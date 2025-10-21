@@ -55,6 +55,23 @@
             background: #dc3545;
             color: #fff;
         }
+        .edit-btn{
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            background: #f8d7da;
+            color: #9fdba5ff;
+            border: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .edit-btn:hover {
+            background: #034211ff;
+            color: #fff;
+        }
         .coupon_code, .apply_coupon {
             padding: 8px 16px;
             border-radius: 4px;
@@ -220,6 +237,10 @@
                                                     <tr id="pro-{{ $item->id }}">
                                                         <td>
                                                             <button type="button" value="{{ $item->id }}" scope="row" class="remove-btn" ><span class="croos">x</span></button>
+                                                            <a href="{{ route('business-cards.edit', $item->attributes->business_card_id) }}" 
+                                                            class="edit-btn">
+                                                            <i class="fa fa-pen"></i>
+                                                            </a>
                                                         </td>
                                                         <td>
                                                             @if($item->attributes->product_type == 'business_card')

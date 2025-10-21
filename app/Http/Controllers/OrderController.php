@@ -242,7 +242,7 @@ class OrderController extends Controller
                         'back_images'   => $item_back_images ?? [],
                     ];
 
-                \Mail::to('production8421@gmail.com')->send(new \App\Mail\Email($details));
+                \Mail::to($order->guest_email)->send(new \App\Mail\Email($details));
                 try {
             
                     $admin = User::role('Admin')->where('status', 1)->first();

@@ -1573,6 +1573,7 @@
                             <!-- Hidden Fields for Business Card Data -->
                              <input type="hidden" name="template_id" value="<?php echo e($businessCard->template_id); ?>">
                             <input type="hidden" name="design_data" value="{}">
+                            <input type="hidden" name="card_id" value="<?php echo e($businessCard->id); ?>">
                             <input type="hidden" name="is_front_design" value="1">
 
                             <!-- 1. Contact Information -->
@@ -1676,8 +1677,8 @@
                                             <select class="input-field form-select modern-select" name="card_weight"
                                                 id="card_weight">
                                                 <option value="">Select Weight...</option>
-                                                <option value="14pt" <?php echo e($businessCard->card_orientation == '14pt' ? 'selected' : ''); ?>>14pt</option>
-                                                <option value="16pt" <?php echo e($businessCard->card_orientation == '16pt' ? 'selected' : ''); ?>>16pt</option>
+                                                <option value="14pt" <?php echo e($businessCard->card_weight == '14pt' ? 'selected' : ''); ?>>14pt</option>
+                                                <option value="16pt" <?php echo e($businessCard->card_weight == '16pt' ? 'selected' : ''); ?>>16pt</option>
                                             </select>
                                         </div>
                                     </div>
@@ -1980,7 +1981,7 @@
                                 <button type="submit" id="add-to-cart-btn"
                                     class="btn primary-btn border-0 w-100 btn-lg">
                                     <i class="fas fa-save me-2"></i>Update Business Card - <span
-                                        id="total-price">$0.00</span>
+                                        id="total-price">$<?php echo e($latestOrder->total_price); ?></span>
                                 </button>
                             </div>
                         </form>
@@ -2002,12 +2003,12 @@
                             </div>
 
                             <!-- Preview Info -->
-                            <div class="preview-info text-center mt-3">
+                            <!-- <div class="preview-info text-center mt-3">
                                 <small class="text-muted">Standard Size: 3.5" × 2"</small>
                                 <div class="preview-quality-indicator mt-2">
                                     <span id="preview-quality" class="quality-status warning">Upload Design</span>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- Preview Controls -->
                             <div class="preview-controls mt-3 text-center">
@@ -2104,8 +2105,8 @@
                 paperStock: "<?php echo e($latestOrder->paper_stock); ?>",
                 borderStyle: '',
                 quantity: "<?php echo e($latestOrder->quantity); ?>",
-                frontDesignFile: "<?php echo e(asset('public/storage/' . $businessCard->card_front_image)); ?>",
-                backDesignFile: "<?php echo e(asset('public/storage/' . $businessCard->card_back_image)); ?>",
+                frontDesignFile: "<?php echo e($businessCard->background_front_image ? asset('public/storage/business_cards/' . $businessCard->background_front_image) : ''); ?>",
+                backDesignFile: "<?php echo e($businessCard->background_back_image ? asset('public/storage/business_cards/' . $businessCard->background_back_image) : ''); ?>",
                 textColor: "<?php echo e($latestOrder->text_color); ?>",
                 backgroundColor: "<?php echo e($latestOrder->background_color); ?>",
                 cornerStyle: "<?php echo e($latestOrder->corner_style); ?>", // Default to standard corners
@@ -3206,7 +3207,7 @@
                 const canvas = document.getElementById('business-card-preview');
                 const previewFrontBtn = document.getElementById('preview-front-btn');
                 const previewBackBtn = document.getElementById('preview-back-btn');
-                
+
                 if (!name.trim()) {
                     showErrorMessage('Please enter your full name');
                     return;
@@ -3269,19 +3270,6 @@
                     currentSelection.quantity = customQuantitySelect.value;
                 }
 
-                //console.log('All validations passed, preparing form data...');
-
-                // currentSelection.currentPreviewType = 'front';
-                // updatePreview(); // redraws front
-                // await new Promise(resolve => requestAnimationFrame(resolve)); // wait one frame
-                // const frontImage = canvas.toDataURL('image/png');
-                // console.log('frontImage data...',frontImage);
-                // currentSelection.currentPreviewType = 'back';
-                // updatePreview(); // redraws back
-                // await new Promise(resolve => requestAnimationFrame(resolve)); // wait one frame
-                // const backImage = canvas.toDataURL('image/png');
-                // console.log('frontImage data...',backImage);
-                // 🟩 1️⃣ Trigger front button
                 previewFrontBtn.click(); // this updates the preview to front
                 await new Promise(r => setTimeout(r, 500)); // wait for render
                 const frontImage = canvas.toDataURL('image/png');
@@ -3291,8 +3279,13 @@
                 await new Promise(r => setTimeout(r, 500)); // wait for render
                 const backImage = canvas.toDataURL('image/png');
 
+                console.log('All validations passed, preparing form data...');
+
                 // Prepare form data
                 const formData = new FormData(event.target);
+                
+                // Ensure Laravel recognizes this as a PUT request
+                formData.append('_method', 'PUT');
                 
                 // Add the uploaded files with correct field names
                 if (currentSelection.frontDesignFile) {
@@ -3315,7 +3308,7 @@
                 formData.append('quantity', currentSelection.quantity);
                 formData.append('text_color', currentSelection.textColor);
                 formData.append('background_color', currentSelection.backgroundColor);
-
+                
                 formData.append('font_family_select', font_family_select);
                 formData.append('card_shape', card_shape);
                 formData.append('card_orientation', card_orientation);
@@ -3345,14 +3338,14 @@
                 }
 
                 // Get CSRF token
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || 
-                                 document.querySelector('input[name="_token"]')?.value ||
-                                 '<?php echo e(csrf_token()); ?>';
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ||
+                    document.querySelector('input[name="_token"]')?.value ||
+                    '<?php echo e(csrf_token()); ?>';
 
                 console.log('CSRF Token:', csrfToken);
 
                 // Submit form via AJAX
-                fetch("<?php echo e(route('business-cards.store')); ?>", {
+                fetch("<?php echo e(route('business-cards.update', $businessCard)); ?>", {
                         method: 'POST',
                         body: formData,
                         headers: {
@@ -3370,10 +3363,10 @@
                     .then(data => {
                         console.log('Response data:', data);
                         if (data.success) {
-                            showSuccessMessage(data.message || 'Business card order added to cart successfully!');
+                            showSuccessMessage(data.message || 'Business card updated successfully!');
                             // Redirect to order details page after 1 second
                             setTimeout(() => {
-                                window.location.href = data.redirect_url;
+                                window.location.href = data.redirect_url || "<?php echo e(route('cart.list')); ?>";
                             }, 1000);
                         } else {
                             showErrorMessage(data.message || 'An error occurred');
@@ -3417,6 +3410,12 @@
                 link.href = fullscreenCanvas.toDataURL();
                 link.click();
             };
+        });
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const previewFrontBtn = document.getElementById('preview-front-btn');
+                if (previewFrontBtn) previewFrontBtn.click();
+            }, 500); // 0.5 sec delay
         });
     </script> 
     

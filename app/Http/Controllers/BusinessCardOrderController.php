@@ -245,6 +245,36 @@ class BusinessCardOrderController extends Controller
         ]);
     }
 
+    private function updateCart(Request $request, BusinessCardOrder $order)
+    {
+        $cartId = 'business_card_' . $order->id;
+
+        // Check if item exists in the cart
+        if (\Darryldecode\Cart\Facades\CartFacade::get($cartId)) {
+            // 🧠 Update existing cart item
+            \Darryldecode\Cart\Facades\CartFacade::update($cartId, [
+                'name' => 'Business Card Order - ' . $order->paper_stock . ' (' . $order->quantity . ' cards)',
+                'price' => $order->total_price,
+                'quantity' => 1, // each order = 1 item
+                'attributes' => [
+                    'order_id' => $order->id,
+                    'business_card_id' => $order->business_card_id,
+                    'paper_stock' => $order->paper_stock,
+                    'corner_style' => $order->corner_style,
+                    'quantity' => $order->quantity,
+                    'upload_files' => $order->upload_files,
+                    'product_type' => 'business_card',
+                    'customer_name' => $order->businessCard->name,
+                    'customer_email' => $order->businessCard->email,
+                    'company_name' => $order->businessCard->company
+                ],
+            ]);
+        } else {
+            // 👇 If not exists, add it fresh
+            $this->addToCart($request, $order);
+        }
+    }
+
     /**
      * Get quantity options for dropdown
      */

@@ -266,89 +266,120 @@ class BusinessCardController extends Controller
             
             throw $e;
         }
-
-        $data = $request->only([
-            'name', 'job_title', 'company', 'phone', 'email', 'website', 'address', 
-            'template_id', 'corner_style', 'paper_stock', 'quantity', 'custom_quantity',
-            'text_color', 'background_color', 'notes', 'design_data', 'is_front_design'
-        ]);
-
-        // Handle logo upload
-        if ($request->hasFile('logo')) {
-            // Delete old logo if exists
-            if ($businessCard->logo_path) {
-                $oldLogoPath = public_path($businessCard->logo_path);
-                if (file_exists($oldLogoPath)) {
-                    unlink($oldLogoPath);
-                }
-            }
-            
-            $logo = $request->file('logo');
-            
-            // Create directory if it doesn't exist
-            $uploadDir = public_path('admin/assets/images/business_cards/logos/');
-            if (!file_exists($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
-            }
-            
-            $fileName = date('YmdHis') . '.' . $logo->getClientOriginalExtension();
-            $logo->move($uploadDir, $fileName);
-            $data['logo_path'] = $fileName;
-        }
-
-        // Handle file uploads and always update design_data with form data
-        $designData = $businessCard->design_data ? json_decode($businessCard->design_data, true) : [];
         
+        $frontUploadFileNames = [];
         if ($request->hasFile('upload_files')) {
-            $uploadFileNames = [];
-            foreach ($request->file('upload_files') as $file) {
-                $uploadDir = public_path('admin/assets/images/business_cards/uploads/');
-                if (!file_exists($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-                
-                $fileName = date('YmdHis') . '_front.' . $file->getClientOriginalExtension();
-                $file->move($uploadDir, $fileName);
-                $uploadFileNames[] = $fileName;
+            foreach ($request->file('upload_files') as $index => $file) {
+                $timestamp = date('YmdHis') . '_' . $index;
+                $fileName = $timestamp . '_front.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('business_cards', $fileName);
+                $frontUploadFileNames[] = $fileName;
             }
-            
-            // Update design_data with upload filenames
-            $designData['front_upload_files'] = $uploadFileNames;
         }
-        
+        // Handle back design file uploads
+        $backUploadFileNames = [];
         if ($request->hasFile('back_upload_files')) {
-            $backUploadFileNames = [];
-            foreach ($request->file('back_upload_files') as $file) {
-                $uploadDir = public_path('admin/assets/images/business_cards/uploads/');
-                if (!file_exists($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-                
-                $fileName = date('YmdHis') . '_back.' . $file->getClientOriginalExtension();
-                $file->move($uploadDir, $fileName);
+            foreach ($request->file('back_upload_files') as $index => $file) {
+                $timestamp = date('YmdHis') . '_' . ($index + 100);
+                $fileName = $timestamp . '_back.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('business_cards', $fileName);
                 $backUploadFileNames[] = $fileName;
             }
-            
-            // Update design_data with back upload filenames
-            $designData['back_upload_files'] = $backUploadFileNames;
         }
-        
+        $uploadFileNames = array_unique(array_merge($frontUploadFileNames, $backUploadFileNames));
+        if ($request->input('business_card_image_front')) {
+            $imageDataFront = $request->input('business_card_image_front');
+            $imageFront = str_replace('data:image/png;base64,', '', $imageDataFront);
+            $imageFront = str_replace(' ', '+', $imageFront);
+            $imageNameFront = 'card_front' . time() . '.png';
+            Storage::disk('public')->put('business_cards/' . $imageNameFront, base64_decode($imageFront));
+
+            $request->merge(['card_front_image' => 'business_cards/' . $imageNameFront]);
+        }
+        if ($request->input('business_card_image_back')) {
+            $imageDataBack = $request->input('business_card_image_back');
+            $imageBack = str_replace('data:image/png;base64,', '', $imageDataBack);
+            $imageBack = str_replace(' ', '+', $imageBack);
+            $imageNameBack = 'card_back' . time() . '.png';
+            Storage::disk('public')->put('business_cards/' . $imageNameBack, base64_decode($imageBack));
+
+            $request->merge(['card_back_image' => 'business_cards/' . $imageNameBack]);
+        }
+        // Handle quantity (regular or custom)
+        $quantity = $request->quantity;
+        if ($request->quantity === 'custom' && $request->custom_quantity) {
+            $quantity = $request->custom_quantity;
+        }
+
+        // Calculate pricing
+        $totalPrice = \App\Models\BusinessCardOrder::calculateTotal(
+            $quantity, 
+            $request->paper_stock, 
+            $request->corner_style
+        );
+
         // Always update design_data with form data (paper_stock, quantity, etc.)
-        if ($request->paper_stock) $designData['paper_stock'] = $request->paper_stock;
-        if ($request->quantity) $designData['quantity'] = $request->quantity;
-        if ($request->custom_quantity) $designData['custom_quantity'] = $request->custom_quantity;
-        if ($request->text_color) $designData['text_color'] = $request->text_color;
-        if ($request->background_color) $designData['background_color'] = $request->background_color;
-        if ($request->notes) $designData['notes'] = $request->notes;
-        
-        $data['design_data'] = json_encode($designData);
+        // if ($request->paper_stock) $designData['paper_stock'] = $request->paper_stock;
+        // if ($request->quantity) $designData['quantity'] = $request->quantity;
+        // if ($request->custom_quantity) $designData['custom_quantity'] = $request->custom_quantity;
+        // if ($request->text_color) $designData['text_color'] = $request->text_color;
+        // if ($request->background_color) $designData['background_color'] = $request->background_color;
+        // if ($request->notes) $designData['notes'] = $request->notes;
+        //$data['design_data'] = json_encode($designData);
 
         try {
-            $businessCard->update($data);
-            
+            //$businessCard->update($data);
+            $businessCard = BusinessCard::findOrFail($request->card_id);
+            $order = \App\Models\BusinessCardOrder::where('business_card_id', $businessCard->id)->first();
+            $businessCard->update([
+                            'user_id' => auth()->id(),
+                            'template_id' => null,
+                            'name' => $request->name,
+                            'job_title' => $request->job_title,
+                            'company' => $request->company,
+                            'phone' => $request->phone,
+                            'email' => $request->email,
+                            'address' => $request->address,
+                            'logo_path' => $frontUploadFileNames[0] ?? $businessCard->logo_path,
+                            'notes' => $request->notes,
+                            'design_data' => json_encode([
+                                'front_upload_files' => $frontUploadFileNames ?: json_decode($businessCard->design_data, true)['front_upload_files'] ?? [],
+                                'back_upload_files'  => $backUploadFileNames ?: json_decode($businessCard->design_data, true)['back_upload_files'] ?? [],
+                            ]),
+                            'corner_style' => $request->corner_style,
+                            'text_color' => $request->text_color,
+                            'text_font' => $request->font_family_select,
+                            'card_shape' => $request->card_shape,
+                            'card_orientation' => $request->card_orientation,
+                            'card_weight' => $request->card_weight,
+                            'text_alignment' => $request->text_alignment,
+                            'background_color' => $request->background_color,
+                            'background_front_image' => $frontUploadFileNames[0] ?? $businessCard->background_front_image,
+                            'background_back_image'  => $backUploadFileNames[0] ?? $businessCard->background_back_image,
+                            'is_front_design' => !empty($frontUploadFileNames) ? 1 : $businessCard->is_front_design,
+                            'card_front_image' => !empty($frontUploadFileNames) ? 'business_cards/' . $frontUploadFileNames[0] : $businessCard->card_front_image,
+                            'is_back_design'  => !empty($backUploadFileNames) ? 1 : $businessCard->is_back_design,
+                            'card_back_image' => !empty($backUploadFileNames) ? 'business_cards/' . $backUploadFileNames[0] : $businessCard->card_back_image,
+                            'status' => 'order_placed'
+                        ]);
+             $order->update([
+                                'paper_stock' => $request->paper_stock ?? $order->paper_stock,
+                                'corner_style' => $request->corner_style ?? $order->corner_style,
+                                'quantity' => $request->quantity ?? $order->quantity,
+                                'text_color' => $request->text_color ?? $order->text_color,
+                                'background_color' => $request->background_color ?? $order->background_color,
+                                'upload_files' => array_merge($order->upload_files ?? [], $frontUploadFileNames, $backUploadFileNames),
+                                'options_data' => json_encode([
+                                    'paper_display' => \App\Models\BusinessCardOption::where('option_key', $request->paper_stock)->first()->name ?? $request->paper_stock
+                                ]),
+                                'total_price' => $request->total_price ?? $order->total_price,
+                                'status' => 'pending',
+                                'notes' => $request->notes ?? $order->notes,
+                            ]);
+            $this->addToCart($request, $order);
             \Log::info('Business card updated successfully:', [
                 'business_card_id' => $businessCard->id,
-                'updated_data' => $data
+                'updated_data' => $businessCard
             ]);
         } catch (\Exception $e) {
             \Log::error('Failed to update business card:', [
@@ -364,7 +395,7 @@ class BusinessCardController extends Controller
                 ], 500);
             }
             
-            return redirect()->route('business-cards.edit', $businessCard)
+            return redirect()->route('cart.list')
                 ->with('error', 'Failed to update business card: ' . $e->getMessage());
         }
 
@@ -373,12 +404,12 @@ class BusinessCardController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Business card updated successfully!',
-                'redirect_url' => route('business-cards.show', $businessCard)
+                'redirect_url' => route('cart.list')
             ]);
         }
 
         // Redirect back to edit page with success message
-        return redirect()->route('business-cards.edit', $businessCard)
+        return redirect()->route('cart.list')
             ->with('success', 'Business card updated successfully!');
     }
 
@@ -536,37 +567,52 @@ class BusinessCardController extends Controller
                 ], 422);
             }
 
-            // Handle front design file uploads
-            $frontUploadFileNames = [];
-            if ($request->hasFile('upload_files')) {
-                $uploadDir = public_path('admin/assets/images/business_cards/uploads/');
-                if (!file_exists($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
+                // Handle front design file uploads
+                $frontUploadFileNames = [];
+                if ($request->hasFile('upload_files')) {
+                    // $uploadDir = public_path('admin/assets/images/business_cards/uploads/');
+                    // if (!file_exists($uploadDir)) {
+                    //     mkdir($uploadDir, 0755, true);
+                    // }
+
+                    // foreach ($request->file('upload_files') as $index => $file) {
+                    //     $timestamp = date('YmdHis') . '_' . $index;
+                    //     $fileName = $timestamp . '_front.' . $file->getClientOriginalExtension();
+                    //     $file->move($uploadDir, $fileName);
+                    //     $frontUploadFileNames[] = $fileName;
+                    // }
+                    foreach ($request->file('upload_files') as $index => $file) {
+                        $timestamp = date('YmdHis') . '_' . $index;
+                        $fileName = $timestamp . '_front.' . $file->getClientOriginalExtension();
+                        $path = $file->storeAs('business_cards', $fileName);
+
+                        $frontUploadFileNames[] = $fileName;
+                    }
                 }
 
-                foreach ($request->file('upload_files') as $index => $file) {
-                    $timestamp = date('YmdHis') . '_' . $index;
-                    $fileName = $timestamp . '_front.' . $file->getClientOriginalExtension();
-                    $file->move($uploadDir, $fileName);
-                    $frontUploadFileNames[] = $fileName;
-                }
-            }
+                // Handle back design file uploads
+                $backUploadFileNames = [];
+                if ($request->hasFile('back_upload_files')) {
+                    // $uploadDir = public_path('admin/assets/images/business_cards/uploads/');
+                    // if (!file_exists($uploadDir)) {
+                    //     mkdir($uploadDir, 0755, true);
+                    // }
 
-            // Handle back design file uploads
-            $backUploadFileNames = [];
-            if ($request->hasFile('back_upload_files')) {
-                $uploadDir = public_path('admin/assets/images/business_cards/uploads/');
-                if (!file_exists($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
+                    // foreach ($request->file('back_upload_files') as $index => $file) {
+                    //     $timestamp = date('YmdHis') . '_' . ($index + 100); // Add offset to avoid conflicts
+                    //     $fileName = $timestamp . '_back.' . $file->getClientOriginalExtension();
+                    //     $file->move($uploadDir, $fileName);
+                    //     $backUploadFileNames[] = $fileName;
+                    // }
+                    foreach ($request->file('back_upload_files') as $index => $file) {
+                        $timestamp = date('YmdHis') . '_' . ($index + 100);
+                        $fileName = $timestamp . '_back.' . $file->getClientOriginalExtension();
 
-                foreach ($request->file('back_upload_files') as $index => $file) {
-                    $timestamp = date('YmdHis') . '_' . ($index + 100); // Add offset to avoid conflicts
-                    $fileName = $timestamp . '_back.' . $file->getClientOriginalExtension();
-                    $file->move($uploadDir, $fileName);
-                    $backUploadFileNames[] = $fileName;
+                        $path = $file->storeAs('business_cards', $fileName);
+
+                        $backUploadFileNames[] = $fileName;
+                    }
                 }
-            }
 
             // Combine all upload files and remove duplicates
             $uploadFileNames = array_unique(array_merge($frontUploadFileNames, $backUploadFileNames));
@@ -701,29 +747,55 @@ class BusinessCardController extends Controller
      */
     private function addToCart(Request $request, $order)
     {
-        // Use the existing cart system (Darryldecode\Cart)
         $cartId = 'business_card_' . $order->id;
-        
-        \Darryldecode\Cart\Facades\CartFacade::add([
-            'id' => $cartId,
-            'name' => 'Business Card Order - ' . $order->paper_stock . ' (' . $order->quantity . ' cards)',
-            'price' => $order->total_price,
-            'quantity' => 1, // Each order is one item
-            'attributes' => [
-                'order_id' => $order->id,
-                'business_card_id' => $order->business_card_id,
-                'paper_stock' => $order->paper_stock,
-                'corner_style' => $order->corner_style,
-                'quantity' => $order->quantity,
-                'upload_files' => $order->upload_files,
-                'product_type' => 'business_card',
-                'customer_name' => $order->businessCard->name,
-                'customer_email' => $order->businessCard->email,
-                'company_name' => $order->businessCard->company,
-                'card_front_image' => $request->card_front_image ?? null,
-                'card_back_image'  => $request->card_back_image ?? null,
-            ]
-        ]);
+
+        // Check if item already exists in cart
+        $existingItem = \Darryldecode\Cart\Facades\CartFacade::get($cartId);
+
+        if ($existingItem) {
+            // 🧠 Update existing cart item
+            \Darryldecode\Cart\Facades\CartFacade::update($cartId, [
+                'name' => 'Business Card Order - ' . $order->paper_stock . ' (' . $order->quantity . ' cards)',
+                'price' => $order->total_price,
+                'quantity' => 1, // each order = 1 item
+                'attributes' => [
+                    'order_id' => $order->id,
+                    'business_card_id' => $order->business_card_id,
+                    'paper_stock' => $order->paper_stock,
+                    'corner_style' => $order->corner_style,
+                    'quantity' => $order->quantity,
+                    'upload_files' => $order->upload_files,
+                    'product_type' => 'business_card',
+                    'customer_name' => $order->businessCard->name,
+                    'customer_email' => $order->businessCard->email,
+                    'company_name' => $order->businessCard->company,
+                    'card_front_image' => $request->card_front_image ?? $existingItem->attributes->card_front_image ?? null,
+                    'card_back_image'  => $request->card_back_image ?? $existingItem->attributes->card_back_image ?? null,
+                ],
+            ]);
+        } else {
+            // 🆕 Add as new cart item
+            \Darryldecode\Cart\Facades\CartFacade::add([
+                'id' => $cartId,
+                'name' => 'Business Card Order - ' . $order->paper_stock . ' (' . $order->quantity . ' cards)',
+                'price' => $order->total_price,
+                'quantity' => 1, // each order = 1 item
+                'attributes' => [
+                    'order_id' => $order->id,
+                    'business_card_id' => $order->business_card_id,
+                    'paper_stock' => $order->paper_stock,
+                    'corner_style' => $order->corner_style,
+                    'quantity' => $order->quantity,
+                    'upload_files' => $order->upload_files,
+                    'product_type' => 'business_card',
+                    'customer_name' => $order->businessCard->name,
+                    'customer_email' => $order->businessCard->email,
+                    'company_name' => $order->businessCard->company,
+                    'card_front_image' => $request->card_front_image ?? null,
+                    'card_back_image'  => $request->card_back_image ?? null,
+                ],
+            ]);
+        }
     }
 
     /**
