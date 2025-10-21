@@ -1,0 +1,53 @@
+/* Ensure dropdown menus are visible with higher specificity */
+.dropdown-menu {
+    display: none !important;
+    position: absolute !important;
+    z-index: 1000 !important;
+    min-width: 10rem !important;
+    padding: 0.5rem 0 !important;
+    margin: 0 !important;
+    font-size: 1rem !important;
+    color: #212529 !important;
+    text-align: left !important;
+    list-style: none !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid rgba(0,0,0,.15) !important;
+    border-radius: 0.25rem !important;
+}
+
+.dropdown-menu.show {
+    display: block !important;
+}
+
+/* Add !important to other dropdown styles as well */
+.dropdown-item {
+    display: block !important;
+    width: 100% !important;
+    padding: 0.25rem 1.5rem !important;
+    clear: both !important;
+    font-weight: 400 !important;
+    color: #212529 !important;
+    text-align: inherit !important;
+    white-space: nowrap !important;
+    background-color: transparent !important;
+    border: 0 !important;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    color: #16181b !important;
+    text-decoration: none !important;
+    background-color: #f8f9fa !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    color: #fff !important;
+    text-decoration: none !important;
+    background-color: #0d6efd !important;
+}
+
+/* Ensure the language switcher is properly positioned */
+.nav-item .dropdown {
+    position: relative !important;
+}
+

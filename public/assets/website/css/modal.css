@@ -1,0 +1,137 @@
+/* Modal Styles */
+.modal.fade .modal-dialog {
+    transform: scale(0.8);
+    transition: transform 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.modal.show .modal-dialog {
+    transform: scale(1);
+    opacity: 1;
+}
+
+#quoteModal .modal-content {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
+}
+
+#quoteModal .modal-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    background: var(--primary-theme);
+    border-radius: 15px 15px 0 0;
+}
+
+#quoteModal .modal-title {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+#quoteModal .btn-close {
+    background-color: #fff;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+#quoteModal .btn-close:hover {
+    opacity: 1;
+}
+
+#quoteModal .modal-body {
+    padding: 2rem;
+}
+
+#quoteModal .field-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+#quoteModal .label-field {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--primary-theme);
+}
+
+#quoteModal .input-field {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+
+#quoteModal .input-field:focus {
+    border-color: var(--secondry-theme);
+    box-shadow: 0 0 0 3px rgba(207, 164, 12, 0.1);
+}
+
+#quoteModal .text-area {
+    min-height: 120px;
+    resize: vertical;
+}
+
+#quoteModal .primary-btn {
+    background: var(--secondry-theme);
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#quoteModal .primary-btn:hover {
+    background: var(--primary-theme);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #quoteModal .modal-body {
+        padding: 1.5rem;
+    }
+    
+    #quoteModal .row {
+        --bs-gutter-x: 1rem;
+    }
+}
+
+/* Form validation styles */
+#quoteModal .input-field.is-invalid {
+    border-color: #dc3545;
+}
+
+#quoteModal .invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Loading state */
+#quoteModal .primary-btn.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+#quoteModal .primary-btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: button-loading 0.8s linear infinite;
+}
+
+@keyframes button-loading {
+    to {
+        transform: translateY(-50%) rotate(360deg);
+    }
+} 
