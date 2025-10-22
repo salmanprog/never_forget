@@ -2107,8 +2107,8 @@
                 paperStock: "{{$latestOrder->paper_stock}}",
                 borderStyle: '',
                 quantity: "{{$latestOrder->quantity}}",
-                frontDesignFile: "{{ $businessCard->background_front_image ? asset('storage/business_cards/' . $businessCard->background_front_image) : '' }}",
-                backDesignFile: "{{ $businessCard->background_back_image ? asset('storage/business_cards/' . $businessCard->background_back_image) : '' }}",
+                frontDesignFile: "{{ $businessCard->background_front_image ? asset('public/storage/business_cards/' . $businessCard->background_front_image) : '' }}",
+                backDesignFile: "{{ $businessCard->background_back_image ? asset('public/storage/business_cards/' . $businessCard->background_back_image) : '' }}",
                 textColor: "{{$latestOrder->text_color}}",
                 backgroundColor: "{{$latestOrder->background_color}}",
                 cornerStyle: "{{$latestOrder->corner_style}}", // Default to standard corners

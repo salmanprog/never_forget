@@ -1,10 +1,10 @@
-@extends('layouts.website.master')
-@section('title', $page_title)
-@section('meta')
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('meta'); ?>
     <meta content="" name="description">
     <meta content="" name="keywords">
-@endsection
-@section('content')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
     <!-- ======= Main Section ======= -->
     <main class="inner-bg">
         <section class="inner-banner">
@@ -20,7 +20,7 @@
                 <div class="col-lg-6">
                     <div class="img-wrapper position-relative" data-aos="fade-right" data-aos-easing="ease-out-cubic"
                         data-aos-duration="1000">
-                        <img src="{{ asset('public/assets/website/images') }}/about-sec-2.png" alt="About Us">
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/about-sec-2.png" alt="About Us">
                     </div>
                 </div>
                 <div class="col-lg-6" data-aos="fade-left" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
@@ -37,7 +37,7 @@
                         personalized gifts for birthdays and anniversaries, custom-branded gifts for employees and clients,
                         or a fully managed corporate gifting program, we’ve got you covered.
                     </p>
-                    <a href="{{ route('shop') }}" class="btn primary-btn border-0">Start Your Gifting Journey Today</a>
+                    <a href="<?php echo e(route('shop')); ?>" class="btn primary-btn border-0">Start Your Gifting Journey Today</a>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
                 <div class="col-lg-6">
                     <div class="img-wrapper position-relative" data-aos="fade-left" data-aos-easing="ease-out-cubic"
                         data-aos-duration="1000">
-                        <img src="{{ asset('public/assets/website/images') }}/about-sec-3.png" alt="Our Vision">
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/about-sec-3.png" alt="Our Vision">
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
                 <div class="col-lg-6">
                     <div class="img-wrapper position-relative" data-aos="fade-right" data-aos-easing="ease-out-cubic"
                         data-aos-duration="1000">
-                        <img src="{{ asset('public/assets/website/images') }}/philopshy.png" alt="About Us" class="w-100" style="max-height: 552px;object-fit: cover;">
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/philopshy.png" alt="About Us" class="w-100" style="max-height: 552px;object-fit: cover;">
                     </div>
                 </div>
                 <div class="col-lg-6" data-aos="fade-left" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
@@ -109,7 +109,7 @@
             <div class="row row-gap-40" data-aos="fade-down" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
                 <div class="col-md-6 col-lg-3">
                     <div class="services-card-wrapper">
-                        <img src="{{ asset('public/assets/website/images') }}/services/01.png" class="mb-10"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/services/01.png" class="mb-10"
                             alt="Tailored Gifting Plans">
                         <h3 class="heading fs-28 mb-10">Tailored Gifting <span>Plans</span></h3>
                         <p>Choose from flexible options that fit your needs and budget.</p>
@@ -117,7 +117,7 @@
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="services-card-wrapper">
-                        <img src="{{ asset('public/assets/website/images') }}/services/02.png" class="mb-10"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/services/02.png" class="mb-10"
                             alt="Custom Branding & Personalization">
                         <h3 class="heading fs-28 mb-10"><span>Custom</span> Branding & Personalization</h3>
                         <p>Add logos, names, or personalized messages for a unique touch.</p>
@@ -125,7 +125,7 @@
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="services-card-wrapper">
-                        <img src="{{ asset('public/assets/website/images') }}/services/03.png" class="mb-10"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/services/03.png" class="mb-10"
                             alt="Seamless Ordering & Delivery">
                         <h3 class="heading fs-28 mb-10">Seamless Ordering & <span>Delivery</span></h3>
                         <p>From sourcing to shipping, we handle it all.</p>
@@ -133,7 +133,7 @@
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="services-card-wrapper">
-                        <img src="{{ asset('public/assets/website/images') }}/services/04.png" class="mb-10"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/services/04.png" class="mb-10"
                             alt="Bulk Gifting Made Easy">
                         <h3 class="heading fs-28 mb-10">Bulk <span>Gifting</span> Made Easy</h3>
                         <p>Hassle-free solutions for large-scale corporate gifting.</p>
@@ -177,7 +177,7 @@
                 <div class="col-lg-6">
                     <div class="img-wrapper position-relative" data-aos="fade-left" data-aos-easing="ease-out-cubic"
                         data-aos-duration="1000">
-                        <img src="{{ asset('public/assets/website/images') }}/why-choose.png" alt="">
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/why-choose.png" alt="">
                     </div>
                 </div>
             </div>
@@ -185,5 +185,7 @@
     </section>
     <!-- End  Section -->
     <!-- ======= Testimonials Section ======= -->
-    @include('website.include.trusted')
-@endSection
+    <?php echo $__env->make('website.include.trusted', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp8.2\htdocs\never-forget\resources\views/website/about-us.blade.php ENDPATH**/ ?>

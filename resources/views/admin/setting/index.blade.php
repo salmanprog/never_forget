@@ -80,7 +80,7 @@
                                             <div class="form-group">
                                                 <label for="" class="col-sm-2 control-label">Existing Photo</label>
                                                 <div class="col-sm-6" style="padding-top:6px;">
-                                                    <img src="{{ asset('/public/admin/assets/img/'.$view->photo_favicon) }}" class="existing-photo" style="height:40px;">
+                                                    <img src="{{ asset('public//public/admin/assets/img/'.$view->photo_favicon) }}" class="existing-photo" style="height:40px;">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -262,7 +262,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-3 control-label">Existing Photo </label>
                                         <div class="col-sm-6">
-                                            <img src="{{ asset('/uploads/'.$view->cta_background_photo) }}" alt="" style="width:300px;">
+                                            <img src="{{ asset('public//uploads/'.$view->cta_background_photo) }}" alt="" style="width:300px;">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -322,7 +322,7 @@
                                                         <td style="width:50%">
                                                             <h4>About Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo1) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo1) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -341,7 +341,7 @@
                                                         <td style="width:50%">
                                                             <h4>Testimonial Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo2) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo2) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -359,7 +359,7 @@
                                                         <td style="width:50%">
                                                             <h4>News Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo3) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo3) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -377,7 +377,7 @@
                                                         <td style="width:50%">
                                                             <h4>Event Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo4) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo4) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -395,7 +395,7 @@
                                                         <td style="width:50%">
                                                             <h4>Contact Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo5) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo5) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -413,7 +413,7 @@
                                                         <td style="width:50%">
                                                             <h4>Search Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo6) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo6) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -432,7 +432,7 @@
                                                         <td style="width:50%">
                                                             <h4>Privacy Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo7) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo7) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -450,7 +450,7 @@
                                                         <td style="width:50%">
                                                             <h4>Verify Subscriber Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo8) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo8) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -474,7 +474,7 @@
                                                         <td style="width:50%">
                                                             <h4>FAQ Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo9) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo9) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -493,7 +493,7 @@
                                                         <td style="width:50%">
                                                             <h4>Service Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo10) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo10) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -512,7 +512,7 @@
                                                         <td style="width:50%">
                                                             <h4>Portfolio Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo11) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo11) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -530,7 +530,7 @@
                                                         <td style="width:50%">
                                                             <h4>Team Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo12) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo12) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -548,7 +548,7 @@
                                                         <td style="width:50%">
                                                             <h4>Pricing Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo13) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo13) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -566,7 +566,7 @@
                                                         <td style="width:50%">
                                                             <h4>Photo Gallery Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo14) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo14) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">
@@ -584,7 +584,7 @@
                                                         <td style="width:50%">
                                                             <h4>Terms Page</h4>
                                                             <p>
-                                                                <img src="{{ asset('/uploads/'.$view->photo15) }}" alt="" style="width: 100%;height:auto;">
+                                                                <img src="{{ asset('public//uploads/'.$view->photo15) }}" alt="" style="width: 100%;height:auto;">
                                                             </p>
                                                         </td>
                                                         <td style="width:50%">

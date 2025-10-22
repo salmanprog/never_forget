@@ -215,6 +215,49 @@
     display: none;
     margin: 20px 0;
 }
+
+.quality_logo {
+    position: relative;
+    overflow: hidden;
+}
+
+.home-categories__menu {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.quality_logo:hover .home-categories__menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.quality_logo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.quality_logo:hover::before {
+  opacity: 1;
+}
+.home-categories__menu {
+  transform: translateY(100%);
+}
+.quality_logo:hover .home-categories__menu {
+  transform: translateY(0);
+}
 </style>
 
 <section class="corporate-gifts-sec py-150">
@@ -247,7 +290,13 @@
                         <a href="<?php echo e(route('business-cards.create')); ?>" class="nav-link">Business Cards</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a href="Javascript:void(0);" class="nav-link">Quality Logo</a>
+                        <button class="nav-link" id="pills-qualitylogo-tab" data-bs-toggle="pill" data-bs-target="#pills-qualitylogo" type="button" role="tab" aria-controls="pills-qualitylogo" aria-selected="false">Quality Logo</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill" data-bs-target="#pills-journey-expert" type="button" role="tab" aria-controls="pills-journey-expert" aria-selected="false">Journey Expert</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-greetings-appreciation-tab" data-bs-toggle="pill" data-bs-target="#pills-greetings-appreciation" type="button" role="tab" aria-controls="pills-greetings-appreciation" aria-selected="false">Greetings and Appreciation </button>
                     </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
@@ -383,6 +432,28 @@
                             <?php endif; ?>
                         </div>
                     </div>
+
+                    <!-- Quality Logo Tab -->
+                    <div class="tab-pane fade" id="pills-qualitylogo" role="tabpanel" aria-labelledby="pills-qualitylogo-tab" tabindex="0">
+                        <div class="row">
+                                <?php echo $__env->make('website.partials._quality_logo_category', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                        </div>
+                    </div>
+
+                    <!-- Journey Expert Tab -->
+                    <div class="tab-pane fade" id="pills-journey-expert" role="tabpanel" aria-labelledby="pills-journey-expert-tab" tabindex="0">
+                        <div class="row">
+                            <?php echo $__env->make('website.partials._journey_expert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                        </div>
+                    </div>
+
+                    <!-- Greeting and appreciation Tab -->
+                    <div class="tab-pane fade" id="pills-greetings-appreciation" role="tabpanel" aria-labelledby="pills-greetings-appreciation-tab" tabindex="0">
+                        <div class="row">
+                            <?php echo $__env->make('website.partials._greetings_appreciation', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                        </div>
+                    </div>
+
 
                     <!-- Individual Category Tabs -->
                     <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>

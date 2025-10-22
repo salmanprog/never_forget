@@ -296,6 +296,7 @@ Route::post('employee/accept-invitation/{token}', 'EmployeeInvitationController@
 // Language switcher
 Route::get('language/{locale}', [App\Http\Controllers\LanguageController::class, 'switchLang'])->name('language.switch');
 
+Route::post('/send-inquiry', [WebController::class, 'send_inquiry'])->name('send.inquiry');
 // Localized routes
 Route::prefix('{locale?}')
     ->where(['locale' => '[a-zA-Z]{2}'])

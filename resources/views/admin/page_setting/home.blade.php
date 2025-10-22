@@ -33,7 +33,7 @@
                             @if(isset($page_data['banner_bg_image']))
                                 <div class="form-group">
                                     <div class="col-sm-4">
-                                        <img src="{{ asset('/public/admin/assets/images/page/'.$page_data['banner_bg_image']) }}" class="existing-photo" style="height:50px;">
+                                        <img src="{{ asset('public//public/admin/assets/images/page/'.$page_data['banner_bg_image']) }}" class="existing-photo" style="height:50px;">
                                     </div>
                                 </div>
                             @endif

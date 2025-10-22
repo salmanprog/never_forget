@@ -35,6 +35,10 @@ class Email extends Mailable
             $email = $this->subject('New Order Created')->view('emails.new-booking-customer-temp');
         } elseif ($this->details['from'] == 'share-email') {
             $email = $this->subject('Never Forget')->view('emails.share-email');
+        }elseif ($this->details['from'] == 'user-inquiry') {
+            $email = $this->subject($this->details['title'])
+                        ->view('emails.user-inquiry')
+                        ->with(['details' => $this->details['body']]);
         }
 
         if (

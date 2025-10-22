@@ -83,7 +83,7 @@
                                         <div class="form-group">
                                             <label for="" class="col-sm-2 control-label">Existing Image</label>
                                             <div class="col-sm-6" style="padding-top:6px;">
-                                                <img src="{{ asset('/public/admin/assets/images/page/'.$view->top_sec_image) }}" class="existing-photo" style="height:180px;">
+                                                <img src="{{ asset('public//public/admin/assets/images/page/'.$view->top_sec_image) }}" class="existing-photo" style="height:180px;">
                                             </div>
                                         </div>
                                     @endif
@@ -118,7 +118,7 @@
                                         <div class="form-group">
                                             <label for="" class="col-sm-2 control-label">Existing Image</label>
                                             <div class="col-sm-6" style="padding-top:6px;">
-                                                <img src="{{ asset('/public/admin/assets/images/page/'.$view->middle_sec_image) }}" class="existing-photo" style="height:180px;">
+                                                <img src="{{ asset('public//public/admin/assets/images/page/'.$view->middle_sec_image) }}" class="existing-photo" style="height:180px;">
                                             </div>
                                         </div>
                                     @endif
@@ -153,7 +153,7 @@
                                         <div class="form-group">
                                             <label for="" class="col-sm-2 control-label">Existing Image</label>
                                             <div class="col-sm-6" style="padding-top:6px;">
-                                                <img src="{{ asset('/public/admin/assets/images/page/'.$view->bottom_sec_image) }}" class="existing-photo" style="height:180px;">
+                                                <img src="{{ asset('public//public/admin/assets/images/page/'.$view->bottom_sec_image) }}" class="existing-photo" style="height:180px;">
                                             </div>
                                         </div>
                                     @endif
@@ -235,7 +235,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label">Existing Image</label>
                                         <div class="col-sm-6" style="padding-top:6px;">
-                                            <img src="{{ asset('/public/admin/assets/images/page/'.$view->home_welcome_image_bg) }}" class="existing-photo" style="height:180px;">
+                                            <img src="{{ asset('public//public/admin/assets/images/page/'.$view->home_welcome_image_bg) }}" class="existing-photo" style="height:180px;">
                                         </div>
                                     </div>
                                 @endif`
@@ -292,7 +292,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label">Existing Image</label>
                                         <div class="col-sm-6" style="padding-top:6px;">
-                                            <img src="{{ asset('/public/admin/assets/images/page/'.$view->counter_photo) }}" class="existing-photo" style="height:180px;">
+                                            <img src="{{ asset('public//public/admin/assets/images/page/'.$view->counter_photo) }}" class="existing-photo" style="height:180px;">
                                         </div>
                                     </div>
                                 @endif
@@ -394,7 +394,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label">Existing Photo</label>
                                         <div class="col-sm-6" style="padding-top:6px;">
-                                            <img src="{{ asset('/public/admin/assets/images/page/'.$view->home_booking_photo) }}" class="" existing-photo="" style=" height:180px;">
+                                            <img src="{{ asset('public//public/admin/assets/images/page/'.$view->home_booking_photo) }}" class="" existing-photo="" style=" height:180px;">
                                         </div>
                                     </div>
                                 @endif
@@ -685,7 +685,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label">Existing Image</label>
                                         <div class="col-sm-6" style="padding-top:6px;">
-                                            <img src="{{ asset('/public/admin/assets/images/page/'.$view->home_real_bottom_first_icon) }}" class="existing-photo" style="height:180px;">
+                                            <img src="{{ asset('public//public/admin/assets/images/page/'.$view->home_real_bottom_first_icon) }}" class="existing-photo" style="height:180px;">
                                         </div>
                                     </div>
                                 @endif
@@ -712,7 +712,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label">Existing Image</label>
                                         <div class="col-sm-6" style="padding-top:6px;">
-                                            <img src="{{ asset('/public/admin/assets/images/page/'.$view->home_real_bottom_second_icon) }}" class="existing-photo" style="height:180px;">
+                                            <img src="{{ asset('public//public/admin/assets/images/page/'.$view->home_real_bottom_second_icon) }}" class="existing-photo" style="height:180px;">
                                         </div>
                                     </div>
                                 @endif
@@ -739,7 +739,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label">Existing Image</label>
                                         <div class="col-sm-6" style="padding-top:6px;">
-                                            <img src="{{ asset('/public/admin/assets/images/page/'.$view->home_real_bottom_third_icon) }}" class="existing-photo" style="height:180px;">
+                                            <img src="{{ asset('public//public/admin/assets/images/page/'.$view->home_real_bottom_third_icon) }}" class="existing-photo" style="height:180px;">
                                         </div>
                                     </div>
                                 @endif
@@ -766,7 +766,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label">Existing Image</label>
                                         <div class="col-sm-6" style="padding-top:6px;">
-                                            <img src="{{ asset('/public/admin/assets/images/page/'.$view->home_real_bottom_fourth_icon) }}" class="existing-photo" style="height:180px;">
+                                            <img src="{{ asset('public//public/admin/assets/images/page/'.$view->home_real_bottom_fourth_icon) }}" class="existing-photo" style="height:180px;">
                                         </div>
                                     </div>
                                 @endif
@@ -793,7 +793,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label">Existing Image</label>
                                         <div class="col-sm-6" style="padding-top:6px;">
-                                            <img src="{{ asset('/public/admin/assets/images/page/'.$view->home_real_bottom_fifth_icon) }}" class="existing-photo" style="height:180px;">
+                                            <img src="{{ asset('public//public/admin/assets/images/page/'.$view->home_real_bottom_fifth_icon) }}" class="existing-photo" style="height:180px;">
                                         </div>
                                     </div>
                                 @endif
@@ -820,7 +820,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label">Existing Image</label>
                                         <div class="col-sm-6" style="padding-top:6px;">
-                                            <img src="{{ asset('/public/admin/assets/images/page/'.$view->home_real_bottom_sixth_icon) }}" class="existing-photo" style="height:180px;">
+                                            <img src="{{ asset('public//public/admin/assets/images/page/'.$view->home_real_bottom_sixth_icon) }}" class="existing-photo" style="height:180px;">
                                         </div>
                                     </div>
                                 @endif

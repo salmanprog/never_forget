@@ -738,4 +738,26 @@ class WebController extends Controller
             'products' => $products
         ]);
     }
+
+    public function send_inquiry(Request $request)
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:100',
+            'name' => 'required|string|max:100',
+            'email' => 'required|email',
+            'phone' => 'required|string|max:20',
+            'message' => 'required|string|max:500',
+        ]);
+
+        // Send email
+         $details = [
+            'from'          => 'user-inquiry',
+            'title'         => $data['title'].' '.$data['name'].',',
+            'body'          => (object) $data
+        ];
+
+        \Mail::to('cruise@neverforgetappreciation.com')->send(new \App\Mail\Email($details));
+
+        return back()->with('success', 'Your inquiry has been sent successfully!');
+    }
 }

@@ -395,7 +395,7 @@
         </div>
     </section>
 
-    <section class="shop-sec py-140">
+    <section class="shop-sec py-140 ss">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 text-center pb-60">
