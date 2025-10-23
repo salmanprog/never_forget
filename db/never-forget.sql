@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 21, 2025 at 10:06 AM
+-- Generation Time: Oct 24, 2025 at 07:30 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -134,7 +134,8 @@ INSERT INTO `billing_addresses` (`id`, `customer_id`, `first_name`, `last_name`,
 (65, '131', 'Amber', 'Dyer', 'Gallegos and Potter Associates', 'Consequatur officii', 'Illo aspernatur aut', 'Vero nobis animi no', 'Vitae sed ipsum vel', '+1 (312) 437-3526', 'synysoj@mailinator.com', '1', '2025-10-21 11:41:19', '2025-10-21 11:41:19'),
 (66, '132', 'Arden', 'Sloan', 'Cole Monroe LLC', 'Maiores vel aliqua', 'Expedita molestiae n', 'Distinctio Omnis au', 'Quia vitae expedita', '+1 (644) 905-5269', 'melokit@mailinator.com', '1', '2025-10-21 11:46:47', '2025-10-21 11:46:47'),
 (67, '133', 'Duncan', 'Mcfadden', 'Hendricks and Pruitt Traders', 'Perspiciatis veniam', 'Et rerum iste quia d', 'Possimus id dolore', 'Unde aliquip non vol', '+1 (464) 168-2166', 'ficazeni@mailinator.com', '1', '2025-10-21 11:49:50', '2025-10-21 11:49:50'),
-(68, '134', 'Josephine', 'Mendez', 'Nielsen Alvarez Traders', 'Aut iste quis consec', 'Aliquid id fugit vo', 'Lorem ex in iusto te', 'Veritatis quibusdam', '+1 (178) 486-7893', 'production8421@gmail.com', '1', '2025-10-21 13:45:02', '2025-10-21 13:45:02');
+(68, '134', 'Josephine', 'Mendez', 'Nielsen Alvarez Traders', 'Aut iste quis consec', 'Aliquid id fugit vo', 'Lorem ex in iusto te', 'Veritatis quibusdam', '+1 (178) 486-7893', 'production8421@gmail.com', '1', '2025-10-21 13:45:02', '2025-10-21 13:45:02'),
+(69, '134', 'Herrod', 'Barnes', 'Haley Francis Trading', 'Nisi laudantium omn', 'Quos debitis amet p', 'Voluptas consequatur', 'Aut facere magna omn', '+1 (143) 279-9083', 'production8421@gmail.com', '1', '2025-10-21 14:33:20', '2025-10-21 14:33:20');
 
 -- --------------------------------------------------------
 
@@ -261,7 +262,8 @@ INSERT INTO `business_cards` (`id`, `user_id`, `template_id`, `name`, `job_title
 (79, NULL, NULL, 'Randall Barrera', 'Maxime cupidatat lab', 'Dennis and Sellers Traders', '+1 (787) 497-6466', 'kosikahaq@mailinator.com', NULL, 'Aliquid labore et ip', NULL, '\"{\\\"front_upload_files\\\":[],\\\"back_upload_files\\\":[\\\"20251021053137_100_back.png\\\",\\\"20251021053137_101_back.png\\\"]}\"', 'Segoe UI', '#684a05', 'standard', 'vertical', '14pt', 'left', '#7af5b9', '', '20251021053137_100_back.png', 'rounded', 0, 'business_cards/card_front1761024697.png', 1, 'business_cards/card_back1761024697.png', NULL, 'order_placed', '2025-10-21 11:31:37', '2025-10-21 11:31:37'),
 (80, NULL, NULL, 'Davis Mitchell', 'Voluptatibus volupta', 'Russell Fisher Plc', '+1 (811) 327-3306', 'guxec@mailinator.com', NULL, 'Aspernatur aliquam f', NULL, '\"{\\\"front_upload_files\\\":[],\\\"back_upload_files\\\":[\\\"20251021054607_100_back.png\\\",\\\"20251021054607_101_back.png\\\"]}\"', 'Courier New', '#0cb56f', 'square', 'vertical', '14pt', 'left', '#d2b8b5', '', '20251021054607_100_back.png', 'standard', 0, 'business_cards/card_front1761025567.png', 1, 'business_cards/card_back1761025567.png', NULL, 'order_placed', '2025-10-21 11:46:07', '2025-10-21 11:46:07'),
 (81, NULL, NULL, 'Cameran Haynes', 'Culpa minus natus c', 'Vaughn and Skinner Inc', '+1 (105) 239-4826', 'rexocom@mailinator.com', NULL, 'Eligendi iure facili', NULL, '\"{\\\"front_upload_files\\\":[],\\\"back_upload_files\\\":[\\\"20251021054846_101_back.png\\\"]}\"', 'Segoe UI', '#cc2f3a', 'square', 'vertical', '16pt', 'center', '#52e974', '', '20251021054846_101_back.png', 'standard', 0, 'business_cards/card_front1761025671.png', 1, 'business_cards/20251021054846_101_back.png', NULL, 'order_placed', '2025-10-21 11:47:51', '2025-10-21 11:48:46'),
-(82, NULL, NULL, 'Aaron Cruz', 'Explicabo Id volup', 'Rivers and Thomas LLC', '+1 (508) 946-6043', 'production8421@gmail.com', NULL, 'Accusamus velit aliq', NULL, '\"{\\\"front_upload_files\\\":[],\\\"back_upload_files\\\":[\\\"20251021074418_100_back.png\\\",\\\"20251021074418_101_back.png\\\"]}\"', 'Arial', '#69ad52', 'square', 'horizontal', '14pt', 'center', '#9bac54', '', '20251021074418_100_back.png', 'standard', 0, 'business_cards/card_front1761032658.png', 1, 'business_cards/card_back1761032658.png', NULL, 'order_placed', '2025-10-21 13:44:18', '2025-10-21 13:44:18');
+(82, NULL, NULL, 'Aaron Cruz', 'Explicabo Id volup', 'Rivers and Thomas LLC', '+1 (508) 946-6043', 'production8421@gmail.com', NULL, 'Accusamus velit aliq', NULL, '\"{\\\"front_upload_files\\\":[],\\\"back_upload_files\\\":[\\\"20251021074418_100_back.png\\\",\\\"20251021074418_101_back.png\\\"]}\"', 'Arial', '#69ad52', 'square', 'horizontal', '14pt', 'center', '#9bac54', '', '20251021074418_100_back.png', 'standard', 0, 'business_cards/card_front1761032658.png', 1, 'business_cards/card_back1761032658.png', NULL, 'order_placed', '2025-10-21 13:44:18', '2025-10-21 13:44:18'),
+(83, NULL, NULL, 'Kieran Olson', 'Explicabo Vel natus', 'Browning and Lawrence LLC', '+1 (897) 644-4199', 'radaxip@mailinator.com', NULL, 'Voluptates veritatis', NULL, '\"{\\\"front_upload_files\\\":[],\\\"back_upload_files\\\":[\\\"20251021083100_101_back.png\\\"]}\"', 'Courier New', '#33d0d9', 'square', 'horizontal', '16pt', 'center', '#617b9e', '', '20251021083100_101_back.png', 'rounded', 0, 'business_cards/card_front1761035409.png', 1, 'business_cards/20251021083100_101_back.png', NULL, 'order_placed', '2025-10-21 14:30:09', '2025-10-21 14:31:00');
 
 -- --------------------------------------------------------
 
@@ -503,7 +505,8 @@ INSERT INTO `business_card_orders` (`id`, `business_card_id`, `user_id`, `order_
 (78, 79, NULL, 'BC-2025-241655', 'plastic', 'rounded', '#684a05', '#7af5b9', 200, '[\"20251021053137_100_back.png\",\"20251021053137_101_back.png\"]', '\"{\\\"paper_display\\\":\\\"plastic\\\"}\"', 88.80, 88.80, 'pending', 'Ex iure eius facilis', '2025-10-21 11:31:37', '2025-10-21 11:31:37'),
 (79, 80, NULL, 'BC-2025-404013', 'kraft', 'standard', '#0cb56f', '#d2b8b5', 200, '[\"20251021054607_100_back.png\",\"20251021054607_101_back.png\"]', '\"{\\\"paper_display\\\":\\\"Kraft Paper\\\"}\"', 56.00, 56.00, 'pending', 'Cupiditate sit ea do', '2025-10-21 11:46:07', '2025-10-21 11:46:07'),
 (80, 81, NULL, 'BC-2025-070667', 'glossy', 'standard', '#cc2f3a', '#52e974', 2000, '[\"20251021054751_100_back.png\",\"20251021054751_101_back.png\",\"20251021054846_101_back.png\"]', '\"{\\\"paper_display\\\":\\\"Glossy Finish\\\"}\"', 636.00, 636.00, 'pending', 'Doloribus facilis en', '2025-10-21 11:47:51', '2025-10-21 11:48:46'),
-(81, 82, NULL, 'BC-2025-126907', 'plastic', 'standard', '#69ad52', '#9bac54', 5000, '[\"20251021074418_100_back.png\",\"20251021074418_101_back.png\"]', '\"{\\\"paper_display\\\":\\\"plastic\\\"}\"', 1325.00, 1325.00, 'pending', 'Aliquam amet et omn', '2025-10-21 13:44:18', '2025-10-21 13:44:18');
+(81, 82, NULL, 'BC-2025-126907', 'plastic', 'standard', '#69ad52', '#9bac54', 5000, '[\"20251021074418_100_back.png\",\"20251021074418_101_back.png\"]', '\"{\\\"paper_display\\\":\\\"plastic\\\"}\"', 1325.00, 1325.00, 'pending', 'Aliquam amet et omn', '2025-10-21 13:44:18', '2025-10-21 13:44:18'),
+(82, 83, NULL, 'BC-2025-674715', 'matte', 'rounded', '#33d0d9', '#617b9e', 200, '[\"20251021083009_100_back.png\",\"20251021083009_101_back.png\",\"20251021083100_101_back.png\"]', '\"{\\\"paper_display\\\":\\\"Matte Finish\\\"}\"', 44.00, 44.00, 'pending', 'Duis provident mole', '2025-10-21 14:30:09', '2025-10-21 14:31:00');
 
 -- --------------------------------------------------------
 
@@ -760,7 +763,16 @@ INSERT INTO `collaborators` (`id`, `created_by`, `title`, `image`, `status`, `de
 (11, 1, 'Cheryl\'s Cookies', '20250822202723.svg', '1', NULL, '2025-08-22 15:27:23', '2025-08-22 15:27:23'),
 (12, 1, 'Fruit Bouquets', '20250822202923.svg', '1', NULL, '2025-08-22 15:29:23', '2025-08-22 15:29:23'),
 (13, 1, 'Harry & David', '20250822203008.svg', '1', NULL, '2025-08-22 15:30:08', '2025-08-22 15:30:08'),
-(14, 1, 'The Popcorn Factory', '20250822203123.svg', '1', NULL, '2025-08-22 15:31:23', '2025-08-22 17:15:34');
+(14, 1, 'The Popcorn Factory', '20250822203123.svg', '1', NULL, '2025-08-22 15:31:23', '2025-08-22 17:15:34'),
+(15, 1, 'AMERICAN DIGITAL AGENCY LLC', '20251021095313.png', '1', NULL, '2025-10-21 15:53:13', '2025-10-21 15:53:13'),
+(16, 1, 'Partner of the year', '20251024041032.png', '1', '2025-10-24 04:13:00', '2025-10-24 10:10:32', '2025-10-24 10:13:00'),
+(17, 1, 'universaltravelagency', '20251024042422.png', '1', NULL, '2025-10-24 10:24:22', '2025-10-24 10:24:22'),
+(18, 1, 'curiseconsuerclub', '20251024042453.png', '1', NULL, '2025-10-24 10:24:53', '2025-10-24 10:24:53'),
+(19, 1, 'disney', '20251024042505.png', '1', NULL, '2025-10-24 10:25:05', '2025-10-24 10:25:05'),
+(20, 1, 'viking', '20251024042516.png', '1', NULL, '2025-10-24 10:25:16', '2025-10-24 10:25:16'),
+(21, 1, 'xpartner', '20251024042529.png', '1', NULL, '2025-10-24 10:25:29', '2025-10-24 10:25:29'),
+(22, 1, 'cruis_line_presedent', '20251024042543.png', '1', NULL, '2025-10-24 10:25:43', '2025-10-24 10:25:43'),
+(23, 1, 'sandal', '20251024042555.png', '1', NULL, '2025-10-24 10:25:55', '2025-10-24 10:25:55');
 
 -- --------------------------------------------------------
 
@@ -1031,7 +1043,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (107, '2025_10_03_193616_create_business_card_categories_table', 70),
 (108, '2025_10_06_204142_add_text_color_and_background_color_to_business_cards_table', 71),
 (109, '2025_10_06_205519_add_color_columns_to_business_card_orders_table', 72),
-(110, '2025_10_14_002111_add_front_back_design_fields_to_business_cards_table', 73);
+(110, '2025_10_14_002111_add_front_back_design_fields_to_business_cards_table', 73),
+(111, '2025_10_23_201433_create_travel_type_table', 74);
 
 -- --------------------------------------------------------
 
@@ -1306,7 +1319,8 @@ INSERT INTO `orders` (`id`, `customer_id`, `guest_email`, `guest_first_name`, `g
 (43, 131, 'synysoj@mailinator.com', 'Amber', 'Dyer', '+1 (312) 437-3526', 65, 503164, NULL, 'pi_3SKNzxLXqt7gmBJh0ZWzJp6W', NULL, 89, NULL, NULL, NULL, '2025-10-21', NULL, 'Pending', 'paid', 1, NULL, '2025-10-21 11:41:19', '2025-10-21 11:41:19'),
 (44, 132, 'melokit@mailinator.com', 'Arden', 'Sloan', '+1 (644) 905-5269', 66, 611665, NULL, 'pi_3SKO5GLXqt7gmBJh0TYeBSap', NULL, 56, NULL, NULL, NULL, '2025-10-21', NULL, 'Pending', 'paid', 1, NULL, '2025-10-21 11:46:47', '2025-10-21 11:46:47'),
 (45, 133, 'ficazeni@mailinator.com', 'Duncan', 'Mcfadden', '+1 (464) 168-2166', 67, 769744, NULL, 'pi_3SKO8CLXqt7gmBJh1u6Lw7cx', NULL, 1272, NULL, NULL, NULL, '2025-10-21', NULL, 'Pending', 'paid', 1, NULL, '2025-10-21 11:49:50', '2025-10-21 11:49:50'),
-(46, 134, 'production8421@gmail.com', 'Josephine', 'Mendez', '+1 (178) 486-7893', 68, 855200, NULL, 'pi_3SKPvgLXqt7gmBJh1AInD2mg', NULL, 1325, NULL, NULL, NULL, '2025-10-21', NULL, 'Pending', 'paid', 1, NULL, '2025-10-21 13:45:02', '2025-10-21 13:45:02');
+(46, 134, 'production8421@gmail.com', 'Josephine', 'Mendez', '+1 (178) 486-7893', 68, 855200, NULL, 'pi_3SKPvgLXqt7gmBJh1AInD2mg', NULL, 1325, NULL, NULL, NULL, '2025-10-21', NULL, 'Pending', 'paid', 1, NULL, '2025-10-21 13:45:02', '2025-10-21 13:45:02'),
+(47, 134, 'production8421@gmail.com', 'Herrod', 'Barnes', '+1 (143) 279-9083', 69, 604091, NULL, 'pi_3SKQgRLXqt7gmBJh1EVLzwhk', NULL, 88, NULL, NULL, NULL, '2025-10-21', NULL, 'Pending', 'paid', 1, NULL, '2025-10-21 14:33:20', '2025-10-21 14:33:20');
 
 -- --------------------------------------------------------
 
@@ -1427,7 +1441,8 @@ INSERT INTO `order_details` (`id`, `order_id`, `category_id`, `sub_category_id`,
 (82, 43, NULL, NULL, NULL, 'business_card', 79, 'Business Card Order - plastic (200 cards)', 89, 1, NULL, NULL, NULL, NULL, 88.80, 'Succeeded', 1, '2025-10-21', NULL, '2025-10-21 11:41:19', '2025-10-21 11:41:19'),
 (83, 44, NULL, NULL, NULL, 'business_card', 80, 'Business Card Order - kraft (200 cards)', 56, 1, NULL, NULL, NULL, NULL, 56.00, 'Succeeded', 1, '2025-10-21', NULL, '2025-10-21 11:46:47', '2025-10-21 11:46:47'),
 (84, 45, NULL, NULL, NULL, 'business_card', 81, 'Business Card Order - glossy (2000 cards)', 636, 2, NULL, NULL, NULL, NULL, 1272.00, 'Succeeded', 1, '2025-10-21', NULL, '2025-10-21 11:49:50', '2025-10-21 11:49:50'),
-(85, 46, NULL, NULL, NULL, 'business_card', 82, 'Business Card Order - plastic (5000 cards)', 1325, 1, NULL, NULL, NULL, NULL, 1325.00, 'Succeeded', 1, '2025-10-21', NULL, '2025-10-21 13:45:02', '2025-10-21 13:45:02');
+(85, 46, NULL, NULL, NULL, 'business_card', 82, 'Business Card Order - plastic (5000 cards)', 1325, 1, NULL, NULL, NULL, NULL, 1325.00, 'Succeeded', 1, '2025-10-21', NULL, '2025-10-21 13:45:02', '2025-10-21 13:45:02'),
+(86, 47, NULL, NULL, NULL, 'business_card', 83, 'Business Card Order - matte (200 cards)', 44, 2, NULL, NULL, NULL, NULL, 88.00, 'Succeeded', 1, '2025-10-21', NULL, '2025-10-21 14:33:20', '2025-10-21 14:33:20');
 
 -- --------------------------------------------------------
 
@@ -3319,6 +3334,32 @@ INSERT INTO `tickets` (`id`, `order_id`, `customer_id`, `product_id`, `ticket_nu
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `travel_types`
+--
+
+CREATE TABLE `travel_types` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `status` enum('0','1') NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `travel_types`
+--
+
+INSERT INTO `travel_types` (`id`, `title`, `image`, `description`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Cruise', NULL, NULL, '1', '2025-10-24 09:51:12', '2025-10-24 09:51:12'),
+(2, 'Tour', NULL, NULL, '1', '2025-10-24 09:51:12', '2025-10-24 09:51:12'),
+(3, 'CP Exclusive', NULL, NULL, '1', '2025-10-24 09:51:12', '2025-10-24 09:51:12'),
+(4, 'All-Inclusive', NULL, NULL, '1', '2025-10-24 09:51:12', '2025-10-24 09:51:12');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -3830,6 +3871,12 @@ ALTER TABLE `tickets`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `travel_types`
+--
+ALTER TABLE `travel_types`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -3869,13 +3916,13 @@ ALTER TABLE `about_us`
 -- AUTO_INCREMENT for table `billing_addresses`
 --
 ALTER TABLE `billing_addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `business_cards`
 --
 ALTER TABLE `business_cards`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `business_card_categories`
@@ -3899,7 +3946,7 @@ ALTER TABLE `business_card_options`
 -- AUTO_INCREMENT for table `business_card_orders`
 --
 ALTER TABLE `business_card_orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `business_card_templates`
@@ -3941,7 +3988,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `collaborators`
 --
 ALTER TABLE `collaborators`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `companies`
@@ -3989,7 +4036,7 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `newsletters`
@@ -4007,13 +4054,13 @@ ALTER TABLE `occasions`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `pages`
@@ -4092,6 +4139,12 @@ ALTER TABLE `testimonials`
 --
 ALTER TABLE `tickets`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `travel_types`
+--
+ALTER TABLE `travel_types`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
