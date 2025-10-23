@@ -184,4 +184,89 @@ $(document).ready(function () {
         ],
     });
     AOS.refresh();
+
 });
+const shopNavSwiper = new Swiper(".shop-nav-swiper", {
+    slidesPerView: 12,
+    spaceBetween: 0,
+    freeMode: true,
+    grabCursor: true,
+    mousewheel: true,
+    breakpoints: {
+      320: { spaceBetween: 8 },
+      768: { spaceBetween: 10 },
+      1024: { spaceBetween: 12 }
+    }
+  });
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const shopNav = document.querySelector(".shop-nav");
+  
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+  
+    // 🖱️ Mouse Events
+    shopNav.addEventListener("mousedown", (e) => {
+      isDown = true;
+      shopNav.classList.add("dragging");
+      startX = e.pageX - shopNav.offsetLeft;
+      scrollLeft = shopNav.scrollLeft;
+    });
+  
+    shopNav.addEventListener("mouseleave", () => {
+      isDown = false;
+      shopNav.classList.remove("dragging");
+    });
+  
+    shopNav.addEventListener("mouseup", () => {
+      isDown = false;
+      shopNav.classList.remove("dragging");
+    });
+  
+    shopNav.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - shopNav.offsetLeft;
+      const walk = (x - startX) * 1; // scroll speed multiplier
+      shopNav.scrollLeft = scrollLeft - walk;
+    });
+  
+    // 📱 Touch Events (for mobile drag)
+    let touchStartX = 0;
+    let touchScrollLeft = 0;
+  
+    shopNav.addEventListener("touchstart", (e) => {
+      touchStartX = e.touches[0].pageX;
+      touchScrollLeft = shopNav.scrollLeft;
+    });
+  
+    shopNav.addEventListener("touchmove", (e) => {
+      const x = e.touches[0].pageX;
+      const walk = (x - touchStartX) * 1;
+      shopNav.scrollLeft = touchScrollLeft - walk;
+    });
+
+    let moved = false;
+
+shopNav.addEventListener("mousedown", (e) => {
+  isDown = true;
+  moved = false;
+  startX = e.pageX - shopNav.offsetLeft;
+  scrollLeft = shopNav.scrollLeft;
+});
+
+shopNav.addEventListener("mousemove", (e) => {
+  if (!isDown) return;
+  moved = true;
+  const x = e.pageX - shopNav.offsetLeft;
+  const walk = (x - startX);
+  shopNav.scrollLeft = scrollLeft - walk;
+});
+
+shopNav.addEventListener("click", (e) => {
+  if (moved) e.preventDefault(); // stop accidental tab activation
+});
+  });
+  

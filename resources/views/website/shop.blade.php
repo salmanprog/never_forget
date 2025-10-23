@@ -13,7 +13,6 @@
 </main>
 
 <style>
-    
     .shop-nav {
         background: #fff;
         border-radius: 50px;
@@ -28,6 +27,7 @@
         padding: 4px 20px;
         gap: 10px;
     }
+
     .shop-nav .nav-link {
         color: #333;
         padding: 10px 20px;
@@ -73,6 +73,10 @@
         scrollbar-width: 20px;
         scrollbar-color: #0B1B48 #f1f1f1;
     }
+
+    /* .shop-nav .nav-item {
+  scroll-snap-align: start;
+} */
 
     .gift-card-wrapper {
         background: #fff;
@@ -297,6 +301,12 @@
         background-color: #cfa40c;
     }
 
+    .shop-nav.dragging {
+        cursor: grabbing;
+        cursor: -webkit-grabbing;
+        user-select: none;
+    }
+
     /* .home-categories__menu {
   transform: translateY(100%);
 } */
@@ -323,32 +333,49 @@
             <div class="col-lg-12">
                 <ul class="nav nav-pills shop-nav" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link {{ !request('category') ? 'active' : '' }}" id="pills-All-tab" data-bs-toggle="pill" data-bs-target="#pills-All" type="button" role="tab" aria-controls="pills-All" aria-selected="{{ !request('category') ? 'true' : 'false' }}">All</button>
+                        <button class="nav-link {{ !request('category') ? 'active' : '' }}" id="pills-All-tab"
+                            data-bs-toggle="pill" data-bs-target="#pills-All" type="button" role="tab"
+                            aria-controls="pills-All"
+                            aria-selected="{{ !request('category') ? 'true' : 'false' }}">All</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-Under30-tab" data-bs-toggle="pill" data-bs-target="#pills-Under30" type="button" role="tab" aria-controls="pills-Under30" aria-selected="false">Gifts Under $30</button>
+                        <button class="nav-link" id="pills-Under30-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-Under30" type="button" role="tab" aria-controls="pills-Under30"
+                            aria-selected="false">Gifts Under $30</button>
                     </li>
-                    @foreach($categories as $category)
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link {{ request('category') == $category->id ? 'active' : '' }}" id="pills-{{$category->id}}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{$category->id}}" type="button" role="tab" aria-controls="pills-{{$category->id}}" aria-selected="{{ request('category') == $category->id ? 'true' : 'false' }}">{{$category->title}}</button>
-                    </li>
+                    @foreach ($categories as $category)
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link {{ request('category') == $category->id ? 'active' : '' }}"
+                                id="pills-{{ $category->id }}-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-{{ $category->id }}" type="button" role="tab"
+                                aria-controls="pills-{{ $category->id }}"
+                                aria-selected="{{ request('category') == $category->id ? 'true' : 'false' }}">{{ $category->title }}</button>
+                        </li>
                     @endforeach
                     <li class="nav-item" role="presentation">
                         <a href="{{ route('business-cards.create') }}" class="nav-link">Business Cards</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-qualitylogo-tab" data-bs-toggle="pill" data-bs-target="#pills-qualitylogo" type="button" role="tab" aria-controls="pills-qualitylogo" aria-selected="false">Quality Logo</button>
+                        <button class="nav-link" id="pills-qualitylogo-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-qualitylogo" type="button" role="tab"
+                            aria-controls="pills-qualitylogo" aria-selected="false">Quality Logo</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill" data-bs-target="#pills-journey-expert" type="button" role="tab" aria-controls="pills-journey-expert" aria-selected="false">Travel & Experience</button>
+                        <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-journey-expert" type="button" role="tab"
+                            aria-controls="pills-journey-expert" aria-selected="false">Travel & Experience</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-greetings-appreciation-tab" data-bs-toggle="pill" data-bs-target="#pills-greetings-appreciation" type="button" role="tab" aria-controls="pills-greetings-appreciation" aria-selected="false">Greetings and Appreciation </button>
+                        <button class="nav-link" id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-greetings-appreciation" type="button" role="tab"
+                            aria-controls="pills-greetings-appreciation" aria-selected="false">Greetings and
+                            Appreciation </button>
                     </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
                     <!-- All Products Tab -->
-                    <div class="tab-pane fade {{ !request('category') ? 'show active' : '' }}" id="pills-All" role="tabpanel" aria-labelledby="pills-All-tab" tabindex="0">
+                    <div class="tab-pane fade {{ !request('category') ? 'show active' : '' }}" id="pills-All"
+                        role="tabpanel" aria-labelledby="pills-All-tab" tabindex="0">
                         <div class="row" id="all-products">
                             @foreach ($categories as $category)
                                 @foreach ($category->products as $product)
