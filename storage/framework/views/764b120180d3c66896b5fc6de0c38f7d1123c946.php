@@ -1,7 +1,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/cool-swag-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/cool-swag-desktop.webp"
                 alt="Cool Swag">
             <div class="home-categories__menu">
                 <ul>
@@ -24,7 +24,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/pens-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/pens-desktop.webp"
                 alt="Custom Pens">
             <div class="home-categories__menu">
                 <ul>
@@ -47,7 +47,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/tote-bags-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/tote-bags-desktop.webp"
                 alt="Custom Tote Bags">
             <div class="home-categories__menu">
                 <ul>
@@ -69,7 +69,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/water-bottles-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/water-bottles-desktop.webp"
                 alt="Custom Tote Bags">
             <div class="home-categories__menu">
                 <ul>
@@ -93,7 +93,7 @@
     <div class="gift-card-wrapper quality_logo">
 
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/bags-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/bags-desktop.webp"
                 alt="Custom Bags">
             <div class="home-categories__menu">
                 <ul>
@@ -116,7 +116,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/phone-accessories-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/phone-accessories-desktop.webp"
                 alt="Phone Accessories">
             <div class="home-categories__menu">
                 <ul>
@@ -139,7 +139,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/apparel-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/apparel-desktop.webp"
                 alt="Custom Apparel">
             <div class="home-categories__menu">
                 <ul>
@@ -162,7 +162,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-        <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/trade-show-desktop.webp"
+        <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/trade-show-desktop.webp"
             alt="Trade Show Giveaways">
             <div class="home-categories__menu">
                 <ul>
@@ -186,7 +186,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-        <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/koozies-desktop.webp"
+        <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/koozies-desktop.webp"
             alt="Custom KOOZIES">
             <div class="home-categories__menu">
                 <ul>
@@ -213,8 +213,8 @@
 <div class="modal fade" id="inquiryModal" tabindex="-1" aria-labelledby="inquiryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content py-20 px-20 ">
-            <form id="inquiryForm" action="{{ route('send.inquiry') }}" method="POST">
-                @csrf
+            <form id="inquiryForm" action="<?php echo e(route('send.inquiry')); ?>" method="POST">
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="title" id="title"
                     value="You have received new quality logo user inquiry from">
                 <div class="modal-header">
@@ -266,3 +266,4 @@
         });
     });
 </script>
+<?php /**PATH C:\xampp\htdocs\never_forget\resources\views/website/partials/_quality_logo_category.blade.php ENDPATH**/ ?>
