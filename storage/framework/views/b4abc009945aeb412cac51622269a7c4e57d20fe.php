@@ -46,7 +46,7 @@
 
 
 <body class="position-relative" class="translater-area">
-    
+
     <!-- ======= Header ======= -->
     <?php echo $__env->make('layouts.website.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <!-- End Header -->
@@ -132,36 +132,70 @@
             },
         });
     </script>
-    <script type="text/javascript">
+    <script>
         function toggleDropdown() {
             document.querySelector('.dropdown-menu.flag').classList.toggle('show');
         }
 
-       /* function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,fr,de,ar,zh-CN,es,it,pt,ja,ru,hi,vi,tl,ko,ur'
-            }, 'google_translate_element');
-        }*/
-
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
-                includedLanguages: 'en,es,zh-CN,tl,vi,ar,fr,ko,ru,de' // English, Spanish, Chinese (Mandarin & Cantonese), Tagalog (Filipino), Vietnamese, Arabic, French, Korean, Russian, German
-                // Top 10 languages only
+                includedLanguages: 'en,es,zh-CN,tl,vi,ar,fr,ko,ru,de'
             }, 'google_translate_element');
         }
 
+        // ✅ Flag mapping
+        const flagMap = {
+            'en': 'https://flagcdn.com/w20/us.png',
+            'es': 'https://flagcdn.com/w20/es.png',
+            'zh-CN': 'https://flagcdn.com/w20/cn.png',
+            'tl': 'https://flagcdn.com/w20/ph.png',
+            'vi': 'https://flagcdn.com/w20/vn.png',
+            'ar': 'https://flagcdn.com/w20/sa.png',
+            'fr': 'https://flagcdn.com/w20/fr.png',
+            'ko': 'https://flagcdn.com/w20/kr.png',
+            'ru': 'https://flagcdn.com/w20/ru.png',
+            'de': 'https://flagcdn.com/w20/de.png'
+        };
+
         const flags = document.querySelectorAll('.flag_link');
         const mainFlag = document.querySelector('.main-flg');
+        const languageText = document.querySelector('.language-text');
 
-        function changeLanguage(lang, imgSrc) {
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdown');
+            const dropdownMenu = document.querySelector('.dropdown-menu.flag');
+            if (!dropdown.contains(event.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+
+        // ✅ Automatically add flags in dropdown
+        flags.forEach(el => {
+            const lang = el.dataset.lang;
+            const imgSrc = flagMap[lang];
+            if (imgSrc) {
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.alt = lang;
+                img.style.width = '20px';
+                img.style.height = '14px';
+                img.style.borderRadius = '2px';
+                img.style.marginRight = '6px';
+                el.prepend(img);
+            }
+        });
+
+        // ✅ Change flag + text on selection
+        function changeLanguage(lang, imgSrc, text) {
             const intervalId = setInterval(() => {
                 const select = document.querySelector("select.goog-te-combo");
                 if (select) {
                     select.value = lang;
                     select.dispatchEvent(new Event("change"));
                     mainFlag.src = imgSrc;
+                    languageText.textContent = text;
                     clearInterval(intervalId);
                 }
             }, 100);
@@ -171,13 +205,15 @@
             el.addEventListener('click', function(e) {
                 e.preventDefault();
                 const lang = this.dataset.lang;
-                const img = this.querySelector('img').src;
-                changeLanguage(lang, img);
+                const imgSrc = flagMap[lang];
+                const text = this.textContent.trim();
+                changeLanguage(lang, imgSrc, text);
                 document.querySelector('.dropdown-menu.flag').classList.remove('show');
             });
         });
     </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"> </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+    </script>
 </body>
 
 </html>

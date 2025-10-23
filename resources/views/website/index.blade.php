@@ -369,21 +369,10 @@
                         </div>
                         <div class="testimonials-arrows  solution-arrows  d-flex align-items-center gap-30 justify-content-center">
                             <div class="arrow-left arrows">
-                                <svg width="50" height="24" viewBox="0 0 60 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <line x1="0" y1="12" x2="58" y2="12" stroke="black"
-                                        stroke-width="2" />
-                                    <polyline points="10,4 0,12 10,20" fill="none" stroke="black" stroke-width="2" />
-                                </svg>
+                                <i class="fa-solid fa-arrow-left-long"></i>
                             </div>
                             <div class="arrow-right arrows">
-                                <svg width="50" height="24" viewBox="0 0 60 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <line x1="2" y1="12" x2="60" y2="12" stroke="black"
-                                        stroke-width="2" />
-                                    <polyline points="50,4 60,12 50,20" fill="none" stroke="black"
-                                        stroke-width="2" />
-                                </svg>
+                                <i class="fa-solid fa-arrow-right-long"></i>
                             </div>
                         </div>
                     </div>

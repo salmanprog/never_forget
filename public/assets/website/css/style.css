@@ -1406,6 +1406,10 @@ ul.footer-links {
 .footer-disclaimer div {
   text-align: center;
 }
+.testimonials-arrows .arrows i {
+  font-size: 35px;
+  color: var(--secondry-theme);
+}
 /* responsive */
 @media(max-width: 1700px) {
   :root {
