@@ -25,7 +25,6 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         flex-wrap: nowrap;
-        max-width: 1020px;
         padding: 4px 20px;
         gap: 10px;
     }
@@ -52,7 +51,7 @@
 
     /* Custom scrollbar styles */
     .shop-nav::-webkit-scrollbar {
-        height: 8px;
+        height: 10px;
     }
 
     .shop-nav::-webkit-scrollbar-track {
@@ -71,7 +70,7 @@
 
     /* Firefox scrollbar */
     .shop-nav {
-        scrollbar-width: thin;
+        scrollbar-width: 20px;
         scrollbar-color: #0B1B48 #f1f1f1;
     }
 
@@ -341,7 +340,7 @@
                         <button class="nav-link" id="pills-qualitylogo-tab" data-bs-toggle="pill" data-bs-target="#pills-qualitylogo" type="button" role="tab" aria-controls="pills-qualitylogo" aria-selected="false">Quality Logo</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill" data-bs-target="#pills-journey-expert" type="button" role="tab" aria-controls="pills-journey-expert" aria-selected="false">Journey Expert</button>
+                        <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill" data-bs-target="#pills-journey-expert" type="button" role="tab" aria-controls="pills-journey-expert" aria-selected="false">Travel & Experience</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pills-greetings-appreciation-tab" data-bs-toggle="pill" data-bs-target="#pills-greetings-appreciation" type="button" role="tab" aria-controls="pills-greetings-appreciation" aria-selected="false">Greetings and Appreciation </button>
