@@ -133,9 +133,16 @@
         });
     </script>
     <script>
-        function toggleDropdown() {
-            document.querySelector('.dropdown-menu.flag').classList.toggle('show');
-        }
+        const dropdown = document.querySelector('.dropdown');
+        const dropdownMenu = document.querySelector('.dropdown-menu.flag');
+
+        dropdown.addEventListener('mouseenter', () => {
+            dropdownMenu.classList.add('show');
+        });
+
+        dropdown.addEventListener('mouseleave', () => {
+            dropdownMenu.classList.remove('show');
+        });
 
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
@@ -162,7 +169,7 @@
         const mainFlag = document.querySelector('.main-flg');
         const languageText = document.querySelector('.language-text');
 
-        document.addEventListener('click', function(event) {
+        document.addEventListener('mouseenter', function(event) {
             const dropdown = document.querySelector('.dropdown');
             const dropdownMenu = document.querySelector('.dropdown-menu.flag');
             if (!dropdown.contains(event.target)) {
