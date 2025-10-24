@@ -341,7 +341,7 @@
                         <button class="nav-link" id="pills-qualitylogo-tab" data-bs-toggle="pill" data-bs-target="#pills-qualitylogo" type="button" role="tab" aria-controls="pills-qualitylogo" aria-selected="false">Quality Logo</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill" data-bs-target="#pills-journey-expert" type="button" role="tab" aria-controls="pills-journey-expert" aria-selected="false">Journey Expert</button>
+                        <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill" data-bs-target="#pills-journey-expert" type="button" role="tab" aria-controls="pills-journey-expert" aria-selected="false">Travel & Experience</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pills-greetings-appreciation-tab" data-bs-toggle="pill" data-bs-target="#pills-greetings-appreciation" type="button" role="tab" aria-controls="pills-greetings-appreciation" aria-selected="false">Greetings and Appreciation </button>

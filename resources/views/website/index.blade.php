@@ -433,6 +433,54 @@
                         </div>
                     </div>
                 @endforeach
+                <div class="card-wrapper">
+                    <div class="category-image mb-20">
+                        <img src="{{asset('public/assets/website/images/greeting_card')}}/business_card.jpg"
+                                alt="Business Cards" class="img-fluid">
+                    </div>
+                    <div class="card-bottom text-center">
+                        <h5 class="heading light-black fs-24 fw-600 mb-20">
+                            Business Cards
+                        </h5>
+                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                    </div>
+                </div>
+                <div class="card-wrapper">
+                    <div class="category-image mb-20">
+                        <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/trade-show-desktop.webp"
+                                alt="Quality Logo" class="img-fluid">
+                    </div>
+                    <div class="card-bottom text-center">
+                        <h5 class="heading light-black fs-24 fw-600 mb-20">
+                            Quality Logo
+                        </h5>
+                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                    </div>
+                </div>
+                <div class="card-wrapper">
+                    <div class="category-image mb-20">
+                        <img src="{{asset('public/assets/website/images/greeting_card')}}/anniversary.webp"
+                                alt="Travel & Experience" class="img-fluid">
+                    </div>
+                    <div class="card-bottom text-center">
+                        <h5 class="heading light-black fs-24 fw-600 mb-20">
+                            Travel & Experience
+                        </h5>
+                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                    </div>
+                </div>
+                <div class="card-wrapper">
+                    <div class="category-image mb-20">
+                        <img src="{{asset('public/assets/website/images/greeting_card')}}/happybirthday.png"
+                                alt="Greeting and Appreciation" class="img-fluid">
+                    </div>
+                    <div class="card-bottom text-center">
+                        <h5 class="heading light-black fs-24 fw-600 mb-20">
+                            Greeting & Appreciation
+                        </h5>
+                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
