@@ -235,11 +235,15 @@
                                                 <?php $__currentLoopData = $cartItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <tr id="pro-<?php echo e($item->id); ?>">
                                                         <td>
+                                                            <?php if($item->attributes->product_type == 'business_card'): ?>
                                                             <button type="button" value="<?php echo e($item->id); ?>" scope="row" class="remove-btn" ><span class="croos">x</span></button>
                                                             <a href="<?php echo e(route('business-cards.edit', $item->attributes->business_card_id)); ?>" 
                                                             class="edit-btn">
                                                             <i class="fa fa-pen"></i>
                                                             </a>
+                                                            <?php else: ?>
+                                                            <button type="button" value="<?php echo e($item->id); ?>" scope="row" class="remove-btn" ><span class="croos">x</span></button>
+                                                            <?php endif; ?>
                                                         </td>
                                                         <td>
                                                             <?php if($item->attributes->product_type == 'business_card'): ?>

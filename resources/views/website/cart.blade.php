@@ -236,11 +236,15 @@
                                                 @foreach ($cartItems as $item)
                                                     <tr id="pro-{{ $item->id }}">
                                                         <td>
+                                                            @if($item->attributes->product_type == 'business_card')
                                                             <button type="button" value="{{ $item->id }}" scope="row" class="remove-btn" ><span class="croos">x</span></button>
                                                             <a href="{{ route('business-cards.edit', $item->attributes->business_card_id) }}" 
                                                             class="edit-btn">
                                                             <i class="fa fa-pen"></i>
                                                             </a>
+                                                            @else
+                                                            <button type="button" value="{{ $item->id }}" scope="row" class="remove-btn" ><span class="croos">x</span></button>
+                                                            @endif
                                                         </td>
                                                         <td>
                                                             @if($item->attributes->product_type == 'business_card')

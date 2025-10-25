@@ -13,7 +13,6 @@
 </main>
 
 <style>
-    
     .shop-nav {
         background: #fff;
         border-radius: 50px;
@@ -25,10 +24,10 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         flex-wrap: nowrap;
-        max-width: 1020px;
         padding: 4px 20px;
         gap: 10px;
     }
+
     .shop-nav .nav-link {
         color: #333;
         padding: 10px 20px;
@@ -52,7 +51,7 @@
 
     /* Custom scrollbar styles */
     .shop-nav::-webkit-scrollbar {
-        height: 8px;
+        height: 10px;
     }
 
     .shop-nav::-webkit-scrollbar-track {
@@ -71,9 +70,13 @@
 
     /* Firefox scrollbar */
     .shop-nav {
-        scrollbar-width: thin;
+        scrollbar-width: 20px;
         scrollbar-color: #0B1B48 #f1f1f1;
     }
+
+    /* .shop-nav .nav-item {
+  scroll-snap-align: start;
+} */
 
     .gift-card-wrapper {
         background: #fff;
@@ -298,6 +301,12 @@
         background-color: #cfa40c;
     }
 
+    .shop-nav.dragging {
+        cursor: grabbing;
+        cursor: -webkit-grabbing;
+        user-select: none;
+    }
+
     /* .home-categories__menu {
   transform: translateY(100%);
 } */
@@ -324,32 +333,49 @@
             <div class="col-lg-12">
                 <ul class="nav nav-pills shop-nav" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link <?php echo e(!request('category') ? 'active' : ''); ?>" id="pills-All-tab" data-bs-toggle="pill" data-bs-target="#pills-All" type="button" role="tab" aria-controls="pills-All" aria-selected="<?php echo e(!request('category') ? 'true' : 'false'); ?>">All</button>
+                        <button class="nav-link <?php echo e(!request('category') ? 'active' : ''); ?>" id="pills-All-tab"
+                            data-bs-toggle="pill" data-bs-target="#pills-All" type="button" role="tab"
+                            aria-controls="pills-All"
+                            aria-selected="<?php echo e(!request('category') ? 'true' : 'false'); ?>">All</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-Under30-tab" data-bs-toggle="pill" data-bs-target="#pills-Under30" type="button" role="tab" aria-controls="pills-Under30" aria-selected="false">Gifts Under $30</button>
+                        <button class="nav-link" id="pills-Under30-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-Under30" type="button" role="tab" aria-controls="pills-Under30"
+                            aria-selected="false">Gifts Under $30</button>
                     </li>
                     <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link <?php echo e(request('category') == $category->id ? 'active' : ''); ?>" id="pills-<?php echo e($category->id); ?>-tab" data-bs-toggle="pill" data-bs-target="#pills-<?php echo e($category->id); ?>" type="button" role="tab" aria-controls="pills-<?php echo e($category->id); ?>" aria-selected="<?php echo e(request('category') == $category->id ? 'true' : 'false'); ?>"><?php echo e($category->title); ?></button>
-                    </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link <?php echo e(request('category') == $category->id ? 'active' : ''); ?>"
+                                id="pills-<?php echo e($category->id); ?>-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-<?php echo e($category->id); ?>" type="button" role="tab"
+                                aria-controls="pills-<?php echo e($category->id); ?>"
+                                aria-selected="<?php echo e(request('category') == $category->id ? 'true' : 'false'); ?>"><?php echo e($category->title); ?></button>
+                        </li>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <li class="nav-item" role="presentation">
                         <a href="<?php echo e(route('business-cards.create')); ?>" class="nav-link">Business Cards</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-qualitylogo-tab" data-bs-toggle="pill" data-bs-target="#pills-qualitylogo" type="button" role="tab" aria-controls="pills-qualitylogo" aria-selected="false">Quality Logo</button>
+                        <button class="nav-link" id="pills-qualitylogo-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-qualitylogo" type="button" role="tab"
+                            aria-controls="pills-qualitylogo" aria-selected="false">Quality Logo</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill" data-bs-target="#pills-journey-expert" type="button" role="tab" aria-controls="pills-journey-expert" aria-selected="false">Travel & Experience</button>
+                        <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-journey-expert" type="button" role="tab"
+                            aria-controls="pills-journey-expert" aria-selected="false">Travel & Experience</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-greetings-appreciation-tab" data-bs-toggle="pill" data-bs-target="#pills-greetings-appreciation" type="button" role="tab" aria-controls="pills-greetings-appreciation" aria-selected="false">Greetings and Appreciation </button>
+                        <button class="nav-link" id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-greetings-appreciation" type="button" role="tab"
+                            aria-controls="pills-greetings-appreciation" aria-selected="false">Greetings and
+                            Appreciation </button>
                     </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
                     <!-- All Products Tab -->
-                    <div class="tab-pane fade <?php echo e(!request('category') ? 'show active' : ''); ?>" id="pills-All" role="tabpanel" aria-labelledby="pills-All-tab" tabindex="0">
+                    <div class="tab-pane fade <?php echo e(!request('category') ? 'show active' : ''); ?>" id="pills-All"
+                        role="tabpanel" aria-labelledby="pills-All-tab" tabindex="0">
                         <div class="row" id="all-products">
                             <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php $__currentLoopData = $category->products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -812,4 +838,5 @@
 <?php $__env->stopPush(); ?>
 
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp8.2\htdocs\never-forget\resources\views/website/shop.blade.php ENDPATH**/ ?>
