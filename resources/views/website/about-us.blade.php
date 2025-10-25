@@ -85,9 +85,7 @@
                 <div class="col-lg-6" data-aos="fade-left" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
                     <span class="btn des-wrapper mb-30">Our Philosophy</span>
                     <h2 class="heading fs-74 mb-30">At Never Forget, our philosophy is <span>simple</span></h2>
-                    <p class="mb-30" style="max-width: 555px"> At <span class="ml-5 fw-700"> Never Forget, our philosophy is simple</span>,relationships come first. Every decision we make
-                        from product curation to delivery,  reflects our commitment to appreciation, reliability, and trust.
-                        We believe meaningful connections are built through consistency and care. That’s why we focus on thoughtful details, quality partnerships, and a seamless experience from start to finish.
+                    <p class="mb-30" style="max-width: 555px"> At <span class="ml-5 fw-700"> Never Forget, our philosophy is simple</span>,relationships come first. Every decision we make, from product curation to the personal touch of a handwritten card, reflects our commitment to appreciation, reliability, and trust. We believe meaningful connections are built through consistency and care. That’s why we focus on thoughtful details, quality partnerships, and a seamless experience from start to finish.
                     </p>
                     <p class="mb-30" style="max-width: 555px">
                         For us, it’s not just about gifts. It’s about creating lasting impressions that remind people they matter.
