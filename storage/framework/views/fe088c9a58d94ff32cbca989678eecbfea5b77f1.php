@@ -114,11 +114,21 @@
     .swal2-success-line-long {
         background-color: #0B1B48 !important;
     }
+    .travel-img-wrapper img {
+        border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    max-height: 390px;
+    object-fit: cover;
+    }
     </style>
 <section class="contact-sec py-150">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
+                <div class="travel-img-wrapper">
+                    <img src="<?php echo e(asset('public/assets/website/images')); ?>/travel-experience.jpeg" alt="Travel & Experience" width="100%">
+                </div>
                 <div class="contact-form-wrapper">
                     <div class="row justify-content-center text-center">
                         <div class="col-lg-8">

@@ -1,6 +1,6 @@
-@extends('layouts.website.master')
-@section('content')
-@section('title', $page_title)
+
+<?php $__env->startSection('content'); ?>
+<?php $__env->startSection('title', $page_title); ?>
 
 <style>
     .contact-form-wrapper {
@@ -147,62 +147,78 @@
                         </div>
                     </div>
 
-                    @if ($career)
+                    <?php if($career): ?>
                         <div class="career-info-card mb-50" data-aos="fade-up" data-aos-easing="ease-out-cubic"
                             data-aos-duration="1000">
                             <div class="row">
                                 <div class="col-lg-8">
-                                    <h3 class="career-title">{{ $career->title }}</h3>
-                                    @if ($career->hasCategory)
-                                        <span class="category-badge">{{ $career->hasCategory->title }}</span>
-                                    @endif
-                                    @if ($career->description)
-                                        <p class="career-description mt-3">{!! $career->description !!}</p>
-                                    @endif
+                                    <h3 class="career-title"><?php echo e($career->title); ?></h3>
+                                    <?php if($career->hasCategory): ?>
+                                        <span class="category-badge"><?php echo e($career->hasCategory->title); ?></span>
+                                    <?php endif; ?>
+                                    <?php if($career->description): ?>
+                                        <p class="career-description mt-3"><?php echo $career->description; ?></p>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="col-lg-4 text-end">
-                                    @if ($career->image)
-                                        <img src="{{ asset('public/admin/assets/images/careers') }}/{{ $career->image }}"
-                                            alt="{{ $career->title }}" class="career-image"
+                                    <?php if($career->image): ?>
+                                        <img src="<?php echo e(asset('public/admin/assets/images/careers')); ?>/<?php echo e($career->image); ?>"
+                                            alt="<?php echo e($career->title); ?>" class="career-image"
                                             style="border-radius: 10px;">
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
-                    <form action="{{ route('careers.apply') }}" method="POST" enctype="multipart/form-data"
+                    <form action="<?php echo e(route('careers.apply')); ?>" method="POST" enctype="multipart/form-data"
                         data-aos="fade-up" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
-                        @csrf
-                        @if ($career)
-                            <input type="hidden" name="career_id" value="{{ $career->id }}">
-                        @else
+                        <?php echo csrf_field(); ?>
+                        <?php if($career): ?>
+                            <input type="hidden" name="career_id" value="<?php echo e($career->id); ?>">
+                        <?php else: ?>
                             <div class="form-group mb-30">
                                 <label for="career_id" class="form-label">Select Position *</label>
                                 <select name="career_id" id="career_id" class="form-control" required>
                                     <option value="">Choose a position</option>
-                                    @foreach (\App\Models\Career::where('status', 1)->with('hasCategory')->get() as $careerOption)
-                                        <option value="{{ $careerOption->id }}">{{ $careerOption->title }}
-                                            @if ($careerOption->hasCategory)
-                                                - {{ $careerOption->hasCategory->title }}
-                                            @endif
+                                    <?php $__currentLoopData = \App\Models\Career::where('status', 1)->with('hasCategory')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $careerOption): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($careerOption->id); ?>"><?php echo e($careerOption->title); ?>
+
+                                            <?php if($careerOption->hasCategory): ?>
+                                                - <?php echo e($careerOption->hasCategory->title); ?>
+
+                                            <?php endif; ?>
                                         </option>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
-                                @error('career_id')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                <?php $__errorArgs = ['career_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
-                        @endif
+                        <?php endif; ?>
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">Employer *</label>
                                     <input type="text" name="employer" id="employer" class="form-control"
-                                        placeholder="Employer" value="{{ old('employer') }}" required>
-                                    @error('employer')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="Employer" value="<?php echo e(old('employer')); ?>" required>
+                                    <?php $__errorArgs = ['employer'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -210,10 +226,17 @@
                                     <label for="email" class="form-label">Position applying for *</label>
                                     <input type="text" name="position_for_applying" id="position_for_applying"
                                         class="form-control" placeholder="Enter Position applying for"
-                                        value="{{ old('position_for_applying') }}" required>
-                                    @error('position_for_applying')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('position_for_applying')); ?>" required>
+                                    <?php $__errorArgs = ['position_for_applying'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -228,10 +251,17 @@
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">Name (last, first, middle) *</label>
                                     <input type="text" name="name" id="name" class="form-control"
-                                        placeholder="Enter your full name" value="{{ old('name') }}" required>
-                                    @error('name')
-                                        <span class="text-danger">{{ $name }}</span>
-                                    @enderror
+                                        placeholder="Enter your full name" value="<?php echo e(old('name')); ?>" required>
+                                    <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($name); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -240,30 +270,51 @@
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">City *</label>
                                     <input type="text" name="city" id="city" class="form-control"
-                                        placeholder="Enter your city" value="{{ old('city') }}" required>
-                                    @error('city')
-                                        <span class="text-danger">{{ $city }}</span>
-                                    @enderror
+                                        placeholder="Enter your city" value="<?php echo e(old('city')); ?>" required>
+                                    <?php $__errorArgs = ['city'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($city); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">State *</label>
                                     <input type="text" name="state" id="state" class="form-control"
-                                        placeholder="Enter your state" value="{{ old('state') }}" required>
-                                    @error('state')
-                                        <span class="text-danger">{{ $state }}</span>
-                                    @enderror
+                                        placeholder="Enter your state" value="<?php echo e(old('state')); ?>" required>
+                                    <?php $__errorArgs = ['state'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($state); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">Zip *</label>
                                     <input type="text" name="zip" id="zip" class="form-control"
-                                        placeholder="Enter your zip" value="{{ old('zip') }}" required>
-                                    @error('zip')
-                                        <span class="text-danger">{{ $zip }}</span>
-                                    @enderror
+                                        placeholder="Enter your zip" value="<?php echo e(old('zip')); ?>" required>
+                                    <?php $__errorArgs = ['zip'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($zip); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -275,10 +326,17 @@
                                     <input type="text" name="street_or_email_address" id="street_or_email_address"
                                         class="form-control"
                                         placeholder="Enter your Street Address and/or Mailing Address"
-                                        value="{{ old('street_or_email_address') }}" required>
-                                    @error('street_or_email_address')
-                                        <span class="text-danger">{{ $street_or_email_address }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('street_or_email_address')); ?>" required>
+                                    <?php $__errorArgs = ['street_or_email_address'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($street_or_email_address); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -288,10 +346,17 @@
                                     <label for="name" class="form-label">Home Telephone Number *</label>
                                     <input type="text" name="home_phone_number" id="home_phone_number"
                                         class="form-control" placeholder="Home Telephone Number"
-                                        value="{{ old('home_phone_number') }}">
-                                    @error('home_phone_number')
-                                        <span class="text-danger">{{ $home_phone_number }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('home_phone_number')); ?>">
+                                    <?php $__errorArgs = ['home_phone_number'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($home_phone_number); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -299,21 +364,35 @@
                                     <label for="name" class="form-label">Business Telephone Number *</label>
                                     <input type="text" name="business_phone_number" id="business_phone_number"
                                         class="form-control" placeholder="Business Telephone Number"
-                                        value="{{ old('business_phone_number') }}">
-                                    @error('business_phone_number')
-                                        <span class="text-danger">{{ $business_phone_number }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('business_phone_number')); ?>">
+                                    <?php $__errorArgs = ['business_phone_number'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($business_phone_number); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">Cellular Telephone Number *</label>
                                     <input type="text" name="cell_number" id="cell_number" class="form-control"
-                                        placeholder="Cellular Telephone Number" value="{{ old('cell_number') }}"
+                                        placeholder="Cellular Telephone Number" value="<?php echo e(old('cell_number')); ?>"
                                         required>
-                                    @error('cell_number')
-                                        <span class="text-danger">{{ $cell_number }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['cell_number'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($cell_number); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -323,10 +402,17 @@
                                     <label for="name" class="form-label">Date you can start work *</label>
                                     <input type="text" name="start_work_date" id="start_work_date"
                                         class="form-control" placeholder="Date you can start work"
-                                        value="{{ old('start_work_date') }}">
-                                    @error('start_work_date')
-                                        <span class="text-danger">{{ $start_work_date }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('start_work_date')); ?>">
+                                    <?php $__errorArgs = ['start_work_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($start_work_date); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -334,10 +420,17 @@
                                     <label for="name" class="form-label">Salary Desired *</label>
                                     <input type="text" name="salary_desired" id="salary_desired"
                                         class="form-control" placeholder="Salary Desired"
-                                        value="{{ old('salary_desired') }}">
-                                    @error('salary_desired')
-                                        <span class="text-danger">{{ $salary_desired }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('salary_desired')); ?>">
+                                    <?php $__errorArgs = ['salary_desired'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($salary_desired); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -357,9 +450,16 @@
                                         <label class="form-check-label" for="diploma_no">No</label>
                                     </div>
 
-                                    @error('high_school_diploma')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['high_school_diploma'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -387,9 +487,16 @@
                                         <label class="form-check-label" for="diploma_no">Part Time</label>
                                     </div>
 
-                                    @error('high_school_diploma')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['high_school_diploma'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -426,9 +533,16 @@
                                         <label class="form-check-label" for="diploma_no">Weekends</label>
                                     </div>
 
-                                    @error('high_school_diploma')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['high_school_diploma'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -447,9 +561,16 @@
                                         <label class="form-check-label" for="diploma_no">Temporary</label>
                                     </div>
 
-                                    @error('high_school_diploma')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['high_school_diploma'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -471,9 +592,16 @@
                                         <label class="form-check-label" for="diploma_no">No</label>
                                     </div>
 
-                                    @error('high_school_diploma')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['high_school_diploma'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -494,9 +622,16 @@
                                         <label class="form-check-label" for="diploma_no">No</label>
                                     </div>
 
-                                    @error('high_school_diploma')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['high_school_diploma'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -519,9 +654,16 @@
                                         <label class="form-check-label" for="diploma_no">No</label>
                                     </div>
 
-                                    @error('high_school_diploma')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['high_school_diploma'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -543,9 +685,16 @@
                                         <label class="form-check-label" for="diploma_no">No</label>
                                     </div>
 
-                                    @error('high_school_diploma')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['high_school_diploma'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -632,11 +781,18 @@
                                 <div class="form-group mb-30">
                                     <label for="special_skills" class="form-label">Special Skills</label>
                                     <textarea name="special_skills" id="special_skills" class="form-control"
-                                        placeholder="Describe your special skills..." rows="4">{{ old('special_skills') }}</textarea>
+                                        placeholder="Describe your special skills..." rows="4"><?php echo e(old('special_skills')); ?></textarea>
 
-                                    @error('special_skills')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['special_skills'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -733,10 +889,17 @@
                                     <label for="name" class="form-label">Start Date (mo/day/yr) *</label>
                                     <input type="text" name="job1_start_date" id="job1_start_date"
                                         class="form-control" placeholder="Start Date"
-                                        value="{{ old('job1_start_date') }}" required>
-                                    @error('job1_start_date')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('job1_start_date')); ?>" required>
+                                    <?php $__errorArgs = ['job1_start_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -744,10 +907,17 @@
                                     <label for="email" class="form-label">End Date (mo/day/yr) *</label>
                                     <input type="text" name="job1_end_date" id="job1_end_date"
                                         class="form-control" placeholder="End Date"
-                                        value="{{ old('job1_end_date') }}" required>
-                                    @error('job1_end_date')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('job1_end_date')); ?>" required>
+                                    <?php $__errorArgs = ['job1_end_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -757,10 +927,17 @@
                                     <label for="name" class="form-label">Company Name *</label>
                                     <input type="text" name="company_name_1" id="company_name_1"
                                         class="form-control" placeholder="Company Name"
-                                        value="{{ old('company_name_1') }}" required>
-                                    @error('company_name_1')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('company_name_1')); ?>" required>
+                                    <?php $__errorArgs = ['company_name_1'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -768,10 +945,17 @@
                                     <label for="email" class="form-label">Supervisor’s Name *</label>
                                     <input type="text" name="supervisor_name1" id="supervisor_name1"
                                         class="form-control" placeholder="Supervisor’s Name"
-                                        value="{{ old('supervisor_name1') }}" required>
-                                    @error('supervisor_name1')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('supervisor_name1')); ?>" required>
+                                    <?php $__errorArgs = ['supervisor_name1'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -779,10 +963,17 @@
                                     <label for="email" class="form-label">Phone Number *</label>
                                     <input type="text" name="phone_number1" id="phone_number1"
                                         class="form-control" placeholder="Phone Number"
-                                        value="{{ old('phone_number1') }}" required>
-                                    @error('phone_number1')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('phone_number1')); ?>" required>
+                                    <?php $__errorArgs = ['phone_number1'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -791,30 +982,51 @@
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">City *</label>
                                     <input type="text" name="city_1" id="city_1" class="form-control"
-                                        placeholder="City" value="{{ old('city_1') }}" required>
-                                    @error('city_1')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="City" value="<?php echo e(old('city_1')); ?>" required>
+                                    <?php $__errorArgs = ['city_1'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group mb-30">
                                     <label for="email" class="form-label">State *</label>
                                     <input type="text" name="state1" id="state1" class="form-control"
-                                        placeholder="State" value="{{ old('state1') }}" required>
-                                    @error('state1')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="State" value="<?php echo e(old('state1')); ?>" required>
+                                    <?php $__errorArgs = ['state1'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group mb-30">
                                     <label for="email" class="form-label">Zip *</label>
                                     <input type="text" name="zip1" id="zip1" class="form-control"
-                                        placeholder="Zip" value="{{ old('zip1') }}" required>
-                                    @error('zip1')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="Zip" value="<?php echo e(old('zip1')); ?>" required>
+                                    <?php $__errorArgs = ['zip1'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -822,10 +1034,17 @@
                             <div class="col-lg-12">
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">Duties *</label>
-                                    <textarea name="duties1" id="duties1" class="form-control" rows="6" placeholder="Duties...">{{ old('duties1') }}</textarea>
-                                    @error('duties1')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <textarea name="duties1" id="duties1" class="form-control" rows="6" placeholder="Duties..."><?php echo e(old('duties1')); ?></textarea>
+                                    <?php $__errorArgs = ['duties1'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -835,10 +1054,17 @@
                                     <label for="name" class="form-label">Reason for Leaving *</label>
                                     <input type="text" name="reason_for_leaving_1" id="reason_for_leaving_1"
                                         class="form-control" placeholder="Reason for Leaving"
-                                        value="{{ old('reason_for_leaving_1') }}" required>
-                                    @error('reason_for_leaving_1')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('reason_for_leaving_1')); ?>" required>
+                                    <?php $__errorArgs = ['reason_for_leaving_1'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -846,10 +1072,17 @@
                                     <label for="email" class="form-label">Starting Salary *</label>
                                     <input type="text" name="starting_salary1" id="starting_salary1"
                                         class="form-control" placeholder="Starting Salary"
-                                        value="{{ old('starting_salary1') }}" required>
-                                    @error('starting_salary1')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('starting_salary1')); ?>" required>
+                                    <?php $__errorArgs = ['starting_salary1'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -857,10 +1090,17 @@
                                     <label for="email" class="form-label">Ending Salary *</label>
                                     <input type="text" name="ending_salary1" id="ending_salary1"
                                         class="form-control" placeholder="Ending Salary"
-                                        value="{{ old('ending_salary1') }}" required>
-                                    @error('ending_salary1')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('ending_salary1')); ?>" required>
+                                    <?php $__errorArgs = ['ending_salary1'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -888,9 +1128,16 @@
                                         <label class="form-check-label" for="diploma_no">N/A</label>
                                     </div>
 
-                                    @error('high_school_diploma')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['high_school_diploma'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -906,10 +1153,17 @@
                                     <label for="name" class="form-label">Start Date (mo/day/yr) *</label>
                                     <input type="text" name="job2_start_date" id="job2_start_date"
                                         class="form-control" placeholder="Start Date"
-                                        value="{{ old('job2_start_date') }}" required>
-                                    @error('job2_start_date')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('job2_start_date')); ?>" required>
+                                    <?php $__errorArgs = ['job2_start_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -917,10 +1171,17 @@
                                     <label for="email" class="form-label">End Date (mo/day/yr) *</label>
                                     <input type="text" name="job2_end_date" id="job2_end_date"
                                         class="form-control" placeholder="End Date"
-                                        value="{{ old('job2_end_date') }}" required>
-                                    @error('job2_end_date')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('job2_end_date')); ?>" required>
+                                    <?php $__errorArgs = ['job2_end_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -930,10 +1191,17 @@
                                     <label for="name" class="form-label">Company Name *</label>
                                     <input type="text" name="company_name_2" id="company_name_2"
                                         class="form-control" placeholder="Company Name"
-                                        value="{{ old('company_name_2') }}" required>
-                                    @error('company_name_2')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('company_name_2')); ?>" required>
+                                    <?php $__errorArgs = ['company_name_2'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -941,10 +1209,17 @@
                                     <label for="email" class="form-label">Supervisor’s Name *</label>
                                     <input type="text" name="supervisor_name2" id="supervisor_name2"
                                         class="form-control" placeholder="Supervisor’s Name"
-                                        value="{{ old('supervisor_name2') }}" required>
-                                    @error('supervisor_name2')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('supervisor_name2')); ?>" required>
+                                    <?php $__errorArgs = ['supervisor_name2'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -952,10 +1227,17 @@
                                     <label for="email" class="form-label">Phone Number *</label>
                                     <input type="text" name="phone_number2" id="phone_number2"
                                         class="form-control" placeholder="Phone Number"
-                                        value="{{ old('phone_number2') }}" required>
-                                    @error('phone_number2')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('phone_number2')); ?>" required>
+                                    <?php $__errorArgs = ['phone_number2'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -964,30 +1246,51 @@
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">City *</label>
                                     <input type="text" name="city_2" id="city_2" class="form-control"
-                                        placeholder="City" value="{{ old('city_2') }}" required>
-                                    @error('city_2')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="City" value="<?php echo e(old('city_2')); ?>" required>
+                                    <?php $__errorArgs = ['city_2'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group mb-30">
                                     <label for="email" class="form-label">State *</label>
                                     <input type="text" name="state2" id="state2" class="form-control"
-                                        placeholder="State" value="{{ old('state2') }}" required>
-                                    @error('state2')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="State" value="<?php echo e(old('state2')); ?>" required>
+                                    <?php $__errorArgs = ['state2'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group mb-30">
                                     <label for="email" class="form-label">Zip *</label>
                                     <input type="text" name="zip2" id="zip2" class="form-control"
-                                        placeholder="Zip" value="{{ old('zip2') }}" required>
-                                    @error('zip2')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="Zip" value="<?php echo e(old('zip2')); ?>" required>
+                                    <?php $__errorArgs = ['zip2'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -995,10 +1298,17 @@
                             <div class="col-lg-12">
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">Duties *</label>
-                                    <textarea name="duties2" id="duties2" class="form-control" rows="6" placeholder="Duties...">{{ old('duties2') }}</textarea>
-                                    @error('duties2')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <textarea name="duties2" id="duties2" class="form-control" rows="6" placeholder="Duties..."><?php echo e(old('duties2')); ?></textarea>
+                                    <?php $__errorArgs = ['duties2'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1008,10 +1318,17 @@
                                     <label for="name" class="form-label">Reason for Leaving *</label>
                                     <input type="text" name="reason_for_leaving_2" id="reason_for_leaving_2"
                                         class="form-control" placeholder="Reason for Leaving"
-                                        value="{{ old('reason_for_leaving_2') }}" required>
-                                    @error('reason_for_leaving_2')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('reason_for_leaving_2')); ?>" required>
+                                    <?php $__errorArgs = ['reason_for_leaving_2'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -1019,10 +1336,17 @@
                                     <label for="email" class="form-label">Starting Salary *</label>
                                     <input type="text" name="starting_salary2" id="starting_salary2"
                                         class="form-control" placeholder="Starting Salary"
-                                        value="{{ old('starting_salary2') }}" required>
-                                    @error('starting_salary2')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('starting_salary2')); ?>" required>
+                                    <?php $__errorArgs = ['starting_salary2'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -1030,10 +1354,17 @@
                                     <label for="email" class="form-label">Ending Salary *</label>
                                     <input type="text" name="ending_salary2" id="ending_salary2"
                                         class="form-control" placeholder="Ending Salary"
-                                        value="{{ old('ending_salary2') }}" required>
-                                    @error('ending_salary2')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('ending_salary2')); ?>" required>
+                                    <?php $__errorArgs = ['ending_salary2'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1049,10 +1380,17 @@
                                     <label for="name" class="form-label">Start Date (mo/day/yr) *</label>
                                     <input type="text" name="job3_start_date" id="job3_start_date"
                                         class="form-control" placeholder="Start Date"
-                                        value="{{ old('job3_start_date') }}" required>
-                                    @error('job3_start_date')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('job3_start_date')); ?>" required>
+                                    <?php $__errorArgs = ['job3_start_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -1060,10 +1398,17 @@
                                     <label for="email" class="form-label">End Date (mo/day/yr) *</label>
                                     <input type="text" name="job3_end_date" id="job3_end_date"
                                         class="form-control" placeholder="End Date"
-                                        value="{{ old('job3_end_date') }}" required>
-                                    @error('job3_end_date')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('job3_end_date')); ?>" required>
+                                    <?php $__errorArgs = ['job3_end_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1073,10 +1418,17 @@
                                     <label for="name" class="form-label">Company Name *</label>
                                     <input type="text" name="company_name_3" id="company_name_3"
                                         class="form-control" placeholder="Company Name"
-                                        value="{{ old('company_name_3') }}" required>
-                                    @error('company_name_3')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('company_name_3')); ?>" required>
+                                    <?php $__errorArgs = ['company_name_3'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -1084,10 +1436,17 @@
                                     <label for="email" class="form-label">Supervisor’s Name *</label>
                                     <input type="text" name="supervisor_name3" id="supervisor_name3"
                                         class="form-control" placeholder="Supervisor’s Name"
-                                        value="{{ old('supervisor_name3') }}" required>
-                                    @error('supervisor_name3')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('supervisor_name3')); ?>" required>
+                                    <?php $__errorArgs = ['supervisor_name3'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -1095,10 +1454,17 @@
                                     <label for="email" class="form-label">Phone Number *</label>
                                     <input type="text" name="phone_number3" id="phone_number3"
                                         class="form-control" placeholder="Phone Number"
-                                        value="{{ old('phone_number3') }}" required>
-                                    @error('phone_number3')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('phone_number3')); ?>" required>
+                                    <?php $__errorArgs = ['phone_number3'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1107,30 +1473,51 @@
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">City *</label>
                                     <input type="text" name="city_3" id="city_3" class="form-control"
-                                        placeholder="City" value="{{ old('city_3') }}" required>
-                                    @error('city_3')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="City" value="<?php echo e(old('city_3')); ?>" required>
+                                    <?php $__errorArgs = ['city_3'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group mb-30">
                                     <label for="email" class="form-label">State *</label>
                                     <input type="text" name="state3" id="state3" class="form-control"
-                                        placeholder="State" value="{{ old('state3') }}" required>
-                                    @error('state3')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="State" value="<?php echo e(old('state3')); ?>" required>
+                                    <?php $__errorArgs = ['state3'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group mb-30">
                                     <label for="email" class="form-label">Zip *</label>
                                     <input type="text" name="zip3" id="zip3" class="form-control"
-                                        placeholder="Zip" value="{{ old('zip3') }}" required>
-                                    @error('zip3')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="Zip" value="<?php echo e(old('zip3')); ?>" required>
+                                    <?php $__errorArgs = ['zip3'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1138,10 +1525,17 @@
                             <div class="col-lg-12">
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">Duties *</label>
-                                    <textarea name="duties3" id="duties3" class="form-control" rows="6" placeholder="Duties...">{{ old('duties3') }}</textarea>
-                                    @error('duties3')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <textarea name="duties3" id="duties3" class="form-control" rows="6" placeholder="Duties..."><?php echo e(old('duties3')); ?></textarea>
+                                    <?php $__errorArgs = ['duties3'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1151,10 +1545,17 @@
                                     <label for="name" class="form-label">Reason for Leaving *</label>
                                     <input type="text" name="reason_for_leaving_3" id="reason_for_leaving_3"
                                         class="form-control" placeholder="Reason for Leaving"
-                                        value="{{ old('reason_for_leaving_3') }}" required>
-                                    @error('reason_for_leaving_3')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('reason_for_leaving_3')); ?>" required>
+                                    <?php $__errorArgs = ['reason_for_leaving_3'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -1162,10 +1563,17 @@
                                     <label for="email" class="form-label">Starting Salary *</label>
                                     <input type="text" name="starting_salary3" id="starting_salary3"
                                         class="form-control" placeholder="Starting Salary"
-                                        value="{{ old('starting_salary3') }}" required>
-                                    @error('starting_salary3')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('starting_salary3')); ?>" required>
+                                    <?php $__errorArgs = ['starting_salary3'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -1173,10 +1581,17 @@
                                     <label for="email" class="form-label">Ending Salary *</label>
                                     <input type="text" name="ending_salary3" id="ending_salary3"
                                         class="form-control" placeholder="Ending Salary"
-                                        value="{{ old('ending_salary3') }}" required>
-                                    @error('ending_salary3')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('ending_salary3')); ?>" required>
+                                    <?php $__errorArgs = ['ending_salary3'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1192,10 +1607,17 @@
                                     <label for="name" class="form-label">Start Date (mo/day/yr) *</label>
                                     <input type="text" name="job4_start_date" id="job4_start_date"
                                         class="form-control" placeholder="Start Date"
-                                        value="{{ old('job4_start_date') }}" required>
-                                    @error('job4_start_date')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('job4_start_date')); ?>" required>
+                                    <?php $__errorArgs = ['job4_start_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -1203,10 +1625,17 @@
                                     <label for="email" class="form-label">End Date (mo/day/yr) *</label>
                                     <input type="text" name="job4_end_date" id="job4_end_date"
                                         class="form-control" placeholder="End Date"
-                                        value="{{ old('job4_end_date') }}" required>
-                                    @error('job4_end_date')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('job4_end_date')); ?>" required>
+                                    <?php $__errorArgs = ['job4_end_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1216,10 +1645,17 @@
                                     <label for="name" class="form-label">Company Name *</label>
                                     <input type="text" name="company_name_4" id="company_name_4"
                                         class="form-control" placeholder="Company Name"
-                                        value="{{ old('company_name_4') }}" required>
-                                    @error('company_name_4')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('company_name_4')); ?>" required>
+                                    <?php $__errorArgs = ['company_name_4'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -1227,10 +1663,17 @@
                                     <label for="email" class="form-label">Supervisor’s Name *</label>
                                     <input type="text" name="supervisor_name4" id="supervisor_name4"
                                         class="form-control" placeholder="Supervisor’s Name"
-                                        value="{{ old('supervisor_name4') }}" required>
-                                    @error('supervisor_name4')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('supervisor_name4')); ?>" required>
+                                    <?php $__errorArgs = ['supervisor_name4'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -1238,10 +1681,17 @@
                                     <label for="email" class="form-label">Phone Number *</label>
                                     <input type="text" name="phone_number4" id="phone_number4"
                                         class="form-control" placeholder="Phone Number"
-                                        value="{{ old('phone_number4') }}" required>
-                                    @error('phone_number4')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('phone_number4')); ?>" required>
+                                    <?php $__errorArgs = ['phone_number4'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1250,30 +1700,51 @@
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">City *</label>
                                     <input type="text" name="city_4" id="city_4" class="form-control"
-                                        placeholder="City" value="{{ old('city_4') }}" required>
-                                    @error('city_4')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="City" value="<?php echo e(old('city_4')); ?>" required>
+                                    <?php $__errorArgs = ['city_4'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group mb-30">
                                     <label for="email" class="form-label">State *</label>
                                     <input type="text" name="state4" id="state4" class="form-control"
-                                        placeholder="State" value="{{ old('state4') }}" required>
-                                    @error('state4')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="State" value="<?php echo e(old('state4')); ?>" required>
+                                    <?php $__errorArgs = ['state4'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group mb-30">
                                     <label for="email" class="form-label">Zip *</label>
                                     <input type="text" name="zip4" id="zip4" class="form-control"
-                                        placeholder="Zip" value="{{ old('zip4') }}" required>
-                                    @error('zip4')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        placeholder="Zip" value="<?php echo e(old('zip4')); ?>" required>
+                                    <?php $__errorArgs = ['zip4'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1281,10 +1752,17 @@
                             <div class="col-lg-12">
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">Duties *</label>
-                                    <textarea name="duties4" id="duties4" class="form-control" rows="6" placeholder="Duties...">{{ old('duties4') }}</textarea>
-                                    @error('duties4')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <textarea name="duties4" id="duties4" class="form-control" rows="6" placeholder="Duties..."><?php echo e(old('duties4')); ?></textarea>
+                                    <?php $__errorArgs = ['duties4'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1294,10 +1772,17 @@
                                     <label for="name" class="form-label">Reason for Leaving *</label>
                                     <input type="text" name="reason_for_leaving_4" id="reason_for_leaving_4"
                                         class="form-control" placeholder="Reason for Leaving"
-                                        value="{{ old('reason_for_leaving_4') }}" required>
-                                    @error('reason_for_leaving_4')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('reason_for_leaving_4')); ?>" required>
+                                    <?php $__errorArgs = ['reason_for_leaving_4'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -1305,10 +1790,17 @@
                                     <label for="email" class="form-label">Starting Salary *</label>
                                     <input type="text" name="starting_salary4" id="starting_salary4"
                                         class="form-control" placeholder="Starting Salary"
-                                        value="{{ old('starting_salary4') }}" required>
-                                    @error('starting_salary4')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('starting_salary4')); ?>" required>
+                                    <?php $__errorArgs = ['starting_salary4'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -1316,10 +1808,17 @@
                                     <label for="email" class="form-label">Ending Salary *</label>
                                     <input type="text" name="ending_salary4" id="ending_salary4"
                                         class="form-control" placeholder="Ending Salary"
-                                        value="{{ old('ending_salary4') }}" required>
-                                    @error('ending_salary4')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                        value="<?php echo e(old('ending_salary4')); ?>" required>
+                                    <?php $__errorArgs = ['ending_salary4'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
@@ -1327,47 +1826,82 @@
                             <div class="col-lg-6">
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">Full Name *</label>
-                                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter your full name" value="{{ old('name') }}" required>
-                                    @error('name')
-    <span class="text-danger">{{ $message }}</span>
-@enderror
+                                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter your full name" value="<?php echo e(old('name')); ?>" required>
+                                    <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+    <span class="text-danger"><?php echo e($message); ?></span>
+<?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group mb-30">
                                     <label for="email" class="form-label">Email Address *</label>
-                                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" value="{{ old('email') }}" required>
-                                    @error('email')
-    <span class="text-danger">{{ $message }}</span>
-@enderror
+                                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" value="<?php echo e(old('email')); ?>" required>
+                                    <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+    <span class="text-danger"><?php echo e($message); ?></span>
+<?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group mb-30">
                             <label for="phone" class="form-label">Phone Number</label>
-                            <input type="tel" name="phone" id="phone" class="form-control" placeholder="Enter your phone number" value="{{ old('phone') }}">
-                            @error('phone')
-    <span class="text-danger">{{ $message }}</span>
-@enderror
+                            <input type="tel" name="phone" id="phone" class="form-control" placeholder="Enter your phone number" value="<?php echo e(old('phone')); ?>">
+                            <?php $__errorArgs = ['phone'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+    <span class="text-danger"><?php echo e($message); ?></span>
+<?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <div class="form-group mb-30">
                             <label for="resume" class="form-label">Resume/CV</label>
                             <input type="file" name="resume" id="resume" class="form-control" accept=".pdf,.doc,.docx">
                             <small class="form-text text-muted">Accepted formats: PDF, DOC, DOCX (Max size: 2MB)</small>
-                            @error('resume')
-    <span class="text-danger">{{ $message }}</span>
-@enderror
+                            <?php $__errorArgs = ['resume'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+    <span class="text-danger"><?php echo e($message); ?></span>
+<?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <div class="form-group mb-30">
                             <label for="cover_letter" class="form-label">Cover Letter</label>
                             <textarea name="cover_letter" id="cover_letter" class="form-control" rows="6"
-                                placeholder="Tell us why you're interested in this position...">{{ old('cover_letter') }}</textarea>
-                            @error('cover_letter')
-    <span class="text-danger">{{ $message }}</span>
-@enderror
+                                placeholder="Tell us why you're interested in this position..."><?php echo e(old('cover_letter')); ?></textarea>
+                            <?php $__errorArgs = ['cover_letter'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+    <span class="text-danger"><?php echo e($message); ?></span>
+<?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div> -->
 
                         <div class="form-group text-center">
@@ -1383,13 +1917,13 @@
 
 
 
-@if (session('success'))
+<?php if(session('success')): ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 icon: 'success',
                 title: 'Application Submitted!',
-                text: '{{ session('success') }}',
+                text: '<?php echo e(session('success')); ?>',
                 timer: 5000,
                 showConfirmButton: true,
                 confirmButtonText: 'OK',
@@ -1397,15 +1931,15 @@
             });
         });
     </script>
-@endif
+<?php endif; ?>
 
-@if (session('error'))
+<?php if(session('error')): ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 icon: 'error',
                 title: 'Error!',
-                text: '{{ session('error') }}',
+                text: '<?php echo e(session('error')); ?>',
                 timer: 5000,
                 showConfirmButton: true,
                 confirmButtonText: 'OK',
@@ -1413,11 +1947,11 @@
             });
         });
     </script>
-@endif
+<?php endif; ?>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form[action="{{ route('careers.apply') }}"]');
+        const form = document.querySelector('form[action="<?php echo e(route('careers.apply')); ?>"]');
         const submitBtn = form.querySelector('button[type="submit"]');
 
         if (form && submitBtn) {
@@ -1503,4 +2037,6 @@
     });
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never_forget\resources\views/website/career-application.blade.php ENDPATH**/ ?>

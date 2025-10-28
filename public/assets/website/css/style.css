@@ -1410,6 +1410,15 @@ ul.footer-links {
   font-size: 35px;
   color: var(--secondry-theme);
 }
+.career-application-sec .form-control,
+.career-application-sec .form-label {
+  font-family: var(--secondry-font);
+}
+/* .contact-form-wrapper {
+  background: 
+  linear-gradient(180deg, #cfa40c, #0B1B48),
+  url("../images/travel-experience.jpeg") no-repeat center / cover !important;
+} */
 /* responsive */
 @media(max-width: 1700px) {
   :root {

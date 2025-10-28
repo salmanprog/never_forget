@@ -106,359 +106,359 @@
             <tbody>
                     <tr>
                         <td><strong>Employer</strong></td>
-                        <td>{{ $details['body']['employer'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['employer'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Position applying for</strong></td>
-                        <td>{{ $details['body']['position_for_applying'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['position_for_applying'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Name</strong></td>
-                        <td>{{ $details['body']['name'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['name'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>City</strong></td>
-                        <td>{{ $details['body']['city'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['city'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>State</strong></td>
-                        <td>{{ $details['body']['state'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['state'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Zip</strong></td>
-                        <td>{{ $details['body']['zip'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['zip'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Street Address and/or Mailing Address</strong></td>
-                        <td>{{ $details['body']['street_or_email_address'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['street_or_email_address'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Home Telephone Number</strong></td>
-                        <td>{{ $details['body']['home_phone_number'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['home_phone_number'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Business Telephone Number</strong></td>
-                        <td>{{ $details['body']['business_phone_number'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['business_phone_number'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Cellular Telephone Number</strong></td>
-                        <td>{{ $details['body']['cell_number'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['cell_number'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Date you can start work</strong></td>
-                        <td>{{ $details['body']['start_work_date'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['start_work_date'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Salary Desired</strong></td>
-                        <td>{{ $details['body']['salary_desired'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['salary_desired'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Do you have a High School Diploma or GED?</strong></td>
-                        <td>{{ $details['body']['high_school_diploma'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['high_school_diploma'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Hours</strong></td>
-                        <td>{{ $details['body']['hourshours'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['hourshours'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Shift</strong></td>
-                        <td>{{ $details['body']['shift'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['shift'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Status</strong></td>
-                        <td>{{ $details['body']['shift_status'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['shift_status'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Are you authorized to work in the U.S. on an unrestricted basis?</strong></td>
-                        <td>{{ $details['body']['authorized_work'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['authorized_work'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Have you ever been convicted of a felony? (Convictions will not necessarily disqualify an applicant for employment.)</strong></td>
-                        <td>{{ $details['body']['convicted'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['convicted'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Have you been told the essential functions of the job or have you been viewed a copy of the job description listing the essential functions of the job?</strong></td>
-                        <td>{{ $details['body']['essential_function'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['essential_function'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Can you perform these essential functions of the job with or without reasonable accommodation?</strong></td>
-                        <td>{{ $details['body']['accommodation'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['accommodation'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>School Name</strong></td>
-                        <td>{{ $details['body']['school_1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['school_1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Degree</strong></td>
-                        <td>{{ $details['body']['degree_1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['degree_1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Address / City / State</strong></td>
-                        <td>{{ $details['body']['address_1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['address_1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>School Name</strong></td>
-                        <td>{{ $details['body']['school_2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['school_2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Degree</strong></td>
-                        <td>{{ $details['body']['degree_2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['degree_2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Address / City / State</strong></td>
-                        <td>{{ $details['body']['address_2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['address_2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Other School Name</strong></td>
-                        <td>{{ $details['body']['other_school'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['other_school'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Other Degree</strong></td>
-                        <td>{{ $details['body']['other_degree'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['other_degree'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Other Address / City / State</strong></td>
-                        <td>{{ $details['body']['other_address'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['other_address'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Special Skills</strong></td>
-                        <td>{{ $details['body']['special_skills'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['special_skills'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Name</strong></td>
-                        <td>{{ $details['body']['name_1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['name_1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Address/City/State</strong></td>
-                        <td>{{ $details['body']['address_1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['address_1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Phone</strong></td>
-                        <td>{{ $details['body']['phone_1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['phone_1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Relationship</strong></td>
-                        <td>{{ $details['body']['relation_1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['relation_1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Name</strong></td>
-                        <td>{{ $details['body']['name_2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['name_2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Address/City/State</strong></td>
-                        <td>{{ $details['body']['address_2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['address_2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Phone</strong></td>
-                        <td>{{ $details['body']['phone_2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['phone_2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Relationship</strong></td>
-                        <td>{{ $details['body']['relation_2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['relation_2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Name</strong></td>
-                        <td>{{ $details['body']['name_3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['name_3'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Address/City/State</strong></td>
-                        <td>{{ $details['body']['address_3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['address_3'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Phone</strong></td>
-                        <td>{{ $details['body']['phone_3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['phone_3'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Relationship</strong></td>
-                        <td>{{ $details['body']['relation_3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['relation_3'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Start Date (mo/day/yr)</strong></td>
-                        <td>{{ $details['body']['job1_start_date'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['job1_start_date'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>End Date (mo/day/yr)</strong></td>
-                        <td>{{ $details['body']['job1_end_date'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['job1_end_date'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Company Name</strong></td>
-                        <td>{{ $details['body']['company_name_1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['company_name_1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Supervisor’s Name</strong></td>
-                        <td>{{ $details['body']['supervisor_name1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['supervisor_name1'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>Phone Number</strong></td>
-                        <td>{{ $details['body']['phone_number1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['phone_number1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>City</strong></td>
-                        <td>{{ $details['body']['city_1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['city_1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>State</strong></td>
-                        <td>{{ $details['body']['state1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['state1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Zip</strong></td>
-                        <td>{{ $details['body']['zip1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['zip1'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>Duties</strong></td>
-                        <td>{{ $details['body']['duties1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['duties1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Reason for Leaving</strong></td>
-                        <td>{{ $details['body']['reason_for_leaving_1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['reason_for_leaving_1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Starting Salary</strong></td>
-                        <td>{{ $details['body']['starting_salary1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['starting_salary1'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Ending Salary</strong></td>
-                        <td>{{ $details['body']['ending_salary1'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['ending_salary1'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>May we contact your present employer?</strong></td>
-                        <td>{{ $details['body']['contact_present_employer'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['contact_present_employer'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Start Date (mo/day/yr)</strong></td>
-                        <td>{{ $details['body']['job2_start_date'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['job2_start_date'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>End Date (mo/day/yr)</strong></td>
-                        <td>{{ $details['body']['job2_end_date'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['job2_end_date'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Company Name</strong></td>
-                        <td>{{ $details['body']['company_name_2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['company_name_2'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>Supervisor’s Name</strong></td>
-                        <td>{{ $details['body']['supervisor_name2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['supervisor_name2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Phone Number</strong></td>
-                        <td>{{ $details['body']['phone_number2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['phone_number2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>City</strong></td>
-                        <td>{{ $details['body']['city_2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['city_2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>State</strong></td>
-                        <td>{{ $details['body']['state2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['state2'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>Zip</strong></td>
-                        <td>{{ $details['body']['zip2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['zip2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Duties</strong></td>
-                        <td>{{ $details['body']['duties2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['duties2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Reason for Leaving</strong></td>
-                        <td>{{ $details['body']['reason_for_leaving_2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['reason_for_leaving_2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Starting Salary</strong></td>
-                        <td>{{ $details['body']['starting_salary2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['starting_salary2'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>Ending Salary</strong></td>
-                        <td>{{ $details['body']['ending_salary2'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['ending_salary2'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Start Date (mo/day/yr)</strong></td>
-                        <td>{{ $details['body']['job3_start_date'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['job3_start_date'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>End Date (mo/day/yr)</strong></td>
-                        <td>{{ $details['body']['job3_end_date'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['job3_end_date'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Company Name</strong></td>
-                        <td>{{ $details['body']['company_name_3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['company_name_3'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>Supervisor’s Name</strong></td>
-                        <td>{{ $details['body']['supervisor_name3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['supervisor_name3'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Phone Number</strong></td>
-                        <td>{{ $details['body']['phone_number3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['phone_number3'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>City</strong></td>
-                        <td>{{ $details['body']['city_3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['city_3'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>State</strong></td>
-                        <td>{{ $details['body']['state3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['state3'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>Zip</strong></td>
-                        <td>{{ $details['body']['zip3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['zip3'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Duties</strong></td>
-                        <td>{{ $details['body']['duties3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['duties3'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Reason for Leaving</strong></td>
-                        <td>{{ $details['body']['reason_for_leaving_3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['reason_for_leaving_3'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Starting Salary</strong></td>
-                        <td>{{ $details['body']['starting_salary3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['starting_salary3'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>Ending Salary</strong></td>
-                        <td>{{ $details['body']['ending_salary3'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['ending_salary3'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Start Date (mo/day/yr)</strong></td>
-                        <td>{{ $details['body']['job4_start_date'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['job4_start_date'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>End Date (mo/day/yr)</strong></td>
-                        <td>{{ $details['body']['job4_end_date'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['job4_end_date'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Company Name</strong></td>
-                        <td>{{ $details['body']['company_name_4'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['company_name_4'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>Supervisor’s Name</strong></td>
-                        <td>{{ $details['body']['supervisor_name4'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['supervisor_name4'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Phone Number</strong></td>
-                        <td>{{ $details['body']['phone_number4'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['phone_number4'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>City</strong></td>
-                        <td>{{ $details['body']['city_4'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['city_4'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>State</strong></td>
-                        <td>{{ $details['body']['state4'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['state4'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>Zip</strong></td>
-                        <td>{{ $details['body']['zip4'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['zip4'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Employer</strong></td>
-                        <td>{{ $details['body']['employer'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['employer'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Duties</strong></td>
-                        <td>{{ $details['body']['duties4'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['duties4'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Reason for Leaving</strong></td>
-                        <td>{{ $details['body']['reason_for_leaving_4'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['reason_for_leaving_4'] ?? '—'); ?></td>
                     </tr><tr>
                         <td><strong>Starting Salary</strong></td>
-                        <td>{{ $details['body']['starting_salary4'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['starting_salary4'] ?? '—'); ?></td>
                     </tr>
                     <tr>
                         <td><strong>Ending Salary</strong></td>
-                        <td>{{ $details['body']['ending_salary4'] ?? '—' }}</td>
+                        <td><?php echo e($details['body']['ending_salary4'] ?? '—'); ?></td>
                     </tr>
             </tbody>
         </table>
@@ -471,7 +471,8 @@
     
     <div class="footer">
         <p>This is an automated message. Please do not reply to this email.</p>
-        <p>© {{ date('Y') }} Never Forget. All rights reserved.</p>
+        <p>© <?php echo e(date('Y')); ?> Never Forget. All rights reserved.</p>
     </div>
 </body>
 </html>
+<?php /**PATH C:\xampp\htdocs\never_forget\resources\views/emails/career-application-email.blade.php ENDPATH**/ ?>
