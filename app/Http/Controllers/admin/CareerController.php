@@ -152,11 +152,11 @@ class CareerController extends Controller
         try {
             $request->validate([
                 'career_id' => 'required|exists:careers,id',
-                'name' => 'required|string|max:255',
-                'email' => 'required|email',
-                'phone' => 'nullable|string|max:20',
-                'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-                'cover_letter' => 'nullable|string',
+                // 'name' => 'required|string|max:255',
+                // 'email' => 'required|email',
+                // 'phone' => 'nullable|string|max:20',
+                // 'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+                // 'cover_letter' => 'nullable|string',
             ]);
 
             $resumePath = null;
@@ -168,18 +168,26 @@ class CareerController extends Controller
                 $resumePath = $photo;
             }
 
-            CareerApplication::create([
-                'career_id'    => $request->career_id,
-                'name'         => $request->name,
-                'email'        => $request->email,
-                'phone'        => $request->phone,
-                'resume'       => $resumePath,
-                'cover_letter' => $request->cover_letter,
-            ]);
-
+            $application = CareerApplication::create($request->all());
+            // CareerApplication::create([
+            //     'career_id'    => $request->career_id,
+            //     'name'         => $request->name,
+            //     'email'        => $request->email,
+            //     'phone'        => $request->phone,
+            //     'resume'       => $resumePath,
+            //     'cover_letter' => $request->cover_letter,
+            // ]);
+            $details = [
+                'from' => 'career-application',
+                'title' => "Hi,",
+                'body'          => $request->all(),
+            ];
+             \Mail::to('salman@yopmail.com')->send(new \App\Mail\Email($details));
             return back()->with('success', 'Your application has been submitted successfully! We will review your application and get back to you soon.');
 
         } catch (\Exception $e) {
+            print_r($e->getMessage());
+            die();
             return back()->with('error', 'Sorry, there was an error submitting your application. Please try again or contact us directly.');
         }
     }

@@ -43,13 +43,13 @@
 
                         {{-- Careers (only if active) --}}
                         @if(!empty($home_page_data['career_status']) && $home_page_data['career_status'] == 1)
-                            <!-- <a href="{{ route('career') }}"
+                            <a href="{{ route('career') }}"
                                class="gap-20 d-flex align-items-center text-white sm-circle-wrapper">
                                 <div class="sm-circle d-flex align-items-center justify-content-center">
                                     <i class="fa-solid fa-briefcase"></i>
                                 </div>
                                 <span class="secondry-font">We're Hiring</span>
-                            </a> -->
+                            </a>
                         @endif
                     </div>
                 </div>
