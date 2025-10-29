@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 24, 2025 at 07:30 AM
+-- Generation Time: Oct 29, 2025 at 03:27 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -579,23 +579,112 @@ INSERT INTO `careers` (`id`, `created_by`, `career_category_id`, `title`, `image
 CREATE TABLE `career_applications` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `career_id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
   `resume` varchar(255) DEFAULT NULL,
   `cover_letter` text DEFAULT NULL,
   `status` tinyint(4) DEFAULT NULL COMMENT '0=rejected, 1=accepted, null=pending',
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `employer` varchar(255) DEFAULT NULL,
+  `position_for_applying` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
+  `zip` varchar(50) DEFAULT NULL,
+  `street_or_email_address` varchar(255) DEFAULT NULL,
+  `home_phone_number` varchar(50) DEFAULT NULL,
+  `business_phone_number` varchar(50) DEFAULT NULL,
+  `cell_number` varchar(50) DEFAULT NULL,
+  `start_work_date` varchar(255) DEFAULT NULL,
+  `salary_desired` varchar(255) DEFAULT NULL,
+  `high_school_diploma` enum('yes','no') DEFAULT NULL,
+  `hours` enum('full_time','part_time') DEFAULT NULL,
+  `shift_status` varchar(255) DEFAULT NULL,
+  `authorized_work` enum('yes','no') DEFAULT NULL,
+  `convicted` enum('yes','no') DEFAULT NULL,
+  `essential_function` enum('yes','no') DEFAULT NULL,
+  `accommodation` enum('yes','no') DEFAULT NULL,
+  `school_1` varchar(255) DEFAULT NULL,
+  `degree_1` varchar(255) DEFAULT NULL,
+  `address_1` varchar(255) DEFAULT NULL,
+  `school_2` varchar(255) DEFAULT NULL,
+  `degree_2` varchar(255) DEFAULT NULL,
+  `address_2` varchar(255) DEFAULT NULL,
+  `other_school` varchar(255) DEFAULT NULL,
+  `other_degree` varchar(255) DEFAULT NULL,
+  `other_address` varchar(255) DEFAULT NULL,
+  `special_skills` text DEFAULT NULL,
+  `name_1` varchar(255) DEFAULT NULL,
+  `phone_1` varchar(50) DEFAULT NULL,
+  `relation_1` varchar(255) DEFAULT NULL,
+  `name_2` varchar(255) DEFAULT NULL,
+  `phone_2` varchar(50) DEFAULT NULL,
+  `relation_2` varchar(255) DEFAULT NULL,
+  `name_3` varchar(255) DEFAULT NULL,
+  `address_3` varchar(255) DEFAULT NULL,
+  `phone_3` varchar(50) DEFAULT NULL,
+  `relation_3` varchar(255) DEFAULT NULL,
+  `shift` text DEFAULT NULL,
+  `job1_start_date` varchar(255) DEFAULT NULL,
+  `job1_end_date` varchar(255) DEFAULT NULL,
+  `company_name_1` varchar(255) DEFAULT NULL,
+  `supervisor_name1` varchar(255) DEFAULT NULL,
+  `phone_number1` varchar(50) DEFAULT NULL,
+  `city_1` varchar(255) DEFAULT NULL,
+  `state1` varchar(255) DEFAULT NULL,
+  `zip1` varchar(50) DEFAULT NULL,
+  `duties1` text DEFAULT NULL,
+  `reason_for_leaving_1` text DEFAULT NULL,
+  `starting_salary1` varchar(255) DEFAULT NULL,
+  `ending_salary1` varchar(255) DEFAULT NULL,
+  `contact_present_employer` varchar(255) DEFAULT NULL,
+  `job2_start_date` varchar(255) DEFAULT NULL,
+  `job2_end_date` varchar(255) DEFAULT NULL,
+  `company_name_2` varchar(255) DEFAULT NULL,
+  `supervisor_name2` varchar(255) DEFAULT NULL,
+  `phone_number2` varchar(50) DEFAULT NULL,
+  `city_2` varchar(255) DEFAULT NULL,
+  `state2` varchar(255) DEFAULT NULL,
+  `zip2` varchar(50) DEFAULT NULL,
+  `duties2` text DEFAULT NULL,
+  `reason_for_leaving_2` text DEFAULT NULL,
+  `starting_salary2` varchar(255) DEFAULT NULL,
+  `ending_salary2` varchar(255) DEFAULT NULL,
+  `job3_start_date` varchar(255) DEFAULT NULL,
+  `job3_end_date` varchar(255) DEFAULT NULL,
+  `company_name_3` varchar(255) DEFAULT NULL,
+  `supervisor_name3` varchar(255) DEFAULT NULL,
+  `phone_number3` varchar(50) DEFAULT NULL,
+  `city_3` varchar(255) DEFAULT NULL,
+  `state3` varchar(255) DEFAULT NULL,
+  `zip3` varchar(50) DEFAULT NULL,
+  `duties3` text DEFAULT NULL,
+  `reason_for_leaving_3` text DEFAULT NULL,
+  `starting_salary3` varchar(255) DEFAULT NULL,
+  `ending_salary3` varchar(255) DEFAULT NULL,
+  `job4_start_date` varchar(255) DEFAULT NULL,
+  `job4_end_date` varchar(255) DEFAULT NULL,
+  `company_name_4` varchar(255) DEFAULT NULL,
+  `supervisor_name4` varchar(255) DEFAULT NULL,
+  `phone_number4` varchar(50) DEFAULT NULL,
+  `city_4` varchar(255) DEFAULT NULL,
+  `state4` varchar(255) DEFAULT NULL,
+  `zip4` varchar(50) DEFAULT NULL,
+  `duties4` text DEFAULT NULL,
+  `reason_for_leaving_4` text DEFAULT NULL,
+  `starting_salary4` varchar(255) DEFAULT NULL,
+  `ending_salary4` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `career_applications`
 --
 
-INSERT INTO `career_applications` (`id`, `career_id`, `name`, `email`, `phone`, `resume`, `cover_letter`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Asjad', 'asjadmmc67@gmail.com', '5574475582', '20250903201515.docx', 'testing cover letter', 1, '2025-09-03 15:15:15', '2025-09-03 15:40:28'),
-(2, 1, 'Hilel Riddle', 'asjadmmc67@gmail.com', '5574475582', '20250903205513.docx', 'asdsadasdfsaf sadsaf', 1, '2025-09-03 15:55:13', '2025-09-03 15:55:45');
+INSERT INTO `career_applications` (`id`, `career_id`, `name`, `email`, `phone`, `resume`, `cover_letter`, `status`, `created_at`, `updated_at`, `employer`, `position_for_applying`, `city`, `state`, `zip`, `street_or_email_address`, `home_phone_number`, `business_phone_number`, `cell_number`, `start_work_date`, `salary_desired`, `high_school_diploma`, `hours`, `shift_status`, `authorized_work`, `convicted`, `essential_function`, `accommodation`, `school_1`, `degree_1`, `address_1`, `school_2`, `degree_2`, `address_2`, `other_school`, `other_degree`, `other_address`, `special_skills`, `name_1`, `phone_1`, `relation_1`, `name_2`, `phone_2`, `relation_2`, `name_3`, `address_3`, `phone_3`, `relation_3`, `shift`, `job1_start_date`, `job1_end_date`, `company_name_1`, `supervisor_name1`, `phone_number1`, `city_1`, `state1`, `zip1`, `duties1`, `reason_for_leaving_1`, `starting_salary1`, `ending_salary1`, `contact_present_employer`, `job2_start_date`, `job2_end_date`, `company_name_2`, `supervisor_name2`, `phone_number2`, `city_2`, `state2`, `zip2`, `duties2`, `reason_for_leaving_2`, `starting_salary2`, `ending_salary2`, `job3_start_date`, `job3_end_date`, `company_name_3`, `supervisor_name3`, `phone_number3`, `city_3`, `state3`, `zip3`, `duties3`, `reason_for_leaving_3`, `starting_salary3`, `ending_salary3`, `job4_start_date`, `job4_end_date`, `company_name_4`, `supervisor_name4`, `phone_number4`, `city_4`, `state4`, `zip4`, `duties4`, `reason_for_leaving_4`, `starting_salary4`, `ending_salary4`) VALUES
+(4, 1, 'Dawson Roberts Associates', NULL, NULL, NULL, NULL, NULL, '2025-10-28 15:54:15', '2025-10-28 15:54:15', 'Quis ullamco ab non', 'Dolor quidem volupta', 'Ipsam incidunt volu', 'Laborum illum minim', '26674', 'kedydode@mailinator.com', '+1 (896) 479-1392', '+1 (232) 522-1787', '318', '02-Jul-1990', 'Et non assumenda ut', 'yes', 'full_time', 'temporary', 'yes', 'yes', 'no', 'no', 'Voluptatem in autem', 'Quis nulla alias ear', '54 East Rocky Hague Avenue', 'Corporis autem delec', 'Consectetur nisi ven', 'Omnis labore est es', 'Sed iste velit quia', 'In debitis minim eli', 'Quis fugit consequa', 'Adipisicing adipisic', 'Blair Larsen', '+1 (758) 538-3668', 'Et quis delectus qu', 'Karen Gomez', '+1 (391) 667-3239', 'Atque in laboriosam', 'Keefe Bryant', 'Labore voluptate vol', '+1 (967) 121-5632', 'Eius quo culpa solut', 'weekends', '12-Feb-1996', '09-Jun-2000', 'Jimenez Jennings Associates', 'Montana Leach', '+1 (538) 559-7297', 'Dolorem corporis iur', 'Placeat aliquip tem', '12111', 'Nisi unde totam veni', 'Nemo dolore anim a o', 'Nulla necessitatibus', 'Natus cillum ipsam o', 'n/a', '11-Apr-1996', '04-Sep-1972', 'Jordan and Merritt Co', 'Aphrodite Clayton', '+1 (249) 163-2227', 'Ea illum est adipis', 'Enim autem quibusdam', '57963', 'Totam ut ut illo aut', 'Consequat Dolorem a', 'Alias similique nemo', 'Et explicabo Volupt', '13-Sep-2005', '20-Jun-1979', 'Stevenson and Mcdonald LLC', 'Sylvia Ochoa', '+1 (699) 901-8021', 'Velit ea aut omnis d', 'Tempora commodi dolo', '66010', 'Harum quas elit nes', 'Et voluptate facilis', 'Commodo duis quas qu', 'Molestiae aut enim d', '11-Jun-1986', '19-Dec-1974', 'Franco and Atkinson Inc', 'Ignatius Harding', '+1 (172) 881-5436', 'Eum quia autem at vo', 'Vel consequat Debit', '84998', 'Aliquip fugiat solu', 'Voluptatem iste bla', 'Consequat Veniam n', 'Rem sint in tenetur'),
+(5, 1, 'Lester and Washington Trading', NULL, NULL, NULL, NULL, NULL, '2025-10-28 16:00:34', '2025-10-28 16:00:34', 'Quia exercitationem', 'Maiores inventore si', 'Soluta mollitia blan', 'Qui aliquam quasi pr', '28919', 'badof@mailinator.com', '+1 (336) 891-6371', '+1 (894) 754-1677', '602', '18-Jul-2001', 'Rerum autem quia at', 'yes', 'part_time', 'temporary', 'yes', 'yes', 'no', 'no', 'Quis voluptatem err', 'Vero et ducimus et', '269 South Cowley Drive', 'Consequat Anim moll', 'Rerum nisi et et et', 'Sequi illum quidem', 'Consectetur dolore', 'Sequi sint sint corp', 'Ipsa mollitia place', 'Ut corporis aut tene', 'Zephr Heath', '+1 (929) 172-2744', 'Sit praesentium sun', 'Holly Conner', '+1 (316) 918-9385', 'Tenetur repudiandae', 'Clementine Patterson', 'Reprehenderit volupt', '+1 (714) 333-1843', 'Suscipit reprehender', 'evenings', '23-Jan-1977', '25-Feb-1993', 'Lewis Henry Traders', 'Tanya Hancock', '+1 (598) 865-8176', 'Aut sint eu vitae qu', 'Ut dolores ullam non', '77587', 'Non est in mollitia', 'Aliquid provident c', 'Vel sed amet laudan', 'Aut doloremque et po', 'no', '14-Nov-1994', '03-Jun-1984', 'Lindsey Bean Plc', 'Iris Baker', '+1 (622) 414-2513', 'Voluptas veniam lau', 'Tempora molestiae mo', '22124', 'Ut dolorum alias lab', 'Rerum voluptatem Ar', 'Ducimus sed beatae', 'Sit voluptate volup', '07-Jul-1981', '30-Nov-2004', 'Contreras Wiggins Traders', 'Evelyn Strong', '+1 (627) 399-6387', 'Et accusantium beata', 'Consectetur esse e', '68838', 'Qui amet cupidatat', 'Et eaque dolor ab ve', 'Voluptatibus volupta', 'Dolor iure quam quam', '30-Jul-2006', '06-Jun-2025', 'Wilson and Mclaughlin Associates', 'Magee Molina', '+1 (298) 585-9891', 'Cupiditate voluptate', 'Ratione libero verit', '42445', 'Veritatis saepe est', 'Officiis vitae anim', 'Quis ullamco lorem d', 'Qui et duis voluptat'),
+(6, 1, 'Garrison and Mendez Co', NULL, NULL, NULL, NULL, NULL, '2025-10-28 16:39:51', '2025-10-28 16:39:51', 'Sunt officia dolor q', 'Ut recusandae Culpa', 'Dolor nesciunt nesc', 'Nesciunt at corpori', '99685', 'popysadep@mailinator.com', '+1 (225) 669-7767', '+1 (344) 932-2381', '547', '04-Dec-2018', 'Assumenda qui qui la', 'no', 'part_time', 'temporary', 'yes', 'no', 'no', 'no', 'Et libero pariatur', 'Cupidatat culpa non', '318 New Lane', 'Perspiciatis vel qu', 'Sunt magni aspernatu', 'Distinctio Animi e', 'Id perspiciatis et', 'Accusamus ullam at l', 'Illo in odio quo ess', 'Qui aliquip pariatur', 'Alec Holloway', '+1 (189) 244-9289', 'Consequatur suscipi', 'Ivana Holder', '+1 (677) 317-5542', 'Laboris earum praese', 'Samuel Norris', 'Provident quas solu', '+1 (954) 523-9526', 'In doloremque offici', 'weekends', '06-Jul-2010', '20-Nov-2023', 'Woods and Petersen Co', 'Minerva Horne', '+1 (672) 979-2205', 'Sed ex deserunt cumq', 'Nam veniam dicta ne', '81834', 'Quia est minus rerum', 'Atque sapiente sit', 'Commodo ullamco lore', 'Ex quo pariatur Acc', 'no', '12-Aug-2012', '26-Dec-2017', 'Rich and Schroeder Co', 'Dylan Byers', '+1 (527) 882-1767', 'Quibusdam commodo ul', 'Possimus vero est a', '23699', 'Cupidatat nihil nobi', 'Atque consectetur v', 'Cupiditate aute ex b', 'Iste sint veniam di', '04-Feb-1993', '17-Jun-1995', 'Gross Rowe Co', 'Christine Battle', '+1 (564) 913-1171', 'Id perferendis dolo', 'Debitis veniam offi', '23935', 'Eaque ipsum qui et e', 'Voluptatum cupidatat', 'Saepe maiores omnis', 'Commodo beatae sed s', '18-Oct-1998', '16-Feb-2014', 'Whitfield Johns Plc', 'Garrison Bolton', '+1 (199) 919-2261', 'Quis eveniet beatae', 'Adipisci ipsam incid', '65882', 'Nostrum voluptate co', 'Provident in ut et', 'Quas tenetur velit a', 'Nobis commodo consec');
 
 -- --------------------------------------------------------
 
@@ -3964,7 +4053,7 @@ ALTER TABLE `careers`
 -- AUTO_INCREMENT for table `career_applications`
 --
 ALTER TABLE `career_applications`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `career_categories`

@@ -186,8 +186,6 @@ class CareerController extends Controller
             return back()->with('success', 'Your application has been submitted successfully! We will review your application and get back to you soon.');
 
         } catch (\Exception $e) {
-            print_r($e->getMessage());
-            die();
             return back()->with('error', 'Sorry, there was an error submitting your application. Please try again or contact us directly.');
         }
     }
