@@ -13,7 +13,11 @@
 </main>
 
 <style>
-    .shop-nav {
+    :root {
+        --swiper-navigation-size: 15px;
+    }
+
+    .shop-nav-slider {
         background: #fff;
         border-radius: 50px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -21,11 +25,14 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         flex-wrap: nowrap;
         padding: 4px 20px;
         gap: 10px;
+    }
+
+    .shop-nav {
+        flex-wrap: nowrap;
     }
 
     .shop-nav .nav-link {
@@ -38,6 +45,11 @@
         text-align: center;
         flex-shrink: 0;
         min-width: fit-content;
+    }
+
+    .shop-nav-slider .swiper-slide {
+        display: flex;
+        justify-content: center;
     }
 
     .shop-nav .nav-link.active {
@@ -306,6 +318,30 @@
         cursor: -webkit-grabbing;
         user-select: none;
     }
+    .swiper-container-wrapper .swiper-button-prev, 
+    .swiper-container-wrapper .swiper-button-next {
+        background-color: #cfa40c;
+        color: white;
+        font-size: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 100%;
+        transition: all 0.3s ease;
+        width: 30px;
+        height: 30px;
+        top: 40%;
+    }
+    .swiper-container-wrapper .swiper-button-next {
+        right: -50px;
+    }
+    .swiper-container-wrapper .swiper-button-prev {
+        left: -50px;
+    }
+    /* .shop-nav-slider .swiper-button-next:after,
+    .shop-nav-slider .swiper-button-prev:after {
+        width: 20px;
+    } */
 
     /* .home-categories__menu {
   transform: translateY(100%);
@@ -331,47 +367,54 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <ul class="nav nav-pills shop-nav" id="pills-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link {{ !request('category') ? 'active' : '' }}" id="pills-All-tab"
-                            data-bs-toggle="pill" data-bs-target="#pills-All" type="button" role="tab"
-                            aria-controls="pills-All"
-                            aria-selected="{{ !request('category') ? 'true' : 'false' }}">All</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-Under30-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-Under30" type="button" role="tab" aria-controls="pills-Under30"
-                            aria-selected="false">Gifts Under $30</button>
-                    </li>
-                    @foreach ($categories as $category)
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link {{ request('category') == $category->id ? 'active' : '' }}"
-                                id="pills-{{ $category->id }}-tab" data-bs-toggle="pill"
-                                data-bs-target="#pills-{{ $category->id }}" type="button" role="tab"
-                                aria-controls="pills-{{ $category->id }}"
-                                aria-selected="{{ request('category') == $category->id ? 'true' : 'false' }}">{{ $category->title }}</button>
-                        </li>
-                    @endforeach
-                    <li class="nav-item" role="presentation">
-                        <a href="{{ route('business-cards.create') }}" class="nav-link">Business Cards</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-qualitylogo-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-qualitylogo" type="button" role="tab"
-                            aria-controls="pills-qualitylogo" aria-selected="false">Quality Logo</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-journey-expert" type="button" role="tab"
-                            aria-controls="pills-journey-expert" aria-selected="false">Travel & Experience</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-greetings-appreciation" type="button" role="tab"
-                            aria-controls="pills-greetings-appreciation" aria-selected="false">Greetings and
-                            Appreciation </button>
-                    </li>
-                </ul>
+                <div class="swiper-container-wrapper position-relative">
+                    <div class="swiper mySwiper shop-nav-slider">
+                        <ul class="nav nav-pills shop-nav swiper-wrapper" id="pills-tab" role="tablist">
+                            <li class="nav-item swiper-slide" role="presentation">
+                                <button class="nav-link {{ !request('category') ? 'active' : '' }}" id="pills-All-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-All" type="button" role="tab"
+                                    aria-controls="pills-All"
+                                    aria-selected="{{ !request('category') ? 'true' : 'false' }}">All</button>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
+                                <button class="nav-link" id="pills-Under30-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-Under30" type="button" role="tab"
+                                    aria-controls="pills-Under30" aria-selected="false">Gifts Under $30</button>
+                            </li>
+                            @foreach ($categories as $category)
+                                <li class="nav-item swiper-slide" role="presentation">
+                                    <button class="nav-link {{ request('category') == $category->id ? 'active' : '' }}"
+                                        id="pills-{{ $category->id }}-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-{{ $category->id }}" type="button" role="tab"
+                                        aria-controls="pills-{{ $category->id }}"
+                                        aria-selected="{{ request('category') == $category->id ? 'true' : 'false' }}">{{ $category->title }}</button>
+                                </li>
+                            @endforeach
+                            <li class="nav-item swiper-slide" role="presentation">
+                                <a href="{{ route('business-cards.create') }}" class="nav-link">Business Cards</a>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
+                                <button class="nav-link" id="pills-qualitylogo-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-qualitylogo" type="button" role="tab"
+                                    aria-controls="pills-qualitylogo" aria-selected="false">Quality Logo</button>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
+                                <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-journey-expert" type="button" role="tab"
+                                    aria-controls="pills-journey-expert" aria-selected="false">Travel &
+                                    Experience</button>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
+                                <button class="nav-link" id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-greetings-appreciation" type="button" role="tab"
+                                    aria-controls="pills-greetings-appreciation" aria-selected="false">Greetings and
+                                    Appreciation </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="swiper-button-next" title="Click to See Next Slide"></div>
+                    <div class="swiper-button-prev" title="Click to See Previous Slide"></div>
+                </div>
                 <div class="tab-content" id="pills-tabContent">
                     <!-- All Products Tab -->
                     <div class="tab-pane fade {{ !request('category') ? 'show active' : '' }}" id="pills-All"

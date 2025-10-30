@@ -123,9 +123,9 @@ $(document).ready(function () {
         arrows: true,
         dots: false,
         prevArrow:
-            '<button class="slick-prev"><i class="fas fa-chevron-left"></i></button>',
+            '<button class="slick-prev" title="Click to Previous Slide"><i class="fas fa-chevron-left"></i></button>',
         nextArrow:
-            '<button class="slick-next"><i class="fas fa-chevron-right"></i></button>',
+            '<button class="slick-next" title="Click to Next Slide"><i class="fas fa-chevron-right"></i></button>',
         infinite: true,
         responsive: [
             {
@@ -158,9 +158,9 @@ $(document).ready(function () {
         arrows: true,
         dots: false,
         prevArrow:
-            '<button class="slick-prev"><i class="fas fa-chevron-left"></i></button>',
+            '<button class="slick-prev" title="Click to Previous Slide"><i class="fas fa-chevron-left"></i></button>',
         nextArrow:
-            '<button class="slick-next"><i class="fas fa-chevron-right"></i></button>',
+            '<button class="slick-next" title="Click to Next Slide"><i class="fas fa-chevron-right"></i></button>',
         infinite: true,
         responsive: [
             {
@@ -193,80 +193,131 @@ const shopNavSwiper = new Swiper(".shop-nav-swiper", {
     grabCursor: true,
     mousewheel: true,
     breakpoints: {
-      320: { spaceBetween: 8 },
-      768: { spaceBetween: 10 },
-      1024: { spaceBetween: 12 }
+        320: { spaceBetween: 8 },
+        768: { spaceBetween: 10 },
+        1024: { spaceBetween: 12 }
     }
+});
+
+
+// document.addEventListener("DOMContentLoaded", function () {
+//     const shopNav = document.querySelector(".shop-nav");
+
+//     let isDown = false;
+//     let startX;
+//     let scrollLeft;
+
+//     // 🖱️ Mouse Events
+//     shopNav.addEventListener("mousedown", (e) => {
+//         isDown = true;
+//         shopNav.classList.add("dragging");
+//         startX = e.pageX - shopNav.offsetLeft;
+//         scrollLeft = shopNav.scrollLeft;
+//     });
+
+//     shopNav.addEventListener("mouseleave", () => {
+//         isDown = false;
+//         shopNav.classList.remove("dragging");
+//     });
+
+//     shopNav.addEventListener("mouseup", () => {
+//         isDown = false;
+//         shopNav.classList.remove("dragging");
+//     });
+
+//     shopNav.addEventListener("mousemove", (e) => {
+//         if (!isDown) return;
+//         e.preventDefault();
+//         const x = e.pageX - shopNav.offsetLeft;
+//         const walk = (x - startX) * 1; // scroll speed multiplier
+//         shopNav.scrollLeft = scrollLeft - walk;
+//     });
+
+//     // 📱 Touch Events (for mobile drag)
+//     let touchStartX = 0;
+//     let touchScrollLeft = 0;
+
+//     shopNav.addEventListener("touchstart", (e) => {
+//         touchStartX = e.touches[0].pageX;
+//         touchScrollLeft = shopNav.scrollLeft;
+//     });
+
+//     shopNav.addEventListener("touchmove", (e) => {
+//         const x = e.touches[0].pageX;
+//         const walk = (x - touchStartX) * 1;
+//         shopNav.scrollLeft = touchScrollLeft - walk;
+//     });
+
+//     let moved = false;
+
+//     shopNav.addEventListener("mousedown", (e) => {
+//         isDown = true;
+//         moved = false;
+//         startX = e.pageX - shopNav.offsetLeft;
+//         scrollLeft = shopNav.scrollLeft;
+//     });
+
+//     shopNav.addEventListener("mousemove", (e) => {
+//         if (!isDown) return;
+//         moved = true;
+//         const x = e.pageX - shopNav.offsetLeft;
+//         const walk = (x - startX);
+//         shopNav.scrollLeft = scrollLeft - walk;
+//     });
+
+//     shopNav.addEventListener("click", (e) => {
+//         if (moved) e.preventDefault(); // stop accidental tab activation
+//     });
+// });
+
+
+// $('.shop-nav-slider').slick({
+//     dots: true,
+//     infinite: true,
+//     slidesToShow: 7,
+//     slidesToScroll: 1,
+//     autoplay: false,
+//     speed: 5000,
+//     pauseOnHover: true,
+//     pauseOnFocus: true,
+//     autoplaySpeed: 0,
+//     cssEase: 'linear',
+
+//     responsive: [
+//         {
+//             breakpoint: 1024,
+//             settings: {
+//                 slidesToShow: 3,
+//                 slidesToScroll: 3,
+//                 infinite: true,
+//                 dots: true
+//             }
+//         },
+//         {
+//             breakpoint: 600,
+//             settings: {
+//                 slidesToShow: 2,
+//                 slidesToScroll: 2
+//             }
+//         },
+//         {
+//             breakpoint: 480,
+//             settings: {
+//                 slidesToShow: 1,
+//                 slidesToScroll: 1
+//             }
+//         }
+//         // You can unslick at a given breakpoint now by adding:
+//         // settings: "unslick"
+//         // instead of a settings object
+//     ]
+// });
+
+
+var swiper = new Swiper(".mySwiper", {
+    slidesPerView: 7,
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
   });
-
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const shopNav = document.querySelector(".shop-nav");
-  
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-  
-    // 🖱️ Mouse Events
-    shopNav.addEventListener("mousedown", (e) => {
-      isDown = true;
-      shopNav.classList.add("dragging");
-      startX = e.pageX - shopNav.offsetLeft;
-      scrollLeft = shopNav.scrollLeft;
-    });
-  
-    shopNav.addEventListener("mouseleave", () => {
-      isDown = false;
-      shopNav.classList.remove("dragging");
-    });
-  
-    shopNav.addEventListener("mouseup", () => {
-      isDown = false;
-      shopNav.classList.remove("dragging");
-    });
-  
-    shopNav.addEventListener("mousemove", (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - shopNav.offsetLeft;
-      const walk = (x - startX) * 1; // scroll speed multiplier
-      shopNav.scrollLeft = scrollLeft - walk;
-    });
-  
-    // 📱 Touch Events (for mobile drag)
-    let touchStartX = 0;
-    let touchScrollLeft = 0;
-  
-    shopNav.addEventListener("touchstart", (e) => {
-      touchStartX = e.touches[0].pageX;
-      touchScrollLeft = shopNav.scrollLeft;
-    });
-  
-    shopNav.addEventListener("touchmove", (e) => {
-      const x = e.touches[0].pageX;
-      const walk = (x - touchStartX) * 1;
-      shopNav.scrollLeft = touchScrollLeft - walk;
-    });
-
-    let moved = false;
-
-shopNav.addEventListener("mousedown", (e) => {
-  isDown = true;
-  moved = false;
-  startX = e.pageX - shopNav.offsetLeft;
-  scrollLeft = shopNav.scrollLeft;
-});
-
-shopNav.addEventListener("mousemove", (e) => {
-  if (!isDown) return;
-  moved = true;
-  const x = e.pageX - shopNav.offsetLeft;
-  const walk = (x - startX);
-  shopNav.scrollLeft = scrollLeft - walk;
-});
-
-shopNav.addEventListener("click", (e) => {
-  if (moved) e.preventDefault(); // stop accidental tab activation
-});
-  });
-  

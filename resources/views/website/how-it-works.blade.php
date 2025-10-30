@@ -26,7 +26,7 @@
     <div class="container">
       @if(isset($home_page_data['how_it_works_status']) && $home_page_data['how_it_works_status'] == 1 && isset($home_page_data['how_it_works_video']))
             <div class="styled-video-wrapper">
-                <video class="img-fluid" autoplay  muted controls loop>
+                <video class="img-fluid" controls loop>
                 <source src="{{ asset('public/admin/assets/videos/'.$home_page_data['how_it_works_video']) }}" type="video/mp4">
                 Your browser does not support the video tag.
                 </video>

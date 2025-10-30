@@ -666,11 +666,11 @@ p {
   text-align: center;
 }
 
-.shop-nav {
+/* .shop-nav {
   border: 1px solid #DEDEDE;
   border-radius: var(--text-60);
   padding: var(--text-5) var(--text-30);
-}
+} */
 
 .shop-nav .nav-link {
   color: var(--light-black); 
@@ -1419,6 +1419,10 @@ ul.footer-links {
   linear-gradient(180deg, #cfa40c, #0B1B48),
   url("../images/travel-experience.jpeg") no-repeat center / cover !important;
 } */
+.shop-nav .slick-slide {
+  display: flex;
+  justify-content: center;
+}
 /* responsive */
 @media(max-width: 1700px) {
   :root {
@@ -1438,6 +1442,9 @@ ul.footer-links {
   .primary-navs-list .btn {
     font-size: var(--text-14);
     padding: 20px;
+  }
+  .inner-banner {
+    padding: 9rem 0 9rem 0;
   }
 }
 @media(max-width: 1400px) {
@@ -1672,7 +1679,9 @@ ul.footer-links {
     font-size: var(--text-14);
     padding: 20px;
   }
-
+  .hero-banner .heading {
+    text-shadow: 0 2px 1px rgb(0 0 0 / 48%);
+  }
 }
 
 @media(max-width: 575px) {
@@ -2087,7 +2096,7 @@ body > .skiptranslate {
 }
 
 .logo-swapper .swiper-slide img {
-    max-width: 140px;
+    max-width: 220px;
     max-height: 80px;
     object-fit: contain;
     transition: all 0.3s ease;
