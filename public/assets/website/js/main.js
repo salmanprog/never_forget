@@ -320,4 +320,18 @@ var swiper = new Swiper(".mySwiper", {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
     },
+    breakpoints: {
+        // 640: {
+        //   slidesPerView: 4,
+        // },
+        0: {
+            slidesPerView: 2,
+          },
+        768: {
+          slidesPerView: 4,
+        },
+        1440: {
+          slidesPerView: 5,
+        },
+      },
   });

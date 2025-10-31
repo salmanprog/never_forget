@@ -1446,6 +1446,10 @@ ul.footer-links {
   .inner-banner {
     padding: 9rem 0 9rem 0;
   }
+  .swiper-container-wrapper {
+    max-width: 940px;
+    margin: 0 auto;
+  }
 }
 @media(max-width: 1400px) {
   .plans-sec .card-wrapper .heading {
@@ -1597,6 +1601,10 @@ ul.footer-links {
   .footer-email .secondry-font {
     font-size: 12px;
   }
+
+  .swiper-container-wrapper {
+    max-width: 790px;
+}
 }
 @media(max-width:992px) {
   .hand-gift {
@@ -1729,6 +1737,9 @@ ul.footer-links {
   .goog-te-gadget {
     margin-top: 0;
   }
+  .swiper-container-wrapper {
+    max-width: 430px;
+}
 }
 
 @media(max-width: 480px) {
@@ -1831,6 +1842,25 @@ ul.footer-links {
   .top-bar-content {
     flex-direction: column;
     align-items: center;
+  }
+  .swiper-container-wrapper .swiper-button-prev, 
+  .swiper-container-wrapper .swiper-button-next {
+    margin: 0 auto;
+    left: 0;
+    top: 60px !important;
+  }
+  .swiper-container-wrapper .swiper-button-prev {
+    left: -42px;
+    right: 0;
+  }
+  .swiper-button-next {
+    right: -40px;
+  }
+  .swiper-button-prev {
+    left: -80px;
+  }
+  .shop-nav-slider {
+    margin-bottom: 70px;
   }
 }
 
