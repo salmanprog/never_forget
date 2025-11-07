@@ -1,6 +1,6 @@
-@extends('layouts.website.master')
-@section('content')
-@section('title', $page_title)
+
+<?php $__env->startSection('content'); ?>
+<?php $__env->startSection('title', $page_title); ?>
         <style>
         .cart-main {
             background: #298dff38; 
@@ -181,7 +181,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="cart-of-table cart-table">
-                            @if ($message = Session::get('success'))
+                            <?php if($message = Session::get('success')): ?>
                                 <div class="p-1 mb-3 rounded bg-success" style="width: 100%; color: #fff;" id="updated-cart">
                                     <p class="text-green-800" style="margin: 0; text-align: center;">Cart Item is Updated Successfully !</p>
                                 </div>
@@ -191,36 +191,36 @@
                                     successMessage.style.display = 'none';
                                 }, 5000);
                             </script>
-                            @endif
+                            <?php endif; ?>
                     
                             <div class="container">
-                                @if(session()->has('error'))
+                                <?php if(session()->has('error')): ?>
                                 <div class="container">
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="alert alert-danger" style="border-top:2px solid red; text-align: center;" role="alert">
-                                        <p><i class="fa fa-info-circle" style="color: rgb(187, 50, 50)"></i> {{ session()->get('error') }}</p>
+                                        <p><i class="fa fa-info-circle" style="color: rgb(187, 50, 50)"></i> <?php echo e(session()->get('error')); ?></p>
                                         </div>
                                     </div>
                                 </div>
-                                @elseif(session()->has('max-error'))
+                                <?php elseif(session()->has('max-error')): ?>
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="alert alert-danger" style="border-top:2px solid red; text-align: center;" role="alert">
-                                            <p><i class="fa fa-info-circle" style="color: rgb(187, 50, 50)"></i> {{ session()->get('max-error') }}</p>
+                                            <p><i class="fa fa-info-circle" style="color: rgb(187, 50, 50)"></i> <?php echo e(session()->get('max-error')); ?></p>
                                             </div>
                                         </div>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                                 </div>
-                                @if($cartItems->count() == 0)
+                                <?php if($cartItems->count() == 0): ?>
                                     <div class="text-center py-5">
                                         <h3>Your cart is empty!</h3>
-                                        <a href="{{ route('shop') }}" class="golbal-btn-submit mt-3">Continue Shopping</a>
+                                        <a href="<?php echo e(route('shop')); ?>" class="golbal-btn-submit mt-3">Continue Shopping</a>
                                     </div>
-                                @else
-                                    <form action="{{ route('cart.update') }}" method="POST">
-                                        @csrf
+                                <?php else: ?>
+                                    <form action="<?php echo e(route('cart.update')); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
                                         <table class="table-responsive table table-striped dt-responsive nowrap">
                                             <thead>
                                                 <tr>
@@ -233,44 +233,45 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($cartItems as $item)
-                                                    <tr id="pro-{{ $item->id }}">
+                                                <?php $__currentLoopData = $cartItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <tr id="pro-<?php echo e($item->id); ?>">
                                                         <td>
-                                                            @if($item->attributes->product_type == 'business_card')
-                                                            <button type="button" value="{{ $item->id }}" scope="row" class="remove-btn" ><span class="croos"><i class="fa fa-trash"></i></span></button>
-                                                            <a href="{{ route('business-cards.edit', $item->attributes->business_card_id) }}" 
+                                                            <?php if($item->attributes->product_type == 'business_card'): ?>
+                                                            <button type="button" value="<?php echo e($item->id); ?>" scope="row" class="remove-btn" ><span class="croos"><i class="fa fa-trash"></i></span></button>
+                                                            <a href="<?php echo e(route('business-cards.edit', $item->attributes->business_card_id)); ?>" 
                                                             class="edit-btn">
                                                             <i class="fa fa-pen"></i>
                                                             </a>
-                                                            @else
-                                                            <button type="button" value="{{ $item->id }}" scope="row" class="remove-btn" ><span class="croos"><i class="fa fa-trash"></i></span></button>
-                                                            @endif
+                                                            <?php else: ?>
+                                                            <button type="button" value="<?php echo e($item->id); ?>" scope="row" class="remove-btn" ><span class="croos"><i class="fa fa-trash"></i></span></button>
+                                                            <?php endif; ?>
                                                         </td>
                                                         <td>
-                                                            @if($item->attributes->product_type == 'business_card')
-                                                            <img src="{{ asset('public/storage/' .$item->attributes->card_front_image) }}" style="width: 100px;">
-                                                            @else
-                                                            <img src="{{ asset('public/admin/assets/images/product') }}/{{ $item->attributes->product_image }}" style="width: 100px;">
-                                                            @endif
+                                                            <?php if($item->attributes->product_type == 'business_card'): ?>
+                                                            <img src="<?php echo e(asset('public/storage/' .$item->attributes->card_front_image)); ?>" style="width: 100px;">
+                                                            <?php else: ?>
+                                                            <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($item->attributes->product_image); ?>" style="width: 100px;">
+                                                            <?php endif; ?>
                                                         </td>
                                                         <td>
-                                                            <p class="product_name">{{ $item->name }}</p>
-                                                            @if($item->attributes->product_type == '1')
-                                                                Option: {{ $item->attributes->variation_name }}
-                                                            @endif
+                                                            <p class="product_name"><?php echo e($item->name); ?></p>
+                                                            <?php if($item->attributes->product_type == '1'): ?>
+                                                                Option: <?php echo e($item->attributes->variation_name); ?>
+
+                                                            <?php endif; ?>
                                                         </td>
-                                                        <td>${{ number_format($item->price, 2) }}</td>
+                                                        <td>$<?php echo e(number_format($item->price, 2)); ?></td>
                                                         <td>
-                                                            <input type="hidden" name="id[]" value="{{ $item->id }}" >
+                                                            <input type="hidden" name="id[]" value="<?php echo e($item->id); ?>" >
                                                             <div class="quantity_goods">
                                                                 <button type="button" class="quantity-btn" onclick="this.nextElementSibling.stepDown();">-</button>
-                                                                <input type="number" step="1" min="1" name="quantity[]" value="{{ $item->quantity }}" title="Qty">
+                                                                <input type="number" step="1" min="1" name="quantity[]" value="<?php echo e($item->quantity); ?>" title="Qty">
                                                                 <button type="button" class="quantity-btn" onclick="this.previousElementSibling.stepUp();">+</button>
                                                             </div>
                                                         </td>
-                                                        <td>${{ number_format($item->quantity * $item->price, 2) }}</td>
+                                                        <td>$<?php echo e(number_format($item->quantity * $item->price, 2)); ?></td>
                                                     </tr>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </tbody>
                                         </table>
                                         <div class="row">
@@ -294,45 +295,45 @@
                                                 <thead>
                                                     <tr>
                                                         <th scope="col">Subtotal</th>
-                                                        <th scope="col" colspan="2">${{ number_format(Cart::getTotal(), 2) }}</th>
+                                                        <th scope="col" colspan="2">$<?php echo e(number_format(Cart::getTotal(), 2)); ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @if(Session::has('discount'))
+                                                    <?php if(Session::has('discount')): ?>
                                                         <?php
                                                             $discount = Session::get('discount');
                                                         ?>
                                                         <tr>
                                                             <td>Coupon Discount</td>
-                                                            <td>${{ number_format($discount['discount'], 2) }}</td>
+                                                            <td>$<?php echo e(number_format($discount['discount'], 2)); ?></td>
                                                             <td>
                                                                 <button title="Remove coupon" type="button" data-session="discount" class="btn btn-danger btn-sm remove-coupon-btn"><i class="fa fa-times"></i></button>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Total</td>
-                                                            <td colspan="2">${{ number_format(Cart::getTotal()-$discount['discount'], 2) }}</td>
+                                                            <td colspan="2">$<?php echo e(number_format(Cart::getTotal()-$discount['discount'], 2)); ?></td>
                                                         </tr>
-                                                    @else
+                                                    <?php else: ?>
                                                         <tr>
                                                             <td>Total</td>
-                                                            <td>${{ number_format(Cart::getTotal(), 2) }}</td>
+                                                            <td>$<?php echo e(number_format(Cart::getTotal(), 2)); ?></td>
                                                         </tr>
-                                                    @endif
+                                                    <?php endif; ?>
                                                 </tbody>
                                             </table>
-                                            <a href="{{ route('check-out') }}" style="cursor: pointer" class="proceesd golbal-btn-submit">Proceed to checkout</a>
+                                            <a href="<?php echo e(route('check-out')); ?>" style="cursor: pointer" class="proceesd golbal-btn-submit">Proceed to checkout</a>
                                         </div>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-@endsection
-@push('js')
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('js'); ?>
     <script>
         $(document).on('click', '.coupon-btn', function(){
             var coupon_code = $('#coupon_code').val();
@@ -343,11 +344,11 @@
             }else{
                 $.ajax({
                     type:"get",
-                    url:"{{ url('apply_coupon') }}",
+                    url:"<?php echo e(url('apply_coupon')); ?>",
                     data:{'coupon_code':coupon_code},
                     success:function(data){
                         if(data.status=='sign'){
-                            window.location.href = "{{ url('./login') }}";
+                            window.location.href = "<?php echo e(url('./login')); ?>";
                         }else if(data.status=='expired'){
                             Swal.fire({
                             position: 'center',
@@ -423,7 +424,7 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type:"get",
-                        url:"{{ url('remove-coupon') }}",
+                        url:"<?php echo e(url('remove-coupon')); ?>",
                         data:{'session_key':session_key},
                         success:function(data){
                             Swal.fire({
@@ -461,7 +462,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url : "{{ route('cart.remove') }}",
+                        url : "<?php echo e(route('cart.remove')); ?>",
                         data : {'product_id' : product_id},
                         type : 'POST',
                         success : function(result){
@@ -485,4 +486,6 @@
             })
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never_forget\resources\views/website/cart.blade.php ENDPATH**/ ?>
