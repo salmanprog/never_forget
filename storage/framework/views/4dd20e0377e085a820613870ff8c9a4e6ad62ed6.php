@@ -58,7 +58,7 @@
     </div>
     
     
-    <div class="container-fluid bg-color-header">
+    <div class="container-fluid bg-color-header pt-10 pb-10">
         <div class="row align-items-center justify-content-between">
             <div class="col-lg-2 col-6">
                 <div class="logo" data-aos="flip-left" data-aos-easing="ease-out-cubic" data-aos-duration="1000">

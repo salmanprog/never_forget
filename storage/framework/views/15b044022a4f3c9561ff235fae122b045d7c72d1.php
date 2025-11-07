@@ -1,6 +1,6 @@
-@extends('layouts.website.master')
-@section('content')
-<link href="{{asset('public/assets/website/vendor/aos/aos.css')}}" rel="stylesheet">
+
+<?php $__env->startSection('content'); ?>
+<link href="<?php echo e(asset('public/assets/website/vendor/aos/aos.css')); ?>" rel="stylesheet">
 <style>
     .about-img{
     margin-top: 170px;
@@ -27,7 +27,7 @@
     max-width: 430px;
 }
 
-@keyframes float {
+@keyframes  float {
     0% {
         transform: translateY(0px);
     }
@@ -252,7 +252,7 @@
 }
 
 </style>
-@section('title', $page_title)
+<?php $__env->startSection('title', $page_title); ?>
 <main class="inner-bg">
     <section class="inner-banner">
         <div class="container">
@@ -268,27 +268,27 @@
         <div class="row align-items-start">
             <div id="main" class="col-md-6 mt-5" data-aos="fade-right">
                 <div class="about-info mt-5">
-                    {{-- <h1>Why Choose Us?</h1> --}}
+                    
                     <div class="why-choose-container">
-                        @php $count = 0; @endphp
-                        @foreach ($chooseus as $item)
-                        <div class="why-choose-item" data-aos="fade-up" data-aos-delay="{{ $count * 100 }}">
+                        <?php $count = 0; ?>
+                        <?php $__currentLoopData = $chooseus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="why-choose-item" data-aos="fade-up" data-aos-delay="<?php echo e($count * 100); ?>">
                             <div class="why-choose-icon">
-                                <img src="{{ asset('public/admin/assets/images/why_choose/' . $item->image) }}" alt="{{ $item->title }}">
+                                <img src="<?php echo e(asset('public/admin/assets/images/why_choose/' . $item->image)); ?>" alt="<?php echo e($item->title); ?>">
                             </div>
                             <div class="why-choose-content">
-                                <h3>{{ $item->title }}</h3>
-                                <p>{!! $item->description !!}</p>
+                                <h3><?php echo e($item->title); ?></h3>
+                                <p><?php echo $item->description; ?></p>
                             </div>
                         </div>
-                        @php $count++; @endphp
-                        @endforeach
+                        <?php $count++; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 mt-5">
                 <div class="about-img" data-aos="fade-left">
-                    <img src="{{asset('public/assets/website/images')}}/why-choose.png" alt="Why Choose Us">
+                    <img src="<?php echo e(asset('public/assets/website/images')); ?>/why-choose.png" alt="Why Choose Us">
                 </div>
             </div>
         </div>
@@ -298,7 +298,7 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
 
-<script src="{{asset('public/assets/website/vendor/aos/aos.js')}}"></script>
+<script src="<?php echo e(asset('public/assets/website/vendor/aos/aos.js')); ?>"></script>
 <script>
     AOS.init({
         duration: 1000,
@@ -307,4 +307,6 @@
         mirror: false
     });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never_forget\resources\views/website/why-choose-us.blade.php ENDPATH**/ ?>

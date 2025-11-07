@@ -243,7 +243,7 @@
         </div>
     </section>
     <section class="solutions-sec">
-        <div class="container me-0">
+        <div class="container">
             <div class="col-lg-6">
                 <span class="btn des-wrapper mb-20" data-aos="flip-up" data-aos-easing="ease-out-cubic"
                     data-aos-duration="1000">Never Forget Showing Appreciation</span>
@@ -448,7 +448,7 @@
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{asset('public/assets/website/images/greeting_card')}}/anniversary.webp"
+                        <img src="{{asset('public/assets/website/images/')}}/travel-experience.jpeg"
                                 alt="Travel & Experience" class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
