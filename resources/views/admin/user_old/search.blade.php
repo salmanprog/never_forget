@@ -12,10 +12,6 @@
             <span class="badge badge-company">
                 Company
             </span>
-        @elseif($user->account_type == 'Sales Person')
-            <span class="badge badge-salesperson">
-                Sales Person
-            </span>
         @else
             <span class="badge badge-individual">
                 Individual

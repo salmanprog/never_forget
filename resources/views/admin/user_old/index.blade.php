@@ -1,16 +1,4 @@
-@php
-    if (Auth::user()->hasRole('Admin')) {
-        $layout = 'layouts.admin.app';
-    } elseif (Auth::user()->hasRole('Individual')) {
-        $layout = 'layouts.individual.app';
-    } elseif (Auth::user()->hasRole('Company')) {
-        $layout = 'layouts.company.app';
-    } else {
-        $layout = 'layouts.company.app';
-    }
-@endphp
-
-@extends($layout)
+@extends('layouts.admin.app')
 @section('title', $page_title)
 @section('content')
 <input type="hidden" id="page_url" value="{{ route('user.index') }}">
@@ -18,13 +6,11 @@
     <div class="content-header-left">
         <h1>{{ $page_title }}</h1>
     </div>
-    @can('user-create')
-        @if(request()->get('type') == 'salesperson')
-        <div class="content-header-right">
-            <a href="{{ route('user.create', ['type' => 'salesperson']) }}" class="btn btn-primary btn-sm">Add New Sales Person</a>
-        </div>
-        @endif
-    @endcan
+    {{-- @can('user-create')
+    <div class="content-header-right">
+        <a href="{{ route('user.create') }}" class="btn btn-primary btn-sm">Add New</a>
+    </div>
+    @endcan --}}
 </section>
 <style> 
     .badge-company {
@@ -43,12 +29,6 @@
         padding: 5px 10px;
         border-radius: 4px;
         background-color: #6c757d !important;
-        color: white !important;
-    }
-    .badge-salesperson {
-        padding: 5px 10px;
-        border-radius: 4px;
-        background-color: #28a745 !important;
         color: white !important;
     }
 </style>
@@ -102,10 +82,6 @@
                                         @if($user->account_type == 'Company')
                                             <span class="badge badge-company">
                                                 Company
-                                            </span>
-                                        @elseif($user->account_type == 'Sales Person')
-                                            <span class="badge badge-salesperson">
-                                                Sales Person
                                             </span>
                                         @else
                                             <span class="badge badge-individual">

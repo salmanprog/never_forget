@@ -61,6 +61,8 @@ Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 Route::get('/admin/profile/edit', 'admin\AdminController@editProfile')->name('admin.profile.edit');
 Route::get('/member/profile/edit', 'admin\UserController@IndividualEditProfile')->name('member.profile.edit');
 Route::post('/member/profile/update', 'admin\UserController@IndividualUpdateProfile')->name('member.profile.update');
+Route::get('/salesperson/profile/edit', 'admin\UserController@SalesPersonEditProfile')->name('salesperson.profile.edit');
+Route::post('/salesperson/profile/update', 'admin\UserController@SalesPersonUpdateProfile')->name('salesperson.profile.update');
 Route::post('/user/profile/update', 'admin\UserController@IndividualUpdateProfile')->name('user.profile.update');
 Route::post('/admin/profile/update', 'admin\AdminController@updateProfile')->name('admin.profile.update');
 Route::post('admin/logout', 'admin\AdminController@logOut')->name('admin.logout');
@@ -174,6 +176,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // MTS Dashboard Routes
     Route::resource('mts-dashboard', 'admin\MTSDashboardController');
+    Route::post('mts-dashboard/{id}/update-assigned-salesperson', 'admin\MTSDashboardController@updateAssignedSalesperson')->name('mts-dashboard.update-assigned-salesperson');
 
     Route::post('send-text', 'admin\MTSDashboardController@sendText')->name('send-text');
 

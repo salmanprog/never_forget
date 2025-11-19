@@ -3,10 +3,10 @@
 @section('content')
 	<section class="content-header">
 		<div class="content-header-left">
-			<h1>Add Salesperson</h1>
+			<h1>Add Customer</h1>
 		</div>
 		<div class="content-header-right">
-			<a href="{{ route('user.index', ['type' => 'salesperson']) }}" class="btn btn-primary btn-sm">View All Salesperson</a>
+			<a href="{{ route('user.index') }}" class="btn btn-primary btn-sm">View All</a>
 		</div>
 	</section>
 
@@ -18,7 +18,7 @@
 
 				<div class="box box-info">
 					<div class="box-body">
-						{{-- <div class="form-group">
+						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Roles <span style="color: red">*</span></label>
 							<div class="col-sm-8">
 								<select name="roles" id="" class="form-control">
@@ -29,19 +29,12 @@
 								</select>
 								<span style="color: red">{{ $errors->first('name') }}</span>
 							</div>
-						</div> --}}
-						
-						<div class="form-group">
-							{{-- <label for="" class="col-sm-2 control-label">Role Name <span style="color: red">*</span></label> --}}
-							<div class="col-sm-8">
-								<input type="hidden" class="form-control" value="{{ $salesperson_roles->first()->name ?? '' }}" name="account_type" readonly>
-							</div>
 						</div>
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">First Name <span style="color: red">*</span></label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" value="{{ old('first_name') }}" name="first_name" placeholder="Enter user first name">
-								<span style="color: red">{{ $errors->first('first_name') }}</span>
+								<input type="text" class="form-control" value="{{ old('name') }}" name="name" placeholder="Enter user name">
+								<span style="color: red">{{ $errors->first('name') }}</span>
 							</div>
 						</div>
 						<div class="form-group">
@@ -56,20 +49,6 @@
 							<div class="col-sm-8">
 								<input type="email" class="form-control" value="{{ old('email') }}" name="email" placeholder="Enter user email">
 								<span style="color: red">{{ $errors->first('email') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Phone <span style="color: red">*</span></label>
-							<div class="col-sm-8">
-								<input type="tel" class="form-control" value="{{ old('phone') }}" name="phone" placeholder="Enter user phone">
-								<span style="color: red">{{ $errors->first('phone') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Address <span style="color: red">*</span></label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" value="{{ old('address') }}" name="address" placeholder="Enter user address">
-								<span style="color: red">{{ $errors->first('address') }}</span>
 							</div>
 						</div>
 						<div class="form-group">

@@ -455,6 +455,8 @@ class WebController extends Controller
                     return redirect()->route('dashboard');
                 } elseif ($user->hasRole('Company')) {
                     return redirect()->route('dashboard');
+                } elseif ($user->hasRole('Sales Person')) {
+                    return redirect()->route('dashboard');
                 } else {
                     Auth::logout();
                     return redirect()->back()->with('error', 'Unauthorized role.');

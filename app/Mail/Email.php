@@ -22,7 +22,12 @@ class Email extends Mailable
         $email = null;
 
         if ($this->details['from'] == 'verify') {
-            $email = $this->subject('Never Forget')->view('emails.verify-email');
+            // Check if it's a Sales Person account and use appropriate template
+            if (isset($this->details['account_type']) && $this->details['account_type'] == 'Sales Person') {
+                $email = $this->subject('Welcome to Never Forget - Sales Person Account Created')->view('emails.verify-email-saleperson');
+            } else {
+                $email = $this->subject('Never Forget')->view('emails.verify-email');
+            }
         } elseif ($this->details['from'] == 'password-reset') {
             $email = $this->subject('Reset Password Notification')->view('emails.password-reset');
         } elseif ($this->details['from'] == 'admin-password-reset') {

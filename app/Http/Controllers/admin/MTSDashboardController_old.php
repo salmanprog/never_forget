@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Vonage\Client;
+use Vonage\Client\Credentials\Basic;
+use Vonage\SMS\Message\SMS;
 
 class MTSDashboardController extends Controller
 {
@@ -24,23 +27,13 @@ class MTSDashboardController extends Controller
         if($request->ajax()){
             $query = User::orderby('id', 'desc')->where('id', '>', 0)
                 ->whereNotNull('account_type')
-                ->whereIn('account_type', ['Company', 'Individual', 'Sales Person']);
+                ->whereIn('account_type', ['Company', 'Individual']);
             
             // Check user role and permissions
             if($user->isAdmin()) {
                 // Admin role: can see all users and filter by type
                 if($request['account_type'] && $request['account_type'] != "All"){
                     $query->where('account_type', $request['account_type']);
-                }
-            } elseif($user->hasRole('Sales Person')) {
-                // Sales Person role: can see companies and individuals assigned to them
-                $query->where('assigned_to_user_id', $user->id);
-                // Allow filtering by account type
-                if($request['account_type'] && $request['account_type'] != "All"){
-                    $query->where('account_type', $request['account_type']);
-                } else {
-                    // Default: show both Company and Individual
-                    $query->whereIn('account_type', ['Company', 'Individual']);
                 }
             } elseif($user->isCompany() && $user->isCompanyAdmin()) {
                 // Company role + administers company: can only see users from their company
@@ -66,19 +59,12 @@ class MTSDashboardController extends Controller
                 $query->where('status', $request['status']);
             }
             $users = $query->paginate(10);
-            
-            // Get all salespersons for the dropdown
-            $salespersons = User::where('account_type', 'Sales Person')
-                ->where('status', 1)
-                ->orderBy('name', 'asc')
-                ->get(['id', 'name', 'last_name', 'email']);
-            
-            return (string) view('admin.mts-dashboard.search', compact('users', 'salespersons'));
+            return (string) view('admin.mts-dashboard.search', compact('users'));
         }
         
         $query = User::orderBy('id','DESC')
             ->whereNotNull('account_type')
-            ->whereIn('account_type', ['Company', 'Individual', 'Sales Person']);
+            ->whereIn('account_type', ['Company', 'Individual']);
         
         // Check user role and permissions
         if($user->isAdmin()) {
@@ -88,18 +74,6 @@ class MTSDashboardController extends Controller
                 $page_title = ucfirst($request->get('account_type')) . ' Users - MTS Dashboard';
             } else {
                 $page_title = 'MTS Dashboard';
-            }
-        } elseif($user->hasRole('Sales Person')) {
-            // Sales Person role: can see companies and individuals assigned to them
-            $query->where('assigned_to_user_id', $user->id);
-            // Allow filtering by account type
-            if($request->get('account_type') && $request->get('account_type') != "All"){
-                $query->where('account_type', $request->get('account_type'));
-                $page_title = 'My Assigned ' . ucfirst($request->get('account_type')) . 's - MTS Dashboard';
-            } else {
-                // Default: show both Company and Individual
-                $query->whereIn('account_type', ['Company', 'Individual']);
-                $page_title = 'My Assigned Accounts - MTS Dashboard';
             }
         } elseif($user->isCompany() && $user->isCompanyAdmin()) {
             // Company role + administers company: can only see users from their company
@@ -132,32 +106,50 @@ class MTSDashboardController extends Controller
         }
         
         $users = $query->paginate(10);
-        
-        // Get all salespersons for the dropdown
-        $salespersons = User::where('account_type', 'Sales Person')
-            ->where('status', 1)
-            ->orderBy('name', 'asc')
-            ->get(['id', 'name', 'last_name', 'email']);
-        
-        return view('admin.mts-dashboard.index', compact('users','page_title', 'salespersons'));
+        return view('admin.mts-dashboard.index', compact('users','page_title'));
     }
 
-    /**
-     * Update assigned salesperson for a user
-     */
-    public function updateAssignedSalesperson(Request $request, $id)
+    public function sendText(Request $request)
     {
         $request->validate([
-            'assigned_to_user_id' => 'nullable|exists:users,id'
+            'phone' => 'required',
+            'message' => 'required|string|max:500',
         ]);
 
-        $user = User::findOrFail($id);
-        $user->assigned_to_user_id = $request->assigned_to_user_id;
-        $user->save();
+        try {
+            // Initialize Vonage Client
+            $basic  = new Basic(
+                config('services.vonage.key'),
+                config('services.vonage.secret')
+            );
+            $client = new Client($basic);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Salesperson assigned successfully'
-        ]);
+            // Send SMS
+            $response = $client->sms()->send(
+                new SMS('+18435551234', '15753057928', $request->message)
+            );
+
+            $message = $response->current();
+            print_r($message);
+            die();
+            if ($message->getStatus() == 0) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Message sent successfully!',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Failed to send message. Status: ' . $message->getStatus(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Vonage SMS Error: ' . $e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'SMS send failed: ' . $e->getMessage(),
+            ], 500);
+        }
     }
+
 }

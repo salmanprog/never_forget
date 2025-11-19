@@ -1,4 +1,4 @@
-@php
+<?php
     if (Auth::user()->hasRole('Admin')) {
         $layout = 'layouts.admin.app';
     } elseif (Auth::user()->hasRole('Individual')) {
@@ -8,23 +8,23 @@
     } else {
         $layout = 'layouts.company.app';
     }
-@endphp
+?>
 
-@extends($layout)
-@section('title', $page_title)
-@section('content')
-<input type="hidden" id="page_url" value="{{ route('user.index') }}">
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('content'); ?>
+<input type="hidden" id="page_url" value="<?php echo e(route('user.index')); ?>">
 <section class="content-header">
     <div class="content-header-left">
-        <h1>{{ $page_title }}</h1>
+        <h1><?php echo e($page_title); ?></h1>
     </div>
-    @can('user-create')
-        @if(request()->get('type') == 'salesperson')
+    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('user-create')): ?>
+        <?php if(request()->get('type') == 'salesperson'): ?>
         <div class="content-header-right">
-            <a href="{{ route('user.create', ['type' => 'salesperson']) }}" class="btn btn-primary btn-sm">Add New Sales Person</a>
+            <a href="<?php echo e(route('user.create', ['type' => 'salesperson'])); ?>" class="btn btn-primary btn-sm">Add New Sales Person</a>
         </div>
-        @endif
-    @endcan
+        <?php endif; ?>
+    <?php endif; ?>
 </section>
 <style> 
     .badge-company {
@@ -56,11 +56,12 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
-            @if (session('success'))
+            <?php if(session('success')): ?>
                 <div class="callout callout-success">
-                    {{ session('status') }}
+                    <?php echo e(session('status')); ?>
+
                 </div>
-            @endif
+            <?php endif; ?>
 
             <div class="box box-info">
                 <div class="box-body">
@@ -89,52 +90,51 @@
                             </tr>
                         </thead>
                         <tbody id="body">
-                            @foreach($users as $key=>$user)
-                                @if($user->hasRole('Admin'))
-                                    @continue;
-                                @endif
-                                <tr id="id-{{ $user->id }}">
-                                    <td>{{  $users->firstItem()+$key }}.</td>
-                                    <td>{{$user->name}}</td>
-                                    <td>{{$user->last_name??'N/A'}}</td>
-                                    <td>{{$user->email}}</td>
+                            <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php if($user->hasRole('Admin')): ?>
+                                    <?php continue; ?>;
+                                <?php endif; ?>
+                                <tr id="id-<?php echo e($user->id); ?>">
+                                    <td><?php echo e($users->firstItem()+$key); ?>.</td>
+                                    <td><?php echo e($user->name); ?></td>
+                                    <td><?php echo e($user->last_name??'N/A'); ?></td>
+                                    <td><?php echo e($user->email); ?></td>
                                     <td>
-                                        @if($user->account_type == 'Company')
+                                        <?php if($user->account_type == 'Company'): ?>
                                             <span class="badge badge-company">
                                                 Company
                                             </span>
-                                        @elseif($user->account_type == 'Sales Person')
+                                        <?php elseif($user->account_type == 'Sales Person'): ?>
                                             <span class="badge badge-salesperson">
                                                 Sales Person
                                             </span>
-                                        @else
+                                        <?php else: ?>
                                             <span class="badge badge-individual">
                                                 Individual
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                     </td>
                                     <td>
-										@if($user->status)
+										<?php if($user->status): ?>
 											<span class="badge label-success">Active</span>
-										@else
+										<?php else: ?>
 											<span class="badge label-danger">In-Active</span>
-										@endif
+										<?php endif; ?>
 									</td>
                                     <td>
-                                        @can('user-edit')
-                                            <a href="{{ route('user.edit', $user->id)}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
-                                        @endcan
-                                        {{-- @can('user-delete')
-                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $user->id }}" data-del-url="{{ url('user', $user->id) }}"><i class="fa fa-trash"></i> Delete</button>
-                                        @endcan --}}
+                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('user-edit')): ?>
+                                            <a href="<?php echo e(route('user.edit', $user->id)); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
+                                        <?php endif; ?>
+                                        
                                     </td>
                                 </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td colspan="8">
-                                    Displying {{$users->firstItem()}} to {{$users->lastItem()}} of {{$users->total()}} records
+                                    Displying <?php echo e($users->firstItem()); ?> to <?php echo e($users->lastItem()); ?> of <?php echo e($users->total()); ?> records
                                     <div class="d-flex justify-content-center">
-                                        {!! $users->links('pagination::bootstrap-4') !!}
+                                        <?php echo $users->links('pagination::bootstrap-4'); ?>
+
                                     </div>
                                 </td>
                             </tr>
@@ -144,5 +144,6 @@
             </div>
         </div>
 </section>
-@endsection
+<?php $__env->stopSection(); ?>
  
+<?php echo $__env->make($layout, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp8.2\htdocs\never-forget\resources\views/admin/user/index.blade.php ENDPATH**/ ?>

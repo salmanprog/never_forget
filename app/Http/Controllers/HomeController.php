@@ -88,6 +88,11 @@ class HomeController extends Controller
                 $products = $customer->favoriteProducts()->get();
             }
             return view('website.company-dashboard.dashboard', compact('customer', 'address', 'shipping', 'order', 'page_title', 'products', 'total_billing_address', 'total_shipping_address', 'total_orders'));
+        } elseif (Auth::check() && $user->hasRole('Sales Person')) {
+
+            $page_title = 'Sales Person Dashboard';
+            $salesperson = User::where('id', $user->id)->first(); 
+            return view('website.sales-person-dashboard.dashboard', compact('salesperson', 'page_title'));
         } else {
             return redirect()->route('index');
         }

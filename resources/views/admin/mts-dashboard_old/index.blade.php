@@ -1,25 +1,11 @@
-@php
-    if (Auth::user()->hasRole('Admin')) {
-        $layout = 'layouts.admin.app';
-    } elseif (Auth::user()->hasRole('Individual')) {
-        $layout = 'layouts.individual.app';
-    } elseif (Auth::user()->hasRole('Company')) {
-        $layout = 'layouts.company.app';
-    }elseif (Auth::user()->hasRole('Sales Person')) {
-        $layout = 'layouts.sales-person.app';
-    } else {
-        $layout = 'layouts.sales-person.app';
-    }
-@endphp
-
-@extends($layout)
+@extends('layouts.admin.app')
 @section('title', $page_title)
 @section('content')
 <input type="hidden" id="page_url" value="{{ route('mts-dashboard.index') }}">
 <section class="content-header">
     <div class="content-header-left">
         <h1>{{ $page_title }}</h1>
-    </div> 
+    </div>
 </section>
 <style> 
     .badge-company {
@@ -38,12 +24,6 @@
         padding: 5px 10px;
         border-radius: 4px;
         background-color: #6c757d !important;
-        color: white !important;
-    }
-    .badge-salesperson {
-        padding: 5px 10px;
-        border-radius: 4px;
-        background-color: #28a745 !important;
         color: white !important;
     }
 </style>
@@ -70,15 +50,6 @@
                                     <option value="All" {{ request('account_type') == 'All' ? 'selected' : '' }}>All Types</option>
                                     <option value="Individual" {{ request('account_type') == 'Individual' ? 'selected' : '' }}>Individual</option>
                                     <option value="Company" {{ request('account_type') == 'Company' ? 'selected' : '' }}>Company</option>
-                                    <option value="Sales Person" {{ request('account_type') == 'Sales Person' ? 'selected' : '' }}>Sales Person</option>
-                                </select>
-                            </div>
-                            @elseif(Auth::user()->hasRole('Sales Person'))
-                            <div class="d-flex col-sm-3">
-                                <select name="account_type" id="account_type" class="form-control account_type" style="margin-bottom:5px" onchange="this.form.submit()">
-                                    <option value="All" {{ request('account_type') == 'All' ? 'selected' : '' }}>All Types</option>
-                                    <option value="Individual" {{ request('account_type') == 'Individual' ? 'selected' : '' }}>Individual</option>
-                                    <option value="Company" {{ request('account_type') == 'Company' ? 'selected' : '' }}>Company</option>
                                 </select>
                             </div>
                             @endif
@@ -89,7 +60,6 @@
                                     <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>In-Active</option>
                                 </select>
                             </div>
-                            
                              
                         </div>
                     </form>
@@ -101,12 +71,9 @@
                                 <th>Last Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <!-- <th>Date of Birth</th> -->
-                                 
-                                <th>Account Type</th> 
-                                @if(Auth::user()->isAdmin())
-                                <th>Assigned To</th>
-                                @endif
+                                <th>Date of Birth</th>
+                                <th>Account Type</th>
+                                <th>Company Name</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -122,15 +89,11 @@
                                     <td>{{ $user->last_name ?? 'N/A' }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->phone ?? 'N/A' }}</td>
-                                    <!-- <td>{{ $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('M d, Y') : 'N/A' }}</td> -->
+                                    <td>{{ $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('M d, Y') : 'N/A' }}</td>
                                     <td>
                                         @if($user->account_type == 'Company')
                                             <span class="badge badge-company">
                                                 Company
-                                            </span>
-                                        @elseif($user->account_type == 'Sales Person')
-                                            <span class="badge badge-salesperson">
-                                                Sales Person
                                             </span>
                                         @else
                                             <span class="badge badge-individual">
@@ -138,19 +101,7 @@
                                             </span>
                                         @endif
                                     </td>
-                                     
-                                    @if(Auth::user()->isAdmin())
-                                    <td>
-                                        <select class="form-control assigned-salesperson-select" data-user-id="{{ $user->id }}" style="min-width: 150px;">
-                                            <option value="">-- Select Salesperson --</option>
-                                            @foreach($salespersons as $salesperson)
-                                                <option value="{{ $salesperson->id }}" {{ $user->assigned_to_user_id == $salesperson->id ? 'selected' : '' }}>
-                                                    {{ $salesperson->name }} {{ $salesperson->last_name ?? '' }} ({{ $salesperson->email }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    @endif
+                                    <td>{{ $user->company_name ?? 'N/A' }}</td>
                                     <td>
                                         @if($user->status)
                                             <span class="badge label-success">Active</span>
@@ -161,7 +112,10 @@
                                     <td>
                                         <div class="btn-group" role="group">
                                             @if($user->phone)
-                                                <button type="button" class="btn btn-success btn-xs" onclick="sendText('{{ $user->phone }}', '{{ $user->name }}')" title="Send Text">
+                                                <!-- <button type="button" class="btn btn-success btn-xs" onclick="sendText('{{ $user->phone }}', '{{ $user->name }}')" title="Send Text">
+                                                    <i class="fa fa-comment"></i>
+                                                </button> -->
+                                                <button type="button" class="btn btn-success btn-xs" onclick="openSendTextModal('{{ $user->phone }}', '{{ $user->name }}')" title="Send Text">
                                                     <i class="fa fa-comment"></i>
                                                 </button>
                                             @endif
@@ -178,7 +132,7 @@
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="{{ Auth::user()->isAdmin() ? '11' : '10' }}">
+                                <td colspan="10">
                                     Displaying {{$users->firstItem()}} to {{$users->lastItem()}} of {{$users->total()}} records
                                     <div class="d-flex justify-content-center">
                                         {!! $users->links('pagination::bootstrap-4') !!}
@@ -191,10 +145,85 @@
             </div>
         </div>
 </section>
+<div class="modal fade" id="sendTextModal" tabindex="-1" role="dialog" aria-labelledby="sendTextModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sendTextModalLabel">Send Text</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="sendTextForm">
+          <div class="form-group">
+            <label for="recipientName">Name</label>
+            <input type="text" class="form-control" id="recipientName" readonly>
+          </div>
+          <div class="form-group">
+            <label for="recipientPhone">Phone</label>
+            <input type="text" class="form-control" id="recipientPhone" readonly>
+          </div>
+          <div class="form-group">
+            <label for="messageText">Message</label>
+            <textarea class="form-control" id="messageText" rows="3" placeholder="Type your message"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" id="sendTextButton">Send Text</button>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 
 @push('js')
 <script>
+ function openSendTextModal(phone, name) {
+    $('#recipientName').val(name);
+    $('#recipientPhone').val(phone);
+    $('#messageText').val('');
+    $('#sendTextModal').modal('show');
+}   
+$('#sendTextButton').on('click', function () {
+        const phone = $('#recipientPhone').val();
+        const message = $('#messageText').val();
+
+        if (!message.trim()) {
+            alert('Please enter a message.');
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('send-text') }}",
+            method: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                phone: phone,
+                message: message,
+            },
+            beforeSend: function () {
+                $('#sendTextButton').prop('disabled', true).text('Sending...');
+            },
+            success: function (res) {
+                if (res.status) {
+                    alert(res.message);
+                    $('#sendTextModal').modal('hide');
+                } else {
+                    alert(res.message || 'Failed to send.');
+                }
+            },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert('Something went wrong.');
+            },
+            complete: function () {
+                $('#sendTextButton').prop('disabled', false).text('Send Text');
+            }
+        });
+    });
 $(document).ready(function() {
 
 // Action functions
@@ -218,61 +247,6 @@ function sendEmail(email, name) {
         window.open('mailto:' + email, '_blank');
     }
 }
-
-// Handle salesperson assignment dropdown change
-$(document).on('change', '.assigned-salesperson-select', function() {
-    var userId = $(this).data('user-id');
-    var salespersonId = $(this).val();
-    var selectElement = $(this);
-    
-    // Disable the select while updating
-    selectElement.prop('disabled', true);
-    
-    var baseUrl = '{{ route("mts-dashboard.update-assigned-salesperson", ":id") }}';
-    var url = baseUrl.replace(':id', userId);
-    
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: {
-            _token: '{{ csrf_token() }}',
-            assigned_to_user_id: salespersonId
-        },
-        success: function(response) {
-            if(response.success) {
-                // Show success message with SweetAlert
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Salesperson assigned successfully',
-                    confirmButtonColor: '#28a745',
-                    timer: 3000,
-                    timerProgressBar: true
-                });
-            }
-        },
-        error: function(xhr) {
-            // Show error message with SweetAlert
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'Error updating salesperson assignment. Please try again.',
-                confirmButtonColor: '#dc3545'
-            });
-            // Revert the selection
-            selectElement.val(selectElement.data('previous-value'));
-        },
-        complete: function() {
-            // Re-enable the select
-            selectElement.prop('disabled', false);
-        }
-    });
-});
-
-// Store previous value before change
-$(document).on('focus', '.assigned-salesperson-select', function() {
-    $(this).data('previous-value', $(this).val());
-});
 });
 </script>
 @endpush

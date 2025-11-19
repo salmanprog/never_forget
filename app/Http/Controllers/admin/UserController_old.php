@@ -13,8 +13,6 @@ use DB;
 use Hash;
 use Illuminate\Support\Arr;
 use Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -45,9 +43,7 @@ class UserController extends Controller
             } else {
                 // Admin can see all users, filter by type if specified
                 if($request['type'] && $request['type'] != "All"){
-                    // Map 'salesperson' to 'Sales Person' for database query
-                    $accountType = $request['type'] == 'salesperson' ? 'Sales Person' : $request['type'];
-                    $query->where('account_type', $accountType);
+                    $query->where('account_type', $request['type']);
                 }
             }
             
@@ -79,10 +75,8 @@ class UserController extends Controller
         } else {
             // Admin can see all users, filter by type if specified
             if($request->get('type')){
-                // Map 'salesperson' to 'Sales Person' for database query
-                $accountType = $request->get('type') == 'salesperson' ? 'Sales Person' : $request->get('type');
-                $query->where('account_type', $accountType);
-                $page_title = $accountType == 'Sales Person' ? 'Sales Person Users' : ucfirst($request->get('type')) . ' Users';
+                $query->where('account_type', $request->get('type'));
+                $page_title = ucfirst($request->get('type')) . ' Users';
             } else {
                 $page_title = 'All Users';
             }
@@ -99,10 +93,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        $page_title = 'Add Sales Person';
-        $salesperson_roles = Role::orderby('id', 'desc')->where('name', 'Sales Person')->get(['name', 'id']);
+        $page_title = 'Add Customer';
         $roles = Role::orderby('id', 'desc')->get(['name', 'id']);
-        return view('admin.user.create',compact('roles','page_title','salesperson_roles'));
+        return view('admin.user.create',compact('roles','page_title'));
     }
 
     /**
@@ -114,69 +107,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'phone' => 'required',
-            'address' => 'required', 
+            'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'account_type' => 'required', 
+            'roles' => 'required'
         ]);
 
-        // Generate unique verify_token
-        do{
-            $verify_token = uniqid();
-        }while(User::where('verify_token', $verify_token)->first());
-        
-        // Generate unique user_id
-        do{
-            $user_id = rand(1000, 9999);
-        }while(User::where('user_id', $user_id)->first());
+        $input = $request->all();
+        $input['password'] = Hash::make($input['password']);
 
-        $user = User::create([
-            'name' => $request->first_name,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'account_type' => $request->account_type,
-            'password' => Hash::make($request->password),
-            'status' => 1, // Activate account
-            'verify_token' => $verify_token,
-            'user_id' => $user_id,
-        ]);
-
-        $user->assignRole($request->input('account_type'));
-
-        // Generate verification link
-        $verification_link = route('email-verification', $verify_token);
-
-        // Send email to salesperson
-        $details = [
-            'from' => 'verify',
-            'title' => "Hi ".$request->first_name.' '.$request->last_name.',',
-            'body' => "Your Sales Person account has been created successfully on NEVER FORGET Showing Appreciation. Please verify your email address by clicking on the verification link below to activate your account.",
-            'regard' => 'We look forward to seeing you soon.',
-            'account_type' => 'Sales Person',
-            'verify_token' => $verify_token,
-            'email' => $request->email,
-            'password' => $request->password,
-            'login_url' => route('login'),
-        ];
-
-        try {
-            \Mail::to($user->email)->send(new \App\Mail\Email($details));
-            $message = 'Sales Person created successfully. An email has been sent with login credentials and verification link.';
-        } catch (\Exception $e) {
-            // Log the error for debugging
-            Log::error('Failed to send email to salesperson: ' . $e->getMessage());
-            // Still show success but include verification link in message
-            $message = 'Sales Person created successfully. Email could not be sent (check logs). Verification link: ' . $verification_link;
-        }
+        $user = User::create($input);
+        $user->assignRole($request->input('roles'));
 
         return redirect()->route('user.index')
-                        ->with('success', $message);
+                        ->with('message','Customer created successfully');
     }
 
     /**
@@ -241,12 +185,6 @@ class UserController extends Controller
         $user =  User::where('id', Auth::user()->id)->first();
         return view('website.individual-dashboard.edit', compact('cities', 'states', 'user', 'page_title'));
     }
-    public function SalesPersonEditProfile()
-    {
-        $page_title = 'Edit Profile'; 
-        $user =  User::where('id', Auth::user()->id)->first();
-        return view('website.sales-person-dashboard.edit', compact('user', 'page_title'));
-    }
 
     public function individualUpdateProfile(Request $request)
     {
@@ -288,24 +226,6 @@ class UserController extends Controller
         if (isset($request->password)) {
             $this->validate($request, [
                 'name' => 'required',
-                'password' => 'required|same:confirm-password',
-            ]);
-
-            $user->password = Hash::make($request->password);
-        }
-
-        $user->update();
-        return redirect()->back()->with('message', 'Profile updated successfully');
-    }
-    public function SalesPersonUpdateProfile(Request $request)
-    {
-        $user = User::where('id', Auth::user()->id)->first();
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->phone = $request->phone;
-        $user->address = $request->address; 
-        if (isset($request->password)) {
-            $this->validate($request, [ 
                 'password' => 'required|same:confirm-password',
             ]);
 

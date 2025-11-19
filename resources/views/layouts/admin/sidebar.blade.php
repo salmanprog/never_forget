@@ -103,6 +103,14 @@
                             </a>
                         </li>
                     @endcan
+                    @can('user-list')
+                        <li class="treeview">
+                            <a href="{{ route('user.index', ['type' => 'salesperson']) }}"
+                                class="{{ request()->is('user') && request()->get('type') == 'salesperson' ? 'active' : '' }}">
+                                <i class="fa fa-user"></i> <span>Sales Person</span>
+                            </a>
+                        </li>
+                    @endcan
                 </ul>
             </li>
         

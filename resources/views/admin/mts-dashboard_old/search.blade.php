@@ -8,34 +8,19 @@
         <td>{{ $user->last_name ?? 'N/A' }}</td>
         <td>{{ $user->email }}</td>
         <td>{{ $user->phone ?? 'N/A' }}</td>
-        <!-- <td>{{ $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('M d, Y') : 'N/A' }}</td> -->
+        <td>{{ $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('M d, Y') : 'N/A' }}</td>
          <td>
              @if($user->account_type == 'Company')
                  <span class="badge badge-company">
                      Company
-                 </span>
-             @elseif($user->account_type == 'Sales Person')
-                 <span class="badge badge-salesperson">
-                     Sales Person
                  </span>
              @else
                  <span class="badge badge-individual">
                      Individual
                  </span>
              @endif
-         </td> 
-        @if(Auth::user()->isAdmin())
-        <td>
-            <select class="form-control assigned-salesperson-select" data-user-id="{{ $user->id }}" style="min-width: 150px;">
-                <option value="">-- Select Salesperson --</option>
-                @foreach($salespersons as $salesperson)
-                    <option value="{{ $salesperson->id }}" {{ $user->assigned_to_user_id == $salesperson->id ? 'selected' : '' }}>
-                        {{ $salesperson->name }} {{ $salesperson->last_name ?? '' }} ({{ $salesperson->email }})
-                    </option>
-                @endforeach
-            </select>
-        </td>
-        @endif
+         </td>
+        <td>{{ $user->company_name ?? 'N/A' }}</td>
         <td>
             @if($user->status)
                 <span class="badge label-success">Active</span>
@@ -63,7 +48,7 @@
     </tr>
 @endforeach
 <tr>
-     <td colspan="{{ Auth::user()->isAdmin() ? '11' : '10' }}">
+     <td colspan="10">
         Displaying {{$users->firstItem()}} to {{$users->lastItem()}} of {{$users->total()}} records
         <div class="d-flex justify-content-center">
             {!! $users->links('pagination::bootstrap-4') !!}
