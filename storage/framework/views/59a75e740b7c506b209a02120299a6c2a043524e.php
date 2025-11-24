@@ -53,6 +53,16 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">Status <span style="color: red">*</span></label>
+							<div class="col-sm-8">
+								<select name="status" id="status" class="form-control">
+									<option value="1" <?php echo e($user->status == 1 ? 'selected' : ''); ?>>Active</option>
+									<option value="0" <?php echo e($user->status == 0 ? 'selected' : ''); ?>>In-Active</option>
+								</select>
+								<span style="color: red"><?php echo e($errors->first('status')); ?></span>
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Password </label>
 							<div class="col-sm-8">
 								<input type="password" class="form-control" name="password" placeholder="Enter password">
@@ -69,6 +79,7 @@
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label"></label>
 							<div class="col-sm-6">
+							<input type="hidden" class="form-control" name="user_role" value="<?php echo e($user->roles[0]->name); ?>">
 								<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
 							</div>
 						</div>

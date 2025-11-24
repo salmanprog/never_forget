@@ -222,15 +222,19 @@ class UserController extends Controller
 
         $user = User::find($id);
 
-        if(!empty($input['password'])){
+        if(!empty($request->input('password'))){
             $user->password = Hash::make($request->input('password'));
         }
         $user->name = $request->input('name');
         $user->last_name = $request->input('last_name');
         $user->email = $request->input('email');
+        $user->status = $request->input('status', 1);
         $user->update();
-        
-        return redirect()->route('user.index')->with('message','Customer updated successfully');
+        if($request->input('user_role') == 'Sales Person'){
+            return redirect()->to(route('user.index') . '?type=salesperson')->with('message','Sales Person updated successfully');
+        }else{
+            return redirect()->route('user.index')->with('message','Customer updated successfully');
+        }
     }
 
     public function IndividualEditProfile()
