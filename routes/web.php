@@ -68,6 +68,47 @@ Route::post('/admin/profile/update', 'admin\AdminController@updateProfile')->nam
 Route::post('admin/logout', 'admin\AdminController@logOut')->name('admin.logout');
 
 
+// individual account dashboard
+Route::get('/my-profile', function() {
+    return view('admin.myprofile.index');
+})->name('myprofile.index');
+
+Route::get('/wishlist', function() {
+    return view('admin.wishlist.index');
+})->name('wishlist.index');
+Route::get('/gift-history', function() {
+    return view('admin.gift-history.index');
+})->name('gift-history.index');
+
+Route::get('/notifications', function() {
+    return view('admin.notifications.index');
+})->name('notifications.index');
+
+Route::get('/settings', function() {
+    return view('admin.settings.index');
+})->name('settings.index');
+
+// Company account dashboard routes
+Route::get('/company-profile', function() {
+    return view('admin.company-profile.index');
+})->name('company-profile.index');
+
+Route::get('/bulk-orders', function() {
+    return view('admin.bulk-orders.index');
+})->name('bulk-orders.index');
+
+Route::get('/order-history-invoices', function() {
+    return view('admin.order-history-invoices.index');
+})->name('order-history-invoices.index');
+
+Route::get('/employee-gifting', function() {
+    return view('admin.employee-gifting.index');
+})->name('employee-gifting.index');
+
+Route::get('/account-settings-support', function() {
+    return view('admin.account-settings-support.index');
+})->name('account-settings-support.index');
+
 //Frontend
 
 Route::get('/', [WebController::class, 'index'])->name('index');

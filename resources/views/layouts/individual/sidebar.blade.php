@@ -16,9 +16,35 @@
                     <i class="fa fa-truck"></i> <span>Shipping Address</span>
                 </a>
             </li> --}}
+
+            <li class="treeview">
+                <a href="{{route('myprofile.index')}}" class="">
+                    <i class="fa fa-shopping-cart"></i> <span>My Profile</span>
+                </a>
+            </li>
             <li class="treeview">
                 <a href="{{ route('order.index') }}" class="{{ request()->is('order') || request()->is('order/create') || request()->is('order/*/edit') ? 'active' : '' }}">
                     <i class="fa fa-shopping-cart"></i> <span>Orders</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="{{route('wishlist.index')}}" class="">
+                    <i class="fa fa-shopping-cart"></i> <span>Wishlist / Favorites</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="{{route('gift-history.index')}}" class="">
+                    <i class="fa fa-shopping-cart"></i> <span>Gift History</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="{{route('notifications.index')}}" class="">
+                    <i class="fa fa-bell"></i> <span>Notifications</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="{{route('settings.index')}}" class="">
+                    <i class="fa fa-cog"></i> <span>Logout / Settings</span>
                 </a>
             </li>
  

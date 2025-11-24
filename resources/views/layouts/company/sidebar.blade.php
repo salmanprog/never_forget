@@ -6,8 +6,7 @@
                     <i class="fa fa-home"></i> <span>Dashboard</span>
                 </a>
             </li>
-
-           <li class="treeview {{ request()->is('company/employees*') ? 'active' : '' }}" style="height: auto;">
+            <li class="treeview {{ request()->is('company/employees*') ? 'active' : '' }}" style="height: auto;">
                 <a href="#" class="{{ request()->is('company/employees*') ? 'active' : '' }}">
                     <i class="fa fa-users"></i>
                     <span>Employee Management</span>
@@ -38,6 +37,38 @@
                     </li> --}}
                 </ul>
             </li>
+            <li class="treeview">
+                <a href="{{route('company-profile.index')}}" class="">
+                    <i class="fa fa-building"></i> <span>Company Profile</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="{{route('bulk-orders.index')}}" class="">
+                    <i class="fa fa-shopping-cart"></i> <span>Bulk Orders</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="{{route('order-history-invoices.index')}}" class="">
+                    <i class="fa fa-file-text"></i> <span>Order History & Invoices</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="{{route('employee-gifting.index')}}" class="">
+                    <i class="fa fa-gift"></i> <span>Employee Gifting</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="{{route('account-settings-support.index')}}" class="">
+                    <i class="fa fa-life-ring"></i> <span>Account Settings & Support</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="{{route('settings.index')}}" class="">
+                    <i class="fa fa-cog"></i> <span>Logout / Settings</span>
+                </a>
+            </li>
+
+          
              
             
 

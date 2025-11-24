@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
 
@@ -105,4 +106,4 @@
 	</script>
 <?php $__env->stopPush(); ?>
 
-<?php echo $__env->make('layouts.admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp8.2\htdocs\never-forget\resources\views/admin/user/edit.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/admin/user/edit.blade.php ENDPATH**/ ?>
