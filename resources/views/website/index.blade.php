@@ -27,7 +27,6 @@
             margin-top: 70px;
             text-align: center;
             height: 450px;
-            /* Fixed height for the image container */
             display: flex;
             align-items: center;
             justify-content: center;
