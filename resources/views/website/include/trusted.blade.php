@@ -56,5 +56,6 @@
         </div>
     </div>
 </section>
+{{-- End Trusted Section --}}
 @include('layouts.website.collaburate-modal')
 @include('website.include.collaborate')
