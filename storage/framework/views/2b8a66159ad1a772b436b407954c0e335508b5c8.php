@@ -1,4 +1,4 @@
-<section class="plans-sec pb-60">
+<section class="plans-sec pb-60" id="plans-sec">
     <div class="container">
         <div class="text-center">
             <span class="btn des-wrapper mb-20" data-aos="flip-up" data-aos-easing="ease-out-cubic"

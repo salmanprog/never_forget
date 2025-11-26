@@ -1421,6 +1421,10 @@ ul.footer-links {
   display: flex;
   justify-content: center;
 }
+.footer-links li {
+  position: relative;
+  max-width: max-content;
+}
 /* responsive */
 @media(max-width: 1700px) {
   :root {

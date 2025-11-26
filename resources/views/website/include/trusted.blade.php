@@ -52,8 +52,9 @@
             </div>
         </div> --}}
         <div class="d-flex justify-content-center">
-            <a href="tel:{{ $home_page_data['header_phone'] }}" class="btn primary-btn border-0">Want to Collaborate? Let's Talk</a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0">Want to Collaborate? Let's Talk</a>
         </div>
     </div>
 </section>
+@include('layouts.website.collaburate-modal')
 @include('website.include.collaborate')

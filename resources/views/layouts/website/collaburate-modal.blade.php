@@ -1,14 +1,14 @@
 <!-- Quote Modal -->
-<div class="modal fade custom-modal" id="quoteModal" tabindex="-1" aria-labelledby="quoteModalLabel" aria-hidden="true">
+<div class="modal custom-modal fade" id="collaburateModal" tabindex="-1" aria-labelledby="collaburateModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="quoteModalLabel">Get A Quote</h5>
+                <h5 class="modal-title" id="collaburateModalLabel">Connect with Corporate Gifting Specialist</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="<?php echo e(route('contactus.store')); ?>" id="quoteForm" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
-                    <?php echo csrf_field(); ?>
+                <form action="" id="quoteForm" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+                    @csrf
                     <input type="hidden" name="quote_form" value="1">
                     <div class="row">
                         <div class="col-lg-6">
@@ -39,7 +39,7 @@
                                     placeholder="Enter Your Phone Number" required>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        {{-- <div class="col-lg-4">
                             <div class="field-wrapper">
                                 <label for="quote_company" class="label-field">Company Name</label>
                                 <input class="input-field" type="text" name="company" id="quote_company"
@@ -67,7 +67,7 @@
                                     <option value="Employees">Employees</option> 
                                 </select> 
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-lg-12">
                             <div class="field-wrapper">
                                 <label for="quote_message" class="label-field">Additional Message</label>
@@ -87,15 +87,15 @@
                             </div>
                             <div class="d-flex gap-10 mb-20 form-links">
                                 <div>
-                                    <a class="navs" href="<?php echo e(route('privacy-policy')); ?>">Privacy Policy</a>
+                                    <a class="navs" href="{{ route('privacy-policy') }}">Privacy Policy</a>
                                 </div>
                                 <div>
-                                    <a class="navs" href="<?php echo e(route('disclaimer')); ?>">Disclaimer</a>
+                                    <a class="navs" href="{{ route('disclaimer') }}">Disclaimer</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <button class="btn primary-btn border-0 w-100" type="submit">Send Quote Request</button>
+                            <button class="btn primary-btn border-0 w-100" type="submit">Send</button>
                         </div>
                     </div>
                 </form>
@@ -142,7 +142,7 @@
     });
 </script>
 
-<?php if(session('getaquotemessage')): ?>
+@if(session('getaquotemessage'))
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Close the modal first
@@ -156,10 +156,10 @@
         Swal.fire({
             icon: 'success',
             title: 'Success!',
-            text: '<?php echo e(session("getaquotemessage")); ?>',
+            text: '{{ session("getaquotemessage") }}',
             timer: 3000,
             showConfirmButton: false
         });
     });
 </script>
-<?php endif; ?><?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/layouts/website/get-a-quote.blade.php ENDPATH**/ ?>
+@endif

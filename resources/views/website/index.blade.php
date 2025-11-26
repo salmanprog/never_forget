@@ -207,8 +207,8 @@
                         Strengthen relationships, boost morale, and retain top talent with personalized corporate gifting
                         and employee appreciation programs.
                     </p>
-                    <a href="#" class="btn primary-btn border-0"><span>Explore Corporate Gifting Plans</span></a>
-                    <a href="tel:{{ $home_page_data['header_phone'] }}" class="btn primary-btn border-0"><span>Call
+                    <a href="#plans-sec" class="btn primary-btn border-0"><span>Explore Corporate Gifting Plans</span></a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0"><span>Call
                             Now</span></a>
                 </div>
             </div>
@@ -693,8 +693,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-center mt-60">
-            <a href="tel:{{ $home_page_data['header_phone'] }}" class="btn primary-btn border-0 mx-auto">Talk to a
-                Corporate Gifting Specialist</a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0 mx-auto">Want to Collaborate? Let's Talk</a>
         </div>
     </section>
 
@@ -827,6 +826,7 @@
         </div>
     </section>
     @include('layouts.website.get-a-quote')
+    @include('layouts.website.collaburate-modal')
     @include('website.include.plans')
     @include('website.include.gift-plan')
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>

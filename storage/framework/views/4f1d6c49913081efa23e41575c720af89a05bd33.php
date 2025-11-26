@@ -18,9 +18,10 @@
         
         
         <div class="d-flex justify-content-center">
-            <a href="tel:<?php echo e($home_page_data['header_phone']); ?>" class="btn primary-btn border-0">Want to Collaborate? Let's Talk</a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0">Want to Collaborate? Let's Talk</a>
         </div>
     </div>
 </section>
+<?php echo $__env->make('layouts.website.collaburate-modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php echo $__env->make('website.include.collaborate', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/website/include/trusted.blade.php ENDPATH**/ ?>
