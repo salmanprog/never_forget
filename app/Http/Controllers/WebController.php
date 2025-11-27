@@ -777,4 +777,41 @@ class WebController extends Controller
 
         return back()->with('success', 'Your inquiry has been sent successfully!');
     }
+
+    public function sendCollaborateQuote(Request $request)
+    {
+        $data = $request->validate([
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'email' => 'required|email|max:100',
+            'phone' => 'required|string|max:20',
+            'message' => 'nullable|string|max:1000',
+        ]);
+
+        // Prepare email data
+        $emailBody = [
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'name' => $data['first_name'] . ' ' . $data['last_name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'message' => $data['message'] ?? 'No additional message provided.',
+        ];
+
+        // Send email
+        $details = [
+            'from' => 'collaborate-quote',
+            'title' => 'New Corporate Gifting Quote Request',
+            'body' => $emailBody
+        ];
+
+        try {
+            \Mail::to('salman@yopmail.com')->send(new \App\Mail\Email($details));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send collaborate quote email: ' . $e->getMessage());
+            return back()->with('error', 'Failed to send email. Please try again.');
+        }
+
+        return back()->with('getaquotemessage', 'Your quote request has been submitted successfully! We will contact you soon.');
+    }
 }

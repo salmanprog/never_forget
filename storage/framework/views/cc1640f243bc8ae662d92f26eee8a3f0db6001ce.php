@@ -59,8 +59,8 @@
                                 <span style="color: red"><?php echo e($errors->first('phone')); ?></span>
                             </div>
                         </div>
-                        <input type="hidden" class="form-control" value="employee" name="type" id="type" placeholder="Enter type">
-                        <!-- <div class="form-group">
+                        <!-- <input type="hidden" class="form-control" value="employee" name="type" id="type" placeholder="Enter type"> -->
+                        <div class="form-group">
                             <label for="type" class="col-sm-2 control-label">Type <span style="color: red">*</span></label>
                             <div class="col-sm-8">
                                 <select name="type" id="type" class="form-control">
@@ -70,7 +70,7 @@
                                 </select>
                                 <span style="color: red"><?php echo e($errors->first('type')); ?></span>
                             </div>
-                        </div> -->
+                        </div>
                         
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label"></label>

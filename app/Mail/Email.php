@@ -46,6 +46,10 @@ class Email extends Mailable
             $email = $this->subject($this->details['title'])
                         ->view('emails.user-inquiry')
                         ->with(['details' => $this->details['body']]);
+        } elseif ($this->details['from'] == 'collaborate-quote') {
+            $email = $this->subject($this->details['title'])
+                        ->view('emails.collaborate-quote')
+                        ->with(['details' => $this->details]);
         }
 
         if (

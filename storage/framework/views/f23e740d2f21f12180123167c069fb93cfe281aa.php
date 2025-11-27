@@ -6,8 +6,7 @@
                     <i class="fa fa-home"></i> <span>Dashboard</span>
                 </a>
             </li>
-
-           <li class="treeview <?php echo e(request()->is('company/employees*') ? 'active' : ''); ?>" style="height: auto;">
+            <li class="treeview <?php echo e(request()->is('company/employees*') ? 'active' : ''); ?>" style="height: auto;">
                 <a href="#" class="<?php echo e(request()->is('company/employees*') ? 'active' : ''); ?>">
                     <i class="fa fa-users"></i>
                     <span>Employee Management</span>
@@ -34,6 +33,38 @@
                     
                 </ul>
             </li>
+            <li class="treeview">
+                <a href="<?php echo e(route('company-profile.index')); ?>" class="">
+                    <i class="fa fa-building"></i> <span>Company Profile</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="<?php echo e(route('bulk-orders.index')); ?>" class="">
+                    <i class="fa fa-shopping-cart"></i> <span>Bulk Orders</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="<?php echo e(route('order-history-invoices.index')); ?>" class="">
+                    <i class="fa fa-file-text"></i> <span>Order History & Invoices</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="<?php echo e(route('employee-gifting.index')); ?>" class="">
+                    <i class="fa fa-gift"></i> <span>Employee Gifting</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="<?php echo e(route('account-settings-support.index')); ?>" class="">
+                    <i class="fa fa-life-ring"></i> <span>Account Settings & Support</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="<?php echo e(route('settings.index')); ?>" class="">
+                    <i class="fa fa-cog"></i> <span>Logout / Settings</span>
+                </a>
+            </li>
+
+          
              
             
 

@@ -1,13 +1,13 @@
 <!-- Quote Modal -->
-<div class="modal fade custom-modal" id="quoteModal" tabindex="-1" aria-labelledby="quoteModalLabel" aria-hidden="true">
+<div class="modal custom-modal fade" id="collaburateModal" tabindex="-1" aria-labelledby="collaburateModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="quoteModalLabel">Get A Quote</h5>
+                <h5 class="modal-title" id="collaburateModalLabel">Connect with Corporate Gifting Specialist</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="<?php echo e(route('contactus.store')); ?>" id="quoteForm" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+                <form action="<?php echo e(route('send.collaborate.quote')); ?>" id="quoteForm" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="quote_form" value="1">
                     <div class="row">
@@ -39,35 +39,7 @@
                                     placeholder="Enter Your Phone Number" required>
                             </div>
                         </div>
-                        <div class="col-lg-4">
-                            <div class="field-wrapper">
-                                <label for="quote_company" class="label-field">Company Name</label>
-                                <input class="input-field" type="text" name="company" id="quote_company"
-                                    placeholder="Enter Your Company Name" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="field-wrapper">
-                                <label for="quote_plans" class="label-field">Choose Your Gifting Plan</label>
-                                <select name="plans" id="quote_plans" class="input-field form-select" required>
-                                    <option value="" selected>Choose Your Plan</option>
-                                    <option value="Basic Plan">Basic Plan</option>
-                                    <option value="Standard Plan">Standard Plan</option>
-                                    <option value="Enterprise Plan">Enterprise Plan</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="field-wrapper">
-                                <label for="quanitity" class="label-field">Choose Your Options</label>
-                                <select name="quanitity" id="quanitity" class="input-field form-select">
-                                    <option value="" selected>Choose Your Options</option>
-                                    <option value="Clientele">Clientele</option>
-                                    <option value="Clientele & Employees">Clientele & Employees</option>
-                                    <option value="Employees">Employees</option> 
-                                </select> 
-                            </div>
-                        </div>
+                        
                         <div class="col-lg-12">
                             <div class="field-wrapper">
                                 <label for="quote_message" class="label-field">Additional Message</label>
@@ -95,7 +67,7 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <button class="btn primary-btn border-0 w-100" type="submit">Send Quote Request</button>
+                            <button class="btn primary-btn border-0 w-100" type="submit">Send</button>
                         </div>
                     </div>
                 </form>
@@ -146,7 +118,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Close the modal first
-        var modalElement = document.getElementById('quoteModal');
+        var modalElement = document.getElementById('collaburateModal');
         var modal = bootstrap.Modal.getInstance(modalElement);
         if (modal) {
             modal.hide();
@@ -162,4 +134,4 @@
         });
     });
 </script>
-<?php endif; ?><?php /**PATH C:\xampp8.2\htdocs\never-forget\resources\views/layouts/website/get-a-quote.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\xampp8.2\htdocs\never-forget\resources\views/layouts/website/collaburate-modal.blade.php ENDPATH**/ ?>
