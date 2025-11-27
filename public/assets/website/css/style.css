@@ -611,9 +611,6 @@ p {
   padding: var(--text-100) 0 0 0;
 }
 
-.footer-links li {
-  margin-bottom: var(--text-15);
-}
 
 .footer-bottom a {
   margin-left: 4px;
@@ -1422,6 +1419,7 @@ ul.footer-links {
   justify-content: center;
 }
 .footer-links li {
+  margin-bottom: var(--text-15);
   position: relative;
   max-width: max-content;
 }

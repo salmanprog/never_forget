@@ -393,20 +393,20 @@
                                 <a href="<?php echo e(route('business-cards.create')); ?>" class="nav-link">Business Cards</a>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link" id="pills-qualitylogo-tab" data-bs-toggle="pill"
+                                <button class="nav-link <?php echo e(request('category') == 'qualitylogo' ? 'active' : ''); ?>" id="pills-qualitylogo-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-qualitylogo" type="button" role="tab"
-                                    aria-controls="pills-qualitylogo" aria-selected="false">Quality Logo</button>
+                                    aria-controls="pills-qualitylogo" aria-selected="<?php echo e(request('category') == 'qualitylogo' ? 'true' : 'false'); ?>">Quality Logo</button>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill"
+                                <button class="nav-link <?php echo e(request('category') == 'journey-expert' ? 'active' : ''); ?>" id="pills-journey-expert-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-journey-expert" type="button" role="tab"
-                                    aria-controls="pills-journey-expert" aria-selected="false">Travel &
+                                    aria-controls="pills-journey-expert" aria-selected="<?php echo e(request('category') == 'journey-expert' ? 'true' : 'false'); ?>">Travel &
                                     Experience</button>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link" id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
+                                <button class="nav-link <?php echo e(request('category') == 'greetings-appreciation' ? 'active' : ''); ?>" id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-greetings-appreciation" type="button" role="tab"
-                                    aria-controls="pills-greetings-appreciation" aria-selected="false">Greetings and
+                                    aria-controls="pills-greetings-appreciation" aria-selected="<?php echo e(request('category') == 'greetings-appreciation' ? 'true' : 'false'); ?>">Greetings and
                                     Appreciation </button>
                             </li>
                         </ul>
@@ -565,7 +565,7 @@
                     </div>
 
                     <!-- Quality Logo Tab -->
-                    <div class="tab-pane fade" id="pills-qualitylogo" role="tabpanel"
+                    <div class="tab-pane fade <?php echo e(request('category') == 'qualitylogo' ? 'show active' : ''); ?>" id="pills-qualitylogo" role="tabpanel"
                         aria-labelledby="pills-qualitylogo-tab" tabindex="0">
                         <div class="row">
                             <?php echo $__env->make('website.partials._quality_logo_category', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
@@ -573,7 +573,7 @@
                     </div>
 
                     <!-- Journey Expert Tab -->
-                    <div class="tab-pane fade" id="pills-journey-expert" role="tabpanel"
+                    <div class="tab-pane fade <?php echo e(request('category') == 'journey-expert' ? 'show active' : ''); ?>" id="pills-journey-expert" role="tabpanel"
                         aria-labelledby="pills-journey-expert-tab" tabindex="0">
                         <div class="row">
                             <?php echo $__env->make('website.partials._journey_expert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
@@ -581,7 +581,7 @@
                     </div>
 
                     <!-- Greeting and appreciation Tab -->
-                    <div class="tab-pane fade" id="pills-greetings-appreciation" role="tabpanel"
+                    <div class="tab-pane fade <?php echo e(request('category') == 'greetings-appreciation' ? 'show active' : ''); ?>" id="pills-greetings-appreciation" role="tabpanel"
                         aria-labelledby="pills-greetings-appreciation-tab" tabindex="0">
                         <div class="row">
                             <?php echo $__env->make('website.partials._greetings_appreciation', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
@@ -875,6 +875,83 @@
 
             // Initial check for scroll position
             handleScroll();
+
+            // Scroll active category tab into view if category parameter exists
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('category');
+            
+            if (categoryParam) {
+                // Find the active tab button by category ID (supports both numeric and string IDs)
+                let activeTab = null;
+                
+                // First try to find by exact ID match
+                activeTab = document.querySelector(`#pills-${categoryParam}-tab.nav-link.active`);
+                
+                // If not found, try to find any active tab that matches
+                if (!activeTab) {
+                    const allActiveTabs = document.querySelectorAll('.nav-link.active');
+                    if (allActiveTabs.length > 0) {
+                        // Find the one that matches the category
+                        allActiveTabs.forEach(tab => {
+                            if (tab.id && tab.id.includes(categoryParam)) {
+                                activeTab = tab;
+                            }
+                        });
+                    }
+                }
+                
+                // If still not found, try to find by ID without active class (for initial load)
+                if (!activeTab) {
+                    activeTab = document.querySelector(`#pills-${categoryParam}-tab.nav-link`);
+                }
+                
+                if (activeTab) {
+                    // Wait for Swiper to initialize and DOM to be ready
+                    setTimeout(() => {
+                        // Get the parent swiper-slide element
+                        const parentSlide = activeTab.closest('.swiper-slide');
+                        const swiperContainer = activeTab.closest('.shop-nav-slider');
+                        
+                        if (parentSlide && swiperContainer) {
+                            // Scroll the parent slide into view with center alignment
+                            parentSlide.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'nearest',
+                                inline: 'center'
+                            });
+                            
+                            // Also scroll the container itself to ensure visibility
+                            swiperContainer.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'nearest',
+                                inline: 'nearest'
+                            });
+                        } else {
+                            // Fallback: scroll the button itself
+                            activeTab.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'nearest',
+                                inline: 'center'
+                            });
+                        }
+                    }, 500);
+                }
+            } else {
+                // If no category, scroll to "All" tab
+                const allTab = document.querySelector('#pills-All-tab');
+                if (allTab) {
+                    setTimeout(() => {
+                        const parentSlide = allTab.closest('.swiper-slide');
+                        if (parentSlide) {
+                            parentSlide.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'nearest',
+                                inline: 'center'
+                            });
+                        }
+                    }, 500);
+                }
+            }
         });
     </script>
 <?php $__env->stopPush(); ?>

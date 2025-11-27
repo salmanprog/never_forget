@@ -430,7 +430,7 @@
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Business Cards
                         </h5>
-                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="{{ route('business-cards.create') }}" class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -442,7 +442,7 @@
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Quality Logo
                         </h5>
-                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="{{ route('shop', ['category' => 'qualitylogo']) }}" class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -454,7 +454,7 @@
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Travel & Experience
                         </h5>
-                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="{{ route('shop', ['category' => 'journey-expert']) }}" class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -466,7 +466,7 @@
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Greeting & Appreciation
                         </h5>
-                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="{{ route('shop', ['category' => 'greetings-appreciation']) }}" class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
             </div>
