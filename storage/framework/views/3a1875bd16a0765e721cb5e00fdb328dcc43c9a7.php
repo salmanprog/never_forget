@@ -4,8 +4,8 @@
         }
 </style>
 <div class="search-bar-container">
-    <form action="">
-        <input type="search" class="input-field bg-transparent" placeholder="Search">
+    <form action="<?php echo e(route('search-products')); ?>" method="GET">
+        <input type="search" name="search" class="input-field bg-transparent" placeholder="Search By Product Name" value="<?php echo e(request('search')); ?>">
     </form>
 </div> 
 <header class="header">

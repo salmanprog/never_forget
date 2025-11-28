@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="" id="quoteForm" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+                <form action="{{ route('send.collaborate.quote') }}" id="quoteForm" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
                     @csrf
                     <input type="hidden" name="quote_form" value="1">
                     <div class="row">
@@ -146,7 +146,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Close the modal first
-        var modalElement = document.getElementById('quoteModal');
+        var modalElement = document.getElementById('collaburateModal');
         var modal = bootstrap.Modal.getInstance(modalElement);
         if (modal) {
             modal.hide();

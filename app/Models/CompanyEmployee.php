@@ -16,6 +16,7 @@ class CompanyEmployee extends Model
         'last_name',
         'email',
         'phone',
+        'date_of_birth',
         'type',
         'invite_token',
         'is_active',
@@ -25,6 +26,7 @@ class CompanyEmployee extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'date_of_birth' => 'date',
         'invited_at' => 'datetime',
         'joined_at' => 'datetime'
     ];

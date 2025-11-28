@@ -232,6 +232,14 @@
                 </a>
             </li>
 
+            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('notification-list')): ?>
+            <li class="treeview">
+                <a href="<?php echo e(route('notification.index')); ?>" class="<?php echo e(request()->is('notification') || request()->is('notification/create') || request()->is('notification/*/edit') || request()->is('notification/*') ? 'active' : ''); ?>">
+                    <i class="fa fa-bell"></i> <span>Notifications</span>
+                </a>
+            </li>
+            <?php endif; ?>
+
            
 
 

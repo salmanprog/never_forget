@@ -45,32 +45,38 @@ class CompanyEmployeeController extends Controller
             $employees = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10, 1);
             return view('admin.company_employee.index', compact('employees', 'page_title', 'company'));
         }
+             
+        $page_title = 'Company Employees';
         
+        // Build query
+        $query = $company->employees()->orderBy('id', 'DESC');
+        
+        // Apply search filter
+        if($request->get('search') != ""){
+            $query->where(function($q) use ($request) {
+                $q->where('first_name', 'like', '%'. $request->get('search') .'%')
+                  ->orWhere('last_name', 'like', '%'. $request->get('search').'%')
+                  ->orWhere('email', 'like', '%'. $request->get('search').'%')
+                  ->orWhere('phone', 'like', '%'. $request->get('search').'%');
+            });
+        }
+        
+        // Apply type filter
+        if($request->get('type') != "All" && $request->get('type') != null){
+            $query->where('type', $request->get('type'));
+        }
+        
+        // Apply status filter (if needed in future)
+        // if($request->get('status') != "All" && $request->get('status') != null){
+        //     $query->where('is_active', $request->get('status') == 'Active' ? 1 : 0);
+        // }
+        
+        $employees = $query->paginate(10)->appends($request->query());
+        
+        // Handle AJAX requests
         if ($request->ajax()) {
-            $query = $company->employees()->orderBy('id', 'desc');
-            
-            if ($request->search != "") {
-                $query->where(function($q) use ($request) {
-                    $q->where('first_name', 'like', '%' . $request->search . '%')
-                      ->orWhere('last_name', 'like', '%' . $request->search . '%')
-                      ->orWhere('email', 'like', '%' . $request->search . '%');
-                });
-            }
-            
-            if ($request->type != "All") {
-                $query->where('type', $request->type);
-            }
-            
-            if ($request->status != "All") {
-                $query->where('is_active', $request->status == 'Active' ? 1 : 0);
-            }
-            
-            $employees = $query->paginate(10);
             return view('admin.company_employee.search', compact('employees'));
         }
-
-        $page_title = 'Company Employees';
-        $employees = $company->employees()->orderBy('id', 'DESC')->paginate(10);
         
         return view('admin.company_employee.index', compact('employees', 'page_title', 'company'));
     }
@@ -101,6 +107,7 @@ class CompanyEmployeeController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:company_employees,email',
             'phone' => 'nullable|string|max:20',
+            'date_of_birth' => 'nullable|date',
             'type' => 'required|in:employee,client'
         ]);
 
@@ -112,12 +119,16 @@ class CompanyEmployeeController extends Controller
 
         $company = $this->getCompany();
         
+        // Format date_of_birth to YYYY-MM-DD format (date only, no time)
+        $dateOfBirth = $request->date_of_birth ? Carbon::parse($request->date_of_birth)->format('Y-m-d') : null;
+        
         $employee = CompanyEmployee::create([
             'company_id' => $company->id,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'date_of_birth' => $dateOfBirth,
             'type' => $request->type,
             'invite_token' => CompanyEmployee::generateInviteToken(),
             'invited_at' => Carbon::now()
@@ -251,11 +262,11 @@ class CompanyEmployeeController extends Controller
             $file = fopen('php://output', 'w');
             
             // Add header
-            fputcsv($file, ['First Name', 'Last Name', 'Email', 'Phone']);
+            fputcsv($file, ['First Name', 'Last Name', 'Email', 'Phone', 'Type']);
             
             // Add sample data
-            fputcsv($file, ['John', 'Doe', 'john.doe@example.com', '+1234567890']);
-            fputcsv($file, ['Jane', 'Smith', 'jane.smith@example.com', '+1234567891']);
+            fputcsv($file, ['John', 'Doe', 'john.doe@example.com', '+1234567890', 'employee']);
+            fputcsv($file, ['Jane', 'Smith', 'jane.smith@example.com', '+1234567891', 'client']);
             
             fclose($file);
         };
@@ -288,6 +299,7 @@ class CompanyEmployeeController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:company_employees,email,' . $employee->id,
             'phone' => 'nullable|string|max:20',
+            'date_of_birth' => 'nullable|date',
             'type' => 'required|in:employee,client'
         ]);
 
@@ -297,11 +309,15 @@ class CompanyEmployeeController extends Controller
                 ->withInput();
         }
 
+        // Format date_of_birth to YYYY-MM-DD format (date only, no time)
+        $dateOfBirth = $request->date_of_birth ? Carbon::parse($request->date_of_birth)->format('Y-m-d') : null;
+        
         $employee->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'date_of_birth' => $dateOfBirth,
             'type' => $request->type
         ]);
 

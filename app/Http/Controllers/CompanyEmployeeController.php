@@ -80,7 +80,6 @@ class CompanyEmployeeController extends Controller
             'position' => 'nullable|string|max:255',
             'status' => 'required|in:pending,active,inactive',
         ]);
-
         // Update user
         $employee->user->update([
             'name' => $request->name,

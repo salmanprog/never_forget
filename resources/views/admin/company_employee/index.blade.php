@@ -58,28 +58,22 @@
             @else
                 <div class="box box-info">
                     <div class="box-body">
-                        <!-- <div class="row" style="margin-bottom:10px">
-                            <div class="d-flex col-sm-4">
-                                <input type="text" id="search" class="form-control" placeholder="Search by name or email">
+                        <form method="GET" action="{{ route('admin.company_employee.index') }}">
+                            <div class="row" style="margin-bottom:10px">
+                                <div class="d-flex col-sm-6">
+                                    <input type="text" name="search" id="search" class="form-control" placeholder="Search by name, email, or phone" value="{{ request('search') }}">
+                                </div>
+                                <div class="d-flex col-sm-3">
+                                    <select name="type" id="type" class="form-control status" style="margin-bottom:5px" onchange="this.form.submit()">
+                                        <option value="All" {{ request('type') == 'All' ? 'selected' : '' }}>All Types</option>
+                                        <option value="employee" {{ request('type') == 'employee' ? 'selected' : '' }}>Employee</option>
+                                        <option value="client" {{ request('type') == 'client' ? 'selected' : '' }}>Client</option>
+                                    </select>
+                                </div>
+                                
+                                
                             </div>
-                            <div class="d-flex col-sm-3">
-                                <select name="" id="type" class="form-control type" style="margin-bottom:5px">
-                                    <option value="All" selected>All Types</option>
-                                    <option value="employee">Employee</option>
-                                    <option value="client">Client</option>
-                                </select>
-                            </div>
-                            <div class="d-flex col-sm-3">
-                                <select name="" id="status" class="form-control status" style="margin-bottom:5px">
-                                    <option value="All" selected>All Status</option>
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                            </div>
-                            <div class="d-flex col-sm-2">
-                                <button type="button" id="search-btn" class="btn btn-primary">Search</button>
-                            </div>
-                        </div> -->
+                        </form>
                         <table id="" class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -88,7 +82,8 @@
                                 <th>Last Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <!-- <th>Type</th> -->
+                                <th>DOB</th>
+                                <th>Type</th>
                                 <!-- <th>Status</th> -->
                                 <!-- <th>Invited At</th> -->
                                 <th>Action</th>
@@ -102,11 +97,12 @@
                                     <td>{{ $employee->last_name }}</td>
                                     <td>{{ $employee->email }}</td>
                                     <td>{{ $employee->phone ?? 'N/A' }}</td>
-                                    <!-- <td>
+                                    <td>{{ $employee->date_of_birth ? \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y') : 'N/A' }}</td>
+                                    <td>
                                         <span class="badge {{ $employee->type == 'employee' ? 'label-primary' : 'label-info' }}">
                                             {{ ucfirst($employee->type) }}
                                         </span>
-                                    </td> -->
+                                    </td>
                                     <!-- <td>
                                         @if($employee->is_active)
                                             <span class="badge label-success">Active</span>
@@ -156,25 +152,12 @@
 @push('js')
 <script>
 $(document).ready(function() {
-    // Search functionality
-    $('#search-btn').click(function() {
-        var search = $('#search').val();
-        var type = $('#type').val();
-        var status = $('#status').val();
-        
-        $.ajax({
-            url: $('#page_url').val(),
-            type: 'GET',
-            data: {
-                search: search,
-                type: type,
-                status: status,
-                ajax: true
-            },
-            success: function(response) {
-                $('#body').html($(response).find('#body').html());
-            }
-        });
+    // Submit form on Enter key press in search field
+    $('#search').on('keypress', function(e) {
+        if (e.which === 13) { // Enter key
+            e.preventDefault();
+            $(this).closest('form').submit();
+        }
     });
 
     // Delete functionality

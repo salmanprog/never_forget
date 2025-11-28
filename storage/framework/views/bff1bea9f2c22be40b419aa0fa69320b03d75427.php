@@ -27,7 +27,6 @@
             margin-top: 70px;
             text-align: center;
             height: 450px;
-            /* Fixed height for the image container */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -208,8 +207,8 @@
                         Strengthen relationships, boost morale, and retain top talent with personalized corporate gifting
                         and employee appreciation programs.
                     </p>
-                    <a href="#" class="btn primary-btn border-0"><span>Explore Corporate Gifting Plans</span></a>
-                    <a href="tel:<?php echo e($home_page_data['header_phone']); ?>" class="btn primary-btn border-0"><span>Call
+                    <a href="#plans-sec" class="btn primary-btn border-0"><span>Explore Corporate Gifting Plans</span></a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0"><span>Call
                             Now</span></a>
                 </div>
             </div>
@@ -432,7 +431,7 @@
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Business Cards
                         </h5>
-                        <a href="<?php echo e(route('shop', ['category' => 0])); ?>" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="<?php echo e(route('business-cards.create')); ?>" class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -444,7 +443,7 @@
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Quality Logo
                         </h5>
-                        <a href="<?php echo e(route('shop', ['category' => 0])); ?>" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="<?php echo e(route('shop', ['category' => 'qualitylogo'])); ?>" class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -456,7 +455,7 @@
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Travel & Experience
                         </h5>
-                        <a href="<?php echo e(route('shop', ['category' => 0])); ?>" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="<?php echo e(route('shop', ['category' => 'journey-expert'])); ?>" class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -468,7 +467,7 @@
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Greeting & Appreciation
                         </h5>
-                        <a href="<?php echo e(route('shop', ['category' => 0])); ?>" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="<?php echo e(route('shop', ['category' => 'greetings-appreciation'])); ?>" class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
             </div>
@@ -695,8 +694,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-center mt-60">
-            <a href="tel:<?php echo e($home_page_data['header_phone']); ?>" class="btn primary-btn border-0 mx-auto">Talk to a
-                Corporate Gifting Specialist</a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0 mx-auto">Want to Collaborate? Let's Talk</a>
         </div>
     </section>
 
@@ -831,6 +829,7 @@
         </div>
     </section>
     <?php echo $__env->make('layouts.website.get-a-quote', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('layouts.website.collaburate-modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('website.include.plans', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php echo $__env->make('website.include.gift-plan', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
