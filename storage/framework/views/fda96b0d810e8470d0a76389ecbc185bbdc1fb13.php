@@ -86,6 +86,7 @@
                                 <th>Last Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>DOB</th>
                                 <th>Type</th>
                                 <!-- <th>Status</th> -->
                                 <!-- <th>Invited At</th> -->
@@ -100,6 +101,7 @@
                                     <td><?php echo e($employee->last_name); ?></td>
                                     <td><?php echo e($employee->email); ?></td>
                                     <td><?php echo e($employee->phone ?? 'N/A'); ?></td>
+                                    <td><?php echo e($employee->date_of_birth ? \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y') : 'N/A'); ?></td>
                                     <td>
                                         <span class="badge <?php echo e($employee->type == 'employee' ? 'label-primary' : 'label-info'); ?>">
                                             <?php echo e(ucfirst($employee->type)); ?>

@@ -82,6 +82,7 @@
                                 <th>Last Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>DOB</th>
                                 <th>Type</th>
                                 <!-- <th>Status</th> -->
                                 <!-- <th>Invited At</th> -->
@@ -96,6 +97,7 @@
                                     <td>{{ $employee->last_name }}</td>
                                     <td>{{ $employee->email }}</td>
                                     <td>{{ $employee->phone ?? 'N/A' }}</td>
+                                    <td>{{ $employee->date_of_birth ? \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y') : 'N/A' }}</td>
                                     <td>
                                         <span class="badge {{ $employee->type == 'employee' ? 'label-primary' : 'label-info' }}">
                                             {{ ucfirst($employee->type) }}

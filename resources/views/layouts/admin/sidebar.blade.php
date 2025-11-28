@@ -286,6 +286,14 @@
                 </a>
             </li>
 
+            @can('notification-list')
+            <li class="treeview">
+                <a href="{{ route('notification.index') }}" class="{{ request()->is('notification') || request()->is('notification/create') || request()->is('notification/*/edit') || request()->is('notification/*') ? 'active' : '' }}">
+                    <i class="fa fa-bell"></i> <span>Notifications</span>
+                </a>
+            </li>
+            @endcan
+
            {{-- @can('slider-list')
             <li class="treeview">
                 <a href="{{ route('slider.index') }}" class="{{ request()->is('slider') || request()->is('slider/create') || request()->is('slider/*/edit') || request()->is('slider/*') ? 'active' : '' }}">

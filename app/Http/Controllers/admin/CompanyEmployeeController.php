@@ -107,6 +107,7 @@ class CompanyEmployeeController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:company_employees,email',
             'phone' => 'nullable|string|max:20',
+            'date_of_birth' => 'nullable|date',
             'type' => 'required|in:employee,client'
         ]);
 
@@ -118,12 +119,16 @@ class CompanyEmployeeController extends Controller
 
         $company = $this->getCompany();
         
+        // Format date_of_birth to YYYY-MM-DD format (date only, no time)
+        $dateOfBirth = $request->date_of_birth ? Carbon::parse($request->date_of_birth)->format('Y-m-d') : null;
+        
         $employee = CompanyEmployee::create([
             'company_id' => $company->id,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'date_of_birth' => $dateOfBirth,
             'type' => $request->type,
             'invite_token' => CompanyEmployee::generateInviteToken(),
             'invited_at' => Carbon::now()
@@ -294,6 +299,7 @@ class CompanyEmployeeController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:company_employees,email,' . $employee->id,
             'phone' => 'nullable|string|max:20',
+            'date_of_birth' => 'nullable|date',
             'type' => 'required|in:employee,client'
         ]);
 
@@ -303,11 +309,15 @@ class CompanyEmployeeController extends Controller
                 ->withInput();
         }
 
+        // Format date_of_birth to YYYY-MM-DD format (date only, no time)
+        $dateOfBirth = $request->date_of_birth ? Carbon::parse($request->date_of_birth)->format('Y-m-d') : null;
+        
         $employee->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'date_of_birth' => $dateOfBirth,
             'type' => $request->type
         ]);
 

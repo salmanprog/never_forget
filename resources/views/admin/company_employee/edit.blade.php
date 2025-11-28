@@ -60,6 +60,14 @@
                                 <span style="color: red">{{ $errors->first('phone') }}</span>
                             </div>
                         </div>
+                        
+                        <div class="form-group">
+                            <label for="date_of_birth" class="col-sm-2 control-label">Date of Birth</label>
+                            <div class="col-sm-8">
+                                <input type="date" class="form-control" value="{{ old('date_of_birth', optional($employee->date_of_birth)->format('Y-m-d')) }}" name="date_of_birth" id="date_of_birth">
+                                <span style="color: red">{{ $errors->first('date_of_birth') }}</span>
+                            </div>
+                        </div>
                         <!-- <input type="hidden" class="form-control" value="employee" name="type" id="type" placeholder="Enter type"> -->
                          <div class="form-group">
                             <label for="type" class="col-sm-2 control-label">Type <span style="color: red">*</span></label>

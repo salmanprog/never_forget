@@ -243,6 +243,9 @@ Route::group(['middleware' => ['auth']], function () {
     //Why Choose Us
     Route::resource('why_choose_us', 'admin\WhyChooseUsController');
 
+    //Notifications
+    Route::resource('notification', 'admin\NotificationController');
+
     // All Sizes
     Route::resource('sizes', 'admin\SizesController');
 
@@ -358,6 +361,13 @@ Route::get('language/{locale}', [App\Http\Controllers\LanguageController::class,
 
 Route::post('/send-inquiry', [WebController::class, 'send_inquiry'])->name('send.inquiry');
 Route::post('/send-collaborate-quote', [WebController::class, 'sendCollaborateQuote'])->name('send.collaborate.quote');
+
+// Notification routes for current user
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/notifications/count', 'admin\NotificationController@getCount')->name('notifications.count');
+    Route::get('/notifications/list', 'admin\NotificationController@getList')->name('notifications.list');
+    Route::post('/notifications/{id}/mark-read', 'admin\NotificationController@markAsRead')->name('notifications.mark-read');
+});
 // Localized routes
 Route::prefix('{locale?}')
     ->where(['locale' => '[a-zA-Z]{2}'])
