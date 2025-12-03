@@ -3,36 +3,51 @@ $(document).on('change','#status',function(e) {
     selectedOption = select.find( "option[value=" + select.val() + "]" );
     var status =  selectedOption.val();
     var search = $('#search').val();
+    var type = $('#type').val();
     var product_id = $('#product_id').val();
     var medium_id = $('#medium_id').val();
     var pageurl = $('#page_url').val();
     var page = 1;
-    fetchAll(pageurl, page, search, status, product_id, medium_id);
+    fetchAll(pageurl, page, search, status, product_id, medium_id, type);
+});
+$(document).on('change','#type',function(e) {
+    select = $(this);
+    selectedOption = select.find( "option[value=" + select.val() + "]" );
+    var type =  selectedOption.val();
+    var search = $('#search').val();
+    var status = $('#status').val();
+    var product_id = $('#product_id').val();
+    var medium_id = $('#medium_id').val();
+    var pageurl = $('#page_url').val();    
+    var page = 1;
+    fetchAll(pageurl, page, search, status, product_id, medium_id, type);
 });
 $('#search').keyup((function(e) {
     var search = $(this).val();
     var status = $('#status').val();
+    var type = $('#type').val();
     var pageurl = $('#page_url').val();
     var product_id = $('#product_id').val();
     var medium_id = $('#medium_id').val();
     var page = 1;
-    fetchAll(pageurl, page, search, status, product_id, medium_id);
+    fetchAll(pageurl, page, search, status, product_id, medium_id, type);
 }));
 
 $(document).on('click', '.pagination a', function(event){
     event.preventDefault();
     var search = $('#search').val();
     var status = $('#status').val();
+    var type = $('#type').val();
     var product_id = $('#product_id').val();
     var medium_id = $('#medium_id').val();
     var pageurl = $('#page_url').val();
     var page = $(this).attr('href').split('page=')[1];
-    fetchAll(pageurl, page, search, status, product_id, medium_id);
+    fetchAll(pageurl, page, search, status, product_id, medium_id, type);
 });
 
-function fetchAll(pageurl, page, search, status,product_id="null",medium_id="null"){
+function fetchAll(pageurl, page, search, status,product_id="null",medium_id="null",type="All"){
     $.ajax({
-        url:pageurl+'?page='+page+'&search='+search+'&status='+status+'&product_id='+product_id+'&medium_id='+medium_id,
+        url:pageurl+'?page='+page+'&search='+search+'&status='+status+'&product_id='+product_id+'&medium_id='+medium_id+'&type='+type,
         type: 'get',
         success: function(response){
             $('#body').html(response);

@@ -26,6 +26,7 @@ use App\Models\Career;
 use App\Models\Collaborator;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use App\Models\Company;
+
 use DB;
 class WebController extends Controller
 {
@@ -787,6 +788,15 @@ class WebController extends Controller
             'phone' => 'required|string|max:20',
             'message' => 'nullable|string|max:1000',
         ]);
+
+        $model = new ContactUs();
+        $model->type = $request->type;
+        $model->first_name = $request->first_name;
+        $model->last_name = $request->last_name;
+        $model->email = $request->email;
+        $model->phone = $request->phone;
+        $model->message = $request->message;
+        $model->save();
 
         // Prepare email data
         $emailBody = [

@@ -10,6 +10,7 @@
                 <form action="{{ route('contactus.store') }}" id="quoteForm" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
                     @csrf
                     <input type="hidden" name="quote_form" value="1">
+                    <input type="hidden" name="type" value="custom_quote">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="field-wrapper">
@@ -68,6 +69,13 @@
                                 </select> 
                             </div>
                         </div>
+                        <div class="col-lg-4" id="additionalFieldWrapper" style="display: none;">
+                            <div class="field-wrapper">
+                                <label for="additional_info" class="label-field">Number of Clientele & Employees</label>
+                                <input class="input-field" type="text" name="additional_info" id="additional_info"
+                                    placeholder="Number of Clientele & Employees">
+                            </div>
+                        </div>
                         <div class="col-lg-12">
                             <div class="field-wrapper">
                                 <label for="quote_message" class="label-field">Additional Message</label>
@@ -106,6 +114,28 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Show/hide additional field based on dropdown selection
+        const quantitySelect = document.getElementById('quanitity');
+        const additionalFieldWrapper = document.getElementById('additionalFieldWrapper');
+        const additionalInfoInput = document.getElementById('additional_info');
+        
+        if (quantitySelect && additionalFieldWrapper) {
+            quantitySelect.addEventListener('change', function() {
+                if (this.value === 'Clientele & Employees') {
+                    additionalFieldWrapper.style.display = 'block';
+                    if (additionalInfoInput) {
+                        additionalInfoInput.setAttribute('required', 'required');
+                    }
+                } else {
+                    additionalFieldWrapper.style.display = 'none';
+                    if (additionalInfoInput) {
+                        additionalInfoInput.removeAttribute('required');
+                        additionalInfoInput.value = '';
+                    }
+                }
+            });
+        }
+        
         // Prevent typing + and - in quantity input field
         const quantityInput = document.getElementById('quote_quantity');
         if (quantityInput) {
