@@ -1,31 +1,32 @@
-@extends('layouts.admin.app')
-@section('title', $page_title)
-@section('content')
-<input type="hidden" id="page_url" value="{{ route('blog.index') }}">
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('content'); ?>
+<input type="hidden" id="page_url" value="<?php echo e(route('blog.index')); ?>">
 <section class="content-header">
 	<div class="content-header-left">
 		<h1>All Blogs</h1>
 	</div>
-	@can('blog-create')
+	<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('blog-create')): ?>
 	<div class="content-header-right">
-		<a href="{{ route('blog.create') }}" class="btn btn-primary btn-sm">Add Blog</a>
+		<a href="<?php echo e(route('blog.create')); ?>" class="btn btn-primary btn-sm">Add Blog</a>
 	</div>
-	@endcan
+	<?php endif; ?>
 </section>
 
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			@if (session('status'))
+			<?php if(session('status')): ?>
 				<div class="callout callout-success">
-					{{ session('status') }}
+					<?php echo e(session('status')); ?>
+
 				</div>
-			@endif
-			@if (session('message'))
+			<?php endif; ?>
+			<?php if(session('message')): ?>
 				<div class="callout callout-success">
-					{{ session('message') }}
+					<?php echo e(session('message')); ?>
+
 				</div>
-			@endif
+			<?php endif; ?>
 
 			<div class="box box-info">
 				<div class="box-body">
@@ -54,40 +55,41 @@
 							</tr>
 						</thead>
 						<tbody id="body">
-							@foreach($models as $key=>$model)
-								<tr id="id-{{ $model->id }}">
-									<td>{{ $models->firstItem()+$key }}.</td>
+							<?php $__currentLoopData = $models; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$model): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+								<tr id="id-<?php echo e($model->id); ?>">
+									<td><?php echo e($models->firstItem()+$key); ?>.</td>
 									<td>
-										@if($model->image)
-											<img src="{{ asset('public/admin/assets/posts/'.$model->image) }}" alt="" style="width:60px; height:60px; object-fit:cover;">
-										@else
-											<img src="{{ asset('public/admin/assets/img/no-photo1.jpg') }}" style="width:60px;">
-										@endif
+										<?php if($model->image): ?>
+											<img src="<?php echo e(asset('public/admin/assets/posts/'.$model->image)); ?>" alt="" style="width:60px; height:60px; object-fit:cover;">
+										<?php else: ?>
+											<img src="<?php echo e(asset('public/admin/assets/img/no-photo1.jpg')); ?>" style="width:60px;">
+										<?php endif; ?>
 									</td>
-									<td>{!! \Illuminate\Support\Str::limit($model->title,40) !!}</td>
-									<td>{!! \Illuminate\Support\Str::limit(strip_tags($model->description),60) !!}</td>
+									<td><?php echo \Illuminate\Support\Str::limit($model->title,40); ?></td>
+									<td><?php echo \Illuminate\Support\Str::limit(strip_tags($model->description),60); ?></td>
 									<td>
-										@if($model->status)
+										<?php if($model->status): ?>
 											<span class="badge badge-success">Active</span>
-										@else
+										<?php else: ?>
 											<span class="badge badge-danger">In-Active</span>
-										@endif
+										<?php endif; ?>
 									</td>
 									<td width="250px">
-										@can('blog-edit')
-											<a href="{{route('blog.edit', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Edit blog" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
-										@endcan
-										@can('blog-delete')
-                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $model->id }}" data-del-url="{{ url('blog', $model->id) }}"><i class="fa fa-trash"></i> Delete</button>
-										@endcan
+										<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('blog-edit')): ?>
+											<a href="<?php echo e(route('blog.edit', $model->id)); ?>" data-toggle="tooltip" data-placement="top" title="Edit blog" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
+										<?php endif; ?>
+										<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('blog-delete')): ?>
+                                            <button class="btn btn-danger btn-xs delete" data-slug="<?php echo e($model->id); ?>" data-del-url="<?php echo e(url('blog', $model->id)); ?>"><i class="fa fa-trash"></i> Delete</button>
+										<?php endif; ?>
 									</td>
 								</tr>
-							@endforeach
+							<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td colspan="7">
-									Displying {{$models->firstItem()}} to {{$models->lastItem()}} of {{$models->total()}} records
+									Displying <?php echo e($models->firstItem()); ?> to <?php echo e($models->lastItem()); ?> of <?php echo e($models->total()); ?> records
                                     <div class="d-flex justify-content-center">
-                                        {!! $models->links('pagination::bootstrap-4') !!}
+                                        <?php echo $models->links('pagination::bootstrap-4'); ?>
+
                                     </div>
                                 </td>
                             </tr>
@@ -98,16 +100,16 @@
 		</div>
 	</div>
 </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
 <script>
 	$(document).ready(function() {
 		$("#search").keyup(function() {
 			var value = $(this).val();
 			if(value.length > 2 || value.length == 0) {
 				$.ajax({
-					url: "{{ route('blog.index') }}",
+					url: "<?php echo e(route('blog.index')); ?>",
 					type: "GET",
 					data: {
 						search: value,
@@ -123,7 +125,7 @@
 		$("#status").change(function() {
 			var value = $(this).val();
 			$.ajax({
-				url: "{{ route('blog.index') }}",
+				url: "<?php echo e(route('blog.index')); ?>",
 				type: "GET",
 				data: {
 					search: $("#search").val(),
@@ -143,7 +145,7 @@
 					url: del_url,
 					type: "DELETE",
 					data: {
-						_token: "{{ csrf_token() }}"
+						_token: "<?php echo e(csrf_token()); ?>"
 					},
 					success: function(response) {
 						if(response) {
@@ -158,4 +160,6 @@
 		});
 	});
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp8.2\htdocs\never-forget\resources\views/admin/blog/index.blade.php ENDPATH**/ ?>
