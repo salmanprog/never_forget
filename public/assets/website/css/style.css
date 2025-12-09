@@ -1423,6 +1423,39 @@ ul.footer-links {
   position: relative;
   max-width: max-content;
 }
+.nav-dropdown-icon {
+  top: 16px;
+  right: 8px;
+  color: #fff;
+  font-size: 10px;
+}
+.nav-dropdown-menu {
+  background-color: #fff;
+  border-radius: var(--text-10);
+  width: 100%;
+  min-width: 180px;
+  padding: var(--text-10) 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  visibility: hidden;
+  /* add box-shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.nav-dropdown-menu-wrapper:hover .nav-dropdown-menu {
+  visibility: visible;
+}
+.nav-dropdown-list {
+  padding: 0 var(--text-10) var(--text-10) var(--text-10);
+}
+.nav-dropdown-list:last-child {
+  padding-bottom: 0;
+}
+
+.nav-dropdown-menu-wrapper.open .nav-dropdown-menu {
+  visibility: visible;
+}
 /* responsive */
 @media(max-width: 1700px) {
   :root {
