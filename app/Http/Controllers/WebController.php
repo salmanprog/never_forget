@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Testimonial;
-use App\Models\Blogs;
+use App\Models\Blog;
 use App\Models\Catering;
 use App\Models\Faq;
 use App\Models\AboutUs;
@@ -26,6 +26,7 @@ use App\Models\Career;
 use App\Models\Collaborator;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use App\Models\Company;
+
 use DB;
 class WebController extends Controller
 {
@@ -70,8 +71,74 @@ class WebController extends Controller
    
     public function blogs()
     {
-        $page_title = 'Blogs || Never Forget'; 
-        return view('website.blogs'  , compact('page_title'));
+        $page_title = 'Blogs || Never Forget';
+        // Show only first 3 blogs initially
+        $blogs = Blog::where('status', '1')->orderBy('id', 'desc')->take(3)->get();
+        $totalBlogs = Blog::where('status', '1')->count();
+        return view('website.blogs', compact('page_title', 'blogs', 'totalBlogs'));
+    }
+
+    public function loadMoreBlogs(Request $request)
+    {
+        try {
+            $page = $request->get('page', 2); // Start from page 2 since page 1 is already loaded
+            $perPage = 3; // Load 3 blogs at a time
+            $skip = ($page - 1) * $perPage; // Skip calculation: page 2 = skip 3, page 3 = skip 6, etc.
+
+            $blogs = Blog::where('status', '1')
+                ->orderBy('id', 'desc')
+                ->skip($skip)
+                ->take($perPage)
+                ->get();
+
+            $totalBlogs = Blog::where('status', '1')->count();
+            $hasMore = ($skip + $perPage) < $totalBlogs;
+
+            $html = '';
+            foreach ($blogs as $index => $blog) {
+                $imageUrl = $blog->image 
+                    ? asset('public/admin/assets/posts/'.$blog->image) 
+                    : asset('public/assets/website/images').'/blogs/'.(($index % 9) + 1).'.png';
+                
+                $html .= '<div class="col-lg-4 col-md-6">';
+                $html .= '<div class="blogs-card-wrapper">';
+                $html .= '<img src="'.$imageUrl.'" class="w-100 mb-10" alt="'.htmlspecialchars($blog->title, ENT_QUOTES, 'UTF-8').'">';
+                $html .= '<h5 class="pl-20 heading fs-24 mb-30">'.htmlspecialchars($blog->title, ENT_QUOTES, 'UTF-8').'</h5>';
+                $html .= '<p class="pl-20 blog-text-'.$blog->id.'">';
+                $html .= '<span class="truncated-text-'.$blog->id.' fs-18 secondry-font">';
+                $html .= htmlspecialchars(\Illuminate\Support\Str::limit(strip_tags($blog->description), 100), ENT_QUOTES, 'UTF-8').'...';
+                $html .= '</span>';
+                $html .= '</p>';
+                $html .= '<div class="pl-20 pb-20">';
+                $html .= '<a href="'.route('blog-detail', $blog->slug).'" class="btn primary-btn border-0">View</a>';
+                $html .= '</div>';
+                $html .= '</div>';
+                $html .= '</div>';
+            }
+
+            return response()->json([
+                'html' => $html,
+                'hasMore' => $hasMore,
+                'totalLoaded' => $skip + $blogs->count()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Error loading blogs: ' . $e->getMessage(),
+                'html' => '',
+                'hasMore' => false
+            ], 500);
+        }
+    }
+
+    public function blogDetail($slug)
+    {
+        $blog = Blog::where('slug', $slug)->where('status', '1')->first();
+        if (!$blog) {
+            return redirect()->route('blogs')->with('error', 'Blog not found');
+        }
+        $page_title = $blog->title . ' || Never Forget';
+        return view('website.blog-detail', compact('page_title', 'blog'));
     }
     
    
@@ -787,6 +854,15 @@ class WebController extends Controller
             'phone' => 'required|string|max:20',
             'message' => 'nullable|string|max:1000',
         ]);
+
+        $model = new ContactUs();
+        $model->type = $request->type;
+        $model->first_name = $request->first_name;
+        $model->last_name = $request->last_name;
+        $model->email = $request->email;
+        $model->phone = $request->phone;
+        $model->message = $request->message;
+        $model->save();
 
         // Prepare email data
         $emailBody = [

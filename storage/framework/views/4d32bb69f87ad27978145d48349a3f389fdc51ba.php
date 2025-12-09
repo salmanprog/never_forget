@@ -1,10 +1,10 @@
-@extends('layouts.website.master')
-@section('title', $page_title)
-@section('meta') 
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('meta'); ?> 
     <meta content="" name="description">
     <meta content="" name="keywords">
-@endsection
-@section('content')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
 <main class="inner-bg"> 
     <section class="inner-banner">
       <div class="container">
@@ -25,36 +25,36 @@
         </div>
       </div> -->
       <div id="blogs-container" class="row row-gap-40">
-        @if(isset($blogs) && $blogs->count() > 0)
-          @foreach($blogs as $index => $blog)
+        <?php if(isset($blogs) && $blogs->count() > 0): ?>
+          <?php $__currentLoopData = $blogs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $blog): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="col-lg-4 col-md-6">
               <div class="blogs-card-wrapper">
-                @if($blog->image)
-                  <img src="{{ asset('public/admin/assets/posts/'.$blog->image) }}" class="w-100 mb-10" alt="{{ $blog->title }}">
-                @else
-                  <img src="{{ asset('public/assets/website/images') }}/blogs/{{ ($index % 9) + 1 }}.png" class="w-100 mb-10" alt="{{ $blog->title }}">
-                @endif
-                <h5 class="pl-20 heading fs-24 mb-30">{{ $blog->title }}</h5>
-                <p class="pl-20 blog-text-{{ $blog->id }}">
-                  <span class="truncated-text-{{ $blog->id }} fs-18 secondry-font">
-                    {!! \Illuminate\Support\Str::limit(strip_tags($blog->description), 100) !!}...
+                <?php if($blog->image): ?>
+                  <img src="<?php echo e(asset('public/admin/assets/posts/'.$blog->image)); ?>" class="w-100 mb-10" alt="<?php echo e($blog->title); ?>">
+                <?php else: ?>
+                  <img src="<?php echo e(asset('public/assets/website/images')); ?>/blogs/<?php echo e(($index % 9) + 1); ?>.png" class="w-100 mb-10" alt="<?php echo e($blog->title); ?>">
+                <?php endif; ?>
+                <h5 class="pl-20 heading fs-24 mb-30"><?php echo e($blog->title); ?></h5>
+                <p class="pl-20 blog-text-<?php echo e($blog->id); ?>">
+                  <span class="truncated-text-<?php echo e($blog->id); ?> fs-18 secondry-font">
+                    <?php echo \Illuminate\Support\Str::limit(strip_tags($blog->description), 100); ?>...
                   </span>
                 </p>
                 <div class="pl-20 pb-20">
-                  <a href="{{ route('blog-detail', $blog->slug) }}" class="btn primary-btn border-0">View</a>
+                  <a href="<?php echo e(route('blog-detail', $blog->slug)); ?>" class="btn primary-btn border-0">View</a>
                 </div>
               </div>
             </div>
-          @endforeach
-        @else
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <?php else: ?>
           <div class="col-lg-12">
             <div class="text-center">
               <p class="fs-18">No blogs available at the moment.</p>
             </div>
           </div>
-        @endif
+        <?php endif; ?>
       </div>
-      @if(isset($totalBlogs) && $totalBlogs > 3)
+      <?php if(isset($totalBlogs) && $totalBlogs > 3): ?>
         <div class="row">
           <div class="col-lg-12 text-center mt-40">
             <button id="load-more-blogs-btn" class="btn primary-btn border-0">Load More</button>
@@ -63,7 +63,7 @@
             </div>
           </div>
         </div>
-      @endif
+      <?php endif; ?>
     </div>
   </section>
 
@@ -72,7 +72,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       let page = 2; // Start from page 2 since page 1 (first 3 blogs) is already loaded
       let loading = false;
-      let hasMore = {{ isset($totalBlogs) && $totalBlogs > 3 ? 'true' : 'false' }};
+      let hasMore = <?php echo e(isset($totalBlogs) && $totalBlogs > 3 ? 'true' : 'false'); ?>;
       const loadMoreBtn = document.getElementById('load-more-blogs-btn');
       const loadingSpinner = document.getElementById('loading-spinner');
       const blogsContainer = document.getElementById('blogs-container');
@@ -89,7 +89,7 @@
             loadingSpinner.style.display = 'block';
           }
 
-          fetch(`{{ route('load.more.blogs') }}?page=${currentPage}`, {
+          fetch(`<?php echo e(route('load.more.blogs')); ?>?page=${currentPage}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -154,5 +154,6 @@
     });
   </script>
 
-  @include('website.include.perfect-gifting')
-@endSection
+  <?php echo $__env->make('website.include.perfect-gifting', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp8.2\htdocs\never-forget\resources\views/website/blogs.blade.php ENDPATH**/ ?>

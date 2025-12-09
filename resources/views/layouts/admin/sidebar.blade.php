@@ -136,6 +136,13 @@
                 </a>
             </li>
             @endcan
+            @can('blog-list')
+            <li class="treeview">
+                <a href="{{ route('blog.index') }}" class="{{ request()->is('blog') || request()->is('blog/create') || request()->is('blog/*/edit') ? 'active' : '' }}">
+                    <i class="fa fa-newspaper-o"></i> <span>Blogs</span>
+                </a>
+            </li>
+            @endcan
             {{-- @can('about_us-list')
             <li class="treeview">
                 <a href="{{ route('about_us.index') }}" class="{{ request()->is('about_us') || request()->is('about_us/create') || request()->is('about_us/*/edit') ? 'active' : '' }}">

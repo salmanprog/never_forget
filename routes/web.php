@@ -119,6 +119,8 @@ Route::get('how-it-works', [WebController::class, 'howItWorks'])->name('how-it-w
 Route::get('corporate-solutions', [WebController::class, 'corporateSolutions'])->name('corporate-solutions');
 Route::get('testimonials', [WebController::class, 'testimonials'])->name('testimonials');
 Route::get('blogs', [WebController::class, 'blogs'])->name('blogs');
+Route::get('/load-more-blogs', [WebController::class, 'loadMoreBlogs'])->name('load.more.blogs');
+Route::get('view-blog/{slug}', [WebController::class, 'blogDetail'])->name('blog-detail');
 Route::get('contact-us', [WebController::class, 'contactus'])->name('contact-us');
 Route::get('faqs', [WebController::class, 'faqs'])->name('faqs');
 Route::get('why-choose-us', [WebController::class, 'whyChooseUs'])->name('why-choose-us');
@@ -239,6 +241,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     //Faqs
     Route::resource('faq', 'admin\FaqController');
+
+    //Blogs
+    Route::resource('blog', 'admin\BlogController');
 
     //Why Choose Us
     Route::resource('why_choose_us', 'admin\WhyChooseUsController');

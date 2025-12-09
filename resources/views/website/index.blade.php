@@ -208,8 +208,7 @@
                         and employee appreciation programs.
                     </p>
                     <a href="#plans-sec" class="btn primary-btn border-0"><span>Explore Corporate Gifting Plans</span></a>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0"><span>Call
-                            Now</span></a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0"><span>Request a call Back</span></a>
                 </div>
             </div>
         </div>
@@ -409,7 +408,9 @@
                                 <img src="{{ asset('public/admin/assets/images/product') }}/{{ $category->products->first()->image }}"
                                     alt="{{ $category->title }}" class="img-fluid">
                             @else
-                                <img src="{{ asset('public/assets/website/images') }}/gift-img.png"
+                                <!-- <img src="{{ asset('public/assets/website/images') }}/gift-img.png"
+                                    alt="{{ $category->title }}" class="img-fluid"> -->
+                                    <img src="{{ asset('public/admin/assets/images/categories') }}/{{ $category->image }}"
                                     alt="{{ $category->title }}" class="img-fluid">
                             @endif
                         </div>
@@ -693,7 +694,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-center mt-60">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0 mx-auto">Want to Collaborate? Let's Talk</a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0 mx-auto">Want to Collaborate? Let's Connect</a>
         </div>
     </section>
 

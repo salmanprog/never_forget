@@ -118,6 +118,13 @@
                 </a>
             </li>
             <?php endif; ?>
+            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('blog-list')): ?>
+            <li class="treeview">
+                <a href="<?php echo e(route('blog.index')); ?>" class="<?php echo e(request()->is('blog') || request()->is('blog/create') || request()->is('blog/*/edit') ? 'active' : ''); ?>">
+                    <i class="fa fa-newspaper-o"></i> <span>Blogs</span>
+                </a>
+            </li>
+            <?php endif; ?>
             
             
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('collaborator-list')): ?>
