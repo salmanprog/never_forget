@@ -93,17 +93,17 @@
                                             href="{{ route('about-us') }}">About Us</a></li>
                                     <li class="nav-dropdown-list"><a class="nav-dropdown-link"
                                             href="{{ route('why-choose-us') }}">Why Choose Us</a></li>
-                                    
+
                                 </ul>
                             </li>
-                            <li><a class="btn primary-btn {{ Route::currentRouteName() == 'blogs' ? 'active' : '' }}"
-                                    href="{{ route('blogs') }}">blogs</a></li>
                             <li><a class="btn primary-btn {{ Route::currentRouteName() == 'corporate-solutions' ? 'active' : '' }}"
                                     href="{{ route('corporate-solutions') }}">Corporate Solutions </a></li>
-                            <li><a class="btn primary-btn {{ Route::currentRouteName() == 'how-it-works' ? 'active' : '' }}"
-                                    href="{{ route('how-it-works') }}">How It Works</a></li>
                             <li><a class="btn primary-btn {{ Route::currentRouteName() == 'shop' ? 'active' : '' }}"
                                     href="{{ route('shop') }}">Shop</a></li>
+                            <li><a class="btn primary-btn {{ Route::currentRouteName() == 'how-it-works' ? 'active' : '' }}"
+                                    href="{{ route('how-it-works') }}">How It Works</a></li>
+                            <li><a class="btn primary-btn {{ Route::currentRouteName() == 'blogs' ? 'active' : '' }}"
+                                    href="{{ route('blogs') }}">Blogs</a></li>
 
 
                             {{-- <li><a class="btn primary-btn {{ Route::currentRouteName() == 'business-cards.create' ? 'active' : '' }}"
@@ -135,16 +135,14 @@
 
                             @guest
                                 <div class="position-relative nav-dropdown-menu-wrapper">
-                                    <a class="btn primary-btn"><span
-                                            class="button-content">Account</span></a>
-                                            <span
-                                            class="nav-dropdown-icon position-absolute"> <i
-                                                class="fa-solid fa-chevron-down"></i></span>
+                                    <a class="btn primary-btn"><span class="button-content">Account</span></a>
+                                    <span class="nav-dropdown-icon position-absolute"> <i
+                                            class="fa-solid fa-chevron-down"></i></span>
                                     <ul class="nav-dropdown-menu">
-                                        <li class="nav-dropdown-list"> <a href="{{ route('register') }}" class=""><span
-                                            class="button-content">Register</span></a></li>
-                                        <li class="nav-dropdown-list"> <a href="{{ route('login') }}"
-                                                class=""><span class="">Login</span></a></li>
+                                        <li class="nav-dropdown-list"> <a href="{{ route('register') }}"
+                                                class=""><span class="button-content">Register</span></a></li>
+                                        <li class="nav-dropdown-list"> <a href="{{ route('login') }}" class=""><span
+                                                    class="">Login</span></a></li>
                                     </ul>
                                 </div>
                             @else
@@ -180,32 +178,4 @@
 <!-- Make sure this is included at the bottom of your layout before the closing body tag -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-</script>
-
-<script>
-    $(document).ready(function () {
-    const isTouch = window.matchMedia("(hover: none)").matches;
-
-    if (isTouch) {
-        // MOBILE / TOUCH DEVICES
-        $(".nav-dropdown-menu-wrapper > a").on("click", function (e) {
-            e.preventDefault(); // stop going to about page
-            
-            const parent = $(this).closest(".nav-dropdown-menu-wrapper");
-
-            // toggle dropdown
-            parent.toggleClass("open");
-
-            // close others
-            $(".nav-dropdown-menu-wrapper").not(parent).removeClass("open");
-        });
-
-        // close when clicking outside
-        $(document).on("click", function(e) {
-            if (!$(e.target).closest(".nav-dropdown-menu-wrapper").length) {
-                $(".nav-dropdown-menu-wrapper").removeClass("open");
-            }
-        });
-    }
-});
 </script>

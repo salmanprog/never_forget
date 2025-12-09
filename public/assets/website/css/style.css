@@ -1430,28 +1430,42 @@ ul.footer-links {
   font-size: 10px;
 }
 .nav-dropdown-menu {
-  background-color: #fff;
-  border-radius: var(--text-10);
   width: 100%;
-  min-width: 180px;
-  padding: var(--text-10) 0;
+  min-width: 145px;
   position: absolute;
   top: 100%;
   left: 0;
   z-index: 1000;
   visibility: hidden;
-  /* add box-shadow */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: var(--text-10) 0;
+  background: rgba(255, 255, 255, 0.21);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(9.5px);
+  -webkit-backdrop-filter: blur(9.5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgb(255 255 255 / 78%);
+  border-radius: 9px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(9.5px);
+  -webkit-backdrop-filter: blur(9.5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 .nav-dropdown-menu-wrapper:hover .nav-dropdown-menu {
   visibility: visible;
 }
 .nav-dropdown-list {
-  padding: 0 var(--text-10) var(--text-10) var(--text-10);
+  padding: var(--text-10);
 }
-.nav-dropdown-list:last-child {
-  padding-bottom: 0;
+.nav-dropdown-list:hover {
+  background-color: var(--secondry-theme);
 }
+.nav-dropdown-list:hover a {
+  color: var(--default-color);
+}
+/* .nav-dropdown-list:last-child {
+  padding-top: 0;
+} */
 
 .nav-dropdown-menu-wrapper.open .nav-dropdown-menu {
   visibility: visible;
