@@ -183,7 +183,7 @@ class CareerController extends Controller
                 'title' => "Hi,",
                 'body'          => $request->all(),
             ];
-             \Mail::to('salman@yopmail.com')->send(new \App\Mail\Email($details));
+             \Mail::to('carreer@neverforgetappreciation.com')->send(new \App\Mail\Email($details));
             return back()->with('success', 'Your application has been submitted successfully! We will review your application and get back to you soon.');
 
         } catch (\Exception $e) {

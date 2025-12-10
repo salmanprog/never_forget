@@ -882,7 +882,7 @@ class WebController extends Controller
         ];
 
         try {
-            \Mail::to('salman@yopmail.com')->send(new \App\Mail\Email($details));
+            \Mail::to('carreer@neverforgetappreciation.com')->send(new \App\Mail\Email($details));
         } catch (\Exception $e) {
             \Log::error('Failed to send collaborate quote email: ' . $e->getMessage());
             return back()->with('error', 'Failed to send email. Please try again.');
