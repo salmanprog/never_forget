@@ -18,7 +18,7 @@
             </li> --}}
 
             <li class="treeview">
-                <a href="{{route('myprofile.index')}}" class="">
+                <a href="{{route('member.profile.edit')}}"  class="{{ request()->is('member/profile/edit') ? 'active' : '' }}">
                     <i class="fa fa-shopping-cart"></i> <span>My Profile</span>
                 </a>
             </li>

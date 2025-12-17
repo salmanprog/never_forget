@@ -114,22 +114,26 @@ class OrderController extends Controller
             $amount = Cart::getTotal() * 100; // cents
 
             //check user
+            if(Auth::check()){
+                $user = Auth::user();
+            }else{
             $user = User::where('email', $request->guest_email)->first();
-            if(!$user){
-                do{
-                    $user_id = rand(1000, 9999);
-                }while(User::where('user_id', $user_id)->first());
+                    if(!$user){
+                        do{
+                            $user_id = rand(1000, 9999);
+                        }while(User::where('user_id', $user_id)->first());
 
-                $user = User::create([
-                    'first_name' => $request->guest_first_name,
-                    'last_name' => $request->guest_last_name,
-                    'account_type' => 'app_user',
-                    'email' => $request->guest_email,
-                    'user_id' => $user_id,
-                    'phone' => $request->guest_phone,
-                    'password' => Hash::make('Test@123'),
-                ]);
-            }
+                        $user = User::create([
+                            'first_name' => $request->guest_first_name,
+                            'last_name' => $request->guest_last_name,
+                            'account_type' => 'app_user',
+                            'email' => $request->guest_email,
+                            'user_id' => $user_id,
+                            'phone' => $request->guest_phone,
+                            'password' => Hash::make('Test@123'),
+                        ]);
+                    }
+                }
             $cartItems = Cart::getContent();
             // Create PaymentIntent with token
             $payment = PaymentIntent::create([
@@ -306,7 +310,7 @@ class OrderController extends Controller
     public function show($id)
     {
         $page_title = 'Order Details';
-        $model = Order::with('hasCustomer')->with('products')->find($id);
+        $model = Order::with('hasCustomer', 'hasOrderDetails')->with('products')->find($id);
         return view('admin.order.show', compact('model', 'page_title'));
     }
 

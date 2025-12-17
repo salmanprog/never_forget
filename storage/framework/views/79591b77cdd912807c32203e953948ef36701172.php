@@ -208,8 +208,7 @@
                         and employee appreciation programs.
                     </p>
                     <a href="#plans-sec" class="btn primary-btn border-0"><span>Explore Corporate Gifting Plans</span></a>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0"><span>Call
-                            Now</span></a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0"><span>Request a call Back</span></a>
                 </div>
             </div>
         </div>
@@ -409,7 +408,9 @@
                                 <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($category->products->first()->image); ?>"
                                     alt="<?php echo e($category->title); ?>" class="img-fluid">
                             <?php else: ?>
-                                <img src="<?php echo e(asset('public/assets/website/images')); ?>/gift-img.png"
+                                <!-- <img src="<?php echo e(asset('public/assets/website/images')); ?>/gift-img.png"
+                                    alt="<?php echo e($category->title); ?>" class="img-fluid"> -->
+                                    <img src="<?php echo e(asset('public/admin/assets/images/categories')); ?>/<?php echo e($category->image); ?>"
                                     alt="<?php echo e($category->title); ?>" class="img-fluid">
                             <?php endif; ?>
                         </div>
@@ -694,7 +695,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-center mt-60">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0 mx-auto">Want to Collaborate? Let's Talk</a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal" class="btn primary-btn border-0 mx-auto">Want to Collaborate? Let's Connect</a>
         </div>
     </section>
 

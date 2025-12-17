@@ -317,7 +317,8 @@
         cursor: -webkit-grabbing;
         user-select: none;
     }
-    .swiper-container-wrapper .swiper-button-prev, 
+
+    .swiper-container-wrapper .swiper-button-prev,
     .swiper-container-wrapper .swiper-button-next {
         background-color: #cfa40c;
         color: white;
@@ -331,12 +332,15 @@
         height: 30px;
         top: 40%;
     }
+
     .swiper-container-wrapper .swiper-button-next {
         right: -50px;
     }
+
     .swiper-container-wrapper .swiper-button-prev {
         left: -50px;
     }
+
     /* .shop-nav-slider .swiper-button-next:after,
     .shop-nav-slider .swiper-button-prev:after {
         width: 20px;
@@ -393,20 +397,29 @@
                                 <a href="<?php echo e(route('business-cards.create')); ?>" class="nav-link">Business Cards</a>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link <?php echo e(request('category') == 'qualitylogo' ? 'active' : ''); ?>" id="pills-qualitylogo-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-qualitylogo" type="button" role="tab"
-                                    aria-controls="pills-qualitylogo" aria-selected="<?php echo e(request('category') == 'qualitylogo' ? 'true' : 'false'); ?>">Quality Logo</button>
+                                <button class="nav-link <?php echo e(request('category') == 'qualitylogo' ? 'active' : ''); ?>"
+                                    id="pills-qualitylogo-tab" data-bs-toggle="pill" data-bs-target="#pills-qualitylogo"
+                                    type="button" role="tab" aria-controls="pills-qualitylogo"
+                                    aria-selected="<?php echo e(request('category') == 'qualitylogo' ? 'true' : 'false'); ?>">Quality
+                                    Logo</button>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link <?php echo e(request('category') == 'journey-expert' ? 'active' : ''); ?>" id="pills-journey-expert-tab" data-bs-toggle="pill"
+                                <button class="nav-link <?php echo e(request('category') == 'journey-expert' ? 'active' : ''); ?>"
+                                    id="pills-journey-expert-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-journey-expert" type="button" role="tab"
-                                    aria-controls="pills-journey-expert" aria-selected="<?php echo e(request('category') == 'journey-expert' ? 'true' : 'false'); ?>">Travel &
+                                    aria-controls="pills-journey-expert"
+                                    aria-selected="<?php echo e(request('category') == 'journey-expert' ? 'true' : 'false'); ?>">Travel
+                                    &
                                     Experience</button>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link <?php echo e(request('category') == 'greetings-appreciation' ? 'active' : ''); ?>" id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
+                                <button
+                                    class="nav-link <?php echo e(request('category') == 'greetings-appreciation' ? 'active' : ''); ?>"
+                                    id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-greetings-appreciation" type="button" role="tab"
-                                    aria-controls="pills-greetings-appreciation" aria-selected="<?php echo e(request('category') == 'greetings-appreciation' ? 'true' : 'false'); ?>">Greetings and
+                                    aria-controls="pills-greetings-appreciation"
+                                    aria-selected="<?php echo e(request('category') == 'greetings-appreciation' ? 'true' : 'false'); ?>">Greetings
+                                    and
                                     Appreciation </button>
                             </li>
                         </ul>
@@ -454,15 +467,23 @@
                                                         <span>4.8</span>
                                                     </div>
                                                 </div>
-                                                <a href="<?php echo e(route('single-product', $product->slug)); ?>"
-                                                    class="add-to-cart">
-                                                    <?php if($product->product_type == 0): ?>
-                                                        Add To Cart
-                                                    <?php else: ?>
-                                                        Select Options
-                                                    <?php endif; ?>
-                                                    <i class="fas fa-arrow-right ms-2"></i>
-                                                </a>
+                                                <div class="d-flex align-items-center product-action-wrapper">
+                                                    <a href="<?php echo e(route('single-product', $product->slug)); ?>"
+                                                        class="add-to-cart">
+                                                        <?php if($product->product_type == 0): ?>
+                                                            Add To Cart
+                                                        <?php else: ?>
+                                                            Select Options
+                                                        <?php endif; ?>
+                                                        <i class="fas fa-arrow-right ms-2"></i>
+                                                    </a>
+                                                    <button
+                                                        class="wishlist-btn <?php echo e(in_array($product->id, $wishlistProductIds) ? 'active' : ''); ?>"
+                                                        data-product-id="<?php echo e($product->id); ?>">
+
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -544,15 +565,23 @@
                                                     <span>4.8</span>
                                                 </div>
                                             </div>
-                                            <a href="<?php echo e(route('single-product', $product->slug)); ?>"
-                                                class="add-to-cart">
-                                                <?php if($product->product_type == 0): ?>
-                                                    Add To Cart
-                                                <?php else: ?>
-                                                    Select Options
-                                                <?php endif; ?>
-                                                <i class="fas fa-arrow-right ms-2"></i>
-                                            </a>
+                                            <div class="d-flex align-items-center product-action-wrapper">
+                                                <a href="<?php echo e(route('single-product', $product->slug)); ?>"
+                                                    class="add-to-cart">
+                                                    <?php if($product->product_type == 0): ?>
+                                                        Add To Cart
+                                                    <?php else: ?>
+                                                        Select Options
+                                                    <?php endif; ?>
+                                                    <i class="fas fa-arrow-right ms-2"></i>
+                                                </a>
+                                                <button
+                                                    class="wishlist-btn <?php echo e(in_array($product->id, $wishlistProductIds) ? 'active' : ''); ?>"
+                                                    data-product-id="<?php echo e($product->id); ?>">
+
+                                                    <i class="fas fa-heart"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -565,23 +594,26 @@
                     </div>
 
                     <!-- Quality Logo Tab -->
-                    <div class="tab-pane fade <?php echo e(request('category') == 'qualitylogo' ? 'show active' : ''); ?>" id="pills-qualitylogo" role="tabpanel"
-                        aria-labelledby="pills-qualitylogo-tab" tabindex="0">
+                    <div class="tab-pane fade <?php echo e(request('category') == 'qualitylogo' ? 'show active' : ''); ?>"
+                        id="pills-qualitylogo" role="tabpanel" aria-labelledby="pills-qualitylogo-tab"
+                        tabindex="0">
                         <div class="row">
                             <?php echo $__env->make('website.partials._quality_logo_category', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                         </div>
                     </div>
 
                     <!-- Journey Expert Tab -->
-                    <div class="tab-pane fade <?php echo e(request('category') == 'journey-expert' ? 'show active' : ''); ?>" id="pills-journey-expert" role="tabpanel"
-                        aria-labelledby="pills-journey-expert-tab" tabindex="0">
+                    <div class="tab-pane fade <?php echo e(request('category') == 'journey-expert' ? 'show active' : ''); ?>"
+                        id="pills-journey-expert" role="tabpanel" aria-labelledby="pills-journey-expert-tab"
+                        tabindex="0">
                         <div class="row">
                             <?php echo $__env->make('website.partials._journey_expert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                         </div>
                     </div>
 
                     <!-- Greeting and appreciation Tab -->
-                    <div class="tab-pane fade <?php echo e(request('category') == 'greetings-appreciation' ? 'show active' : ''); ?>" id="pills-greetings-appreciation" role="tabpanel"
+                    <div class="tab-pane fade <?php echo e(request('category') == 'greetings-appreciation' ? 'show active' : ''); ?>"
+                        id="pills-greetings-appreciation" role="tabpanel"
                         aria-labelledby="pills-greetings-appreciation-tab" tabindex="0">
                         <div class="row">
                             <?php echo $__env->make('website.partials._greetings_appreciation', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
@@ -629,15 +661,23 @@
                                                         <span>4.8</span>
                                                     </div>
                                                 </div>
-                                                <a href="<?php echo e(route('single-product', $product->slug)); ?>"
-                                                    class="add-to-cart">
-                                                    <?php if($product->product_type == 0): ?>
-                                                        Add To Cart
-                                                    <?php else: ?>
-                                                        Select Options
-                                                    <?php endif; ?>
-                                                    <i class="fas fa-arrow-right ms-2"></i>
-                                                </a>
+                                                <div class="d-flex align-items-center product-action-wrapper">
+                                                    <a href="<?php echo e(route('single-product', $product->slug)); ?>"
+                                                        class="add-to-cart">
+                                                        <?php if($product->product_type == 0): ?>
+                                                            Add To Cart
+                                                        <?php else: ?>
+                                                            Select Options
+                                                        <?php endif; ?>
+                                                        <i class="fas fa-arrow-right ms-2"></i>
+                                                    </a>
+                                                    <button
+                                                        class="wishlist-btn <?php echo e(in_array($product->id, $wishlistProductIds) ? 'active' : ''); ?>"
+                                                        data-product-id="<?php echo e($product->id); ?>">
+
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -706,14 +746,22 @@
                                     <span>4.8</span>
                                 </div>
                             </div>
-                            <a href="<?php echo e(route('single-product', $product->slug)); ?>" class="add-to-cart">
-                                <?php if($product->product_type == 0): ?>
-                                    Add To Cart
-                                <?php else: ?>
-                                    Select Options
-                                <?php endif; ?>
-                                <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
+                            <div class="d-flex align-items-center product-action-wrapper">
+                                <a href="<?php echo e(route('single-product', $product->slug)); ?>" class="add-to-cart">
+                                    <?php if($product->product_type == 0): ?>
+                                        Add To Cart
+                                    <?php else: ?>
+                                        Select Options
+                                    <?php endif; ?>
+                                    <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                                <button
+                                    class="wishlist-btn <?php echo e(in_array($product->id, $wishlistProductIds) ? 'active' : ''); ?>"
+                                    data-product-id="<?php echo e($product->id); ?>">
+
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -879,14 +927,14 @@
             // Scroll active category tab into view if category parameter exists
             const urlParams = new URLSearchParams(window.location.search);
             const categoryParam = urlParams.get('category');
-            
+
             if (categoryParam) {
                 // Find the active tab button by category ID (supports both numeric and string IDs)
                 let activeTab = null;
-                
+
                 // First try to find by exact ID match
                 activeTab = document.querySelector(`#pills-${categoryParam}-tab.nav-link.active`);
-                
+
                 // If not found, try to find any active tab that matches
                 if (!activeTab) {
                     const allActiveTabs = document.querySelectorAll('.nav-link.active');
@@ -899,19 +947,19 @@
                         });
                     }
                 }
-                
+
                 // If still not found, try to find by ID without active class (for initial load)
                 if (!activeTab) {
                     activeTab = document.querySelector(`#pills-${categoryParam}-tab.nav-link`);
                 }
-                
+
                 if (activeTab) {
                     // Wait for Swiper to initialize and DOM to be ready
                     setTimeout(() => {
                         // Get the parent swiper-slide element
                         const parentSlide = activeTab.closest('.swiper-slide');
                         const swiperContainer = activeTab.closest('.shop-nav-slider');
-                        
+
                         if (parentSlide && swiperContainer) {
                             // Scroll the parent slide into view with center alignment
                             parentSlide.scrollIntoView({
@@ -919,7 +967,7 @@
                                 block: 'nearest',
                                 inline: 'center'
                             });
-                            
+
                             // Also scroll the container itself to ensure visibility
                             swiperContainer.scrollIntoView({
                                 behavior: 'smooth',
@@ -954,6 +1002,9 @@
             }
         });
     </script>
+<?php $__env->stopPush(); ?>
+<?php $__env->startPush('js'); ?>
+    <?php echo $__env->make('components.wishlist', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php $__env->stopPush(); ?>
 
 <?php $__env->stopSection(); ?>

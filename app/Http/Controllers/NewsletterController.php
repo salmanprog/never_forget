@@ -41,7 +41,6 @@ class NewsletterController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            // return "Asjad";
             $news_letters = $query->paginate(10);
             return (string) view('admin.news_letter.search', compact('news_letters'));
         }

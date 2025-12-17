@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
@@ -28,47 +29,48 @@ use Darryldecode\Cart\Facades\CartFacade as Cart;
 use App\Models\Company;
 
 use DB;
+
 class WebController extends Controller
 {
-    public function index ()
-    {  
+    public function index()
+    {
         $page_title = 'Home || Never Forget';
-        $abouts=AboutUs::where('status' , 1)->first();
-        $testimonials=Testimonial::where('status' ,  1)->get();
-        $products = Product::where('status' , 1)->get();
-        $questions = Faq::where('status',1)->get();
-        $chooseus = WhyChooseUs::where('status' , 1)->get();
-        $collaborators = Collaborator::where('status' , 1)->get();
-        $categories = Category::with(['products' => function($query) {
+        $abouts = AboutUs::where('status', 1)->first();
+        $testimonials = Testimonial::where('status',  1)->get();
+        $products = Product::where('status', 1)->get();
+        $questions = Faq::where('status', 1)->get();
+        $chooseus = WhyChooseUs::where('status', 1)->get();
+        $collaborators = Collaborator::where('status', 1)->get();
+        $categories = Category::with(['products' => function ($query) {
             $query->where('status', 1);  // Only get active products
         }])->where('status', 1)->get();
         $products = Product::orderby('id', 'ASC')->where('status', 1)->get();
-        return view('website.index', compact('page_title','abouts' , 'products' , 'testimonials' , 'questions' , 'chooseus' , 'categories' , 'products' , 'collaborators'));
+        return view('website.index', compact('page_title', 'abouts', 'products', 'testimonials', 'questions', 'chooseus', 'categories', 'products', 'collaborators'));
     }
 
     public function aboutUs()
     {
         $page_title = 'About Us || Never Forget';
-        $abouts=AboutUs::where('status' ,  1)->first();
-        $collaborators = Collaborator::where('status' , 1)->get();  
-        return view('website.about-us'  , compact('abouts','page_title','collaborators'));
+        $abouts = AboutUs::where('status',  1)->first();
+        $collaborators = Collaborator::where('status', 1)->get();
+        return view('website.about-us', compact('abouts', 'page_title', 'collaborators'));
     }
-    
+
     public function corporateSolutions()
     {
         $page_title = 'Corporate Solutions || Never Forget';
-        $corporatesolutions=AboutUs::where('status' ,  1)->first();
-        return view('website.corporate-solutions'  , compact('corporatesolutions','page_title'));
+        $corporatesolutions = AboutUs::where('status',  1)->first();
+        return view('website.corporate-solutions', compact('corporatesolutions', 'page_title'));
     }
-    
+
     public function testimonials()
     {
         $page_title = 'Testimonials || Never Forget';
-        $testimonials=Testimonial::where('status' ,  1)->get();
-        $videos=Testimonial::where('status' ,  1)->where('video', '!=', null)->get();
-        return view('website.testimonials'  , compact('testimonials','page_title','videos'));
+        $testimonials = Testimonial::where('status',  1)->get();
+        $videos = Testimonial::where('status',  1)->where('video', '!=', null)->get();
+        return view('website.testimonials', compact('testimonials', 'page_title', 'videos'));
     }
-   
+
     public function blogs()
     {
         $page_title = 'Blogs || Never Forget';
@@ -96,21 +98,21 @@ class WebController extends Controller
 
             $html = '';
             foreach ($blogs as $index => $blog) {
-                $imageUrl = $blog->image 
-                    ? asset('public/admin/assets/posts/'.$blog->image) 
-                    : asset('public/assets/website/images').'/blogs/'.(($index % 9) + 1).'.png';
-                
+                $imageUrl = $blog->image
+                    ? asset('public/admin/assets/posts/' . $blog->image)
+                    : asset('public/assets/website/images') . '/blogs/' . (($index % 9) + 1) . '.png';
+
                 $html .= '<div class="col-lg-4 col-md-6">';
                 $html .= '<div class="blogs-card-wrapper">';
-                $html .= '<img src="'.$imageUrl.'" class="w-100 mb-10" alt="'.htmlspecialchars($blog->title, ENT_QUOTES, 'UTF-8').'">';
-                $html .= '<h5 class="pl-20 heading fs-24 mb-30">'.htmlspecialchars($blog->title, ENT_QUOTES, 'UTF-8').'</h5>';
-                $html .= '<p class="pl-20 blog-text-'.$blog->id.'">';
-                $html .= '<span class="truncated-text-'.$blog->id.' fs-18 secondry-font">';
-                $html .= htmlspecialchars(\Illuminate\Support\Str::limit(strip_tags($blog->description), 100), ENT_QUOTES, 'UTF-8').'...';
+                $html .= '<img src="' . $imageUrl . '" class="w-100 mb-10" alt="' . htmlspecialchars($blog->title, ENT_QUOTES, 'UTF-8') . '">';
+                $html .= '<h5 class="pl-20 heading fs-24 mb-30">' . htmlspecialchars($blog->title, ENT_QUOTES, 'UTF-8') . '</h5>';
+                $html .= '<p class="pl-20 blog-text-' . $blog->id . '">';
+                $html .= '<span class="truncated-text-' . $blog->id . ' fs-18 secondry-font">';
+                $html .= htmlspecialchars(\Illuminate\Support\Str::limit(strip_tags($blog->description), 100), ENT_QUOTES, 'UTF-8') . '...';
                 $html .= '</span>';
                 $html .= '</p>';
                 $html .= '<div class="pl-20 pb-20">';
-                $html .= '<a href="'.route('blog-detail', $blog->slug).'" class="btn primary-btn border-0">View</a>';
+                $html .= '<a href="' . route('blog-detail', $blog->slug) . '" class="btn primary-btn border-0">View</a>';
                 $html .= '</div>';
                 $html .= '</div>';
                 $html .= '</div>';
@@ -140,51 +142,61 @@ class WebController extends Controller
         $page_title = $blog->title . ' || Never Forget';
         return view('website.blog-detail', compact('page_title', 'blog'));
     }
-    
-   
-    public function shop ()
+
+
+    public function shop()
     {
+
+        $wishlistProductIds = [];
+
+        if (auth()->check()) {
+            $wishlistProductIds = auth()->user()
+                ->wishlists()
+                ->pluck('product_id')
+                ->toArray();
+        }
+
         $page_title = 'Shop || Never Forget';
         $products = Product::orderby('id', 'ASC')->where('status', 1)->get();
-        $categories = Category::with(['products' => function($query) {
+        $categories = Category::with(['products' => function ($query) {
             $query->where('status', 1);  // Only get active products
         }])->where('status', 1)->get();
-        
-        $customer_favorites = Product::whereIn('id', function($query) {
+
+        $customer_favorites = Product::whereIn('id', function ($query) {
             $query->select('product_id')
-                  ->from('favorites')
-                  ->where('status', 1);
+                ->from('favorites')
+                ->where('status', 1);
         })->where('status', 1)->get();
 
-        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites'));
+        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds'));
     }
-    
-    public function Career ()
+
+    public function Career()
     {
         $page_title = 'Careers || Never Forget';
-        $categories = CareerCategory::with(['careers' => function($query) {
+        $categories = CareerCategory::with(['careers' => function ($query) {
             $query->where('status', 1)->orderBy('id', 'ASC');
         }])->where('status', 1)->get();
-        
+
         // Get all careers for the "All" tab
         $all_careers = Career::with('hasCategory')->where('status', 1)->orderBy('id', 'ASC')->get();
-        
+
         return view('website.careers', compact('page_title', 'categories', 'all_careers'));
     }
-    
-    public function disclaimer ()
+
+    public function disclaimer()
     {
-        $page_title = 'Disclaimer || Never Forget';  
+        $page_title = 'Disclaimer || Never Forget';
         return view('website.disclaimer', compact('page_title'));
     }
-    public function cookiePolicy ()
+    public function cookiePolicy()
     {
-        $page_title = 'Cookie Policy || Never Forget';  
+        $page_title = 'Cookie Policy || Never Forget';
         return view('website.cookie-policy', compact('page_title'));
     }
-    public function privacyPolicy ()
+    public function privacyPolicy()
     {
-        $page_title = 'Privacy Policy || Never Forget';  
+        $page_title = 'Privacy Policy || Never Forget';
         return view('website.privacy-policy', compact('page_title'));
     }
 
@@ -192,12 +204,12 @@ class WebController extends Controller
     {
         $page = $request->get('page', 1);
         $perPage = 6; // Adjust as needed
-        
+
         $careers = Career::with('hasCategory')
             ->where('status', 1)
             ->orderBy('id', 'ASC')
             ->paginate($perPage, ['*'], 'page', $page);
-            
+
         return response()->json([
             'careers' => $careers->items(),
             'hasMore' => $careers->hasMorePages()
@@ -208,13 +220,13 @@ class WebController extends Controller
     {
         $page = $request->get('page', 1);
         $perPage = 6; // Adjust as needed
-        
+
         $careers = Career::with('hasCategory')
             ->where('status', 1)
             ->where('career_category_id', $categoryId)
             ->orderBy('id', 'ASC')
             ->paginate($perPage, ['*'], 'page', $page);
-            
+
         return response()->json([
             'careers' => $careers->items(),
             'hasMore' => $careers->hasMorePages()
@@ -226,43 +238,43 @@ class WebController extends Controller
         $page_title = 'Career Application || Never Forget';
         $career_id = $request->get('career_id');
         $career = null;
-        
+
         if ($career_id) {
             $career = Career::with('hasCategory')->where('id', $career_id)->where('status', 1)->first();
         }
-        
+
         return view('website.career-application', compact('page_title', 'career'));
     }
 
     public function howItWorks()
     {
         $page_title = 'How It Works || Never Forget';
-        $howitworks=AboutUs::where('status' ,  1)->first();
-        return view('website.how-it-works'  , compact('howitworks','page_title'));
+        $howitworks = AboutUs::where('status',  1)->first();
+        return view('website.how-it-works', compact('howitworks', 'page_title'));
     }
 
 
     public function contactus()
     {
         $page_title = 'Contact Us || Never Forget';
-        $contactus=ContactUs::where('status',1)->first();
-        return view('website.contact-us', compact('page_title','contactus'));
+        $contactus = ContactUs::where('status', 1)->first();
+        return view('website.contact-us', compact('page_title', 'contactus'));
     }
 
     public function specialOffers()
     {
         $page_title = 'Special Offers || Never Forget';
-        $products = Product::where('status' , 1)->where('is_special' , 1)->get();
-       /*  $category = Category::orderby('id', 'ASC')->where('status', 1)->first(); */
-        return view('website.special-offers'  , compact('page_title','products'/* ,'category' */));
+        $products = Product::where('status', 1)->where('is_special', 1)->get();
+        /*  $category = Category::orderby('id', 'ASC')->where('status', 1)->first(); */
+        return view('website.special-offers', compact('page_title', 'products'/* ,'category' */));
     }
 
     public function reviews()
     {
         $page_title = 'Customers Reviews || Never Forget';
-        return view('website.reviews'  , compact('page_title'));
+        return view('website.reviews', compact('page_title'));
     }
-    
+
 
     public function categoryProducts(Request $request)
     {
@@ -286,29 +298,29 @@ class WebController extends Controller
                 $subcategory = [];
             }
         }
-    
 
-       
+
+
         if ($request->ajax()) {
             $view = view('website.product-ajax', compact('products'))->render();
             $pagination = $products->links('pagination::bootstrap-4')->toHtml();
-    
+
             return response()->json([
                 'html' => $view,
                 'pagination' => $pagination,
             ]);
         }
-    
-        return view('website.products', compact('category','subcategory', 'products', 'page_title'));
+
+        return view('website.products', compact('category', 'subcategory', 'products', 'page_title'));
     }
-    
+
     public function searchProducts(Request $request)
     {
         $page_title = 'Search Products';
-        $products = Product::orderby('id', 'ASC')->where('name', 'like', '%'. $request->search.'%')->where('status', 1)->get();
+        $products = Product::orderby('id', 'ASC')->where('name', 'like', '%' . $request->search . '%')->where('status', 1)->get();
         return view('website.search-products', compact('products', 'page_title'));
     }
-    
+
     public function singleProduct($slug)
     {
         $page_title = 'Single Products';
@@ -316,20 +328,20 @@ class WebController extends Controller
         if (!$product) {
             return redirect()->route('shop')->with('error', 'Product not found');
         }
-        
+
         $related_products = [];
-        if(isset($product->related_product)){
+        if (isset($product->related_product)) {
             $related_p = json_decode($product->related_product);
-            foreach($related_p as $id){
-               $related_products[] = Product::where('id', $id)->first();
+            foreach ($related_p as $id) {
+                $related_products[] = Product::where('id', $id)->first();
             }
         }
-        
+
         $product_price = $product->product_price;
         $variations = collect([]);
         $variation_id = "";
-        
-        if($product->product_type == 1 && $product->variations){
+
+        if ($product->product_type == 1 && $product->variations) {
             // Get variations from the JSON data
             $variationsData = json_decode($product->variations, true);
             if (!empty($variationsData)) {
@@ -345,7 +357,7 @@ class WebController extends Controller
                     ];
                 }
                 $variations = collect($variations_array);
-                
+
                 if ($variations->isNotEmpty()) {
                     $firstVariation = $variations->first();
                     $product_price = $firstVariation['price'];
@@ -354,13 +366,13 @@ class WebController extends Controller
             }
         }
 
-        return view('website.product-details', compact('product','page_title','related_products','product_price','variations','variation_id'));
+        return view('website.product-details', compact('product', 'page_title', 'related_products', 'product_price', 'variations', 'variation_id'));
     }
-    
+
     public function store(Request $request)
     {
         $accountType = $request->account_type ?? 'Individual';
-        
+
         if ($accountType === 'Individual') {
             return $this->registerIndividual($request);
         } else {
@@ -378,13 +390,13 @@ class WebController extends Controller
             'password' => 'required|same:password_confirmation',
         ]);
 
-        do{
+        do {
             $verify_token = uniqid();
-        }while(User::where('verify_token', $verify_token)->first());
-        
-        do{
+        } while (User::where('verify_token', $verify_token)->first());
+
+        do {
             $user_id = rand(1000, 9999);
-        }while(User::where('user_id', $user_id)->first());
+        } while (User::where('user_id', $user_id)->first());
 
         $user = User::create([
             'name' => $request->first_name,
@@ -396,30 +408,29 @@ class WebController extends Controller
             'verify_token' => $verify_token,
             'user_id' => $user_id,
             'password' => Hash::make($request->password),
-            'status'=> '0'
+            'status' => '0'
         ]);
 
         $user->assignRole("Individual");
 
         $details = [
             'from' => 'verify',
-            'title' => "Hi ".$request->first_name.' '.$request->last_name.',',
-            'body' => "Thanks for creating an account on NEVER FORGET Showing Appreciation. Your username is <b>".$request->email."</b>. You can access your account, and more at: ",
+            'title' => "Hi " . $request->first_name . ' ' . $request->last_name . ',',
+            'body' => "Thanks for creating an account on NEVER FORGET Showing Appreciation. Your username is <b>" . $request->email . "</b>. You can access your account, and more at: ",
             'regard' => 'We look forward to seeing you soon.',
             'account_type' => 'Individual',
             'verify_token' => $verify_token
         ];
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password]))
-        {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             \Mail::to($user->email)->send(new \App\Mail\Email($details));
             //return redirect()->intended('login')->with('success', 'Register successfully');
             return redirect()->route('login')->with('success', 'You are welcome. You can login from here after verify email.');
-        }else{
+        } else {
             return redirect()->back()->with('error', 'Something went wrong!');
         }
 
-       // return redirect()->back()->with('message', 'We have sent verification email. Click on link and get activation');
+        // return redirect()->back()->with('message', 'We have sent verification email. Click on link and get activation');
     }
 
     private function registerCompany(Request $request)
@@ -432,13 +443,13 @@ class WebController extends Controller
             'password' => 'required|same:password_confirmation',
         ]);
 
-        do{
+        do {
             $verify_token = uniqid();
-        }while(User::where('verify_token', $verify_token)->first());
-        
-        do{
+        } while (User::where('verify_token', $verify_token)->first());
+
+        do {
             $user_id = rand(1000, 9999);
-        }while(User::where('user_id', $user_id)->first());
+        } while (User::where('user_id', $user_id)->first());
 
         $user = User::create([
             'name' => $request->first_name,
@@ -450,22 +461,22 @@ class WebController extends Controller
             'verify_token' => $verify_token,
             'user_id' => $user_id,
             'password' => Hash::make($request->password),
-            'status'=> '0'
+            'status' => '0'
         ]);
 
         $user->assignRole("Company");
 
         $details = [
             'from' => 'verify',
-            'title' => "Hi ".$request->first_name.' '.$request->last_name.',',
-            'body' => "Thanks for creating a company account on NEVER FORGET Showing Appreciation. Your username is <b>".$request->email."</b>. You can access your account area to view orders, and more at: ",
+            'title' => "Hi " . $request->first_name . ' ' . $request->last_name . ',',
+            'body' => "Thanks for creating a company account on NEVER FORGET Showing Appreciation. Your username is <b>" . $request->email . "</b>. You can access your account area to view orders, and more at: ",
             'regard' => 'We look forward to seeing you soon.',
             'account_type' => 'Company',
             'verify_token' => $verify_token
         ];
 
         $company_details = Company::create([
-            'name' => $request->first_name.' '.$request->last_name,
+            'name' => $request->first_name . ' ' . $request->last_name,
             'website' => 'www.google.com',
             'address' => 'Street 123',
             'industry' => 'ABC Company',
@@ -484,18 +495,18 @@ class WebController extends Controller
     public function verifyEmail($token)
     {
         $user = User::where('verify_token', $token)->first();
-        if(!empty($user)){
+        if (!empty($user)) {
             $user->verify_token = null;
             $user->email_verified_at = date('Y-m-d H:i:s');
             $user->status = '1';
-            if(!empty($user->temprary_email)){
+            if (!empty($user->temprary_email)) {
                 $user->email = $user->temprary_email;
                 $user->temprary_email = null;
             }
             $user->update();
 
             return redirect()->route('login')->with('success', 'You are welcome. You can login from here.');
-        }else{
+        } else {
             return redirect()->back()->with('error', 'Your token is expired');
         }
     }
@@ -514,7 +525,7 @@ class WebController extends Controller
             if (Auth::attempt($credentials)) {
                 /** @var User $user */
                 $user = Auth::user();
-                
+
                 // Redirect based on role
                 if ($user->hasRole('Admin')) {
                     return redirect()->route('dashboard');
@@ -557,16 +568,16 @@ class WebController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->where('status', 1)->first();
-        if(empty($user)){
+        if (empty($user)) {
             return redirect()->back()->with('error', 'Your account not found.');
-        }elseif($user->status != 1){
+        } elseif ($user->status != 1) {
             return redirect()->back()->with('error', 'Your account is not verified. We have sent verification email verify first.');
         }
-        if(!empty($user) && $user->status==1 && $user->hasRole('User')){
+        if (!empty($user) && $user->status == 1 && $user->hasRole('User')) {
             $page_title = 'Change Password';
-            do{
+            do {
                 $verify_token = uniqid();
-            }while(User::where('verify_token', $verify_token)->first());
+            } while (User::where('verify_token', $verify_token)->first());
 
             $user->verify_token = $verify_token;
             $user->update();
@@ -581,7 +592,7 @@ class WebController extends Controller
             \Mail::to($user->email)->send(new \App\Mail\Email($details));
 
             return redirect()->route('login')->with('success', 'We have emailed your password reset link!');
-        }else{
+        } else {
             return redirect()->back()->with('error', 'You have not allow to access this panel.');
         }
     }
@@ -601,9 +612,9 @@ class WebController extends Controller
         $user->verify_token = null;
         $user->update();
 
-        if($user){
+        if ($user) {
             return redirect()->route('login')->with('message', 'You have updated password. You can login now.');
-        }else{
+        } else {
             return redirect()->back()->with('error', 'Something went wrong try again');
         }
     }
@@ -613,10 +624,10 @@ class WebController extends Controller
 
         $userPassword = $user->password;
 
-        if(!empty($request->current_password)){
+        if (!empty($request->current_password)) {
             if (!Hash::check($request->current_password, $userPassword)) {
-                return back()->withErrors(['current_password'=>'Current password does not match']);
-            }else{
+                return back()->withErrors(['current_password' => 'Current password does not match']);
+            } else {
                 $request->validate([
                     'current_password' => 'required',
                     'password' => 'required|same:confirm_password|min:6',
@@ -630,12 +641,12 @@ class WebController extends Controller
         $user->name = $request->name;
         $user->save();
 
-        return redirect()->back()->with('success','Profile successfully updated');
+        return redirect()->back()->with('success', 'Profile successfully updated');
     }
 
     public function sendEmail(Request $request)
     {
-        if(!isset($request->type)){
+        if (!isset($request->type)) {
             $this->validate($request, [
                 'email' => 'required|email|unique:users,email',
             ]);
@@ -643,9 +654,9 @@ class WebController extends Controller
 
         $user = User::where('email', Auth::user()->email)->first();
 
-        do{
+        do {
             $verify_token = uniqid();
-        }while(User::where('verify_token', $verify_token)->first());
+        } while (User::where('verify_token', $verify_token)->first());
 
         $user->temprary_email = $request->email;
         $user->verify_token = $verify_token;
@@ -662,72 +673,74 @@ class WebController extends Controller
 
         return redirect()->back()->with('message', 'We have sent verification email. Click on link and get activation');
     }
-    
-    public function billingAddress ()
+
+    public function billingAddress()
     {
         $address = BillingAddress::where('customer_id', Auth::user()->id)->first();
         return view('website.billing-address', compact('address'));
     }
-    public function cartList ()
+    public function cartList()
     {
         return redirect()->route('cart.list');
     }
-    public function cart ()
+    public function cart()
     {
         $cartItems = Cart::getContent();
         $page_title = 'Cart';
-        return view('website.cart', compact('cartItems', 'page_title')); 
+        return view('website.cart', compact('cartItems', 'page_title'));
     }
 
-    public function faqs ()
+    public function faqs()
     {
         $page_title = 'FAQs';
-		$questions = Faq::where('status',1)->get();
-        return view('website.faqs' , compact('questions','page_title'));
+        $questions = Faq::where('status', 1)->get();
+        return view('website.faqs', compact('questions', 'page_title'));
     }
-    public function whyChooseUs ()
+    public function whyChooseUs()
     {
         $page_title = 'Why Choose Us';
-		$chooseus = WhyChooseUs::where('status',1)->get();
-        return view('website.why-choose-us' , compact('chooseus','page_title'));
+        $chooseus = WhyChooseUs::where('status', 1)->get();
+        return view('website.why-choose-us', compact('chooseus', 'page_title'));
     }
 
     public function lostPassword()
     {
         return view('website.lost-password');
     }
-    
+
     public function shippingAddress()
     {
         $shipping = ShippingAddress::where('customer_id', Auth::user()->id)->first();
         return view('website.shipping-address', compact('shipping'));
     }
-    
+
     public function termsAndConditions()
     {
         return view('website.terms-and-conditions');
     }
-   
-    
+
+
     public function orderDetail($id)
     {
-        $orders = Order::where('customer_id', Auth::user()->id)->where('id',$id)->orderby('id','desc')->first();
-        $address = BillingAddress::where('customer_id', Auth::user()->id)->where('id',$orders->billing_address_id)->orderby('id','desc')->first();
-        return view('website.order-details', compact('orders','address'));
+        $orders = Order::where('customer_id', Auth::user()->id)->where('id', $id)->orderby('id', 'desc')->first();
+        $address = BillingAddress::where('customer_id', Auth::user()->id)->where('id', $orders->billing_address_id)->orderby('id', 'desc')->first();
+        return view('website.order-details', compact('orders', 'address'));
     }
 
-    public function getProductId(){
-        $product_ids = Product::where('status',1)->get(['id', 'draw_ends']);
+    public function getProductId()
+    {
+        $product_ids = Product::where('status', 1)->get(['id', 'draw_ends']);
         return response()->json($product_ids);
     }
-    
-    public function shareEmail(Request $request){
-        
-        $slug= $request->product_email_slug;
-        $first_name= $request->first_name;
-        $last_name= $request->last_name;
-        $email= $request->your_email;
-        $to_email= $request->to_email;
+
+    public function shareEmail(Request $request)
+    {
+
+        $slug = $request->product_email_slug;
+        $first_name = $request->first_name;
+        $last_name = $request->last_name;
+        $email = $request->your_email;
+        $to_email = $request->to_email;
         $product = Product::where('slug', $slug)->first();
         $details = [
             'from' => 'share-email',
@@ -740,14 +753,14 @@ class WebController extends Controller
         ];
 
         \Mail::to($to_email)->send(new \App\Mail\Email($details));
-        
+
         return redirect()->back()->with('share-email-success', 'Email sent successfully to your friend.');
     }
 
     public function getSizesPrice($id)
     {
         $sizesprice = Variations::where('id', $id)->first('price');
-        return array('sizesprice'=>$sizesprice);
+        return array('sizesprice' => $sizesprice);
     }
 
     public function loadMoreProducts(Request $request)
@@ -761,7 +774,7 @@ class WebController extends Controller
             ->skip($skip)
             ->take($perPage)
             ->get()
-            ->map(function($product) {
+            ->map(function ($product) {
                 // Format price based on product type
                 if ($product->product_type == 0) {
                     // Simple product
@@ -798,7 +811,7 @@ class WebController extends Controller
             ->skip($skip)
             ->take($perPage)
             ->get()
-            ->map(function($product) {
+            ->map(function ($product) {
                 // Format price based on product type
                 if ($product->product_type == 0) {
                     // Simple product
@@ -834,9 +847,9 @@ class WebController extends Controller
         ]);
 
         // Send email
-         $details = [
+        $details = [
             'from'          => 'user-inquiry',
-            'title'         => $data['title'].' '.$data['name'].',',
+            'title'         => $data['title'] . ' ' . $data['name'] . ',',
             'body'          => (object) $data
         ];
 

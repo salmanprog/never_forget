@@ -83,6 +83,7 @@
     </script>
     @stack('js')
     <script>
+
         var swiper = new Swiper(".logo-swapper", {
             slidesPerView: 6,
             spaceBetween: 30,

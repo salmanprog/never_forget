@@ -3,13 +3,14 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="collaburateModalLabel">Connect with Corporate Gifting Specialist</h5>
+                <h5 class="modal-title" id="collaburateModalLabel">Connect With Us</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="<?php echo e(route('send.collaborate.quote')); ?>" id="quoteForm" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="quote_form" value="1">
+                    <input type="hidden" name="type" value="request_a_quote">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="field-wrapper">
@@ -43,7 +44,7 @@
                         <div class="col-lg-12">
                             <div class="field-wrapper">
                                 <label for="quote_message" class="label-field">Additional Message</label>
-                                <textarea class="input-field text-area" name="message" id="quote_message" placeholder="Message"></textarea>
+                                <textarea class="input-field text-area" name="message" id="quote_message" placeholder="Tell us something about your company"></textarea>
                             </div>
                         </div>
                         <div class="col-12">

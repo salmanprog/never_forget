@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\VariationsController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,43 +70,41 @@ Route::post('admin/logout', 'admin\AdminController@logOut')->name('admin.logout'
 
 
 // individual account dashboard
-Route::get('/my-profile', function() {
+Route::get('/my-profile', function () {
     return view('admin.myprofile.index');
 })->name('myprofile.index');
 
-Route::get('/wishlist', function() {
-    return view('admin.wishlist.index');
-})->name('wishlist.index');
-Route::get('/gift-history', function() {
+
+Route::get('/gift-history', function () {
     return view('admin.gift-history.index');
 })->name('gift-history.index');
 
-Route::get('/notifications', function() {
+Route::get('/notifications', function () {
     return view('admin.notifications.index');
 })->name('notifications.index');
 
-Route::get('/settings', function() {
+Route::get('/settings', function () {
     return view('admin.settings.index');
 })->name('settings.index');
 
 // Company account dashboard routes
-Route::get('/company-profile', function() {
+Route::get('/company-profile', function () {
     return view('admin.company-profile.index');
 })->name('company-profile.index');
 
-Route::get('/bulk-orders', function() {
+Route::get('/bulk-orders', function () {
     return view('admin.bulk-orders.index');
 })->name('bulk-orders.index');
 
-Route::get('/order-history-invoices', function() {
+Route::get('/order-history-invoices', function () {
     return view('admin.order-history-invoices.index');
 })->name('order-history-invoices.index');
 
-Route::get('/employee-gifting', function() {
+Route::get('/employee-gifting', function () {
     return view('admin.employee-gifting.index');
 })->name('employee-gifting.index');
 
-Route::get('/account-settings-support', function() {
+Route::get('/account-settings-support', function () {
     return view('admin.account-settings-support.index');
 })->name('account-settings-support.index');
 
@@ -189,6 +188,10 @@ Route::post('/careers/applications/{id}/respond', [App\Http\Controllers\admin\Ca
 
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+
+
     //Roles
     Route::resource('role', 'admin\RoleController');
 
@@ -389,6 +392,14 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::post('/translations', [App\Http\Controllers\Admin\TranslationController::class, 'translate'])->name('admin.translations.translate');
     Route::get('/translations/manage', [App\Http\Controllers\Admin\TranslationController::class, 'manageTranslations'])->name('admin.translations.manage');
 });
+
+Route::get('/orders/{order}', [OrderController::class, 'show'])
+    ->name('order.show')
+    ->middleware('auth');
+
+
+// Route::get('/product/{slug}', [ProductController::class, 'show'])
+//     ->name('product.show');
 
 // Route::get('/test-mail', function () {
 

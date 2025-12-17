@@ -40,9 +40,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    
 
-    public function billingAddress(){
+
+    public function billingAddress()
+    {
         return $this->hasOne(BillingAddress::class, 'id', 'billing_address_id');
     }
 
@@ -116,5 +117,15 @@ class User extends Authenticatable
     public function isCompanyAccountType()
     {
         return $this->account_type === 'Company';
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function wishlistProducts()
+    {
+        return $this->belongsToMany(Product::class, 'wishlists');
     }
 }

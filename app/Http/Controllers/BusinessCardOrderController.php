@@ -133,7 +133,6 @@ class BusinessCardOrderController extends Controller
                 $request->paper_stock, 
                 $request->corner_style
             );
-
             // First create a business card record for customer reference
             $businessCard = BusinessCard::create([
                 'user_id' => auth()->id(),

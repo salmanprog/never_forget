@@ -38,7 +38,7 @@
                 </ul>
             </li>
             <li class="treeview">
-                <a href="{{route('company-profile.index')}}" class="">
+                <a href="{{route('member.profile.edit')}}" class="{{ request()->is('member/profile/edit') ? 'active' : '' }}">
                     <i class="fa fa-building"></i> <span>Company Profile</span>
                 </a>
             </li>
