@@ -36,12 +36,12 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         $query = Order::orderby('id', 'desc');
-
+        
         // If the user is not an admin, filter by their orders
         if (!$user->hasRole('Admin')) {
             $query->where('customer_id', $user->id);
         }
-
+        
         if ($request->ajax()) {
             if ($request['search'] != "") {
                 $query->where('order_number', 'like', '%' . $request['search'] . '%');
@@ -55,10 +55,10 @@ class OrderController extends Controller
             $models = $query->paginate(10);
             return (string) view('admin.order.search', compact('models'));
         }
-
+        
         $page_title = 'All Order';
-        $models = $query->paginate(10);
-        $orderdetails = OrderDetail::where('status', 1)->get();
+        $models = $query->with('hasOrderDetails.productsItem')->paginate(10);
+        $orderdetails = OrderDetail::with('productsItem')->where('status', 1)->get();
         return view('admin.order.index', compact("models", "page_title", "orderdetails"));
     }
 
@@ -216,7 +216,7 @@ class OrderController extends Controller
                     OrderDetail::create([
                         'order_id' => $order->id, 
                         'product_type' => $item->attributes->product_type ?? 'product',
-                        'product_id' => $item->attributes->business_card_id ?? 0,
+                        'product_id' => $item->attributes->business_card_id ?? ($item->attributes->product_id ?? 0),
                         'product_slug' => $item->name,
                         'category_id' => $item->attributes->category_id ?? null,
                         'sub_category_id' => $item->attributes->sub_category_id ?? null,
@@ -310,7 +310,14 @@ class OrderController extends Controller
     public function show($id)
     {
         $page_title = 'Order Details';
-        $model = Order::with('hasCustomer', 'hasOrderDetails')->with('products')->find($id);
+        //$model = Order::with('hasCustomer', 'hasOrderDetails')->with('products','productsItem')->find($id);
+        $model = Order::with([
+            'hasCustomer',
+            'hasBillingAddress',
+            'hasOrderDetails' => function ($query) {
+                $query->with('productsItem');
+            },
+        ])->find($id);
         return view('admin.order.show', compact('model', 'page_title'));
     }
 

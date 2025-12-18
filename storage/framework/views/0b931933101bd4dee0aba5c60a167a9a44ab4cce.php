@@ -16,7 +16,7 @@
 <?php $__env->startSection('content'); ?>
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Logout / Settings</h1>
+		<h1>Employee Gifting</h1>
 	</div>
 	<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('order-create')): ?>
 	<div class="content-header-right">
@@ -27,7 +27,7 @@
 <section class="content">
 
     <div class="box box-info" style="padding: 20px;">
-        <h3>password and security preferences.</h3>
+        <h3>upload or manage recipient lists (for appreciation campaigns).</h3>
     </div>
 </section>
 <?php $__env->stopSection(); ?>
@@ -35,4 +35,4 @@
 <?php $__env->stopPush(); ?>
 
 
-<?php echo $__env->make($layout, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/admin/settings/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make($layout, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/admin/employee-gifting/index.blade.php ENDPATH**/ ?>

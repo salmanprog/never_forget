@@ -7,7 +7,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="<?php echo e(route('contactus.store')); ?>" id="quoteForm" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+                <form action="<?php echo e(route('contactus.store')); ?>" id="quoteForm" class="form-horizontal"
+                    enctype="multipart/form-data" method="post" accept-charset="utf-8">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="quote_form" value="1">
                     <input type="hidden" name="type" value="custom_quote">
@@ -65,15 +66,16 @@
                                     <option value="" selected>Choose Your Options</option>
                                     <option value="Clientele">Clientele</option>
                                     <option value="Clientele & Employees">Clientele & Employees</option>
-                                    <option value="Employees">Employees</option> 
-                                </select> 
+                                    <option value="Employees">Employees</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-4" id="additionalFieldWrapper" style="display: none;">
                             <div class="field-wrapper">
-                                <label for="additional_info" class="label-field">Number of Clientele & Employees</label>
-                                <input class="input-field" type="text" name="additional_info" id="additional_info"
-                                    placeholder="Number of Clientele & Employees">
+                                <label id="chnglbl" for="additional_info" class="label-field">Number of Clientele &
+                                    Employees</label>
+                                <input class="input-field" type="text" name="additional_info"
+                                    id="additional_info" placeholder="Number of Clientele & Employees">
                             </div>
                         </div>
                         <div class="col-lg-12">
@@ -89,7 +91,11 @@
                                 </div>
                                 <div>
                                     <label class="form-check-label text-start" for="consent">
-                                        I agree to receive SMS messages from Never Forget showing appreciation at the number I provided. These messages may include special offers, service updates, and personalized gift reminders. Frequency may vary. Reply STOP to unsubscribe at any time, or HELP for assistance. Standard message & data rates may apply. My consent is not required for purchase.
+                                        I agree to receive SMS messages from Never Forget showing appreciation at the
+                                        number I provided. These messages may include special offers, service updates,
+                                        and personalized gift reminders. Frequency may vary. Reply STOP to unsubscribe
+                                        at any time, or HELP for assistance. Standard message & data rates may apply. My
+                                        consent is not required for purchase.
                                     </label>
                                 </div>
                             </div>
@@ -118,24 +124,27 @@
         const quantitySelect = document.getElementById('quanitity');
         const additionalFieldWrapper = document.getElementById('additionalFieldWrapper');
         const additionalInfoInput = document.getElementById('additional_info');
-        
-        if (quantitySelect && additionalFieldWrapper) {
+        const chnglbl = document.getElementById('chnglbl');
+
+        if (quantitySelect && additionalFieldWrapper && chnglbl) {
             quantitySelect.addEventListener('change', function() {
-                if (this.value === 'Clientele & Employees') {
-                    additionalFieldWrapper.style.display = 'block';
-                    if (additionalInfoInput) {
-                        additionalInfoInput.setAttribute('required', 'required');
-                    }
-                } else {
+                if (this.value === "") {
                     additionalFieldWrapper.style.display = 'none';
-                    if (additionalInfoInput) {
-                        additionalInfoInput.removeAttribute('required');
-                        additionalInfoInput.value = '';
-                    }
+                    additionalInfoInput.style.display = 'none';
+                    additionalInfoInput.value = '';
+                    additionalInfoInput.removeAttribute('required');
+                    chnglbl.innerHTML = '';
+                } else {
+                    additionalFieldWrapper.style.display = 'block';
+                    additionalInfoInput.style.display = 'block';
+                    additionalInfoInput.setAttribute('required', 'required');
+                    additionalInfoInput.setAttribute('placeholder', this.value);
+                    chnglbl.innerHTML = `Number of ${this.value}`;
                 }
             });
         }
-        
+
+
         // Prevent typing + and - in quantity input field
         const quantityInput = document.getElementById('quote_quantity');
         if (quantityInput) {
@@ -144,13 +153,13 @@
                 if (e.key === '+' || e.key === '-' || e.key === 'e' || e.key === 'E') {
                     e.preventDefault();
                 }
-                
+
                 // Prevent typing 0 as the first character (since min is 1)
                 if (e.key === '0' && this.value === '') {
                     e.preventDefault();
                 }
             });
-            
+
             // Also prevent paste of invalid characters
             quantityInput.addEventListener('paste', function(e) {
                 e.preventDefault();
@@ -160,7 +169,7 @@
                     this.value = cleanPaste;
                 }
             });
-            
+
             // Validate on input to ensure value is at least 1
             quantityInput.addEventListener('input', function(e) {
                 const value = parseInt(this.value);
@@ -173,23 +182,24 @@
 </script>
 
 <?php if(session('getaquotemessage')): ?>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Close the modal first
-        var modalElement = document.getElementById('quoteModal');
-        var modal = bootstrap.Modal.getInstance(modalElement);
-        if (modal) {
-            modal.hide();
-        }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Close the modal first
+            var modalElement = document.getElementById('quoteModal');
+            var modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+                modal.hide();
+            }
 
-        // Show sweet alert
-        Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: '<?php echo e(session("getaquotemessage")); ?>',
-            timer: 3000,
-            showConfirmButton: false
+            // Show sweet alert
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '<?php echo e(session('getaquotemessage')); ?>',
+                timer: 3000,
+                showConfirmButton: false
+            });
         });
-    });
-</script>
-<?php endif; ?><?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/layouts/website/get-a-quote.blade.php ENDPATH**/ ?>
+    </script>
+<?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/layouts/website/get-a-quote.blade.php ENDPATH**/ ?>

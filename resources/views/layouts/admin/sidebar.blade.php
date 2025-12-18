@@ -97,45 +97,7 @@
 
 
                     {{-- Super Admin Menu --}}
-                    <li class="treeview {{ request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show') ? 'active' : '' }}"
-                        style="height: auto;">
-                        <a href="#"
-                            class="{{ request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show') ? 'active' : '' }}">
-                            <i class="fa fa-th"></i>
-                            <span>All Registrations</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu"
-                            style="display: {{ request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show') ? 'block' : 'none' }};">
-
-                            @can('user-list')
-                                <li class="treeview">
-                                    <a href="{{ route('user.index', ['type' => 'company']) }}"
-                                        class="{{ request()->is('user') && request()->get('type') == 'company' ? 'active' : '' }}">
-                                        <i class="fa fa-building"></i> <span>Company</span>
-                                    </a>
-                                </li>
-                            @endcan
-                            @can('user-list')
-                                <li class="treeview">
-                                    <a href="{{ route('user.index', ['type' => 'individual']) }}"
-                                        class="{{ request()->is('user') && request()->get('type') == 'individual' ? 'active' : '' }}">
-                                        <i class="fa fa-user"></i> <span>Individual</span>
-                                    </a>
-                                </li>
-                            @endcan
-                            @can('user-list')
-                                <li class="treeview">
-                                    <a href="{{ route('user.index', ['type' => 'salesperson']) }}"
-                                        class="{{ request()->is('user') && request()->get('type') == 'salesperson' ? 'active' : '' }}">
-                                        <i class="fa fa-user"></i> <span>Sales Person</span>
-                                    </a>
-                                </li>
-                            @endcan
-                        </ul>
-                    </li>
+                    
 
 
 
@@ -316,7 +278,47 @@
                 </a>
 
                 <ul class="treeview-menu" style="display: {{ request()->is('mts-dashboard*') ? 'block' : 'none' }};">
+                     <li class="treeview {{ request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show') ? 'active' : '' }}"
+                        style="height: auto;">
+                        <a href="#"
+                            class="{{ request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show') ? 'active' : '' }}">
+                            <i class="fa fa-th"></i>
+                            <span>All Registrations</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu"
+                            style="display: {{ request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show') ? 'block' : 'none' }};">
+
+                            @can('user-list')
+                                <li class="treeview">
+                                    <a href="{{ route('user.index', ['type' => 'company']) }}"
+                                        class="{{ request()->is('user') && request()->get('type') == 'company' ? 'active' : '' }}">
+                                        <i class="fa fa-building"></i> <span>Company</span>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('user-list')
+                                <li class="treeview">
+                                    <a href="{{ route('user.index', ['type' => 'individual']) }}"
+                                        class="{{ request()->is('user') && request()->get('type') == 'individual' ? 'active' : '' }}">
+                                        <i class="fa fa-user"></i> <span>Individual</span>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('user-list')
+                                <li class="treeview">
+                                    <a href="{{ route('user.index', ['type' => 'salesperson']) }}"
+                                        class="{{ request()->is('user') && request()->get('type') == 'salesperson' ? 'active' : '' }}">
+                                        <i class="fa fa-user"></i> <span>Sales Person</span>
+                                    </a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
                     @can('contactus-list')
+                   
                         <li class="treeview">
                             <a href="{{ route('mts-dashboard.index') . '?search=&account_type=All&status=All' }}"
                                 class="{{ request()->is('mts-dashboard*') ? 'active' : '' }}">

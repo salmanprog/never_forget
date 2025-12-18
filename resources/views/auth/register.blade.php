@@ -27,12 +27,13 @@
                     </div>
                     <form method="POST" action="{{ route('new-register') }}" class="sing-form">
                         @csrf
+                        <input type="hidden" name="user_id">
                         <div class="new-agents form-row pt-3">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group mb-20">
                                         <span style="color: red">{{ $errors->first('account_type') }}</span>
-                                        <label class="form-label">Account Type <span style="color: red">*</span></label>
+                                        <label class="form-label">Account Type<span style="color: red">*</span> <span class="account-type-wrapper" style="color: red"></span></label>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-check">
@@ -80,6 +81,12 @@
                                     <div class="form-group mb-20">
                                         <input type="phone" class="input-field" name="phone"
                                             placeholder="Phone" value="" required autofocus>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group mb-20 company-name-wrapper">
+                                        <input type="text" class="input-field" name="company_name"
+                                            placeholder="Company Name" value="" required autofocus>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -140,3 +147,19 @@
         </div>
     </section>
 @endsection
+@push('js')
+    <script>
+        
+        $(document).ready(function() {
+            $('input[name="account_type"]').on('change', function() {
+                if ($(this).val() == 'Company') {
+                    $('.account-type-wrapper').html('company');
+                    $('.company-name-wrapper').show();
+                } else {
+                    $('.account-type-wrapper').html('Individual');
+                    $('.company-name-wrapper').hide();
+                }
+            });
+        });
+    </script>
+@endpush

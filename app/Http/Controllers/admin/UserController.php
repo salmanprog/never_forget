@@ -15,6 +15,7 @@ use Illuminate\Support\Arr;
 use Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use App\Models\Company;
 
 class UserController extends Controller
 {
@@ -242,8 +243,9 @@ class UserController extends Controller
         $page_title = 'Edit Profile';
         $cities = City::where('status', 1)->get();
         $states = State::where('city_id')->get();
+        $company = Company::where('id', Auth::user()->name)->first(); 
         $user =  User::where('id', Auth::user()->id)->first();
-        return view('website.individual-dashboard.edit', compact('cities', 'states', 'user', 'page_title'));
+        return view('website.individual-dashboard.edit', compact('cities', 'states', 'user', 'page_title', 'company'));
     }
     public function SalesPersonEditProfile()
     {

@@ -111,31 +111,11 @@
             .main-sidebar, .left-side {
                 top: 0;
                 left: 0;
-                padding-top: 106px;
+                padding-top: 150px;
                 min-height: 100%;
                 width: 230px;
                 z-index: 810;
                 transition: transform .3s ease-in-out,width .3s ease-in-out;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-
-            /* Mobile responsive sidebar */
-            @media (max-width: 768px) {
-                .main-sidebar, .left-side {
-                    padding-top: 50px;
-                    height: calc(100vh - 50px);
-                    overflow-y: auto;
-                    -webkit-overflow-scrolling: touch;
-                }
-            }
-
-            /* Desktop responsive sidebar */
-            @media (min-width: 769px) {
-                .main-sidebar, .left-side {
-                    height: calc(100vh - 106px);
-                    overflow-y: auto;
-                }
             }
 
             /* width */
@@ -208,6 +188,24 @@
 			.rating-stars .far.fa-star {
 				color: #ccc;
 			}
+
+			/* Mobile Responsive Dashboard */
+			@media (max-width: 768px) {
+				.info-box {
+					margin-bottom: 15px;
+				}
+			}
+
+			@media (max-width: 480px) {
+				.content-header h1 {
+					font-size: 18px !important;
+					margin: 10px 0;
+				}
+				
+				.info-box {
+					margin-bottom: 10px;
+				}
+			}
 		</style>
 
 		<?php echo $__env->yieldPushContent('css'); ?>
@@ -216,10 +214,10 @@
 	<body class="hold-transition fixed skin-blue sidebar-mini">
 		<div class="wrapper">
 			<!--header-->
-			<?php echo $__env->make('layouts.admin.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+			<?php echo $__env->make('layouts.company.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 			<!--sidebar-->
-			<?php echo $__env->make('layouts.admin.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+			<?php echo $__env->make('layouts.company.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 			<div class="content-wrapper">
 				<?php echo $__env->yieldContent('content'); ?>
@@ -294,62 +292,8 @@
      $(function () {
         //Initialize Select2 Elements
         $('.select2').select2()
-        
-        // Initialize slimScrollBar for sidebar with mobile responsiveness
-        function initSidebarScroll() {
-            if ($(window).width() <= 768) {
-                // Mobile: Use native scrolling
-                $('.sidebar').css({
-                    'overflow-y': 'auto',
-                    'overflow-x': 'hidden',
-                    '-webkit-overflow-scrolling': 'touch'
-                });
-            } else {
-                // Desktop: Use slimScrollBar
-                if (typeof $.fn.slimScroll !== 'undefined') {
-                    $('.sidebar').slimScroll({
-                        height: 'calc(100vh - 106px)',
-                        color: '#cfa40c',
-                        size: '8px',
-                        position: 'right',
-                        distance: '2px',
-                        opacity: 0.8,
-                        alwaysVisible: false,
-                        disableFadeOut: false,
-                        railVisible: true,
-                        railColor: '#081e37',
-                        railOpacity: 0.3,
-                        railDraggable: true,
-                        allowPageScroll: false,
-                        wheelStep: 20,
-                        touchScrollStep: 200,
-                        borderRadius: '5px',
-                        railBorderRadius: '5px'
-                    });
-                }
-            }
-        }
-        
-        // Initialize on page load
-        initSidebarScroll();
-        
-        // Re-initialize on window resize
-        $(window).on('resize', function() {
-            setTimeout(function() {
-                initSidebarScroll();
-            }, 100);
-        });
-        
-        // Re-initialize when sidebar is toggled
-        $('.sidebar-toggle').on('click', function() {
-            setTimeout(function() {
-                initSidebarScroll();
-            }, 300);
-        });
      });
-
-     
     </script>
 	<?php echo $__env->yieldPushContent('js'); ?>
 </html>
-<?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/layouts/admin/app.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/layouts/company/app.blade.php ENDPATH**/ ?>

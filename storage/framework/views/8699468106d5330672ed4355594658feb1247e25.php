@@ -16,7 +16,7 @@
 <?php $__env->startSection('content'); ?>
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Gift History</h1>
+		<h1>Order History & Invoices</h1>
 	</div>
 	<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('order-create')): ?>
 	<div class="content-header-right">
@@ -27,10 +27,12 @@
 <section class="content">
 
     <div class="box box-info" style="padding: 20px;">
-        <h3>record of gifts sent, recipients, and dates.</h3>
+        <h3>all company transactions, receipts, and tracking.</h3>
     </div>
 </section>
 <?php $__env->stopSection(); ?>
 <?php $__env->startPush('js'); ?>
 <?php $__env->stopPush(); ?>
-<?php echo $__env->make($layout, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/admin/gift-history/index.blade.php ENDPATH**/ ?>
+
+
+<?php echo $__env->make($layout, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/admin/order-history-invoices/index.blade.php ENDPATH**/ ?>

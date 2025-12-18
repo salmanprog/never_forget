@@ -42,11 +42,15 @@ class CartController extends Controller
             'name' => $product->name,
             'price' => $request->product_price,
             'quantity' => $request->quantity,
+            'product_id' => $product->id,
             'attributes' => [
                 'product_image' => $variationImage ?: $product->image,
                 'product_type' => $product->product_type,
                 'variation_id' => $request->variation_id,
                 'variation_name' => $variationName,
+                'business_card_id' => $product->id,
+                'category_id' => $product->category_id,
+                'sub_category_id' => $product->sub_category_id ?? null,
             ]
         ]);
 

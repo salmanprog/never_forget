@@ -47,7 +47,16 @@
                             </tr>
                             <tr>
                                 <th>Address</th>
-                                <td>{{ $model->hasCustomer->address ?? 'Not Provided' }}</td>
+                                <td>
+                                    @if($model->hasBillingAddress)
+                                        <strong>Street: </strong> {{ $model->hasBillingAddress->street }}<br>
+                                        <strong>City: </strong> {{ $model->hasBillingAddress->town }}<br>
+                                        <strong>Country: </strong> {{ $model->hasBillingAddress->country }}<br>
+                                        <strong>Postcode: </strong> {{ $model->hasBillingAddress->postcode }}
+                                    @else
+                                        <span class="text-danger">Not Provided</span>
+                                    @endif
+                                </td>
                             </tr>
                         </table>
 
@@ -72,12 +81,13 @@
                             <tbody>
                                 @php($counter = 0)
                                 @foreach ($model->hasOrderDetails as $product)
+
                                     <tr>
                                         <td>{{ ++$counter }}.</td>
-                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $product->product_slug }}</td>
                                         <td>
-                                            @if ($product->image)
-                                                <img src="{{ asset('public/admin/assets/images/product/' . $product->image) }}"
+                                            @if ($product->productsItem->image)
+                                                <img src="{{ asset('public/admin/assets/images/product/' . $product->productsItem->image) }}"
                                                     alt="Product Image" style="height:100px; width:150px;">
                                             @else
                                                 <img src="{{ asset('public/admin/assets/images/product/no-photo1.jpg') }}"

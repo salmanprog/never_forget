@@ -40,6 +40,13 @@
                                     placeholder="Enter Your Phone Number" required>
                             </div>
                         </div>
+                        <div class="col-lg-12">
+                            <div class="field-wrapper">
+                                <label for="quote_company" class="label-field">Company Name</label>
+                                <input type="text" class="input-field" name="company"
+                                    placeholder="Enter Your Company Name" value="" required>
+                            </div>
+                        </div>
                         
                         <div class="col-lg-12">
                             <div class="field-wrapper">

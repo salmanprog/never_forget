@@ -69,4 +69,9 @@ class Product extends Model
     {
         return $this->belongsToMany(User::class, 'wishlists');
     }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

@@ -441,6 +441,7 @@ class WebController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:password_confirmation',
+            'company_name' => 'required|string|max:255',
         ]);
 
         do {
@@ -476,7 +477,7 @@ class WebController extends Controller
         ];
 
         $company_details = Company::create([
-            'name' => $request->first_name . ' ' . $request->last_name,
+            'name' => $request->company_name,
             'website' => 'www.google.com',
             'address' => 'Street 123',
             'industry' => 'ABC Company',
@@ -866,6 +867,7 @@ class WebController extends Controller
             'email' => 'required|email|max:100',
             'phone' => 'required|string|max:20',
             'message' => 'nullable|string|max:1000',
+            'company_name' => 'required|string|max:100',
         ]);
 
         $model = new ContactUs();
@@ -875,6 +877,7 @@ class WebController extends Controller
         $model->email = $request->email;
         $model->phone = $request->phone;
         $model->message = $request->message;
+        $model->company_name = $request->company_name;
         $model->save();
 
         // Prepare email data
@@ -884,6 +887,7 @@ class WebController extends Controller
             'name' => $data['first_name'] . ' ' . $data['last_name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
+            'company_name' => $data['company_name'],
             'message' => $data['message'] ?? 'No additional message provided.',
         ];
 

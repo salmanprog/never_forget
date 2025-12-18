@@ -63,6 +63,11 @@ class Order extends Model
         return $this->hasOne(Product::class, 'slug', 'product_slug');
     }
 
+    public function productsItem()
+    {
+        return $this->hasMany(Product::class, 'id', 'product_id');
+    }
+
     public function products()
     {
         return $this->hasManyThrough(

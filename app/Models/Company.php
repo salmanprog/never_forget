@@ -19,7 +19,8 @@ class Company extends Model
         'plan',
         'options',
         'description',
-        'admin_user_id'
+        'admin_user_id',
+        'company_name'
     ];
 
     /**
@@ -44,5 +45,10 @@ class Company extends Model
     public function occasions()
     {
         return $this->hasMany(Occasion::class);
+    }
+
+    public function user()
+    {
+        return $this->hasMany(User::class);
     }
 }

@@ -48,8 +48,9 @@
                                 <tr>
                                     <th>SL</th>
                                     <th>Order No#</th>
-                                    <th>Customer </th>
-                                    <th>Email </th>
+                                    <th>Product </th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
                                     <th>Date</th>
                                     <th>Order Status</th>
                                     @if (Auth::user()->hasRole('Admin'))
@@ -63,19 +64,27 @@
                                         <td>{{ $models->firstItem() + $key }}.</td>
 
                                         <td width="80px">{{ $model->order_number }}</td>
+										<td>
+											@foreach ($model->hasOrderDetails as $orderDetail)
+												@if ($orderDetail->productsItem)
+													{{ $orderDetail->productsItem->name }} 
+                                                @elseif($orderDetail->product_slug)
+                                                    {{ $orderDetail->product_slug }}
+												@else
+													<span class="badge badge-danger">No Product</span>
+												@endif
+                                                <br>
+											@endforeach
+										</td>
                                         <td>
-                                            @if ($model->customer_id > 0 && $model->hasCustomer)
-                                                {{ $model->hasCustomer->name }}
-                                            @else
-                                                {{ $model->guest_first_name }} {{ $model->guest_last_name }} (Guest)
-                                            @endif
+											@foreach ($model->hasOrderDetails as $orderDetail)
+												{{ $orderDetail->quantity }}<br>
+											@endforeach
                                         </td>
                                         <td>
-                                            @if ($model->customer_id > 0 && $model->hasCustomer)
-                                                {{ $model->hasCustomer->email }}
-                                            @else
-                                                {{ $model->guest_email }}
-                                            @endif
+											@foreach ($model->hasOrderDetails as $orderDetail)
+											  ${{ number_format($orderDetail->price, 2) }}<br>
+											@endforeach
                                         </td>
                                         <td>{{ date('d, m-Y H:i A', strtotime($model->created_at)) }}</td>
                                         <td>
