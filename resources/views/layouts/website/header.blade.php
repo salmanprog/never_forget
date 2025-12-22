@@ -171,6 +171,11 @@
             </div>
         </div>
     </div>
+    <marquee class="" style="background-color: #081e37;
+    color: #fff; padding: 5px 0;">
+        <h3>Our website is currently being updated. We appreciate your patience
+        </h3>
+    </marquee>
 </header>
 
 @include('layouts.website.get-a-quote')
