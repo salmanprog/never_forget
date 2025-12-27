@@ -1,6 +1,5 @@
-@extends('layouts.website.master')
-@section('content')
-@section('title', $page_title)
+<?php $__env->startSection('content'); ?>
+<?php $__env->startSection('title', $page_title); ?>
 
 <!-- Inner Page Banner  -->
 <main class="inner-bg">
@@ -375,54 +374,54 @@
                     <div class="swiper mySwiper shop-nav-slider">
                         <ul class="nav nav-pills shop-nav swiper-wrapper" id="pills-tab" role="tablist">
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link {{ !request('category') ? 'active' : '' }}" id="pills-All-tab"
+                                <button class="nav-link <?php echo e(!request('category') ? 'active' : ''); ?>" id="pills-All-tab"
                                     data-bs-toggle="pill" data-bs-target="#pills-All" type="button" role="tab"
                                     aria-controls="pills-All"
-                                    aria-selected="{{ !request('category') ? 'true' : 'false' }}">All</button>
+                                    aria-selected="<?php echo e(!request('category') ? 'true' : 'false'); ?>">All</button>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
                                 <button class="nav-link" id="pills-Under30-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-Under30" type="button" role="tab"
                                     aria-controls="pills-Under30" aria-selected="false">Gifts Under $30</button>
                             </li>
-                            @foreach ($categories as $category)
+                            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li class="nav-item swiper-slide" role="presentation">
-                                    <button class="nav-link {{ request('category') == $category->id ? 'active' : '' }}"
-                                        id="pills-{{ $category->id }}-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-{{ $category->id }}" type="button" role="tab"
-                                        aria-controls="pills-{{ $category->id }}"
-                                        aria-selected="{{ request('category') == $category->id ? 'true' : 'false' }}">{{ $category->title }}</button>
+                                    <button class="nav-link <?php echo e(request('category') == $category->id ? 'active' : ''); ?>"
+                                        id="pills-<?php echo e($category->id); ?>-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-<?php echo e($category->id); ?>" type="button" role="tab"
+                                        aria-controls="pills-<?php echo e($category->id); ?>"
+                                        aria-selected="<?php echo e(request('category') == $category->id ? 'true' : 'false'); ?>"><?php echo e($category->title); ?></button>
                                 </li>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link {{ request('category') == 'balloons' ? 'active' : '' }}"
+                                <button class="nav-link <?php echo e(request('category') == 'balloons' ? 'active' : ''); ?>"
                                     id="pills-balloons-tab" data-bs-toggle="pill" data-bs-target="#pills-balloons"
                                     type="button" role="tab" aria-controls="pills-balloons"
-                                    aria-selected="{{ request('category') == 'balloons' ? 'true' : 'false' }}">Balloons</button>
+                                    aria-selected="<?php echo e(request('category') == 'balloons' ? 'true' : 'false'); ?>">Balloons</button>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link {{ request('category') == 'qualitylogo' ? 'active' : '' }}"
+                                <button class="nav-link <?php echo e(request('category') == 'qualitylogo' ? 'active' : ''); ?>"
                                     id="pills-qualitylogo-tab" data-bs-toggle="pill" data-bs-target="#pills-qualitylogo"
                                     type="button" role="tab" aria-controls="pills-qualitylogo"
-                                    aria-selected="{{ request('category') == 'qualitylogo' ? 'true' : 'false' }}">Quality
+                                    aria-selected="<?php echo e(request('category') == 'qualitylogo' ? 'true' : 'false'); ?>">Quality
                                     Logo</button>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link {{ request('category') == 'journey-expert' ? 'active' : '' }}"
+                                <button class="nav-link <?php echo e(request('category') == 'journey-expert' ? 'active' : ''); ?>"
                                     id="pills-journey-expert-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-journey-expert" type="button" role="tab"
                                     aria-controls="pills-journey-expert"
-                                    aria-selected="{{ request('category') == 'journey-expert' ? 'true' : 'false' }}">Travel
+                                    aria-selected="<?php echo e(request('category') == 'journey-expert' ? 'true' : 'false'); ?>">Travel
                                     &
                                     Experience</button>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
                                 <button
-                                    class="nav-link {{ request('category') == 'greetings-appreciation' ? 'active' : '' }}"
+                                    class="nav-link <?php echo e(request('category') == 'greetings-appreciation' ? 'active' : ''); ?>"
                                     id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-greetings-appreciation" type="button" role="tab"
                                     aria-controls="pills-greetings-appreciation"
-                                    aria-selected="{{ request('category') == 'greetings-appreciation' ? 'true' : 'false' }}">Greetings
+                                    aria-selected="<?php echo e(request('category') == 'greetings-appreciation' ? 'true' : 'false'); ?>">Greetings
                                     and
                                     Appreciation </button>
                             </li>
@@ -433,24 +432,24 @@
                 </div>
                 <div class="tab-content" id="pills-tabContent">
                     <!-- All Products Tab -->
-                    <div class="tab-pane fade {{ !request('category') ? 'show active' : '' }}" id="pills-All"
+                    <div class="tab-pane fade <?php echo e(!request('category') ? 'show active' : ''); ?>" id="pills-All"
                         role="tabpanel" aria-labelledby="pills-All-tab" tabindex="0">
                         <div class="row" id="all-products">
-                            @foreach ($categories as $category)
-                                @foreach ($category->products as $product)
+                            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $category->products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="col-lg-4 col-md-6 product-item visible">
                                         <div class="gift-card-wrapper">
-                                            <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
-                                                alt="{{ $product->name }}">
+                                            <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($product->image); ?>"
+                                                alt="<?php echo e($product->name); ?>">
                                             <div class="product-info">
-                                                <h3 class="product-title">{{ $product->name }}</h3>
+                                                <h3 class="product-title"><?php echo e($product->name); ?></h3>
                                                 <div class="price-rating">
-                                                    @if ($product->product_type == 0)
+                                                    <?php if($product->product_type == 0): ?>
                                                         <span
-                                                            class="price">${{ number_format($product->product_price, 2) }}</span>
-                                                    @else
+                                                            class="price">$<?php echo e(number_format($product->product_price, 2)); ?></span>
+                                                    <?php else: ?>
                                                         <span class="price range">
-                                                            @php
+                                                            <?php
                                                                 $variations = json_decode($product->variations, true);
                                                                 if ($variations && count($variations) > 0) {
                                                                     $prices = array_column($variations, 'price');
@@ -463,27 +462,27 @@
                                                                 } else {
                                                                     echo 'N/A';
                                                                 }
-                                                            @endphp
+                                                            ?>
                                                         </span>
-                                                    @endif
+                                                    <?php endif; ?>
                                                     <div class="rating">
                                                         <i class="fa-solid fa-star"></i>
                                                         <span>4.8</span>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-center product-action-wrapper">
-                                                    <a href="{{ route('single-product', $product->slug) }}"
+                                                    <a href="<?php echo e(route('single-product', $product->slug)); ?>"
                                                         class="add-to-cart">
-                                                        @if ($product->product_type == 0)
+                                                        <?php if($product->product_type == 0): ?>
                                                             Add To Cart
-                                                        @else
+                                                        <?php else: ?>
                                                             Select Options
-                                                        @endif
+                                                        <?php endif; ?>
                                                         <i class="fas fa-arrow-right ms-2"></i>
                                                     </a>
                                                     <button
-                                                        class="wishlist-btn {{ in_array($product->id, $wishlistProductIds) ? 'active' : '' }}"
-                                                        data-product-id="{{ $product->id }}">
+                                                        class="wishlist-btn <?php echo e(in_array($product->id, $wishlistProductIds) ? 'active' : ''); ?>"
+                                                        data-product-id="<?php echo e($product->id); ?>">
 
                                                         <i class="fas fa-heart"></i>
                                                     </button>
@@ -491,8 +490,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
-                            @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                         <div class="text-center loading-spinner" id="loading-spinner">
                             <div class="spinner-border text-primary" role="status">
@@ -505,7 +504,7 @@
                     <div class="tab-pane fade" id="pills-Under30" role="tabpanel"
                         aria-labelledby="pills-Under30-tab" tabindex="0">
                         <div class="row">
-                            @php
+                            <?php
                                 $under30_products = [];
                                 $product_ids = [];
                                 $all_products = $categories
@@ -513,10 +512,10 @@
                                         return $category->products;
                                     })
                                     ->unique('id');
-                            @endphp
+                            ?>
 
-                            @foreach ($all_products as $product)
-                                @php
+                            <?php $__currentLoopData = $all_products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php
                                     $price = 0;
                                     if ($product->product_type == 0) {
                                         $price = $product->product_price;
@@ -527,28 +526,28 @@
                                             $price = !empty($prices) ? min($prices) : 0;
                                         }
                                     }
-                                @endphp
-                                @if ($price > 0 && $price < 30)
-                                    @php
+                                ?>
+                                <?php if($price > 0 && $price < 30): ?>
+                                    <?php
                                         $under30_products[] = $product;
-                                    @endphp
-                                @endif
-                            @endforeach
+                                    ?>
+                                <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                            @forelse($under30_products as $product)
+                            <?php $__empty_1 = true; $__currentLoopData = $under30_products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div class="col-lg-4 col-md-6 product-item visible">
                                     <div class="gift-card-wrapper">
-                                        <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
-                                            alt="{{ $product->name }}">
+                                        <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($product->image); ?>"
+                                            alt="<?php echo e($product->name); ?>">
                                         <div class="product-info">
-                                            <h3 class="product-title">{{ $product->name }}</h3>
+                                            <h3 class="product-title"><?php echo e($product->name); ?></h3>
                                             <div class="price-rating">
-                                                @if ($product->product_type == 0)
+                                                <?php if($product->product_type == 0): ?>
                                                     <span
-                                                        class="price">${{ number_format($product->product_price, 2) }}</span>
-                                                @else
+                                                        class="price">$<?php echo e(number_format($product->product_price, 2)); ?></span>
+                                                <?php else: ?>
                                                     <span class="price range">
-                                                        @php
+                                                        <?php
                                                             $variations = json_decode($product->variations, true);
                                                             if ($variations && count($variations) > 0) {
                                                                 $prices = array_column($variations, 'price');
@@ -561,27 +560,27 @@
                                                             } else {
                                                                 echo 'N/A';
                                                             }
-                                                        @endphp
+                                                        ?>
                                                     </span>
-                                                @endif
+                                                <?php endif; ?>
                                                 <div class="rating">
                                                     <i class="fa-solid fa-star"></i>
                                                     <span>4.8</span>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center product-action-wrapper">
-                                                <a href="{{ route('single-product', $product->slug) }}"
+                                                <a href="<?php echo e(route('single-product', $product->slug)); ?>"
                                                     class="add-to-cart">
-                                                    @if ($product->product_type == 0)
+                                                    <?php if($product->product_type == 0): ?>
                                                         Add To Cart
-                                                    @else
+                                                    <?php else: ?>
                                                         Select Options
-                                                    @endif
+                                                    <?php endif; ?>
                                                     <i class="fas fa-arrow-right ms-2"></i>
                                                 </a>
                                                 <button
-                                                    class="wishlist-btn {{ in_array($product->id, $wishlistProductIds) ? 'active' : '' }}"
-                                                    data-product-id="{{ $product->id }}">
+                                                    class="wishlist-btn <?php echo e(in_array($product->id, $wishlistProductIds) ? 'active' : ''); ?>"
+                                                    data-product-id="<?php echo e($product->id); ?>">
 
                                                     <i class="fas fa-heart"></i>
                                                 </button>
@@ -589,62 +588,62 @@
                                         </div>
                                     </div>
                                 </div>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="col-12">
                                     <p class="text-center">No products found under $30.</p>
                                 </div>
-                            @endforelse
+                            <?php endif; ?>
                         </div>
                     </div>
 
                     <!-- Quality Logo Tab -->
-                    <div class="tab-pane fade {{ request('category') == 'qualitylogo' ? 'show active' : '' }}"
+                    <div class="tab-pane fade <?php echo e(request('category') == 'qualitylogo' ? 'show active' : ''); ?>"
                         id="pills-qualitylogo" role="tabpanel" aria-labelledby="pills-qualitylogo-tab"
                         tabindex="0">
                         <div class="row">
-                            @include('website.partials._quality_logo_category')
+                            <?php echo $__env->make('website.partials._quality_logo_category', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                         </div>
                     </div>
 
                     <!-- Journey Expert Tab -->
-                    <div class="tab-pane fade {{ request('category') == 'journey-expert' ? 'show active' : '' }}"
+                    <div class="tab-pane fade <?php echo e(request('category') == 'journey-expert' ? 'show active' : ''); ?>"
                         id="pills-journey-expert" role="tabpanel" aria-labelledby="pills-journey-expert-tab"
                         tabindex="0">
                         <div class="row">
-                            @include('website.partials._journey_expert')
+                            <?php echo $__env->make('website.partials._journey_expert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                         </div>
                     </div>
 
                     <!-- Greeting and appreciation Tab -->
-                    <div class="tab-pane fade {{ request('category') == 'greetings-appreciation' ? 'show active' : '' }}"
+                    <div class="tab-pane fade <?php echo e(request('category') == 'greetings-appreciation' ? 'show active' : ''); ?>"
                         id="pills-greetings-appreciation" role="tabpanel"
                         aria-labelledby="pills-greetings-appreciation-tab" tabindex="0">
                         <div class="row">
-                            @include('website.partials._greetings_appreciation')
+                            <?php echo $__env->make('website.partials._greetings_appreciation', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                         </div>
                     </div>
 
 
                     <!-- Individual Category Tabs -->
-                    @foreach ($categories as $category)
-                        <div class="tab-pane fade {{ request('category') == $category->id ? 'show active' : '' }}"
-                            id="pills-{{ $category->id }}" role="tabpanel"
-                            aria-labelledby="pills-{{ $category->id }}-tab" tabindex="0">
-                            <div class="row" id="category-products-{{ $category->id }}">
-                                @forelse($category->products as $product)
+                    <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="tab-pane fade <?php echo e(request('category') == $category->id ? 'show active' : ''); ?>"
+                            id="pills-<?php echo e($category->id); ?>" role="tabpanel"
+                            aria-labelledby="pills-<?php echo e($category->id); ?>-tab" tabindex="0">
+                            <div class="row" id="category-products-<?php echo e($category->id); ?>">
+                                <?php $__empty_1 = true; $__currentLoopData = $category->products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <div class="col-lg-4 col-md-6 product-item visible">
                                         <div class="gift-card-wrapper">
-                                            <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
-                                                alt="{{ $product->name }}">
+                                            <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($product->image); ?>"
+                                                alt="<?php echo e($product->name); ?>">
                                             <div class="product-info">
-                                                <h3 class="product-title">{{ $product->name }}</h3>
+                                                <h3 class="product-title"><?php echo e($product->name); ?></h3>
                                                 <div class="price-rating">
-                                                    @if ($product->product_type == 0)
+                                                    <?php if($product->product_type == 0): ?>
                                                         <span
-                                                            class="price">${{ number_format($product->product_price, 2) }}</span>
-                                                    @else
+                                                            class="price">$<?php echo e(number_format($product->product_price, 2)); ?></span>
+                                                    <?php else: ?>
                                                         <span class="price range">
-                                                            @php
+                                                            <?php
                                                                 $variations = json_decode($product->variations, true);
                                                                 if ($variations && count($variations) > 0) {
                                                                     $prices = array_column($variations, 'price');
@@ -657,27 +656,27 @@
                                                                 } else {
                                                                     echo 'N/A';
                                                                 }
-                                                            @endphp
+                                                            ?>
                                                         </span>
-                                                    @endif
+                                                    <?php endif; ?>
                                                     <div class="rating">
                                                         <i class="fa-solid fa-star"></i>
                                                         <span>4.8</span>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-center product-action-wrapper">
-                                                    <a href="{{ route('single-product', $product->slug) }}"
+                                                    <a href="<?php echo e(route('single-product', $product->slug)); ?>"
                                                         class="add-to-cart">
-                                                        @if ($product->product_type == 0)
+                                                        <?php if($product->product_type == 0): ?>
                                                             Add To Cart
-                                                        @else
+                                                        <?php else: ?>
                                                             Select Options
-                                                        @endif
+                                                        <?php endif; ?>
                                                         <i class="fas fa-arrow-right ms-2"></i>
                                                     </a>
                                                     <button
-                                                        class="wishlist-btn {{ in_array($product->id, $wishlistProductIds) ? 'active' : '' }}"
-                                                        data-product-id="{{ $product->id }}">
+                                                        class="wishlist-btn <?php echo e(in_array($product->id, $wishlistProductIds) ? 'active' : ''); ?>"
+                                                        data-product-id="<?php echo e($product->id); ?>">
 
                                                         <i class="fas fa-heart"></i>
                                                     </button>
@@ -685,59 +684,59 @@
                                             </div>
                                         </div>
                                     </div>
-                                @empty
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                     <div class="col-12">
                                         <p class="text-center">No products found in this category.</p>
                                     </div>
-                                @endforelse
+                                <?php endif; ?>
                             </div>
-                            <div class="text-center loading-spinner" id="loading-spinner-{{ $category->id }}">
+                            <div class="text-center loading-spinner" id="loading-spinner-<?php echo e($category->id); ?>">
                                 <div class="spinner-border text-primary" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
                     <!-- balloons category tab -->
-                    <div class="tab-pane fade {{ request('category') == 'balloons' ? 'active show' : '' }}"
+                    <div class="tab-pane fade <?php echo e(request('category') == 'balloons' ? 'active show' : ''); ?>"
                         id="pills-balloons" role="tabpanel" aria-labelledby="pills-balloons-tab" tabindex="0">
                         <div class="row">
-                            @foreach ($balloons as $balloon)
+                            <?php $__currentLoopData = $balloons; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $balloon): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="col-lg-4 col-md-6 product-item visible">
                                     <div class="gift-card-wrapper">
-                                        <img src="{{ asset('/public/' . $balloon->images) }}" alt="Balloons">
+                                        <img src="<?php echo e(asset('/public/' . $balloon->images)); ?>" alt="Balloons">
                                         <div class="product-info">
-                                            <h3 class="product-title">{{ $balloon->title }}</h3>
+                                            <h3 class="product-title"><?php echo e($balloon->title); ?></h3>
                                             <div class="d-flex align-items-center product-action-wrapper">
-                                                <form action="{{ route('create-balloon-enquiry-item') }}" method="POST">
-                                                    @csrf
+                                                <form action="<?php echo e(route('create-balloon-enquiry-item')); ?>" method="POST">
+                                                    <?php echo csrf_field(); ?>
                                                     <input type="hidden" name="balloon_id"
-                                                        value="{{ $balloon->id }}">
+                                                        value="<?php echo e($balloon->id); ?>">
                                                     <input type="hidden" name="enquiry_id"
-                                                        value="{{ $balloon->enquiry_id }}">
+                                                        value="<?php echo e($balloon->enquiry_id); ?>">
                                                     <input type="hidden" name="quantity" value="1"
                                                         min="1">
-                                                    @php
+                                                    <?php
                                                         $user = auth()->user();
-                                                    @endphp
-                                                    @if ($user)
+                                                    ?>
+                                                    <?php if($user): ?>
                                                         <button type="submit" class="add-to-cart">
                                                             Add
                                                         </button>
-                                                    @else
-                                                        <a href="{{ route('login') }}" class="add-to-cart">
+                                                    <?php else: ?>
+                                                        <a href="<?php echo e(route('login')); ?>" class="add-to-cart">
                                                             Login to add
                                                             <i class="fas fa-arrow-right ms-2"></i>
                                                         </a>
-                                                    @endif
+                                                    <?php endif; ?>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                 </div>
@@ -759,19 +758,19 @@
             </div>
         </div>
         <div class="row">
-            @forelse($customer_favorites as $product)
+            <?php $__empty_1 = true; $__currentLoopData = $customer_favorites; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <div class="col-lg-4 col-md-6 product-item visible">
                     <div class="gift-card-wrapper">
-                        <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
-                            alt="{{ $product->name }}">
+                        <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($product->image); ?>"
+                            alt="<?php echo e($product->name); ?>">
                         <div class="product-info">
-                            <h3 class="product-title">{{ $product->name }}</h3>
+                            <h3 class="product-title"><?php echo e($product->name); ?></h3>
                             <div class="price-rating">
-                                @if ($product->product_type == 0)
-                                    <span class="price">${{ number_format($product->product_price, 2) }}</span>
-                                @else
+                                <?php if($product->product_type == 0): ?>
+                                    <span class="price">$<?php echo e(number_format($product->product_price, 2)); ?></span>
+                                <?php else: ?>
                                     <span class="price range">
-                                        @php
+                                        <?php
                                             $variations = json_decode($product->variations, true);
                                             if ($variations && count($variations) > 0) {
                                                 $prices = array_column($variations, 'price');
@@ -784,26 +783,26 @@
                                             } else {
                                                 echo 'N/A';
                                             }
-                                        @endphp
+                                        ?>
                                     </span>
-                                @endif
+                                <?php endif; ?>
                                 <div class="rating">
                                     <i class="fa-solid fa-star"></i>
                                     <span>4.8</span>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center product-action-wrapper">
-                                <a href="{{ route('single-product', $product->slug) }}" class="add-to-cart">
-                                    @if ($product->product_type == 0)
+                                <a href="<?php echo e(route('single-product', $product->slug)); ?>" class="add-to-cart">
+                                    <?php if($product->product_type == 0): ?>
                                         Add To Cart
-                                    @else
+                                    <?php else: ?>
                                         Select Options
-                                    @endif
+                                    <?php endif; ?>
                                     <i class="fas fa-arrow-right ms-2"></i>
                                 </a>
                                 <button
-                                    class="wishlist-btn {{ in_array($product->id, $wishlistProductIds) ? 'active' : '' }}"
-                                    data-product-id="{{ $product->id }}">
+                                    class="wishlist-btn <?php echo e(in_array($product->id, $wishlistProductIds) ? 'active' : ''); ?>"
+                                    data-product-id="<?php echo e($product->id); ?>">
 
                                     <i class="fas fa-heart"></i>
                                 </button>
@@ -811,20 +810,20 @@
                         </div>
                     </div>
                 </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <div class="col-12">
                     <p class="text-center">No customer favorite products found.</p>
                 </div>
-            @endforelse
+            <?php endif; ?>
         </div>
     </div>
 </section>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
         let page = 1;
         let loading = false;
-        let activeCategory = '{{ request('category') ? request('category') : 'all' }}';
+        let activeCategory = '<?php echo e(request('category') ? request('category') : 'all'); ?>';
         let hasMoreProducts = true;
 
         // Function to check if element is in viewport
@@ -886,7 +885,7 @@
 
                         productElement.innerHTML = `
                     <div class="gift-card-wrapper">
-                        <img src="{{ asset('public/admin/assets/images/product') }}/${product.image}" alt="${product.name}">
+                        <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/${product.image}" alt="${product.name}">
                         <div class="product-info">
                             <h3 class="product-title">${product.name}</h3>
                             <div class="price-rating">
@@ -896,12 +895,12 @@
                                     <span>4.8</span>
                                 </div>
                             </div>
-                            <a href="{{ route('single-product', '') }}/${product.slug}" class="add-to-cart">
-                                @if ($product->product_type == 0)
+                            <a href="<?php echo e(route('single-product', '')); ?>/${product.slug}" class="add-to-cart">
+                                <?php if($product->product_type == 0): ?>
                                     Add To Cart
-                                @else
+                                <?php else: ?>
                                     Select Options
-                                @endif
+                                <?php endif; ?>
                                 <i class="fas fa-arrow-right ms-2"></i>
                             </a>
                         </div>
@@ -1048,9 +1047,11 @@
             }
         });
     </script>
-@endpush
-@push('js')
-    @include('components.wishlist')
-@endpush
+<?php $__env->stopPush(); ?>
+<?php $__env->startPush('js'); ?>
+    <?php echo $__env->make('components.wishlist', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->stopPush(); ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/website/shop.blade.php ENDPATH**/ ?>

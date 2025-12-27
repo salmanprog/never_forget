@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\BalloonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,8 @@ Route::post('/salesperson/profile/update', 'admin\UserController@SalesPersonUpda
 Route::post('/user/profile/update', 'admin\UserController@IndividualUpdateProfile')->name('user.profile.update');
 Route::post('/admin/profile/update', 'admin\AdminController@updateProfile')->name('admin.profile.update');
 Route::post('admin/logout', 'admin\AdminController@logOut')->name('admin.logout');
+
+
 
 
 // individual account dashboard
@@ -186,7 +189,10 @@ Route::get('/careers/applications', [App\Http\Controllers\admin\CareerController
 Route::get('/careers/{id}/applications', [App\Http\Controllers\admin\CareerController::class, 'careerApplications'])->name('careers.applications.view');
 Route::post('/careers/applications/{id}/respond', [App\Http\Controllers\admin\CareerController::class, 'respondToApplication'])->name('careers.applications.respond');
 
-
+Route::post('/create-balloon-enquiry-item', [WebController::class, 'createBalloonEnquiryItem'])->name('create-balloon-enquiry-item');
+Route::post('/balloon-enquiry', [WebController::class, 'storeBalloonEnquiry'])->name('balloon.enquiry');
+Route::get('/balloon-items', [WebController::class, 'balloonItems'])->name('balloon-items');
+Route::post('/submit-balloon-enquiry', [WebController::class, 'submitBalloonEnquiry'])->name('submit-balloon-enquiry');
 Route::group(['middleware' => ['auth']], function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');

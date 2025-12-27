@@ -296,6 +296,9 @@
                             </a>
                         </li>
                     <?php endif; ?>
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('balloon-enquiry-list')): ?>
+                       asdasdsa
+                    <?php endif; ?>
                 </ul>
             </li>
 

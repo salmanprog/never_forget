@@ -27,6 +27,9 @@ use App\Models\Career;
 use App\Models\Collaborator;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use App\Models\Company;
+use App\Models\BalloonsCategory;
+use App\Models\BalloonsEnquiry;
+use App\Models\BalloonEnquiryItem;
 
 use DB;
 
@@ -168,7 +171,75 @@ class WebController extends Controller
                 ->where('status', 1);
         })->where('status', 1)->get();
 
-        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds'));
+        $balloons = BalloonsCategory::all();
+        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons'));
+    }
+
+    public function balloonItems()
+    {
+        $page_title = 'Balloon Item || Never Forget';
+
+        $enquiries = BalloonEnquiryItem::with('balloon')
+            ->with('enquiry')->where('user_id', auth()->id())
+            ->where('enquiry_id', null)
+            ->get();
+
+        return view('website.balloon-items', compact(
+            'page_title',
+            'enquiries',
+        ));
+    }
+
+    public function createBalloonEnquiryItem(Request $request)
+    {
+        BalloonEnquiryItem::create([
+            'user_id' => auth()->id(),
+            'balloon_id' => $request->balloon_id,
+            'quantity' => 1,
+        ]);
+        return redirect()->route('balloon-items')->with('success', 'Balloon enquiry item created successfully');
+    }
+
+    public function storeBalloonEnquiry(Request $request)
+    {
+        // $enquiry = BalloonsEnquiry::where('is_submitted', 0)->first();
+        $enquiry = BalloonsEnquiry::create([
+            'message' => $request->message,
+            'is_submitted' => 1,
+        ]);
+
+        $itemsId = explode(',', $request->balloon_ids);
+        foreach ($itemsId as $itemId) {
+            $item = BalloonEnquiryItem::where('balloon_id', $itemId)->where('user_id', auth()->id())->first();
+            if ($item) {
+                $item->update([
+                    'enquiry_id' => $enquiry->id,
+                ]);
+            }
+        }
+        return redirect()->route('balloon-items');
+    }
+
+    public function submitBalloonEnquiry(Request $request)
+    {
+        $balloon_ids = $request->balloon_ids;
+        $quantity = $request->quantity;
+        $enquiry_id = $request->enquiry_id;
+        $message = $request->message;
+        $enquiry = BalloonEnquiryItem::where('enquiry_id', $enquiry_id)->first();
+        if ($enquiry) {
+            $enquiry->update([
+                'message' => $message,
+                'is_submitted' => 1,
+            ]);
+        }
+        $balloon_ids = explode(',', $balloon_ids);
+        foreach ($balloon_ids as $balloon_id) {
+            BalloonEnquiryItem::where('enquiry_id', $enquiry_id)->update([
+                'quantity' => $quantity,
+            ]);
+        }
+        return redirect()->route('balloon-items');
     }
 
     public function Career()
