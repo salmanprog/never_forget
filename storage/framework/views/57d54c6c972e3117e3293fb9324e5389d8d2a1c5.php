@@ -23,6 +23,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Message</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody id="body">
@@ -31,6 +32,7 @@
                                     <td><?php echo e($balloonEnquiry->email); ?></td>
                                     <td><?php echo e($balloonEnquiry->phone); ?></td>
                                     <td><?php echo e($balloonEnquiry->message); ?></td>
+                                    <td><?php echo e($balloonEnquiry->created_at->format('d M Y')); ?></td>
                                 </tr>
                             </tbody>
                             <thead>

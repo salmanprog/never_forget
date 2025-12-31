@@ -23,6 +23,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Message</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody id="body">
@@ -31,6 +32,7 @@
                                     <td>{{ $balloonEnquiry->email }}</td>
                                     <td>{{ $balloonEnquiry->phone }}</td>
                                     <td>{{ $balloonEnquiry->message }}</td>
+                                    <td>{{ $balloonEnquiry->created_at->format('d M Y') }}</td>
                                 </tr>
                             </tbody>
                             <thead>

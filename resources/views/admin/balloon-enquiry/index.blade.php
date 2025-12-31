@@ -45,6 +45,7 @@
                                     <th>Phone</th>
                                     {{-- <th>Quantity</th> --}}
                                     <th>Message</th>
+                                    <th>Date</th>
                                     <th width="140">Action</th>
                                 </tr>
                             </thead>
@@ -65,29 +66,9 @@
                                             @endif
                                             {{$enquiry->message}}
                                         </td>
-                                        {{-- @foreach ($enquiry->Items as $item )
-                                        <td>{{$item->quantity}}</td>
-                                        <td>{{$item->balloon->title}}</td>
-                                        <td><img src="{{ asset('/public/' . $item->balloon->images) }}" alt="{{$item->balloon->title}}"
-                                            style="min-width: 100px; max-width: 100px; max-height: 100px"
-                                            ></td>
-                                        @endforeach --}}
+                                        <td>{{ $enquiry->created_at->format('d M Y') }}</td>
                                         <td>
                                             <a class="btn btn-info btn-sm" href="{{route('balloon_enquiry.show', $enquiry->id)}}">view</a>
-                                        </td>
-                                        <td></td>
-                                        <td>
-                                            {{-- @if ($model->status)
-                                                <span class="badge label-success">Active</span>
-                                            @else
-                                                <span class="badge label-danger">In-Active</span>
-                                            @endif --}}
-                                        </td>
-                                        <td width="250px">
-                                            {{-- <button class="btn btn-danger btn-xs delete" data-slug="{{ $model->id }}"
-                                                data-del-url="{{ url('contactus', $model->id) }}"><i
-                                                    class="fa fa-trash"></i> Delete</button> --}}
-                                            
                                         </td>
                                     </tr>
                                 @endforeach

@@ -34,6 +34,7 @@
                                     <th>Phone</th>
                                     
                                     <th>Message</th>
+                                    <th>Date</th>
                                     <th width="140">Action</th>
                                 </tr>
                             </thead>
@@ -56,17 +57,9 @@
                                             <?php echo e($enquiry->message); ?>
 
                                         </td>
-                                        
+                                        <td><?php echo e($enquiry->created_at->format('d M Y')); ?></td>
                                         <td>
                                             <a class="btn btn-info btn-sm" href="<?php echo e(route('balloon_enquiry.show', $enquiry->id)); ?>">view</a>
-                                        </td>
-                                        <td></td>
-                                        <td>
-                                            
-                                        </td>
-                                        <td width="250px">
-                                            
-                                            
                                         </td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
