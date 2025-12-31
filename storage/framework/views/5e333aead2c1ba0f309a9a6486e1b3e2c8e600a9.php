@@ -393,13 +393,11 @@ unset($__errorArgs, $__bag); ?>
 
         $('.enquiry-form').on('submit', function(e) {
             e.preventDefault();
-
             let form = $(this);
-
             $.ajax({
                 url: form.attr('action'),
                 type: 'POST',
-                data: form.serialize(), // ✅ CSRF + all inputs
+                data: form.serialize(),
                 success: function(response) {
                     Swal.fire({
                         icon: 'success',

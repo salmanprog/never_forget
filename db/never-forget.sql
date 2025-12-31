@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 18, 2025 at 09:08 PM
+-- Generation Time: Dec 31, 2025 at 11:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,6 +48,87 @@ CREATE TABLE `about_us` (
 
 INSERT INTO `about_us` (`id`, `created_by`, `first_title`, `second_title`, `heading`, `description`, `first_image`, `second_image`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Best Restaurant', 'Rajani’s Kitchen', 'Great taste for satisfaction!', '<p>In half a decade&rsquo;s history, Rajani&rsquo;s Kitchen has consistently strived to be more than just another Indian restaurant.<br /><br />Rajani&rsquo;s Kitchen is established in 2017 by Mrs. Rajani Bondugula&rsquo;s family, Rajani&rsquo;s Kitchen started out as a &ldquo;Best Kept Secret&rdquo; restaurant that has turned into a regionally celebrated foodie destination for Indian / Telugu community for homemade food in Chantilly, Fairfax County, Virginia &amp; Washington DC metropolitan area. People consider Rajani&rsquo;s Kitchen as their second kitchen at home far away from their home in India.</p>', '20240205183048.jpg', '20240205183048.png', '1', NULL, '2024-02-05 13:22:29', '2024-02-05 13:32:41');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `balloons_category`
+--
+
+CREATE TABLE `balloons_category` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `images` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `balloons_category`
+--
+
+INSERT INTO `balloons_category` (`id`, `title`, `images`, `description`, `created_at`, `updated_at`) VALUES
+(10, 'Organic Balloons Garland Grab and Go (6ft min)', 'assets/website/images/balloons/08.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(11, 'Circle Arch', 'assets/website/images/balloons/04.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(12, 'Organic Balloon Tunnel', 'assets/website/images/balloons/09.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(13, 'Marquee Balloon Styling', 'assets/website/images/balloons/01.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(14, 'Balloon Arch', 'assets/website/images/balloons/02.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(15, 'Organic Balloon Wall', 'assets/website/images/balloons/10.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(16, 'Party Focal Point Organic balloon garland with Shimmer wall', 'assets/website/images/balloons/07.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(17, 'Square Frame', 'assets/website/images/balloons/06.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(18, 'Balloon Columns', 'assets/website/images/balloons/05.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `balloons_enquiry`
+--
+
+CREATE TABLE `balloons_enquiry` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `message` text DEFAULT NULL,
+  `is_submitted` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `user_name` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `phone` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `balloons_enquiry`
+--
+
+INSERT INTO `balloons_enquiry` (`id`, `message`, `is_submitted`, `created_at`, `updated_at`, `user_name`, `email`, `phone`) VALUES
+(64, 'asasdasdsasadasasadasdasd', 1, '2025-12-31 16:37:16', '2025-12-31 16:37:16', 'webdev', 'webdev@yopmail.com', '7284587308'),
+(65, 'asdasdasdasdasdasdasd', 1, '2025-12-31 16:38:04', '2025-12-31 16:38:04', 'asdasdasdsad', 'mokosu@mailinator.com', '1234567894'),
+(66, 'asdasdasdasdasdsasadsadsadsadsad', 1, '2025-12-31 16:57:38', '2025-12-31 16:57:38', 'webdev', 'webdev@yopmail.com', '7284587308');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `balloon_enquiry_items`
+--
+
+CREATE TABLE `balloon_enquiry_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `balloon_id` bigint(20) UNSIGNED NOT NULL,
+  `enquiry_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `balloon_enquiry_items`
+--
+
+INSERT INTO `balloon_enquiry_items` (`id`, `user_id`, `balloon_id`, `enquiry_id`, `quantity`, `created_at`, `updated_at`) VALUES
+(65, 175, 11, 64, 8, '2025-12-31 16:37:08', '2025-12-31 16:37:16'),
+(66, NULL, 12, 65, 1, '2025-12-31 16:37:50', '2025-12-31 16:38:04'),
+(68, 175, 14, 66, 5, '2025-12-31 16:54:20', '2025-12-31 16:57:38');
 
 -- --------------------------------------------------------
 
@@ -765,7 +846,8 @@ INSERT INTO `categories` (`id`, `created_by`, `parent_id`, `title`, `slug`, `ima
 (3, 1, '0', 'Fruit Bouquets', 'fruit-bouquets', '20250416221514.webp', '1', NULL, '2025-04-16 17:15:14', '2025-04-16 17:15:14'),
 (4, 1, '0', 'Gift Baskets', 'gift-baskets', '20250416221558.webp', '1', NULL, '2025-04-16 17:15:58', '2025-04-16 17:15:58'),
 (5, 1, '0', 'Plants', 'plants', '20250416221650.webp', '1', NULL, '2025-04-16 17:16:50', '2025-04-22 11:36:41'),
-(6, 1, '0', 'Personalized Business Gifts', 'personalized-business-gifts', '20250416221754.webp', '1', NULL, '2025-04-16 17:17:54', '2025-04-22 11:36:45');
+(6, 1, '0', 'Personalized Business Gifts', 'personalized-business-gifts', '20250416221754.webp', '1', NULL, '2025-04-16 17:17:54', '2025-04-22 11:36:45'),
+(7, 1, NULL, 'Balloons', 'balloons', '20251219224746.png', '1', '2025-12-25 22:03:17', '2025-12-19 17:47:46', '2025-12-25 17:03:17');
 
 -- --------------------------------------------------------
 
@@ -935,7 +1017,8 @@ INSERT INTO `companies` (`id`, `user_id`, `name`, `website`, `address`, `industr
 (24, NULL, 'dev4company', 'www.google.com', 'Street 123', 'ABC Company', 'dev4@gmail.com', '1234567894', 'Basic', 'Both', NULL, 168, '2025-12-18 12:06:33', '2025-12-18 12:06:33'),
 (25, NULL, 'dev5company', 'www.google.com', 'Street 123', 'ABC Company', 'dev5@yopmail.com', '1234567894', 'Basic', 'Both', NULL, 169, '2025-12-18 12:16:48', '2025-12-18 12:16:48'),
 (26, NULL, 'Callahan and Schroeder Inc', 'www.google.com', 'Street 123', 'ABC Company', 'jepuciza@mailinator.com', '+1 (647) 838-9803', 'Basic', 'Both', NULL, 171, '2025-12-18 12:23:52', '2025-12-18 12:23:52'),
-(27, NULL, 'legacytech', 'www.google.com', 'Street 123', 'ABC Company', 'markjohson@yopmail.com', '7284587308', 'Basic', 'Both', NULL, 172, '2025-12-18 13:22:07', '2025-12-18 13:22:07');
+(27, NULL, 'legacytech', 'www.google.com', 'Street 123', 'ABC Company', 'markjohson@yopmail.com', '7284587308', 'Basic', 'Both', NULL, 172, '2025-12-18 13:22:07', '2025-12-18 13:22:07'),
+(28, NULL, 'Robertson and Aguirre LLC', 'www.google.com', 'Street 123', 'ABC Company', 'waniko@mailinator.com', '+1 (335) 774-8706', 'Basic', 'Both', NULL, 174, '2025-12-31 14:52:05', '2025-12-31 14:52:05');
 
 -- --------------------------------------------------------
 
@@ -1205,7 +1288,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (109, '2025_10_06_205519_add_color_columns_to_business_card_orders_table', 72),
 (110, '2025_10_14_002111_add_front_back_design_fields_to_business_cards_table', 73),
 (111, '2025_10_23_201433_create_travel_type_table', 74),
-(112, '2025_12_15_232504_create_wishlists_table', 75);
+(112, '2025_12_15_232504_create_wishlists_table', 75),
+(113, '2025_12_25_225428_create_balloons_category_table', 76),
+(116, '2025_12_25_225512_create_balloons_enquiry_table', 77),
+(118, '2025_12_26_180915_create_balloon_enquiry_items', 78);
 
 -- --------------------------------------------------------
 
@@ -1331,6 +1417,8 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (2, 'App\\Models\\User', 151),
 (2, 'App\\Models\\User', 152),
 (2, 'App\\Models\\User', 155),
+(2, 'App\\Models\\User', 173),
+(2, 'App\\Models\\User', 175),
 (5, 'App\\Models\\User', 83),
 (5, 'App\\Models\\User', 86),
 (5, 'App\\Models\\User', 89),
@@ -1365,7 +1453,8 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (5, 'App\\Models\\User', 169),
 (5, 'App\\Models\\User', 170),
 (5, 'App\\Models\\User', 171),
-(5, 'App\\Models\\User', 172);
+(5, 'App\\Models\\User', 172),
+(5, 'App\\Models\\User', 174);
 
 -- --------------------------------------------------------
 
@@ -2042,7 +2131,11 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `permission`, `deleted_at
 (282, 'company_employee-list', 'web', 'list', NULL, '2025-11-10 11:45:36', '2025-11-10 11:45:36'),
 (283, 'company_employee-create', 'web', 'create', NULL, '2025-11-10 11:45:36', '2025-11-10 11:45:36'),
 (284, 'company_employee-edit', 'web', 'edit', NULL, '2025-11-10 11:45:36', '2025-11-10 11:45:36'),
-(285, 'company_employee-delete', 'web', 'delete', NULL, '2025-11-10 11:45:36', '2025-11-10 11:45:36');
+(285, 'company_employee-delete', 'web', 'delete', NULL, '2025-11-10 11:45:36', '2025-11-10 11:45:36'),
+(296, 'balloon_enquiry-list', 'web', 'list', NULL, '2025-12-30 14:37:05', '2025-12-30 14:37:05'),
+(297, 'balloon_enquiry-create', 'web', 'create', NULL, '2025-12-30 14:37:05', '2025-12-30 14:37:05'),
+(298, 'balloon_enquiry-edit', 'web', 'edit', NULL, '2025-12-30 14:37:05', '2025-12-30 14:37:05'),
+(299, 'balloon_enquiry-delete', 'web', 'delete', NULL, '2025-12-30 14:37:05', '2025-12-30 14:37:05');
 
 -- --------------------------------------------------------
 
@@ -2433,7 +2526,11 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (284, 1),
 (284, 5),
 (285, 1),
-(285, 5);
+(285, 5),
+(296, 1),
+(297, 1),
+(298, 1),
+(299, 1);
 
 -- --------------------------------------------------------
 
@@ -3744,7 +3841,10 @@ INSERT INTO `users` (`id`, `user_id`, `account_type`, `company_id`, `name`, `fir
 (169, '4630', 'Company', NULL, 'dev', 'dev', 'dev', 'dev5@yopmail.com', '1234567894', NULL, '$2y$10$6eYYvCwygyrlgMTeEgOiDOT7CvjPesphC2mei.K4x7vylyWlZ0EHe', NULL, '6944370045251', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-18 12:16:48', '2025-12-18 12:16:48'),
 (170, NULL, 'Company', NULL, 'Faith', 'Faith', 'Winters', 'tinene@mailinator.com', '+1 (138) 398-3627', NULL, '$2y$10$hl5xuynLRmwbQWya2zVlO.yXdj.4ScVwDglLg2p6xUpTC2WT7RaFK', NULL, '69443889513f8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-18 12:23:21', '2025-12-18 12:23:21'),
 (171, NULL, 'Company', NULL, 'Phelan', 'Phelan', 'Berry', 'jepuciza@mailinator.com', '+1 (647) 838-9803', NULL, '$2y$10$.2h.rOR9LUqeHya2BwOX6eyF0SxK7GJ9.mfTopgQHZ.1rpfAXuO7u', NULL, '694438a7d0ca0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-18 12:23:51', '2025-12-18 12:23:51'),
-(172, '6113', 'Company', NULL, 'mark', 'mark', 'johnson', 'markjohson@yopmail.com', '7284587308', '2025-12-18 13:23:16', '$2y$10$BMSb0hnTmcKXUtlw8zVOzuzt2txL9ZJtsc3RFzqO7n64RoIvDP802', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-18 13:22:07', '2025-12-18 13:23:16');
+(172, '6113', 'Company', NULL, 'mark', 'mark', 'johnson', 'markjohson@yopmail.com', '7284587308', '2025-12-18 13:23:16', '$2y$10$BMSb0hnTmcKXUtlw8zVOzuzt2txL9ZJtsc3RFzqO7n64RoIvDP802', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-18 13:22:07', '2025-12-18 13:23:16'),
+(173, '7331', 'Individual', NULL, 'Declan', 'Declan', 'Mack', 'xeqebybel@yopmail.com', '+1 (108) 295-7492', NULL, '$2y$10$C8.Z45Q1b9H1Agnk7YpsDeMbBo9GIKb4qA2BkeusasIipYeTqjqPa', NULL, '694494ec0a747', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-18 18:57:32', '2025-12-18 18:57:32'),
+(174, '9647', 'Company', NULL, 'Christian', 'Christian', 'Cardenas', 'waniko@mailinator.com', '+1 (335) 774-8706', NULL, '$2y$10$rF8gkwCTaP42q09eyKa.rOtewtPfMWSX4S9GYSzV79gu.Wkhy6w5m', NULL, '69557ee51cb8c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-31 14:52:05', '2025-12-31 14:52:05'),
+(175, '9834', 'Individual', NULL, 'webdev', 'webdev', 'test', 'webdev@yopmail.com', '7284587308', NULL, '$2y$10$8JidvJpwdfxboddDESmKOebtRVytvwHKFiSzw/A7byxq5LM/.05Wq', NULL, '69557f13dd979', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-31 14:52:51', '2025-12-31 14:52:51');
 
 -- --------------------------------------------------------
 
@@ -3912,6 +4012,27 @@ INSERT INTO `wishlists` (`id`, `user_id`, `product_id`, `created_at`, `updated_a
 --
 ALTER TABLE `about_us`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `balloons_category`
+--
+ALTER TABLE `balloons_category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `balloons_enquiry`
+--
+ALTER TABLE `balloons_enquiry`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `balloon_enquiry_items`
+--
+ALTER TABLE `balloon_enquiry_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `balloon_enquiry_items_user_id_foreign` (`user_id`),
+  ADD KEY `balloon_enquiry_items_balloon_id_foreign` (`balloon_id`),
+  ADD KEY `balloon_enquiry_items_enquiry_id_foreign` (`enquiry_id`);
 
 --
 -- Indexes for table `billing_addresses`
@@ -4248,6 +4369,24 @@ ALTER TABLE `about_us`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `balloons_category`
+--
+ALTER TABLE `balloons_category`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `balloons_enquiry`
+--
+ALTER TABLE `balloons_enquiry`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+
+--
+-- AUTO_INCREMENT for table `balloon_enquiry_items`
+--
+ALTER TABLE `balloon_enquiry_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+
+--
 -- AUTO_INCREMENT for table `billing_addresses`
 --
 ALTER TABLE `billing_addresses`
@@ -4317,7 +4456,7 @@ ALTER TABLE `career_categories`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -4335,7 +4474,7 @@ ALTER TABLE `collaborators`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `company_employees`
@@ -4377,7 +4516,7 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
 -- AUTO_INCREMENT for table `newsletters`
@@ -4431,7 +4570,7 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=286;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=300;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -4497,7 +4636,7 @@ ALTER TABLE `travel_types`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
 
 --
 -- AUTO_INCREMENT for table `user_business_card_designs`
@@ -4526,6 +4665,14 @@ ALTER TABLE `wishlists`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `balloon_enquiry_items`
+--
+ALTER TABLE `balloon_enquiry_items`
+  ADD CONSTRAINT `balloon_enquiry_items_balloon_id_foreign` FOREIGN KEY (`balloon_id`) REFERENCES `balloons_category` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `balloon_enquiry_items_enquiry_id_foreign` FOREIGN KEY (`enquiry_id`) REFERENCES `balloons_enquiry` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `balloon_enquiry_items_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `business_cards`
