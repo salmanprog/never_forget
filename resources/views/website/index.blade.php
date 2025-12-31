@@ -442,7 +442,7 @@
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{ asset('public/assets/website/images') }}/balloon.png" alt="Balloons"
+                        <img src="{{ asset('public/assets/website/images') }}/balloons/03.png" alt="Balloons"
                             class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">

@@ -12,7 +12,6 @@
     }
 ?>
 
-
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
 <input type="hidden" id="page_url" value="<?php echo e(route('mts-dashboard.index')); ?>">

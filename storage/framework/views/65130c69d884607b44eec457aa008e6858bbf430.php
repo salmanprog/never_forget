@@ -26,10 +26,10 @@
                 </li>
             <?php endif; ?> 
            
-            <li class="treeview <?php echo e(request()->is('page') ||request()->is('page/*') ||request()->is('page_setting/*') ||request()->is('variations') ||request()->is('variations/*') ||request()->is('product') ||request()->is('product/*') ||request()->is('category') ||request()->is('category/*') ||request()->is('order') ||request()->is('order/*') ||request()->is('user') ||request()->is('user/*') ||request()->is('coupon') ||request()->is('coupon/*') ||request()->is('collaborator') ||request()->is('collaborator/*') ||request()->is('testimonial') ||request()->is('testimonial/*') ||request()->is('contactus') ||request()->is('contactus/*') ||request()->is('careers') ||request()->is('careers/*') ||request()->is('career_category') ||request()->is('career_category/*') ||request()->is('business_card_options') ||request()->is('business_card_options/*') ||request()->is('business_card_categories') ||request()->is('business_card_categories/*') ||request()->is('business_card_templates') ||request()->is('business_card_templates/*') ||request()->is('business_card') ||request()->is('business_card/*') ||request()->is('newsletter') ||request()->is('newsletter/*') ||request()->is('faq') ||request()->is('faq/*') ||request()->is('why_choose_us') ||request()->is('why_choose_us/*')? 'active': ''); ?>"
+            <li class="treeview <?php echo e(request()->is('page') ||request()->is('page/*') ||request()->is('page_setting/*') ||request()->is('variations') ||request()->is('variations/*') ||request()->is('product') ||request()->is('product/*') ||request()->is('category') ||request()->is('category/*') ||request()->is('order') ||request()->is('order/*') ||request()->is('coupon') ||request()->is('coupon/*') ||request()->is('collaborator') ||request()->is('collaborator/*') ||request()->is('testimonial') ||request()->is('testimonial/*') ||request()->is('careers') ||request()->is('careers/*') ||request()->is('career_category') ||request()->is('career_category/*') ||request()->is('business_card_options') ||request()->is('business_card_options/*') ||request()->is('business_card_categories') ||request()->is('business_card_categories/*') ||request()->is('business_card_templates') ||request()->is('business_card_templates/*') ||request()->is('business_card') ||request()->is('business_card/*') ||request()->is('newsletter') ||request()->is('newsletter/*') ||request()->is('faq') ||request()->is('faq/*') ||request()->is('why_choose_us') ||request()->is('why_choose_us/*')? 'active': ''); ?>"
                 style="height: auto;">
                 <a href="#"
-                    class="<?php echo e(request()->is('page') ||request()->is('page/*') ||request()->is('page_setting/*') ||request()->is('variations') ||request()->is('variations/*') ||request()->is('product') ||request()->is('product/*') ||request()->is('category') ||request()->is('category/*') ||request()->is('order') ||request()->is('order/*') ||request()->is('user') ||request()->is('user/*') ||request()->is('coupon') ||request()->is('coupon/*') ||request()->is('collaborator') ||request()->is('collaborator/*') ||request()->is('testimonial') ||request()->is('testimonial/*') ||request()->is('contactus') ||request()->is('contactus/*') ||request()->is('careers') ||request()->is('careers/*') ||request()->is('career_category') ||request()->is('career_category/*') ||request()->is('business_card_options') ||request()->is('business_card_options/*') ||request()->is('business_card_categories') ||request()->is('business_card_categories/*') ||request()->is('business_card_templates') ||request()->is('business_card_templates/*') ||request()->is('business_card') ||request()->is('business_card/*') ||request()->is('newsletter') ||request()->is('newsletter/*') ||request()->is('faq') ||request()->is('faq/*') ||request()->is('why_choose_us') ||request()->is('why_choose_us/*')? 'active': ''); ?>">
+                    class="<?php echo e(request()->is('page') ||request()->is('page/*') ||request()->is('page_setting/*') ||request()->is('variations') ||request()->is('variations/*') ||request()->is('product') ||request()->is('product/*') ||request()->is('category') ||request()->is('category/*') ||request()->is('order') ||request()->is('order/*') ||request()->is('coupon') ||request()->is('coupon/*') ||request()->is('collaborator') ||request()->is('collaborator/*') ||request()->is('testimonial') ||request()->is('testimonial/*') ||request()->is('careers') ||request()->is('careers/*') ||request()->is('career_category') ||request()->is('career_category/*') ||request()->is('business_card_options') ||request()->is('business_card_options/*') ||request()->is('business_card_categories') ||request()->is('business_card_categories/*') ||request()->is('business_card_templates') ||request()->is('business_card_templates/*') ||request()->is('business_card') ||request()->is('business_card/*') ||request()->is('newsletter') ||request()->is('newsletter/*') ||request()->is('faq') ||request()->is('faq/*') ||request()->is('why_choose_us') ||request()->is('why_choose_us/*') ? 'active': ''); ?>">
                     <i class="fa fa-cog"></i>
                     <span>Website Settings</span>
                     <span class="pull-right-container">
@@ -37,7 +37,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu"
-                    style="display: <?php echo e(request()->is('page') ||request()->is('page/*') ||request()->is('page_setting/*') ||request()->is('variations') ||request()->is('variations/*') ||request()->is('product') ||request()->is('product/*') ||request()->is('category') ||request()->is('category/*') ||request()->is('order') ||request()->is('order/*') ||request()->is('user') ||request()->is('user/*') ||request()->is('coupon') ||request()->is('coupon/*') ||request()->is('collaborator') ||request()->is('collaborator/*') ||request()->is('testimonial') ||request()->is('testimonial/*') ||request()->is('contactus') ||request()->is('contactus/*') ||request()->is('careers') ||request()->is('careers/*') ||request()->is('career_category') ||request()->is('career_category/*') ||request()->is('business_card_options') ||request()->is('business_card_options/*') ||request()->is('business_card_categories') ||request()->is('business_card_categories/*') ||request()->is('business_card_templates') ||request()->is('business_card_templates/*') ||request()->is('business_card') ||request()->is('business_card/*') ||request()->is('newsletter') ||request()->is('newsletter/*') ||request()->is('faq') ||request()->is('faq/*') ||request()->is('why_choose_us') ||request()->is('why_choose_us/*')? 'block': 'none'); ?>;">
+                    style="display: <?php echo e(request()->is('page') ||request()->is('page/*') ||request()->is('page_setting/*') ||request()->is('variations') ||request()->is('variations/*') ||request()->is('product') ||request()->is('product/*') ||request()->is('category') ||request()->is('category/*') ||request()->is('order') ||request()->is('order/*') ||request()->is('coupon') ||request()->is('coupon/*') ||request()->is('collaborator') ||request()->is('collaborator/*') ||request()->is('testimonial') ||request()->is('testimonial/*') ||request()->is('careers') ||request()->is('careers/*') ||request()->is('career_category') ||request()->is('career_category/*') ||request()->is('business_card_options') ||request()->is('business_card_options/*') ||request()->is('business_card_categories') ||request()->is('business_card_categories/*') ||request()->is('business_card_templates') ||request()->is('business_card_templates/*') ||request()->is('business_card') ||request()->is('business_card/*') ||request()->is('newsletter') ||request()->is('newsletter/*') ||request()->is('faq') ||request()->is('faq/*') ||request()->is('why_choose_us') ||request()->is('why_choose_us/*') ? 'block': 'none'); ?>;">
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('page-list')): ?>
                         <li class="treeview">
                             <a href="<?php echo e(route('page.index')); ?>"
@@ -233,16 +233,16 @@
                 </ul>
             </li>
 
-            <li class="treeview">
-                <a href="">
+            <li class="treeview <?php echo e(request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') ? 'active': ''); ?>">
+                <a href="" class="<?php echo e(request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') ? 'active': ''); ?>">
                     <i class="fa fa-gift"></i> <span>MTS Dashboard</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
 
-                <ul class="treeview-menu" style="display: <?php echo e(request()->is('mts-dashboard*') ? 'block' : 'none'); ?>;">
-                     <li class="treeview <?php echo e(request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show') ? 'active' : ''); ?>"
+                <ul class="treeview-menu" style="display: <?php echo e(request()->is('mts-dashboard*') || request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*/show')  ? 'block' : 'none'); ?>;">
+                     <li class="treeview <?php echo e(request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show')  ||request()->is('user') ||request()->is('user/*')  ? 'active' : ''); ?>"
                         style="height: auto;">
                         <a href="#"
                             class="<?php echo e(request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show') ? 'active' : ''); ?>">
@@ -253,7 +253,7 @@
                             </span>
                         </a>
                         <ul class="treeview-menu"
-                            style="display: <?php echo e(request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show') ? 'block' : 'none'); ?>;">
+                            style="display: <?php echo e(request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show')  ? 'block' : 'none'); ?>;">
 
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('user-list')): ?>
                                 <li class="treeview">
@@ -296,8 +296,14 @@
                             </a>
                         </li>
                     <?php endif; ?>
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('balloon-enquiry-list')): ?>
-                       asdasdsa
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('balloon_enquiry-list')): ?>
+                    <li class="treeview">
+                        <a href="<?php echo e(route('balloon_enquiry.index')); ?>"
+                        class="<?php echo e(request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') ? 'active' : ''); ?>"
+                        >
+                            <i class="fa fa-envelope"></i> <span>Balloon Enquiry</span>
+                        </a>
+                    </li>
                     <?php endif; ?>
                 </ul>
             </li>

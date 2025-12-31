@@ -192,6 +192,7 @@ class WebController extends Controller
 
     public function createBalloonEnquiryItem(Request $request)
     {
+
         BalloonEnquiryItem::create([
             'user_id' => auth()->id(),
             'balloon_id' => $request->balloon_id,
@@ -202,10 +203,21 @@ class WebController extends Controller
 
     public function storeBalloonEnquiry(Request $request)
     {
-        // $enquiry = BalloonsEnquiry::where('is_submitted', 0)->first();
+        if (!auth()->check()) {
+            $request->validate([
+                'user_name'  => 'required|string|max:100',
+                'email' => 'required|email',
+                'phone' => 'nullable|string|max:20',
+            ]);
+        };
+
+        $user = auth()->user();
         $enquiry = BalloonsEnquiry::create([
             'message' => $request->message,
             'is_submitted' => 1,
+            'user_name' => $user ? $user->name : $request->user_name,
+            'email'     => $user ? $user->email : $request->email,
+            'phone' => $user ? $user->phone : $request->phone,
         ]);
 
         $itemsId = explode(',', $request->balloon_ids);
@@ -220,12 +232,35 @@ class WebController extends Controller
         return redirect()->route('balloon-items');
     }
 
+    public function destroyBalloonEnquiry($id)
+    {
+
+        $enquiryItem = BalloonEnquiryItem::findOrFail($id);
+
+        if (!$enquiryItem) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Record not found'
+            ]);
+        }
+        $enquiryItem->delete();
+
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item Successfully Removed',
+        ]);
+    }
+
     public function submitBalloonEnquiry(Request $request)
     {
+
+
         $balloon_ids = $request->balloon_ids;
         $quantity = $request->quantity;
         $enquiry_id = $request->enquiry_id;
         $message = $request->message;
+        $quantities = $request->quantity;
         $enquiry = BalloonEnquiryItem::where('enquiry_id', $enquiry_id)->first();
         if ($enquiry) {
             $enquiry->update([
@@ -233,13 +268,36 @@ class WebController extends Controller
                 'is_submitted' => 1,
             ]);
         }
+
         $balloon_ids = explode(',', $balloon_ids);
         foreach ($balloon_ids as $balloon_id) {
             BalloonEnquiryItem::where('enquiry_id', $enquiry_id)->update([
                 'quantity' => $quantity,
             ]);
         }
-        return redirect()->route('balloon-items');
+        BalloonEnquiryItem::where('enquiry_id', $enquiry_id)->delete();
+        // return redirect()->route('balloon-items');
+        return response()->json([
+            'success' => true, 
+            'message' => 'Your Enquiry Submitted Successfully',
+        ]);
+    }
+
+    public function updateQuantity(Request $request)
+    {
+        $request->validate([
+            'id'       => 'required|integer',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        BalloonEnquiryItem::where('id', $request->id)
+            ->update([
+                'quantity' => $request->quantity
+            ]);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     public function Career()

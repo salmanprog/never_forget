@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\BalloonController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -190,8 +191,11 @@ Route::get('/careers/{id}/applications', [App\Http\Controllers\admin\CareerContr
 Route::post('/careers/applications/{id}/respond', [App\Http\Controllers\admin\CareerController::class, 'respondToApplication'])->name('careers.applications.respond');
 
 Route::post('/create-balloon-enquiry-item', [WebController::class, 'createBalloonEnquiryItem'])->name('create-balloon-enquiry-item');
+Route::post('/balloon-items/update-quantity',[WebController::class, 'updateQuantity'])->name('balloon-items.update-quantity');
+
 Route::post('/balloon-enquiry', [WebController::class, 'storeBalloonEnquiry'])->name('balloon.enquiry');
 Route::get('/balloon-items', [WebController::class, 'balloonItems'])->name('balloon-items');
+Route::post('/balloon-items/{id}', [WebController::class, 'destroyBalloonEnquiry'])->name('balloon-items-delete');
 Route::post('/submit-balloon-enquiry', [WebController::class, 'submitBalloonEnquiry'])->name('submit-balloon-enquiry');
 Route::group(['middleware' => ['auth']], function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
@@ -280,6 +284,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     //Testimonial
     Route::resource('testimonial', 'admin\TestimonialController');
+
+    //BallonEnquiry
+    Route::resource('balloon_enquiry', 'admin\BalloonEnquiryController');
 
     //CareerCategory
     Route::resource('career_category', 'admin\CareerCategoryController');

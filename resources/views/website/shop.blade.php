@@ -342,6 +342,12 @@
         left: -50px;
     }
 
+    .gift-card-wrapper.balloon-images img {
+        width: 100%;
+        height: 326px;
+        object-fit: contain;
+    }
+
     /* .shop-nav-slider .swiper-button-next:after,
     .shop-nav-slider .swiper-button-prev:after {
         width: 20px;
@@ -706,12 +712,13 @@
                         <div class="row">
                             @foreach ($balloons as $balloon)
                                 <div class="col-lg-4 col-md-6 product-item visible">
-                                    <div class="gift-card-wrapper">
+                                    <div class="gift-card-wrapper balloon-images">
                                         <img src="{{ asset('/public/' . $balloon->images) }}" alt="Balloons">
                                         <div class="product-info">
                                             <h3 class="product-title">{{ $balloon->title }}</h3>
                                             <div class="d-flex align-items-center product-action-wrapper">
-                                                <form action="{{ route('create-balloon-enquiry-item') }}" method="POST">
+                                                <form action="{{ route('create-balloon-enquiry-item') }}"
+                                                    method="POST">
                                                     @csrf
                                                     <input type="hidden" name="balloon_id"
                                                         value="{{ $balloon->id }}">
@@ -719,19 +726,10 @@
                                                         value="{{ $balloon->enquiry_id }}">
                                                     <input type="hidden" name="quantity" value="1"
                                                         min="1">
-                                                    @php
-                                                        $user = auth()->user();
-                                                    @endphp
-                                                    @if ($user)
-                                                        <button type="submit" class="add-to-cart">
+                                                        <button type="submit" class="add-to-cart"
+                                                            style="width: 100%">
                                                             Add
                                                         </button>
-                                                    @else
-                                                        <a href="{{ route('login') }}" class="add-to-cart">
-                                                            Login to add
-                                                            <i class="fas fa-arrow-right ms-2"></i>
-                                                        </a>
-                                                    @endif
                                                 </form>
                                             </div>
                                         </div>

@@ -16,6 +16,7 @@ class CreateBalloonsEnquiryTable extends Migration
         Schema::create('balloons_enquiry', function (Blueprint $table) {
             $table->id();
             $table->text('message')->nullable();
+            $table->text('phone')->nullable();
             $table->integer('is_submitted')->default(0);
             $table->timestamps();
         });

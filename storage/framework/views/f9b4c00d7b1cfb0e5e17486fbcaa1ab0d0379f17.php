@@ -341,6 +341,12 @@
         left: -50px;
     }
 
+    .gift-card-wrapper.balloon-images img {
+        width: 100%;
+        height: 326px;
+        object-fit: contain;
+    }
+
     /* .shop-nav-slider .swiper-button-next:after,
     .shop-nav-slider .swiper-button-prev:after {
         width: 20px;
@@ -705,12 +711,13 @@
                         <div class="row">
                             <?php $__currentLoopData = $balloons; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $balloon): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="col-lg-4 col-md-6 product-item visible">
-                                    <div class="gift-card-wrapper">
+                                    <div class="gift-card-wrapper balloon-images">
                                         <img src="<?php echo e(asset('/public/' . $balloon->images)); ?>" alt="Balloons">
                                         <div class="product-info">
                                             <h3 class="product-title"><?php echo e($balloon->title); ?></h3>
                                             <div class="d-flex align-items-center product-action-wrapper">
-                                                <form action="<?php echo e(route('create-balloon-enquiry-item')); ?>" method="POST">
+                                                <form action="<?php echo e(route('create-balloon-enquiry-item')); ?>"
+                                                    method="POST">
                                                     <?php echo csrf_field(); ?>
                                                     <input type="hidden" name="balloon_id"
                                                         value="<?php echo e($balloon->id); ?>">
@@ -718,19 +725,10 @@
                                                         value="<?php echo e($balloon->enquiry_id); ?>">
                                                     <input type="hidden" name="quantity" value="1"
                                                         min="1">
-                                                    <?php
-                                                        $user = auth()->user();
-                                                    ?>
-                                                    <?php if($user): ?>
-                                                        <button type="submit" class="add-to-cart">
+                                                        <button type="submit" class="add-to-cart"
+                                                            style="width: 100%">
                                                             Add
                                                         </button>
-                                                    <?php else: ?>
-                                                        <a href="<?php echo e(route('login')); ?>" class="add-to-cart">
-                                                            Login to add
-                                                            <i class="fas fa-arrow-right ms-2"></i>
-                                                        </a>
-                                                    <?php endif; ?>
                                                 </form>
                                             </div>
                                         </div>

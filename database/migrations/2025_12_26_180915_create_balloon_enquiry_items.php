@@ -15,7 +15,7 @@ class CreateBalloonEnquiryItems extends Migration
     {
         Schema::create('balloon_enquiry_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('balloon_id');
             $table->unsignedBigInteger('enquiry_id')->nullable();
             $table->integer('quantity')->default(0);

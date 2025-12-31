@@ -32,11 +32,14 @@
                                 <div class="col-lg-12">
                                     <div class="form-group mb-20">
                                         <span style="color: red"><?php echo e($errors->first('account_type')); ?></span>
-                                        <label class="form-label">Account Type<span style="color: red">*</span> <span class="account-type-wrapper" style="color: red"></span></label>
+                                        <label class="form-label">Account Type<span style="color: red">*</span> <span
+                                                class="account-type-wrapper" style="color: red"></span></label>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="account_type" id="individual" value="Individual" <?php echo e(old('account_type') == 'Individual' ? 'checked' : ''); ?> required>
+                                                    <input class="form-check-input" type="radio" name="account_type"
+                                                        id="individual" value="Individual"
+                                                        <?php echo e(old('account_type') == 'Individual' ? 'checked' : ''); ?> required>
                                                     <label class="form-check-label" for="individual">
                                                         Individual Account
                                                     </label>
@@ -44,7 +47,9 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="account_type" id="company" value="Company" <?php echo e(old('account_type') == 'Company' ? 'checked' : ''); ?>>
+                                                    <input class="form-check-input" type="radio" name="account_type"
+                                                        id="company" value="Company"
+                                                        <?php echo e(old('account_type') == 'Company' ? 'checked' : ''); ?>>
                                                     <label class="form-check-label" for="company">
                                                         Company Account
                                                     </label>
@@ -72,34 +77,35 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-20">
                                         <span style="color: red"><?php echo e($errors->first('email')); ?></span>
-                                        <input type="email" class="input-field" value="<?php echo e(old('email')); ?>"
-                                            name="email" placeholder="Email" required autofocus>
+                                        <input type="email" class="input-field" value="<?php echo e(old('email')); ?>" name="email"
+                                            placeholder="Email" required autofocus>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-20">
-                                        <input type="phone" class="input-field" name="phone"
-                                            placeholder="Phone" value="" required autofocus>
+                                        <input type="phone" class="input-field" name="phone" placeholder="Phone"
+                                            value="" required autofocus>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group mb-20 company-name-wrapper">
                                         <input type="text" class="input-field" name="company_name"
-                                            placeholder="Company Name" value="" required autofocus>
+                                            placeholder="Company Name" value="">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-20">
                                         <span style="color: red"><?php echo e($errors->first('password')); ?></span>
-                                        <input type="password" id="password" class="input-field"
-                                            name="password" placeholder="Enter password">
+                                        <input type="password" id="password" class="input-field" name="password"
+                                            placeholder="Enter password">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-20">
                                         <span style="color: red"><?php echo e($errors->first('password_confirmation')); ?></span>
                                         <input type="password" id="password_confirmation" class="input-field"
-                                            name="password_confirmation" placeholder="Confirm password" required autofocus>
+                                            name="password_confirmation" placeholder="Confirm password" required
+                                            autofocus>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -109,7 +115,11 @@
                                         </div>
                                         <div>
                                             <label class="form-check-label" for="consent">
-                                                I agree to receive SMS messages from Never Forget showing appreciation at the number I provided. These messages may include special offers, service updates, and personalized gift reminders. Frequency may vary. Reply STOP to unsubscribe at any time, or HELP for assistance. Standard message & data rates may apply. My consent is not required for purchase.
+                                                I agree to receive SMS messages from Never Forget showing appreciation at
+                                                the number I provided. These messages may include special offers, service
+                                                updates, and personalized gift reminders. Frequency may vary. Reply STOP to
+                                                unsubscribe at any time, or HELP for assistance. Standard message & data
+                                                rates may apply. My consent is not required for purchase.
                                             </label>
                                         </div>
                                     </div>
@@ -139,7 +149,8 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="enroll-image d-flex justify-content-center d-none d-lg-block">
-                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/register.png" class="w-100" alt="">
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/register.png" class="w-100"
+                            alt="">
                     </div>
                 </div>
             </div>
@@ -148,18 +159,23 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startPush('js'); ?>
     <script>
-        
         $(document).ready(function() {
             $('input[name="account_type"]').on('change', function() {
                 if ($(this).val() == 'Company') {
                     $('.account-type-wrapper').html('company');
                     $('.company-name-wrapper').show();
+                    $('input[name="company_name"]')
+                        .prop('required', true);
                 } else {
                     $('.account-type-wrapper').html('Individual');
                     $('.company-name-wrapper').hide();
+                    $('input[name="company_name"]')
+                        .prop('required', false)
+                        .val('');
                 }
             });
         });
     </script>
 <?php $__env->stopPush(); ?>
+
 <?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/auth/register.blade.php ENDPATH**/ ?>
