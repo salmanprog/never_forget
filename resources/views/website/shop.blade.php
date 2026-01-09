@@ -346,6 +346,11 @@
         width: 100%;
         height: 326px;
         object-fit: contain;
+        background-color: #0b1b48;
+    }
+
+    .balloon-btn {
+        max-width: max-content;
     }
 
     /* .shop-nav-slider .swiper-button-next:after,
@@ -716,9 +721,16 @@
                                         <img src="{{ asset('/public/' . $balloon->images) }}" alt="Balloons">
                                         <div class="product-info">
                                             <h3 class="product-title">{{ $balloon->title }}</h3>
-                                            <div class="d-flex align-items-center product-action-wrapper">
-                                                <form action="{{ route('create-balloon-enquiry-item') }}"
-                                                    method="POST">
+
+                                            @if (in_array($balloon->id, $addedBalloonIds ?? []))
+                                                <a href="{{ route('balloon-items') }}"
+                                                    class="add-to-cart balloon-btn"
+                                                    style="width:100%; text-align:center;">
+                                                    View
+                                                </a>
+                                            @else
+                                                <form class="balloon-form" method="POST"
+                                                    action="{{ route('create-balloon-enquiry-item') }}">
                                                     @csrf
                                                     <input type="hidden" name="balloon_id"
                                                         value="{{ $balloon->id }}">
@@ -726,12 +738,13 @@
                                                         value="{{ $balloon->enquiry_id }}">
                                                     <input type="hidden" name="quantity" value="1"
                                                         min="1">
-                                                        <button type="submit" class="add-to-cart"
-                                                            style="width: 100%">
-                                                            Add
-                                                        </button>
+                                                    <button type="submit" class="add-to-cart balloon-btn"
+                                                        data-id='btnid' style="width: 100%">
+                                                        Add
+                                                    </button>
                                                 </form>
-                                            </div>
+                                            @endif
+
                                         </div>
                                     </div>
                                 </div>
@@ -818,8 +831,44 @@
     </div>
 </section>
 
-@push('scripts')
+@push('js')
     <script>
+        $(document).ready(function() {
+
+            $(document).on('submit', '.balloon-form', function(e) {
+                e.preventDefault();
+
+                const form = this;
+                const formData = new FormData(form);
+
+                $.ajax({
+                    url: $(form).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log(response);
+
+                        const cartUrl = "{{ route('balloon-items') }}";
+
+                        const link = `
+                                        <a href="${cartUrl}" class="add-to-cart balloon-btn">
+                                            View
+                                        </a>
+                                    `;
+
+                        $(form).find('button[type="submit"]').replaceWith(link);
+
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+        });
+
         let page = 1;
         let loading = false;
         let activeCategory = '{{ request('category') ? request('category') : 'all' }}';

@@ -20,9 +20,7 @@
                 <div class="box box-info">
                     <div class="box-body">
                         <div class="row">
-                            <div class="d-flex col-sm-4">
-                                <input type="text" id="search" class="form-control" placeholder="Search">
-                            </div>
+                            
                             
                             
                         </div>

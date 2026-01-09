@@ -291,8 +291,13 @@ unset($__errorArgs, $__bag); ?>
                                     <textarea name="message" id="message" placeholder="Message" class="input-field"></textarea>
                                 </div>
                                 <div class="col-12">
-                                    <button type="submit" class="golbal-btn-submit"
-                                        style="display: flex; margin-left: auto;">Submit Balloon Enquiry</button>
+                                    <div class="d-flex gap-20 justify-content-end">
+                                        <a href="<?php echo e(route('shop', ['category' => 'balloons'])); ?>" class="golbal-btn-submit">
+                                            Add More
+                                        </a>
+                                        <button type="submit" class="golbal-btn-submit"
+                                        style="">Submit Balloon Enquiry</button>
+                                    </div>
                                 </div>
                             </div>
                         </form>
