@@ -30,6 +30,8 @@ use App\Models\Company;
 use App\Models\BalloonsCategory;
 use App\Models\BalloonsEnquiry;
 use App\Models\BalloonEnquiryItem;
+use Illuminate\Support\Str;
+
 
 use DB;
 
@@ -172,34 +174,58 @@ class WebController extends Controller
         })->where('status', 1)->get();
 
         $balloons = BalloonsCategory::all();
-        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons'));
+
+        $addedBalloonIds = [];
+        if (auth()->check()) {
+            $addedBalloonIds = BalloonEnquiryItem::where('user_id', auth()->id())->pluck('balloon_id')->toArray();
+        } elseif (session()->has('guest_token')) {
+            $addedBalloonIds = BalloonEnquiryItem::where('guest_token', session('guest_token'))->pluck('balloon_id')->toArray();
+        }
+
+        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds'));
+    }
+
+    public function createBalloonEnquiryItem(Request $request)
+    {
+        if (!session()->has('guest_token')) {
+            session(['guest_token' => Str::uuid()->toString()]);
+        }
+
+        BalloonEnquiryItem::create([
+            'user_id' => auth()->id(),
+            'guest_token' => auth()->check() ? null : session('guest_token'),
+            'balloon_id' => $request->balloon_id,
+            'quantity' => 1,
+        ]);
+        return response()->json( [
+            'success' => true,
+            'message' => 'Balloon enquiry item created successfully',
+        ]);
+        // return redirect()->route('balloon-items')->with('success', 'Balloon enquiry item created successfully');
     }
 
     public function balloonItems()
     {
         $page_title = 'Balloon Item || Never Forget';
 
-        $enquiries = BalloonEnquiryItem::with('balloon')
-            ->with('enquiry')->where('user_id', auth()->id())
-            ->where('enquiry_id', null)
+        $enquiries = BalloonEnquiryItem::with(['balloon', 'enquiry'])
+            ->where(function ($query) {
+                if (auth()->check()) {
+                    $query->where('user_id', auth()->id());
+                } else {
+                    $query->where('guest_token', session('guest_token'));
+                }
+            })
+            ->whereNull('enquiry_id')
             ->get();
 
         return view('website.balloon-items', compact(
             'page_title',
-            'enquiries',
+            'enquiries'
         ));
     }
 
-    public function createBalloonEnquiryItem(Request $request)
-    {
 
-        BalloonEnquiryItem::create([
-            'user_id' => auth()->id(),
-            'balloon_id' => $request->balloon_id,
-            'quantity' => 1,
-        ]);
-        return redirect()->route('balloon-items')->with('success', 'Balloon enquiry item created successfully');
-    }
 
     public function storeBalloonEnquiry(Request $request)
     {
@@ -278,7 +304,7 @@ class WebController extends Controller
         BalloonEnquiryItem::where('enquiry_id', $enquiry_id)->delete();
         // return redirect()->route('balloon-items');
         return response()->json([
-            'success' => true, 
+            'success' => true,
             'message' => 'Your Enquiry Submitted Successfully',
         ]);
     }
