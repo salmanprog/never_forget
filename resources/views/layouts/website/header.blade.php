@@ -92,6 +92,8 @@
                                     <li class="nav-dropdown-list"><a class="nav-dropdown-link"
                                             href="{{ route('about-us') }}">About Us</a></li>
                                     <li class="nav-dropdown-list"><a class="nav-dropdown-link"
+                                            href="{{ route('founder') }}">Founder</a></li>
+                                    <li class="nav-dropdown-list"><a class="nav-dropdown-link"
                                             href="{{ route('why-choose-us') }}">Why Choose Us</a></li>
 
                                 </ul>
