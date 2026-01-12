@@ -1036,4 +1036,11 @@ class WebController extends Controller
 
         return back()->with('getaquotemessage', 'Your quote request has been submitted successfully! We will contact you soon.');
     }
+
+    public function founder()
+    {
+        $page_title = 'Founder || Never Forget';
+        $collaborators = Collaborator::where('status', 1)->get();
+        return view('website.founder', compact('page_title', 'collaborators'));
+    }
 }

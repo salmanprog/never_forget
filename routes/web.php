@@ -131,6 +131,7 @@ Route::get('career', [WebController::class, 'Career'])->name('career');
 Route::get('disclaimer', [WebController::class, 'disclaimer'])->name('disclaimer');
 Route::get('cookie-policy', [WebController::class, 'cookiePolicy'])->name('cookie-policy');
 Route::get('privacy-policy', [WebController::class, 'privacyPolicy'])->name('privacy-policy');
+Route::get('founder', [WebController::class, 'founder'])->name('founder');
 
 
 /* Route::get('our-menu', [WebController::class, 'ourMenu'])->name('our-menu');

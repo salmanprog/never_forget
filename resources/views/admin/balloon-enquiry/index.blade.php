@@ -19,9 +19,9 @@
                 <div class="box box-info">
                     <div class="box-body">
                         <div class="row">
-                            <div class="d-flex col-sm-4">
+                            {{-- <div class="d-flex col-sm-4">
                                 <input type="text" id="search" class="form-control" placeholder="Search">
-                            </div>
+                            </div> --}}
                             {{-- <div class="d-flex col-sm-4">
                                 <select name="" id="type" class="form-control type" style="margin-bottom:5px">
                                     <option value="All" selected>Search by type</option>
