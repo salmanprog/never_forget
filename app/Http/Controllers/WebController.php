@@ -1065,7 +1065,7 @@ class WebController extends Controller
 
     public function founder()
     {
-        $page_title = 'Founder || Never Forget';
+        $page_title = 'Founder’s Vision || Never Forget';
         $collaborators = Collaborator::where('status', 1)->get();
         return view('website.founder', compact('page_title', 'collaborators'));
     }

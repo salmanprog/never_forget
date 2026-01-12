@@ -92,6 +92,8 @@
                                     <li class="nav-dropdown-list"><a class="nav-dropdown-link"
                                             href="<?php echo e(route('about-us')); ?>">About Us</a></li>
                                     <li class="nav-dropdown-list"><a class="nav-dropdown-link"
+                                            href="<?php echo e(route('founder')); ?>">Founder</a></li>
+                                    <li class="nav-dropdown-list"><a class="nav-dropdown-link"
                                             href="<?php echo e(route('why-choose-us')); ?>">Why Choose Us</a></li>
 
                                 </ul>
