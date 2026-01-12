@@ -45,8 +45,8 @@
         <div class="container">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8">
-                    <span class="btn des-wrapper mb-30 text-center mx-auto" data-aos="flip-up" data-aos-easing="ease-out-cubic">
-                
+                    <span class="btn des-wrapper mb-30 text-center mx-auto" data-aos="flip-up" data-aos-easing="ease-out-cubic"
+                        data-aos-duration="1000">The Meaning Behind NEVER FORGET</span>
                     <p class="mb-50 text-center mx-auto" style="max-width: 800px">
                         The NEVER FORGET logo was intentionally designed to reflect the values at the heart of the brand. Each element represents a commitment to recognizing people fully and thoughtfully.
                     </p>
