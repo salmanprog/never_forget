@@ -28,7 +28,7 @@
                     <span class="btn des-wrapper mb-30">The Visionary Behind Never Forget</span>
                     <h2 class="heading fs-74 mb-30">Larry <span>Thornton</span></h2>
                     <p class="mb-30" style="max-width: 555px">
-                        Larry Thornton is a passionate entrepreneur who believes that genuine appreciation is the cornerstone of every successful business relationship. With decades of experience in the industry, Larry founded <span class="fw-700"> Never Forget Showing Appreciation </span> with a single mission: to help businesses build stronger, more meaningful connections through thoughtful gifting.
+                        Larry Thornton is a passionate entrepreneur who believes that genuine appreciation is the cornerstone of every successful business relationship. With decades of experience in the industry, Larry founded <span class="fw-700"> Never Forget Showing Appreciation </span>with a single mission: to help businesses build stronger, more meaningful connections through thoughtful gifting.
                     </p>
                     <p class="mb-30" style="max-width: 555px">
                         His journey began with Thornton Studios in 1980, serving as an approved vendor for the Naval Academy. Larry's commitment to excellence and his deep understanding of relationship management have been the driving forces behind the growth and success of Never Forget.
