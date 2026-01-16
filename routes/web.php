@@ -289,7 +289,7 @@ Route::group(['middleware' => ['auth']], function () {
     //BallonEnquiry
     Route::resource('balloon_enquiry', 'admin\BalloonEnquiryController');
 
-    //CareerCategory
+    //CareerCategorysss
     Route::resource('career_category', 'admin\CareerCategoryController');
     //CareerCategory
     Route::resource('business_card_categories', 'admin\BusinessCardCategoriesController');
