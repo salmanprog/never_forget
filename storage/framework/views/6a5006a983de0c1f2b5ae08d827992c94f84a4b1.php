@@ -79,10 +79,10 @@
                                     <td><?php echo e($product->businessCard->text_alignment ?? 'Not Provided'); ?></td>
                                 </tr>
                                 <tr>
-                                    <th>Front</th>
+                                    <th>Card Front</th>
                                     <td>
                                         <?php if(!empty($product->businessCard) && !empty($product->businessCard->card_front_image)): ?>
-                                            <img src="<?php echo e(asset('public/' . $product->businessCard->card_front_image)); ?>"
+                                            <img src="<?php echo e(asset('public/storage/' . $product->businessCard->card_front_image)); ?>"
                                                 alt="Product Image" style="height:100px; width:150px;">
                                         <?php else: ?>
                                             <img src="<?php echo e(asset('public/admin/assets/images/product/no-photo1.jpg')); ?>"
@@ -91,10 +91,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Back</th>
+                                    <th>Card Back</th>
                                     <td>
                                         <?php if(!empty($product->businessCard) && !empty($product->businessCard->card_back_image)): ?>
-                                            <img src="<?php echo e(asset('public/admin/assets/images/product/' . $product->businessCard->card_back_image)); ?>"
+                                            <img src="<?php echo e(asset('public/storage/' . $product->businessCard->card_back_image)); ?>"
                                                 alt="Product Image" style="height:100px; width:150px;">
                                         <?php else: ?>
                                             <img src="<?php echo e(asset('public/admin/assets/images/product/no-photo1.jpg')); ?>"
