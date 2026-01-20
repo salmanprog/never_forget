@@ -82,9 +82,8 @@
                                     <th>Front</th>
                                     <td>
                                         <?php if(!empty($product->businessCard) && !empty($product->businessCard->card_front_image)): ?>
-                                        <img src="<?php echo e(asset('storage/' . $product->businessCard->card_front_image)); ?>"
-     alt="Product Image"
-     style="height:100px; width:150px;">
+                                            <img src="<?php echo e(asset('public/' . $product->businessCard->card_front_image)); ?>"
+                                                alt="Product Image" style="height:100px; width:150px;">
                                         <?php else: ?>
                                             <img src="<?php echo e(asset('public/admin/assets/images/product/no-photo1.jpg')); ?>"
                                                 alt="No Image" style="height:100px; width:150px;">

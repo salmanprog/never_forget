@@ -49,10 +49,8 @@
                                     <th>SL</th>
                                     <th>Order No#</th>
                                     <th>Product </th>
-                                    <th>Quantity</th>
                                     <th>Price</th>
                                     <th>Date</th>
-                                    <th>Order Status</th>
                                     @if (Auth::user()->hasRole('Admin'))
                                         <th>Action</th>
                                     @endif
@@ -78,26 +76,10 @@
 										</td>
                                         <td>
 											@foreach ($model->hasOrderDetails as $orderDetail)
-												{{ $orderDetail->quantity }}<br>
-											@endforeach
-                                        </td>
-                                        <td>
-											@foreach ($model->hasOrderDetails as $orderDetail)
 											  ${{ number_format($orderDetail->price, 2) }}<br>
 											@endforeach
                                         </td>
                                         <td>{{ date('d, m-Y H:i A', strtotime($model->created_at)) }}</td>
-                                        <td>
-                                            @if ($model->order_status == 'Pending')
-                                                <span class="badge label-info">Pending</span>
-                                            @elseif($model->order_status == 'Delivered')
-                                                <span class="badge label-warning">Delivered</span>
-                                            @elseif($model->order_status == 'Completed')
-                                                <span class="badge label-success">Completed</span>
-                                            @elseif($model->order_status == 'Canceled')
-                                                <span class="badge label-danger">Canceled</span>
-                                            @endif
-                                        </td>
 
                                         <td>
                                             <a href="{{ route('business-card-orders.ordersshow', $model->id) }}" class="btn btn-info btn-sm">
@@ -112,14 +94,14 @@
                                                         class="fa fa-eye"></i></a>
                                             @endcan
                                             @can('order-edit')
-                                                <a href="{{ route('order.edit', $model->id) }}" data-toggle="tooltip"
+                                                <!-- <a href="{{ route('order.edit', $model->id) }}" data-toggle="tooltip"
                                                     data-placement="top" title="Edit order" class="btn btn-primary btn-xs"><i
-                                                        class="fa fa-edit"></i></a>
+                                                        class="fa fa-edit"></i></a> -->
                                             @endcan
                                             @can('order-invoice')
-                                                <a href="{{ route('order.invoice', ['id' => $model->id]) }}"
+                                                <!-- <a href="{{ route('order.invoice', ['id' => $model->id]) }}"
                                                     data-toggle="tooltip" data-placement="top" title="Order Invoice"
-                                                    class="btn btn-warning btn-xs"><i class="fa fa-file"></i></a>
+                                                    class="btn btn-warning btn-xs"><i class="fa fa-file"></i></a> -->
                                             @endcan
                                         </td>
                                     </tr>

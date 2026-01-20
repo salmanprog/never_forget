@@ -49,10 +49,8 @@
                                     <th>SL</th>
                                     <th>Order No#</th>
                                     <th>Product </th>
-                                    <th>Quantity</th>
                                     <th>Price</th>
                                     <th>Date</th>
-                                    <th>Order Status</th>
                                     <?php if(Auth::user()->hasRole('Admin')): ?>
                                         <th>Action</th>
                                     <?php endif; ?>
@@ -79,26 +77,10 @@
 										</td>
                                         <td>
 											<?php $__currentLoopData = $model->hasOrderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orderDetail): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-												<?php echo e($orderDetail->quantity); ?><br>
-											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </td>
-                                        <td>
-											<?php $__currentLoopData = $model->hasOrderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orderDetail): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 											  $<?php echo e(number_format($orderDetail->price, 2)); ?><br>
 											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </td>
                                         <td><?php echo e(date('d, m-Y H:i A', strtotime($model->created_at))); ?></td>
-                                        <td>
-                                            <?php if($model->order_status == 'Pending'): ?>
-                                                <span class="badge label-info">Pending</span>
-                                            <?php elseif($model->order_status == 'Delivered'): ?>
-                                                <span class="badge label-warning">Delivered</span>
-                                            <?php elseif($model->order_status == 'Completed'): ?>
-                                                <span class="badge label-success">Completed</span>
-                                            <?php elseif($model->order_status == 'Canceled'): ?>
-                                                <span class="badge label-danger">Canceled</span>
-                                            <?php endif; ?>
-                                        </td>
 
                                         <td>
                                             <a href="<?php echo e(route('business-card-orders.ordersshow', $model->id)); ?>" class="btn btn-info btn-sm">
@@ -113,14 +95,14 @@
                                                         class="fa fa-eye"></i></a>
                                             <?php endif; ?>
                                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('order-edit')): ?>
-                                                <a href="<?php echo e(route('order.edit', $model->id)); ?>" data-toggle="tooltip"
+                                                <!-- <a href="<?php echo e(route('order.edit', $model->id)); ?>" data-toggle="tooltip"
                                                     data-placement="top" title="Edit order" class="btn btn-primary btn-xs"><i
-                                                        class="fa fa-edit"></i></a>
+                                                        class="fa fa-edit"></i></a> -->
                                             <?php endif; ?>
                                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('order-invoice')): ?>
-                                                <a href="<?php echo e(route('order.invoice', ['id' => $model->id])); ?>"
+                                                <!-- <a href="<?php echo e(route('order.invoice', ['id' => $model->id])); ?>"
                                                     data-toggle="tooltip" data-placement="top" title="Order Invoice"
-                                                    class="btn btn-warning btn-xs"><i class="fa fa-file"></i></a>
+                                                    class="btn btn-warning btn-xs"><i class="fa fa-file"></i></a> -->
                                             <?php endif; ?>
                                         </td>
                                     </tr>
