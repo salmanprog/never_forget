@@ -11,7 +11,7 @@ use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\BalloonController;
-
+use App\Http\Controllers\admin\EnquiresController;
 
 /*
 |--------------------------------------------------------------------------
@@ -289,7 +289,11 @@ Route::group(['middleware' => ['auth']], function () {
     //BallonEnquiry
     Route::resource('balloon_enquiry', 'admin\BalloonEnquiryController');
 
-    //CareerCategorysss
+    //Enquires
+    Route::resource('enquires-detail', 'admin\EnquiresController')->except(['index','create', 'edit','delete']);
+    Route::get('enquires/{identifier}', [EnquiresController::class, 'allEnquires'])->name('enquires.show');
+
+    //CareerCategory
     Route::resource('career_category', 'admin\CareerCategoryController');
     //CareerCategory
     Route::resource('business_card_categories', 'admin\BusinessCardCategoriesController');

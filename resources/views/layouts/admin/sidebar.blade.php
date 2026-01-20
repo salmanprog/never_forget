@@ -269,15 +269,15 @@
                 </ul>
             </li>
 
-            <li class="treeview {{  request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') ? 'active': ''}}">
-                <a href="" class="{{  request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') ? 'active': '' }}">
+            <li class="treeview {{  request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') ? 'active': ''}}">
+                <a href="" class="{{  request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') ? 'active': '' }}">
                     <i class="fa fa-gift"></i> <span>MTS Dashboard</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
 
-                <ul class="treeview-menu" style="display: {{ request()->is('mts-dashboard*') || request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*/show')  ? 'block' : 'none' }};">
+                <ul class="treeview-menu" style="display: {{ request()->is('mts-dashboard*') || request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*/show') || request()->is('enquires/journey_expert') || request()->is('enquires/quality_logo')  ? 'block' : 'none' }};">
                      <li class="treeview {{ request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show')  ||request()->is('user') ||request()->is('user/*')  ? 'active' : '' }}"
                         style="height: auto;">
                         <a href="#"
@@ -338,6 +338,24 @@
                         class="{{ request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') ? 'active' : '' }}"
                         >
                             <i class="fa fa-envelope"></i> <span>Balloon Enquiry</span>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('enquiry-list')
+                    <li class="treeview">
+                        <a href="{{ route('enquires.show', 'quality_logo') }}"
+                        class="{{ request()->is('enquires/quality_logo') || request()->is('enquires/quality_logo/*') ? 'active' : '' }}">
+                            <i class="fa fa-envelope"></i>
+                            <span>Quality Logo Enquiry</span>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('enquiry-list')
+                    <li class="treeview">
+                        <a href="{{ route('enquires.show','journey_expert') }}"
+                        class="{{ request()->is('enquires/journey_expert') || request()->is('enquires/journey_expert/*') ? 'active' : '' }}">
+                            <i class="fa fa-envelope"></i>
+                            <span>Journey-Expert Enquiry</span>
                         </a>
                     </li>
                     @endcan
