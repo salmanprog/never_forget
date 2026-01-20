@@ -172,27 +172,6 @@
                             <?php endif; ?>
                         </ul>
                     </li>
-                    <li class="treeview <?php echo e(request()->is('business_card_options') || request()->is('business_card_options/create') || request()->is('business_card_options/*/edit') || request()->is('business_card_options/*/show') || request()->is('business_card_categories') || request()->is('business_card_categories/create') || request()->is('business_card_categories/*/edit') || request()->is('business_card_categories/*/show') || request()->is('business_card_templates') || request()->is('business_card_templates/create') || request()->is('business_card_templates/*/edit') || request()->is('business_card_templates/*/show') || request()->is('business_card') || request()->is('business_card/create') || request()->is('business_card/*/edit') || request()->is('business_card/*/show') ? 'active' : ''); ?>"
-                        style="height: auto;">
-                        <a href="#"
-                            class="<?php echo e(request()->is('business_card_options') || request()->is('business_card_options/create') || request()->is('business_card_options/*/edit') || request()->is('business_card_options/*/show') || request()->is('business_card_categories') || request()->is('business_card_categories/create') || request()->is('business_card_categories/*/edit') || request()->is('business_card_categories/*/show') || request()->is('business_card_templates') || request()->is('business_card_templates/create') || request()->is('business_card_templates/*/edit') || request()->is('business_card_templates/*/show') || request()->is('business_card') || request()->is('business_card/create') || request()->is('business_card/*/edit') || request()->is('business_card/*/show') ? 'active' : ''); ?>">
-
-                            <i class="fa fa-th"></i>
-                            <span>Business Cards </span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu"
-                            style="display: <?php echo e(request()->is('business_card_options') || request()->is('business_card_options/create') || request()->is('business_card_options/*/edit') || request()->is('business_card_options/*/show') || request()->is('business_card_categories') || request()->is('business_card_categories/create') || request()->is('business_card_categories/*/edit') || request()->is('business_card_categories/*/show') || request()->is('business_card_templates') || request()->is('business_card_templates/create') || request()->is('business_card_templates/*/edit') || request()->is('business_card_templates/*/show') || request()->is('business_card') || request()->is('business_card/create') || request()->is('business_card/*/edit') || request()->is('business_card/*/show') ? 'block' : 'none'); ?>;">
-
-                            
-                            
-                            
-                            
-                        </ul>
-                    </li>
-
                     <!-- Business Card Templates -->
                     
 
@@ -233,15 +212,15 @@
                 </ul>
             </li>
 
-            <li class="treeview <?php echo e(request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') ? 'active': ''); ?>">
-                <a href="" class="<?php echo e(request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') ? 'active': ''); ?>">
+            <li class="treeview <?php echo e(request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') || request()->is('business-card-orders') ? 'active': ''); ?>">
+                <a href="" class="<?php echo e(request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') || request()->is('business-card-orders') ? 'active': ''); ?>">
                     <i class="fa fa-gift"></i> <span>MTS Dashboard</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
 
-                <ul class="treeview-menu" style="display: <?php echo e(request()->is('mts-dashboard*') || request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*/show') || request()->is('enquires/journey_expert') || request()->is('enquires/quality_logo')  ? 'block' : 'none'); ?>;">
+                <ul class="treeview-menu" style="display: <?php echo e(request()->is('mts-dashboard*') || request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*/show') || request()->is('enquires/journey_expert') || request()->is('enquires/quality_logo') || request()->is('business-card-orders')  ? 'block' : 'none'); ?>;">
                      <li class="treeview <?php echo e(request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show')  ||request()->is('user') ||request()->is('user/*')  ? 'active' : ''); ?>"
                         style="height: auto;">
                         <a href="#"
@@ -306,6 +285,14 @@
                     </li>
                     <?php endif; ?>
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('enquiry-list')): ?>
+                    
+                    <li class="treeview">
+                        <a href="<?php echo e(route('business-card.orders')); ?>"
+                        class="<?php echo e(request()->is('business-card-orders') || request()->is('business-card-orders*') ? 'active' : ''); ?>">
+                            <i class="fa fa-envelope"></i>
+                            <span>Business Card Order</span>
+                        </a>
+                    </li>
                     <li class="treeview">
                         <a href="<?php echo e(route('enquires.show', 'quality_logo')); ?>"
                         class="<?php echo e(request()->is('enquires/quality_logo') || request()->is('enquires/quality_logo/*') ? 'active' : ''); ?>">

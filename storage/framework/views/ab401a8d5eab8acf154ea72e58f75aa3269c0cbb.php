@@ -87,7 +87,7 @@
                                         <td><?php echo e(++$counter); ?>.</td>
                                         <td><?php echo e($product->product_slug); ?></td>
                                         <td>
-                                            <?php if($product->productsItem->image): ?>
+                                            <?php if(!empty($product->productsItem) && !empty($product->productsItem->image)): ?>
                                                 <img src="<?php echo e(asset('public/admin/assets/images/product/' . $product->productsItem->image)); ?>"
                                                     alt="Product Image" style="height:100px; width:150px;">
                                             <?php else: ?>

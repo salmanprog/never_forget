@@ -86,7 +86,7 @@
                                         <td>{{ ++$counter }}.</td>
                                         <td>{{ $product->product_slug }}</td>
                                         <td>
-                                            @if ($product->productsItem->image)
+                                            @if (!empty($product->productsItem) && !empty($product->productsItem->image))
                                                 <img src="{{ asset('public/admin/assets/images/product/' . $product->productsItem->image) }}"
                                                     alt="Product Image" style="height:100px; width:150px;">
                                             @else

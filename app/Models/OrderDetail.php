@@ -34,4 +34,9 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
+
+    public function businessCard()
+    {
+        return $this->belongsTo(BusinessCard::class, 'product_id', 'id');
+    }
 }
