@@ -11,7 +11,7 @@ use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\BalloonController;
-
+use App\Http\Controllers\admin\EnquiresController;
 
 /*
 |--------------------------------------------------------------------------
@@ -289,6 +289,10 @@ Route::group(['middleware' => ['auth']], function () {
     //BallonEnquiry
     Route::resource('balloon_enquiry', 'admin\BalloonEnquiryController');
 
+    //Enquires
+    Route::resource('enquires-detail', 'admin\EnquiresController')->except(['index','create', 'edit','delete']);
+    Route::get('enquires/{identifier}', [EnquiresController::class, 'allEnquires'])->name('enquires.show');
+
     //CareerCategory
     Route::resource('career_category', 'admin\CareerCategoryController');
     //CareerCategory
@@ -325,6 +329,8 @@ Route::resource('billing_address', 'BillingAddressController');
 
 //Business Cards
 Route::get('business-cards', [App\Http\Controllers\BusinessCardController::class, 'index'])->name('business-cards.index');
+Route::get('business-card-orders', [App\Http\Controllers\BusinessCardController::class, 'businessCardOrders'])->name('business-card.orders');
+Route::get('business-card/{businessCard}', [App\Http\Controllers\BusinessCardController::class, 'businessCardShow'])->name('business-card-orders.ordersshow');
 Route::get('business-cards/create', [App\Http\Controllers\BusinessCardController::class, 'create'])->name('business-cards.create');
 Route::post('business-cards', [App\Http\Controllers\BusinessCardController::class, 'store'])->name('business-cards.store');
 Route::get('business-cards/{businessCard}', [App\Http\Controllers\BusinessCardController::class, 'show'])->name('business-cards.show');

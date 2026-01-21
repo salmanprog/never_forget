@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Barryvdh\DomPDF\Facade\Pdf;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Models\Order;
+use App\Models\OrderDetail;
 
 class BusinessCardController extends Controller
 {
@@ -25,6 +27,61 @@ class BusinessCardController extends Controller
         $templates = BusinessCardTemplate::active()->orderBy('sort_order')->get();
         return view('website.business-cards.index', compact('templates'));
     }
+
+    public function businessCardOrders(Request $request)
+    {
+        $user = Auth::user();
+        //$query = Order::orderby('id', 'desc');
+        $query = Order::whereHas('orderDetails', function ($q) {
+            $q->where('product_type', 'business_card');
+        })->orderBy('id', 'desc');
+        
+        // If the user is not an admin, filter by their order
+        if (!$user->hasRole('Admin')) {
+            $query->where('customer_id', $user->id);
+        }
+        
+        if ($request->ajax()) {
+
+            // SEARCH
+            if ($request->filled('search')) {
+                $query->where('order_number', 'like', '%' . $request->input('search') . '%');
+            }
+        
+            // STATUS FILTER
+            if ($request->filled('status') && $request->status !== 'All') {
+                $status = ($request->status == 2) ? 0 : $request->status;
+                $query->where('status', $status);
+            }
+        
+            $models = $query
+                ->paginate(10)
+                ->withPath(route('business-card.orders')) // 🔴 VERY IMPORTANT
+                ->withQueryString();
+        
+            return view('admin.business_card.search', compact('models'))->render();
+        }
+        
+        $page_title = 'All Business Card Order';
+        $models = $query->with('hasOrderDetails.productsItem')->paginate(10);
+        $orderdetails = OrderDetail::with('productsItem')->where('status', 1)->get();
+        return view('admin.business_card.orders', compact("models", "page_title", "orderdetails"));
+    }
+
+    public function businessCardShow($id)
+    {
+        $page_title = 'Order Details';
+        //$model = Order::with('hasCustomer', 'hasOrderDetails')->with('products','productsItem')->find($id);
+        $model = Order::with([
+            'hasCustomer',
+            'hasBillingAddress',
+            'hasOrderDetails' => function ($query) {
+                $query->with('businessCard');
+            },
+        ])->find($id);
+        return view('admin.business_card.ordershow', compact('model', 'page_title'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */

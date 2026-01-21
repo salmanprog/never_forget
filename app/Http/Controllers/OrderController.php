@@ -35,9 +35,12 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $query = Order::orderby('id', 'desc');
+        //$query = Order::orderby('id', 'desc');
+        $query = Order::whereDoesntHave('orderDetails', function ($q) {
+            $q->where('product_type', 'business_card');
+        })->orderBy('id', 'desc');
         
-        // If the user is not an admin, filter by their orders
+        // If the user is not an admin, filter by their order
         if (!$user->hasRole('Admin')) {
             $query->where('customer_id', $user->id);
         }

@@ -30,6 +30,7 @@ use App\Models\Company;
 use App\Models\BalloonsCategory;
 use App\Models\BalloonsEnquiry;
 use App\Models\BalloonEnquiryItem;
+use App\Models\Enquires;
 use Illuminate\Support\Str;
 
 
@@ -1002,12 +1003,25 @@ class WebController extends Controller
             'message' => 'required|string|max:500',
         ]);
 
+        $params = $request->all();
+
         // Send email
         $details = [
             'from'          => 'user-inquiry',
             'title'         => $data['title'] . ' ' . $data['name'] . ',',
             'body'          => (object) $data
         ];
+        
+        Enquires::create([
+            'user_id' => 0,
+            'identifier'    => $params['identifier'],
+            'product_name'    => isset($params['product']) ? $params['product'] : '',
+            'name'    => $params['name'],
+            'email'   => $params['email'],
+            'phone'   => $params['phone'],
+            'message' => $params['message'],
+            'status'  => 1,
+        ]);
 
         \Mail::to('cruise@neverforgetappreciation.com')->send(new \App\Mail\Email($details));
 
