@@ -20,18 +20,26 @@ use Stripe\Stripe as StripeAPI;
 use Stripe\PaymentIntent;
 use Stripe\Customer as StripeCustomer;
 use Stripe\Exception\ApiErrorException;
+use App\Services\TaxJarService;
 
 /**
  * @property-read \Stripe\StripeClient $stripe
  */
 class OrderController extends Controller
 {
+
+    protected $taxJarService;
+
+    public function __construct(TaxJarService $taxJarService)
+    {
+        $this->taxJarService = $taxJarService;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    
+
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -39,12 +47,12 @@ class OrderController extends Controller
         $query = Order::whereDoesntHave('orderDetails', function ($q) {
             $q->where('product_type', 'business_card');
         })->orderBy('id', 'desc');
-        
+
         // If the user is not an admin, filter by their order
         if (!$user->hasRole('Admin')) {
             $query->where('customer_id', $user->id);
         }
-        
+
         if ($request->ajax()) {
             if ($request['search'] != "") {
                 $query->where('order_number', 'like', '%' . $request['search'] . '%');
@@ -58,7 +66,7 @@ class OrderController extends Controller
             $models = $query->paginate(10);
             return (string) view('admin.order.search', compact('models'));
         }
-        
+
         $page_title = 'All Order';
         $models = $query->with('hasOrderDetails.productsItem')->paginate(10);
         $orderdetails = OrderDetail::with('productsItem')->where('status', 1)->get();
@@ -82,6 +90,64 @@ class OrderController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws ApiErrorException
      */
+
+    //  public function calculateTax(Request $request)
+    //  {
+    //      $address = $request->all();  // Get the address from the request
+
+    //      try {
+    //          $taxData = $this->taxJarService->getTax($address);  // Get tax details from TaxJar
+
+    //          // Log the API response for debugging
+    //          \Log::info('TaxJar API Response:', $taxData); 
+    //           // This will log the response from TaxJar API
+
+    //          // Check if the expected values exist in the response
+    //          if (!isset($taxData['tax']['amount_to_collect']) || !isset($taxData['tax']['total_amount'])) {
+    //              throw new \Exception('Invalid TaxJar API Response');
+    //          }
+
+    //          // Return the tax data to the frontend
+    //          return response()->json([
+    //              'tax' => $taxData['tax']['amount_to_collect'],  // Tax to collect
+    //              'total' => $taxData['tax']['total_amount'],    // Total amount including tax
+    //          ]);
+    //      } catch (\Exception $e) {
+    //          // Log the error if something goes wrong
+    //          \Log::error('Error calculating tax: ' . $e->getMessage());
+    //          return response()->json(['error' => 'Failed to calculate tax.'], 500);
+    //      }
+    //  }
+
+    public function calculateTax(Request $request)
+    {
+        $fromCountry = 'US';
+        $fromState = 'NY';
+        $fromZip = '10001';
+        $fromCity = 'New York';
+        $toCountry = 'US';
+        $toState = $request->input('guest_state');
+        $toZip = $request->input('guest_postal_code');
+        $toCity = $request->input('guest_city');
+        $amount = Cart::getSubTotal();
+        $shipping = 10;
+        // $fromCountry = 'US';
+        // $fromState = 'CA';  // Assuming nexus is in California
+        // $fromZip = '90001';
+        // $fromCity = 'Los Angeles';
+        // $toCountry = 'US';
+        // $toState = 'MI';
+        // $toZip = '49506';
+        // $toCity = 'Grand Rapids';
+        // $amount = 120; // Sample amount
+        // $shipping = 10; // Sample shipping
+        $tax = $this->taxJarService->calculateSalesTax($fromCountry, $fromState, $fromZip, $fromCity, $toCountry, $toState, $toZip, $toCity, $amount, $shipping);
+        if ($tax) {
+            return response()->json($tax);
+        } else {
+            return response()->json(['error' => 'Unable to calculate tax'], 500);
+        }
+    }
     public function store(Request $request)
     {
         try {
@@ -93,7 +159,7 @@ class OrderController extends Controller
             if (Cart::isEmpty()) {
                 return back()->with('error', 'Your cart is empty. Please add products before checking out.');
             }
-            
+
             // Validate guest checkout fields if not authenticated
             if (!Auth::check()) {
                 $request->validate([
@@ -103,6 +169,7 @@ class OrderController extends Controller
                     'guest_phone' => 'required|string|max:20',
                     'guest_country' => 'required|string|max:255',
                     'guest_street' => 'required|string|max:255',
+                    'guest_state' => 'required|string|max:255',
                     'guest_city' => 'required|string|max:255',
                     'guest_postal_code' => 'required|string|max:20',
                 ]);
@@ -117,26 +184,26 @@ class OrderController extends Controller
             $amount = Cart::getTotal() * 100; // cents
 
             //check user
-            if(Auth::check()){
+            if (Auth::check()) {
                 $user = Auth::user();
-            }else{
-            $user = User::where('email', $request->guest_email)->first();
-                    if(!$user){
-                        do{
-                            $user_id = rand(1000, 9999);
-                        }while(User::where('user_id', $user_id)->first());
+            } else {
+                $user = User::where('email', $request->guest_email)->first();
+                if (!$user) {
+                    do {
+                        $user_id = rand(1000, 9999);
+                    } while (User::where('user_id', $user_id)->first());
 
-                        $user = User::create([
-                            'first_name' => $request->guest_first_name,
-                            'last_name' => $request->guest_last_name,
-                            'account_type' => 'app_user',
-                            'email' => $request->guest_email,
-                            'user_id' => $user_id,
-                            'phone' => $request->guest_phone,
-                            'password' => Hash::make('Test@123'),
-                        ]);
-                    }
+                    $user = User::create([
+                        'first_name' => $request->guest_first_name,
+                        'last_name' => $request->guest_last_name,
+                        'account_type' => 'app_user',
+                        'email' => $request->guest_email,
+                        'user_id' => $user_id,
+                        'phone' => $request->guest_phone,
+                        'password' => Hash::make('Test@123'),
+                    ]);
                 }
+            }
             $cartItems = Cart::getContent();
             // Create PaymentIntent with token
             $payment = PaymentIntent::create([
@@ -165,6 +232,7 @@ class OrderController extends Controller
                         'company' => $request->guest_company ?? '',
                         'country' => $request->guest_country,
                         'street' => $request->guest_street,
+                        'state' => $request->guest_state,
                         'town' => $request->guest_city, // Using 'town' instead of 'city'
                         'postcode' => $request->guest_postal_code, // Using 'postcode' instead of 'postal_code'
                         'phone' => $request->guest_phone,
@@ -173,9 +241,9 @@ class OrderController extends Controller
                     ]);
                     $billing_address_id = $guest_address->id;
                 }
-                
+
                 // Store order
-                $order = new Order(); 
+                $order = new Order();
                 $order->billing_address_id = $billing_address_id;
                 $order->payment_id = $payment->id;
                 $order->order_number = mt_rand(100000, 999999);
@@ -184,7 +252,7 @@ class OrderController extends Controller
                 $order->order_status = 'Pending';
                 $order->order_date = date('Y-m-d');
                 $order->total_amount = Cart::getTotal();
-                
+
                 // Store guest information if not logged in
                 if (!Auth::check()) {
                     $order->guest_email = $request->guest_email;
@@ -217,7 +285,7 @@ class OrderController extends Controller
                         $item_back_images[] = $back;
                     }
                     OrderDetail::create([
-                        'order_id' => $order->id, 
+                        'order_id' => $order->id,
                         'product_type' => $item->attributes->product_type ?? 'product',
                         'product_id' => $item->attributes->business_card_id ?? ($item->attributes->product_id ?? 0),
                         'product_slug' => $item->name,
@@ -242,16 +310,16 @@ class OrderController extends Controller
 
                 // Send emails only if order and payment are successful
                 $details = [
-                        'from'          => 'customer-new-booking',
-                        'title'         => "You have received the following order from" . $user->first_name . ' ' . $user->last_name . ',',
-                        'body'          => $order,
-                        'front_images'  => $item_front_images ?? [],
-                        'back_images'   => $item_back_images ?? [],
-                    ];
+                    'from'          => 'customer-new-booking',
+                    'title'         => "You have received the following order from" . $user->first_name . ' ' . $user->last_name . ',',
+                    'body'          => $order,
+                    'front_images'  => $item_front_images ?? [],
+                    'back_images'   => $item_back_images ?? [],
+                ];
 
                 \Mail::to($order->guest_email)->send(new \App\Mail\Email($details));
                 try {
-            
+
                     $admin = User::role('Admin')->where('status', 1)->first();
                     if ($admin) {
                         $admin_email = $admin->email;
@@ -265,10 +333,10 @@ class OrderController extends Controller
                         ];
                         Mail::to('herry@yopmail.com')->send(new \App\Mail\Email($details));
                     }
-                    
+
                     // Send confirmation email to customer
                     $customer_email = Auth::check() ? Auth::user()->email : $order->guest_email;
-                    
+
                     if ($customer_email) {
                         $details = [
                             'from' => 'customer-new-booking',
@@ -288,11 +356,11 @@ class OrderController extends Controller
             }
 
             return back()->with('error', 'Payment failed. Please try again.');
-
         } catch (\Exception $e) {
             return back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
+
 
     /**
      * Display the order success page
@@ -334,7 +402,7 @@ class OrderController extends Controller
     {
         $page_title = 'Edit Subscribers';
         $model  = Order::where('id', $id)->first();
-        return view('admin.order.edit', compact('model','page_title'));
+        return view('admin.order.edit', compact('model', 'page_title'));
     }
 
     /**
@@ -346,7 +414,7 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $update = Order::where('id', $id)->first(); 
+        $update = Order::where('id', $id)->first();
         $update->order_status = $request->order_status;
         $update->update();
 
@@ -372,7 +440,7 @@ class OrderController extends Controller
         }
 
         $order_details = OrderDetail::with('hasProduct')->where('order_id', $id)->get();
-        
+
         $pdf = PDF::loadView('admin.order.mypdf', compact('orders', 'order_details'));
         return $pdf->download('order-invoice.pdf');
     }

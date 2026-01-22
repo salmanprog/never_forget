@@ -33,6 +33,7 @@ return [
     'google' => [
         'project_id' => env('GOOGLE_CLOUD_PROJECT_ID'),
         'key_file' => env('GOOGLE_CLOUD_KEY_FILE'),
+        'places_key' => env('GOOGLE_PLACES_KEY'),
     ],
     'stripe' => [
         'key' => env('STRIPE_KEY'),
@@ -44,6 +45,8 @@ return [
         'secret' => env('VONAGE_API_SECRET'),
         'brand_name' => env('VONAGE_BRAND_NAME', 'MyApp'),
     ],
+    'taxjar' => [
+        'api_key' => env('TAXJAR_API_KEY'),
+    ],
 
 ];
-

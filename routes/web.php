@@ -192,7 +192,7 @@ Route::get('/careers/{id}/applications', [App\Http\Controllers\admin\CareerContr
 Route::post('/careers/applications/{id}/respond', [App\Http\Controllers\admin\CareerController::class, 'respondToApplication'])->name('careers.applications.respond');
 
 Route::post('/create-balloon-enquiry-item', [WebController::class, 'createBalloonEnquiryItem'])->name('create-balloon-enquiry-item');
-Route::post('/balloon-items/update-quantity',[WebController::class, 'updateQuantity'])->name('balloon-items.update-quantity');
+Route::post('/balloon-items/update-quantity', [WebController::class, 'updateQuantity'])->name('balloon-items.update-quantity');
 
 Route::post('/balloon-enquiry', [WebController::class, 'storeBalloonEnquiry'])->name('balloon.enquiry');
 Route::get('/balloon-items', [WebController::class, 'balloonItems'])->name('balloon-items');
@@ -290,7 +290,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('balloon_enquiry', 'admin\BalloonEnquiryController');
 
     //Enquires
-    Route::resource('enquires-detail', 'admin\EnquiresController')->except(['index','create', 'edit','delete']);
+    Route::resource('enquires-detail', 'admin\EnquiresController')->except(['index', 'create', 'edit', 'delete']);
     Route::get('enquires/{identifier}', [EnquiresController::class, 'allEnquires'])->name('enquires.show');
 
     //CareerCategory
@@ -416,6 +416,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 Route::get('/orders/{order}', [OrderController::class, 'show'])
     ->name('order.show')
     ->middleware('auth');
+
+// Route::post('/checkout/tax', [OrderController::class, 'calculateTax'])->name('checkout.calculateTax');
+Route::post('/calculate-tax', [OrderController::class, 'calculateTax'])->name('calculateTax');
 
 
 // Route::get('/product/{slug}', [ProductController::class, 'show'])

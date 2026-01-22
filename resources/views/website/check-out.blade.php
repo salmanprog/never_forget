@@ -6,18 +6,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-    body { background: linear-gradient(135deg, #f8fafc 0%, #e9f1fb 100%); font-family: 'Poppins', Arial, sans-serif; }
+    body {
+        background: linear-gradient(135deg, #f8fafc 0%, #e9f1fb 100%);
+        font-family: 'Poppins', Arial, sans-serif;
+    }
+
     .checkout-container {
         max-width: 950px;
         margin: 0 auto;
         padding: 2.5rem 0 2rem 0;
     }
+
     .checkout-progress {
         display: flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 2.5rem;
     }
+
     .progress-step {
         font-weight: 600;
         color: #1976d2;
@@ -29,6 +35,7 @@
         letter-spacing: 0.5px;
         box-shadow: 0 2px 8px rgba(25, 118, 210, 0.07);
     }
+
     .progress-sep {
         width: 32px;
         height: 2px;
@@ -36,6 +43,7 @@
         border-radius: 1px;
         margin: 0 0.5rem;
     }
+
     .checkout-card {
         background: #fff;
         border-radius: 22px;
@@ -43,6 +51,7 @@
         padding: 2.2rem 2.2rem 1.5rem 2.2rem;
         margin-bottom: 2rem;
     }
+
     .checkout-title {
         font-size: 2.2rem;
         font-weight: 700;
@@ -50,18 +59,22 @@
         color: #1976d2;
         letter-spacing: 0.5px;
     }
+
     .checkout-step {
         font-size: 1.1rem;
         color: #1976d2;
         margin-bottom: 1.5rem;
         font-weight: 600;
     }
+
     .form-label {
         font-weight: 600;
         color: #222;
         margin-bottom: 0.4rem;
     }
-    .form-control, .form-select {
+
+    .form-control,
+    .form-select {
         border-radius: 10px;
         /* min-height: 50px; */
         font-size: 1.05rem;
@@ -69,6 +82,7 @@
         border: 1.5px solid #e3eafc;
         margin-bottom: 0.7rem;
     }
+
     .stripe-logo {
         width: 100px;
         margin-bottom: 1rem;
@@ -77,6 +91,7 @@
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
     }
+
     .checkout-btn {
         width: 100%;
         font-size: 1.25rem;
@@ -94,21 +109,26 @@
         box-shadow: 0 4px 16px rgba(67, 233, 123, 0.13);
         transition: background 0.2s, box-shadow 0.2s;
     }
-    .checkout-btn:hover, .checkout-btn:focus {
+
+    .checkout-btn:hover,
+    .checkout-btn:focus {
         background: linear-gradient(90deg, #1976d2 0%, #43e97b 100%);
         color: #fff;
         box-shadow: 0 6px 24px rgba(25, 118, 210, 0.18);
     }
+
     .checkout-btn[disabled] {
         opacity: 0.7;
         pointer-events: none;
     }
+
     .spinner-border {
         width: 1.3rem;
         height: 1.3rem;
         vertical-align: middle;
         margin-left: 0.5rem;
     }
+
     .order-summary-card {
         background: #fff;
         border-radius: 22px;
@@ -116,6 +136,7 @@
         padding: 2rem 2rem 1.2rem 2rem;
         margin-bottom: 2rem;
     }
+
     .order-summary-title {
         font-size: 1.4rem;
         font-weight: 700;
@@ -123,25 +144,31 @@
         color: #1976d2;
         letter-spacing: 0.5px;
     }
+
     .order-summary-list {
         font-size: 1.08rem;
         color: #333;
     }
+
     .order-summary-list strong {
         color: #1a202c;
     }
+
     .order-summary-divider {
         border-top: 1.5px solid #e3eafc;
         margin: 1.2rem 0;
     }
+
     .order-summary-totals strong {
         color: #1976d2;
         font-size: 1.15rem;
     }
+
     .alert {
         border-radius: 10px;
         font-size: 1.08rem;
     }
+
     .add-address-btn {
         display: inline-block;
         background: #1976d2;
@@ -155,23 +182,33 @@
         transition: background 0.2s;
         text-decoration: none;
     }
-    .add-address-btn:hover, .add-address-btn:focus {
+
+    .add-address-btn:hover,
+    .add-address-btn:focus {
         background: #43e97b;
         color: #fff;
         text-decoration: none;
     }
+
     @media (max-width: 767.98px) {
         .checkout-container {
             padding: 1rem 0.5rem;
         }
-        .checkout-card, .order-summary-card {
+
+        .checkout-card,
+        .order-summary-card {
             padding: 1rem;
         }
+
         .order-summary-mobile {
             margin-top: 1.5rem;
         }
-        .checkout-title { font-size: 1.5rem; }
+
+        .checkout-title {
+            font-size: 1.5rem;
+        }
     }
+
     /* Sticky order summary on desktop */
     @media (min-width: 992px) {
         .order-summary-sticky {
@@ -179,16 +216,18 @@
             top: 2rem;
         }
     }
+
     .lock-icon {
         font-size: 1.2rem;
         color: #fff;
     }
+
     /* Stripe input custom style */
     #card-element {
         background: #f8fafc;
         border: 1.5px solid #e3eafc;
         border-radius: 10px;
-       /*  min-height: 50px; */
+        /*  min-height: 50px; */
         padding: 0.7rem 1rem;
         font-size: 1.08rem;
         margin-bottom: 0.7rem;
@@ -204,123 +243,163 @@
     <div class="row g-4">
         <div class="col-lg-7 order-2 order-lg-1">
             <div class="checkout-card">
-                <div class="checkout-title">Checkout</div>
-                <div class="checkout-step">Step 1: Billing Details</div>
-                @if(session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                @endif
-                @if(session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
                 <form action="{{ route('order.store') }}" method="POST" id="payment-form" autocomplete="off">
                     @csrf
-                    
-                    @if(Auth::check())
-                        <div class="mb-3">
-                            <label for="billing_address" class="form-label">Select Billing Address</label>
-                            <select name="billing_address_id" id="billing_address" class="form-select" required aria-label="Select Billing Address">
-                                <option value="">Select Billing Address</option>
-                                @foreach($billing_addresses as $address)
-                                    <option value="{{ $address->id }}">
-                                        {{ $address->first_name }}, {{ $address->last_name }}, {{ $address->company }}, {{ $address->country }}, {{ $address->street }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <a href="{{ route('billing_address.create') }}" class="add-address-btn">Add New Address</a>
-                        </div>
-                    @else
-                        <!-- Guest Checkout Form -->
-                        <div class="mb-3">
-                            <h5 class="text-primary mb-3">Guest Checkout Information</h5>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="guest_first_name" class="form-label">First Name *</label>
-                                    <input type="text" class="form-control" id="guest_first_name" name="guest_first_name" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="guest_last_name" class="form-label">Last Name *</label>
-                                    <input type="text" class="form-control" id="guest_last_name" name="guest_last_name" required>
-                                </div>
+                    <div id="step-1">
+                        <div class="checkout-title">Checkout</div>
+                        <div class="checkout-step">Step 1: Billing Details</div>
+                        @if (session('error'))
+                            <div class="alert alert-danger">{{ session('error') }}</div>
+                        @endif
+                        @if (session('success'))
+                            <div class="alert alert-success">{{ session('success') }}</div>
+                        @endif
+
+
+                        @if (Auth::check())
+                            <div class="mb-3">
+                                <label for="billing_address" class="form-label">Select Billing Address</label>
+                                <select name="billing_address_id" id="billing_address" class="form-select" required
+                                    aria-label="Select Billing Address">
+                                    <option value="">Select Billing Address</option>
+                                    @foreach ($billing_addresses as $address)
+                                        <option value="{{ $address->id }}">
+                                            {{ $address->first_name }}, {{ $address->last_name }},
+                                            {{ $address->company }}, {{ $address->country }}, {{ $address->street }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <a href="{{ route('billing_address.create') }}" class="add-address-btn">Add New
+                                    Address</a>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="guest_email" class="form-label">Email Address *</label>
-                                    <input type="email" class="form-control" id="guest_email" name="guest_email" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="guest_phone" class="form-label">Phone Number *</label>
-                                    <input type="tel" class="form-control" id="guest_phone" name="guest_phone" required>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Guest Billing Address -->
-                        <div class="mb-3">
-                            <h5 class="text-primary mb-3">Billing Address</h5>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="guest_company" class="form-label">Company</label>
-                                    <input type="text" class="form-control" id="guest_company" name="guest_company">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="guest_country" class="form-label">Country *</label>
-                                    <input type="text" class="form-control" id="guest_country" name="guest_country" required>
-                                </div>
-                            
-                                <div class="col-md-12">
-                                    <label for="guest_street" class="form-label">Street Address *</label>
-                                    <input type="text" class="form-control" id="guest_street" name="guest_street" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="guest_city" class="form-label">City/Town *</label>
-                                    <input type="text" class="form-control" id="guest_city" name="guest_city" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="guest_postal_code" class="form-label">Postal Code *</label>
-                                    <input type="text" class="form-control" id="guest_postal_code" name="guest_postal_code" required>
-                                </div>
-                                <div class="col-12">
-                                    <div class="d-flex gap-10 mb-10">
-                                        <div>
-                                            <input type="checkbox" id="consent" class="input-field mt-5" required>
-                                        </div>
-                                        <div>
-                                            <label class="form-check-label text-start fs-14" for="consent">
-                                                I agree to receive SMS messages from Never Forget showing appreciation at the number I provided. These messages may include special offers, service updates, and personalized gift reminders. Frequency may vary. Reply STOP to unsubscribe at any time, or HELP for assistance. Standard message & data rates may apply. My consent is not required for purchase.
-                                            </label>
-                                        </div>
+                        @else
+                            <!-- Guest Checkout Form -->
+                            <div class="mb-3">
+                                <h5 class="text-primary mb-3">Guest Checkout Information</h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="guest_first_name" class="form-label">First Name *</label>
+                                        <input type="text" class="form-control" id="guest_first_name"
+                                            name="guest_first_name" value="{{ old('guest_first_name') }}" required>
                                     </div>
-                                    <div class="d-flex gap-10 mb-10 form-links">
-                                        <div>
-                                            <a class="navs" href="{{ route('privacy-policy') }}">Privacy Policy</a>
-                                        </div>
-                                        <div>
-                                            <a class="navs" href="{{ route('disclaimer') }}">Disclaimer</a>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label for="guest_last_name" class="form-label">Last Name *</label>
+                                        <input type="text" class="form-control" id="guest_last_name"
+                                            name="guest_last_name" value="{{ old('guest_last_name') }}" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="guest_email" class="form-label">Email Address *</label>
+                                        <input type="email" class="form-control" id="guest_email" name="guest_email"
+                                            value="{{ old('guest_email') }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="guest_phone" class="form-label">Phone Number *</label>
+                                        <input type="tel" class="form-control" id="guest_phone" name="guest_phone"
+                                            value="{{ old('guest_phone') }}" required>
                                     </div>
                                 </div>
                             </div>
 
-                            
-                        </div>
-                        
-                        <!-- Hidden field for guest billing address -->
-                        <input type="hidden" name="billing_address_id" value="0">
-                    @endif
-                    <div class="mb-3">
-                        <div class="checkout-step">Step 2: Payment</div>
-                        <label for="card-element" class="form-label">Credit or Debit Card</label>
-                        <img src="https://stripe.com/img/v3/home/social.png" alt="Powered by Stripe" class="stripe-logo" aria-label="Powered by Stripe">
-                        <div id="card-element" class="form-control" aria-label="Card input">
-                            <!-- A Stripe Element will be inserted here. -->
-                        </div>
-                        <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+                            <!-- Guest Billing Address -->
+                            <div class="mb-3">
+                                <h5 class="text-primary mb-3">Billing Address</h5>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label for="guest_company" class="form-label">Company</label>
+                                        <input type="text" class="form-control" id="guest_company"
+                                            value="{{ old('guest_company') }}" name="guest_company">
+                                    </div>
+
+
+                                    <div class="col-md-12">
+                                        <label for="guest_street" class="form-label">Street Address *</label>
+                                        <input type="text" class="form-control" id="autocomplete_address"
+                                            name="guest_street" value="{{ old('guest_street') }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="guest_state" class="form-label">State *</label>
+                                        <input type="text" class="form-control" id="guest_state"
+                                            value="{{ old('guest_state') }}" name="guest_state" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="guest_country" class="form-label">Country *</label>
+                                        <input type="text" class="form-control" id="guest_country"
+                                            value="{{ old('guest_country') }}" name="guest_country" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="guest_city" class="form-label">City/Town *</label>
+                                        <input type="text" class="form-control" id="guest_city" name="guest_city"
+                                            value="{{ old('guest_city') }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="guest_postal_code" class="form-label">Postal Code *</label>
+                                        <input type="text" class="form-control" id="guest_postal_code"
+                                            name="guest_postal_code" value="{{ old('guest_postal_code') }}" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="d-flex gap-10 mb-10">
+                                            <div>
+                                                <input type="checkbox" id="consent" class="input-field mt-5"
+                                                    required>
+                                            </div>
+                                            <div>
+                                                <label class="form-check-label text-start fs-14" for="consent">
+                                                    I agree to receive SMS messages from Never Forget showing
+                                                    appreciation at the number I provided. These messages may include
+                                                    special offers, service updates, and personalized gift reminders.
+                                                    Frequency may vary. Reply STOP to unsubscribe at any time, or HELP
+                                                    for assistance. Standard message & data rates may apply. My consent
+                                                    is not required for purchase.
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-10 mb-10 form-links">
+                                            <div>
+                                                <a class="navs" href="{{ route('privacy-policy') }}">Privacy
+                                                    Policy</a>
+                                            </div>
+                                            <div>
+                                                <a class="navs" href="{{ route('disclaimer') }}">Disclaimer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <!-- Hidden field for guest billing address -->
+                            <input type="hidden" name="billing_address_id" value="0">
+                        @endif
+                        <button type="button" class="checkout-btn mt-3" id="next-step-btn">
+                            Next
+                        </button>
                     </div>
-                    <button type="submit" class="checkout-btn" id="submit-button">
-                        <span class="lock-icon"><i class="fa fa-lock"></i></span>
-                        <span id="pay-btn-text">Pay Now (${{ number_format(\Cart::getTotal(), 2) }})</span>
-                        <span class="spinner-border spinner-border-sm d-none" id="pay-btn-spinner" role="status" aria-hidden="true"></span>
-                    </button>
+                    <div id="step-2" style="display:none;">
+                        <div class="mb-3">
+                            <div class="checkout-step">Step 2: Payment</div>
+                            <label for="card-element" class="form-label">Credit or Debit Card</label>
+                            <img src="https://stripe.com/img/v3/home/social.png" alt="Powered by Stripe"
+                                class="stripe-logo" aria-label="Powered by Stripe">
+                            <div id="card-element" class="form-control" aria-label="Card input">
+                                <!-- A Stripe Element will be inserted here. -->
+                            </div>
+                            <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+                        </div>
+                        <div class="d-flex gap-20 align-items-center mt-20">
+                            <button type="button" class="checkout-btn mt-3" id="back-step-btn">
+                                Back
+                            </button>
+                            <button type="submit" class="checkout-btn mt-0" id="submit-button">
+                                <span class="lock-icon"><i class="fa fa-lock"></i></span>
+                                <span id="pay-btn-text">Pay Now (${{ number_format(\Cart::getTotal(), 2) }})</span>
+                                <span class="spinner-border spinner-border-sm d-none" id="pay-btn-spinner"
+                                    role="status" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -328,11 +407,11 @@
             <div class="order-summary-card order-summary-sticky">
                 <div class="order-summary-title">Order Summary</div>
                 <div class="order-summary-list">
-                    @foreach($Items as $item)
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>{{ $item->product_name ?? $item->name }} x {{ $item->quantity }}</span>
-                        <span>${{ number_format(($item->product_price ?? $item->price) * $item->quantity, 2) }}</span>
-                    </div>
+                    @foreach ($Items as $item)
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>{{ $item->product_name ?? $item->name }} x {{ $item->quantity }}</span>
+                            <span>${{ number_format(($item->product_price ?? $item->price) * $item->quantity, 2) }}</span>
+                        </div>
                     @endforeach
                 </div>
                 <div class="order-summary-divider"></div>
@@ -340,15 +419,19 @@
                     <strong>Subtotal</strong>
                     <span>${{ number_format(\Cart::getSubTotal(), 2) }}</span>
                 </div>
-                @if(Session::has('discount'))
-                <div class="order-summary-list order-summary-totals d-flex justify-content-between mb-2">
-                    <strong>Discount</strong>
-                    <span>-${{ number_format(Session::get('discount')['discount'], 2) }}</span>
-                </div>
+                @if (Session::has('discount'))
+                    <div class="order-summary-list order-summary-totals d-flex justify-content-between mb-2">
+                        <strong>Discount</strong>
+                        <span>-${{ number_format(Session::get('discount')['discount'], 2) }}</span>
+                    </div>
                 @endif
+                <div class="order-summary-list order-summary-totals d-flex justify-content-between mb-2">
+                    <strong>Tax</strong>
+                    <span id="tax-amount">$0.00</span> <!-- This will be updated dynamically -->
+                </div>
                 <div class="order-summary-list order-summary-totals d-flex justify-content-between">
                     <strong>Total</strong>
-                    <span>${{ number_format(\Cart::getTotal(), 2) }}</span>
+                    <span id="total-amount">${{ number_format(\Cart::getTotal(), 2) }}</span>
                 </div>
             </div>
         </div>
@@ -359,8 +442,161 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <!-- SweetAlert2 for alerts -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.places_key') }}&libraries=places&callback=initAutocomplete"
+    async defer></script>
 <script src="https://js.stripe.com/v3/"></script>
+
 <script>
+    let autocomplete;
+
+    function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete_address'), {
+                types: ['address'],
+                componentRestrictions: {
+                    country: ['us'] // Adjust if needed
+                }
+            });
+
+        // When a place is selected
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+
+            // Extract relevant information from the selected address
+            const address = {
+                country: document.getElementById('guest_country').value, // Ensure matching input names
+                state: document.getElementById('guest_state').value,
+                city: document.getElementById('guest_city').value,
+                postal_code: document.getElementById('guest_postal_code').value
+            };
+
+            place.address_components.forEach(component => {
+                const types = component.types;
+
+                if (types.includes('country')) {
+                    address.country = component.long_name;
+                }
+                if (types.includes('administrative_area_level_1')) {
+                    address.state = component.short_name;
+                }
+                if (types.includes('locality')) {
+                    address.city = component.long_name;
+                }
+                if (types.includes('postal_code')) {
+                    address.postal_code = component.long_name;
+                }
+            });
+
+            // Fill in the fields with the selected address values
+            document.getElementById('guest_country').value = address.country;
+            document.getElementById('guest_state').value = address.state;
+            document.getElementById('guest_city').value = address.city;
+            document.getElementById('guest_postal_code').value = address.postal_code;
+
+            // Send AJAX request to backend to calculate tax
+            fetch("{{ route('calculateTax') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(address)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the order summary with tax and total amount
+                    document.getElementById('tax-amount').textContent = '$' + data.tax;
+                    document.getElementById('total-amount').textContent = '$' + data.total;
+                })
+                .catch(error => console.error('Error calculating tax:', error));
+        });
+    }
+
+
+    function fillInAddress() {
+        const place = autocomplete.getPlace();
+
+        let street = '';
+        let city = '';
+        let state = '';
+        let country = '';
+        let postalCode = '';
+
+        place.address_components.forEach(component => {
+            const types = component.types;
+
+            if (types.includes('street_number')) {
+                street = component.long_name + ' ' + street;
+            }
+
+            if (types.includes('route')) {
+                street += component.long_name;
+            }
+
+            if (types.includes('locality')) {
+                city = component.long_name;
+            }
+
+            if (types.includes('administrative_area_level_1')) {
+                state = component.short_name;
+            }
+
+            if (types.includes('country')) {
+                country = component.long_name;
+            }
+
+            if (types.includes('postal_code')) {
+                postalCode = component.long_name;
+            }
+        });
+
+        document.getElementById('autocomplete_address').value = street;
+        document.getElementById('guest_city').value = city;
+        document.getElementById('guest_state').value = state;
+        document.getElementById('guest_country').value = country;
+        document.getElementById('guest_postal_code').value = postalCode;
+    }
+    document.getElementById('next-step-btn').addEventListener('click', function() {
+
+        let valid = true;
+
+        document.querySelectorAll('#step-1 input[required], #step-1 select[required]').forEach(function(field) {
+
+            if (field.type === 'checkbox') {
+                if (!field.checked) {
+                    valid = false;
+                    field.classList.add('is-invalid');
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            } else {
+                if (!field.value.trim()) {
+                    valid = false;
+                    field.classList.add('is-invalid');
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            }
+        });
+
+        if (!valid) {
+            alert('Please fill all required billing details');
+            return;
+        }
+
+        document.getElementById('step-1').style.display = 'none';
+        document.getElementById('step-2').style.display = 'block';
+
+        if (!window.cardMounted) {
+            card.mount('#card-element');
+            window.cardMounted = true;
+        }
+    });
+    document.getElementById('back-step-btn').addEventListener('click', function() {
+        document.getElementById('step-2').style.display = 'none';
+        document.getElementById('step-1').style.display = 'block';
+    });
     // Create a Stripe client. 
     var stripe = Stripe("{{ config('services.stripe.key') }}");
     // Create an instance of Elements.
@@ -382,7 +618,9 @@
         }
     };
     // Create an instance of the card Element.
-    var card = elements.create('card', {style: style});
+    var card = elements.create('card', {
+        style: style
+    });
     // Add an instance of the card Element into the `card-element` <div>.
     card.mount('#card-element');
     // Handle real-time validation errors from the card Element.
@@ -409,7 +647,8 @@
                 errorElement.textContent = result.error.message;
                 document.getElementById('submit-button').disabled = false;
                 document.getElementById('pay-btn-spinner').classList.add('d-none');
-                document.getElementById('pay-btn-text').textContent = 'Pay Now (${{ number_format(\Cart::getTotal(), 2) }})';
+                document.getElementById('pay-btn-text').textContent =
+                    'Pay Now (${{ number_format(\Cart::getTotal(), 2) }})';
             } else {
                 // Send the token to your server.
                 stripeTokenHandler(result.token);
@@ -425,7 +664,7 @@
         hiddenInput.setAttribute('name', 'stripeToken');
         hiddenInput.setAttribute('value', token.id);
         form.appendChild(hiddenInput);
-        
+
         // Show success message before redirect
         Swal.fire({
             title: 'Processing Payment...',
@@ -437,7 +676,7 @@
                 Swal.showLoading();
             }
         });
-        
+
         // Submit the form
         form.submit();
     }
