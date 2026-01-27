@@ -264,8 +264,7 @@
                                     <?php $__currentLoopData = $billing_addresses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $address): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <option value="<?php echo e($address->id); ?>">
                                             <?php echo e($address->first_name); ?>, <?php echo e($address->last_name); ?>,
-                                            <?php echo e($address->company); ?>, <?php echo e($address->country); ?>, <?php echo e($address->street); ?>
-
+                                            <?php echo e($address->company); ?>, <?php echo e($address->country); ?>, <?php echo e($address->street); ?>,
                                         </option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
@@ -341,7 +340,7 @@
                                     <div class="col-12">
                                         <div class="d-flex gap-10 mb-10">
                                             <div>
-                                                <input type="checkbox" id="consent" class="input-field mt-5"
+                                                <input type="checkbox" id="consent" name="consent" class="input-field mt-5"
                                                     required>
                                             </div>
                                             <div>
@@ -405,6 +404,9 @@
         </div>
         <div class="col-lg-5 order-1 order-lg-2 order-summary-mobile">
             <div class="order-summary-card order-summary-sticky">
+                <input type="hidden" name="tax_amount" id="tax-hidden" value="0">
+                <input type="hidden" name="final_total" id="final-total-hidden"
+                    value="<?php echo e(\Cart::getSubTotal()); ?>">
                 <div class="order-summary-title">Order Summary</div>
                 <div class="order-summary-list">
                     <?php $__currentLoopData = $Items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -417,7 +419,10 @@
                 <div class="order-summary-divider"></div>
                 <div class="order-summary-list order-summary-totals d-flex justify-content-between mb-2">
                     <strong>Subtotal</strong>
-                    <span>$<?php echo e(number_format(\Cart::getSubTotal(), 2)); ?></span>
+                    <span id="subtotal-amount" data-subtotal="<?php echo e(\Cart::getSubTotal()); ?>">
+                        $<?php echo e(number_format(\Cart::getSubTotal(), 2)); ?>
+
+                    </span>
                 </div>
                 <?php if(Session::has('discount')): ?>
                     <div class="order-summary-list order-summary-totals d-flex justify-content-between mb-2">
@@ -431,7 +436,10 @@
                 </div>
                 <div class="order-summary-list order-summary-totals d-flex justify-content-between">
                     <strong>Total</strong>
-                    <span id="total-amount">$<?php echo e(number_format(\Cart::getTotal(), 2)); ?></span>
+                    <span id="total-amount">
+                        $<?php echo e(number_format(\Cart::getSubTotal(), 2)); ?>
+
+                    </span>
                 </div>
             </div>
         </div>
@@ -439,79 +447,63 @@
 </div>
 
 <!-- FontAwesome for lock icon -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+
 <!-- SweetAlert2 for alerts -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script
-    src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(config('services.google.places_key')); ?>&libraries=places&callback=initAutocomplete"
-    async defer></script>
 <script src="https://js.stripe.com/v3/"></script>
 
 <script>
     let autocomplete;
 
-    function initAutocomplete() {
-        autocomplete = new google.maps.places.Autocomplete(
-            document.getElementById('autocomplete_address'), {
-                types: ['address'],
-                componentRestrictions: {
-                    country: ['us'] // Adjust if needed
-                }
-            });
 
-        // When a place is selected
+    function initAutocomplete() {
+        const input = document.getElementById('autocomplete_address');
+        if (!input) return;
+
+        autocomplete = new google.maps.places.Autocomplete(input, {
+            types: ['address'],
+            componentRestrictions: {
+                country: ['us']
+            }
+        });
+
         autocomplete.addListener('place_changed', function() {
             const place = autocomplete.getPlace();
 
-            // Extract relevant information from the selected address
-            const address = {
-                country: document.getElementById('guest_country').value, // Ensure matching input names
-                state: document.getElementById('guest_state').value,
-                city: document.getElementById('guest_city').value,
-                postal_code: document.getElementById('guest_postal_code').value
-            };
+            let street = '',
+                city = '',
+                state = '',
+                country = '',
+                postalCode = '';
 
             place.address_components.forEach(component => {
-                const types = component.types;
-
-                if (types.includes('country')) {
-                    address.country = component.long_name;
-                }
-                if (types.includes('administrative_area_level_1')) {
-                    address.state = component.short_name;
-                }
-                if (types.includes('locality')) {
-                    address.city = component.long_name;
-                }
-                if (types.includes('postal_code')) {
-                    address.postal_code = component.long_name;
-                }
+                if (component.types.includes('street_number')) street = component.long_name + ' ';
+                if (component.types.includes('route')) street += component.long_name;
+                if (component.types.includes('locality')) city = component.long_name;
+                if (component.types.includes('administrative_area_level_1')) state = component
+                    .short_name;
+                if (component.types.includes('country')) country = component.short_name;
+                if (component.types.includes('postal_code')) postalCode = component.long_name;
             });
 
-            // Fill in the fields with the selected address values
-            document.getElementById('guest_country').value = address.country;
-            document.getElementById('guest_state').value = address.state;
-            document.getElementById('guest_city').value = address.city;
-            document.getElementById('guest_postal_code').value = address.postal_code;
-
-            // Send AJAX request to backend to calculate tax
-            fetch("<?php echo e(route('calculateTax')); ?>", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
-                    },
-                    body: JSON.stringify(address)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Update the order summary with tax and total amount
-                    document.getElementById('tax-amount').textContent = '$' + data.tax;
-                    document.getElementById('total-amount').textContent = '$' + data.total;
-                })
-                .catch(error => console.error('Error calculating tax:', error));
+            document.getElementById('autocomplete_address').value = street;
+            document.getElementById('guest_city').value = city;
+            document.getElementById('guest_state').value = state;
+            document.getElementById('guest_country').value = country;
+            document.getElementById('guest_postal_code').value = postalCode;
         });
     }
+
+    // ✅ wait until Google is actually available
+    document.addEventListener('DOMContentLoaded', function() {
+        const waitForGoogle = setInterval(() => {
+            if (window.google && google.maps && google.maps.places) {
+                clearInterval(waitForGoogle);
+                initAutocomplete();
+            }
+        }, 200);
+    });
 
 
     function fillInAddress() {
@@ -561,38 +553,82 @@
 
         let valid = true;
 
-        document.querySelectorAll('#step-1 input[required], #step-1 select[required]').forEach(function(field) {
-
-            if (field.type === 'checkbox') {
-                if (!field.checked) {
-                    valid = false;
-                    field.classList.add('is-invalid');
-                } else {
-                    field.classList.remove('is-invalid');
-                }
+        document.querySelectorAll('#step-1 input[required], #step-1 select[required]').forEach(field => {
+            if (!field.value.trim()) {
+                valid = false;
+                field.classList.add('is-invalid');
             } else {
-                if (!field.value.trim()) {
-                    valid = false;
-                    field.classList.add('is-invalid');
-                } else {
-                    field.classList.remove('is-invalid');
-                }
+                field.classList.remove('is-invalid');
             }
         });
 
         if (!valid) {
-            alert('Please fill all required billing details');
+            Swal.fire({
+                icon: 'error',
+                text: 'Please fill all required details',
+            });
             return;
         }
 
-        document.getElementById('step-1').style.display = 'none';
-        document.getElementById('step-2').style.display = 'block';
+        const payload = {};
 
-        if (!window.cardMounted) {
-            card.mount('#card-element');
-            window.cardMounted = true;
+        // 🔹 Guest user
+        if (document.getElementById('autocomplete_address')) {
+            payload.guest_street = document.getElementById('autocomplete_address').value;
+            payload.guest_city = document.getElementById('guest_city').value;
+            payload.guest_state = document.getElementById('guest_state').value;
+            payload.guest_country = document.getElementById('guest_country').value;
+            payload.guest_postal_code = document.getElementById('guest_postal_code').value;
         }
+
+        // 🔹 Logged-in user
+        if (document.getElementById('billing_address')) {
+            payload.billing_address_id = document.getElementById('billing_address').value;
+        }
+
+        fetch("<?php echo e(route('calculateTax')); ?>", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.tax) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Tax Calculation Failed',
+                        text: 'Unable to calculate tax. Please check your address.',
+                    });
+                    return;
+                }
+
+                const tax = parseFloat(data.tax);
+                const subtotal = parseFloat(document.getElementById('subtotal-amount').dataset.subtotal);
+                const total = subtotal + tax;
+
+                document.getElementById('tax-amount').innerText = '$' + tax.toFixed(2);
+                document.getElementById('total-amount').innerText = '$' + total.toFixed(2);
+                document.getElementById('tax-hidden').value = tax.toFixed(2);
+                document.getElementById('final-total-hidden').value = total.toFixed(2);
+
+                document.getElementById('pay-btn-text').innerText =
+                    'Pay Now ($' + total.toFixed(2) + ')';
+
+                // ✅ Move to payment step ONLY after tax success
+                document.getElementById('step-1').style.display = 'none';
+                document.getElementById('step-2').style.display = 'block';
+
+                if (!window.cardMounted) {
+                    card.mount('#card-element');
+                    window.cardMounted = true;
+                }
+            })
+            .catch(() => alert('Tax calculation failed'));
     });
+
     document.getElementById('back-step-btn').addEventListener('click', function() {
         document.getElementById('step-2').style.display = 'none';
         document.getElementById('step-1').style.display = 'block';

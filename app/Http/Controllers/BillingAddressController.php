@@ -77,6 +77,7 @@ class BillingAddressController extends Controller
             'company' => 'required|max:100',
             'country' => 'required|max:20',
             'street' => 'required|max:50',
+            'state' => 'required|max:100',
             'town' => 'required|max:20',
             'phone' => 'required|max:20',
             'email' => 'required|max:30',
@@ -91,6 +92,7 @@ class BillingAddressController extends Controller
             $model->company = $request->company;
             $model->country = $request->country;
             $model->street = $request->street;
+            $model->state = $request->state;
             $model->town = $request->town;
             $model->postcode = $request->postcode;
             $model->phone = $request->phone;

@@ -122,32 +122,79 @@ class OrderController extends Controller
     public function calculateTax(Request $request)
     {
         $fromCountry = 'US';
-        $fromState = 'NY';
-        $fromZip = '10001';
-        $fromCity = 'New York';
+        $fromState   = 'NY';
+        $fromZip     = '10001';
+        $fromCity    = 'New York';
+
         $toCountry = 'US';
-        $toState = $request->input('guest_state');
-        $toZip = $request->input('guest_postal_code');
-        $toCity = $request->input('guest_city');
-        $amount = Cart::getSubTotal();
-        $shipping = 10;
-        // $fromCountry = 'US';
-        // $fromState = 'CA';  // Assuming nexus is in California
-        // $fromZip = '90001';
-        // $fromCity = 'Los Angeles';
-        // $toCountry = 'US';
-        // $toState = 'MI';
-        // $toZip = '49506';
-        // $toCity = 'Grand Rapids';
-        // $amount = 120; // Sample amount
-        // $shipping = 10; // Sample shipping
-        $tax = $this->taxJarService->calculateSalesTax($fromCountry, $fromState, $fromZip, $fromCity, $toCountry, $toState, $toZip, $toCity, $amount, $shipping);
-        if ($tax) {
-            return response()->json($tax);
-        } else {
-            return response()->json(['error' => 'Unable to calculate tax'], 500);
+        $shipping  = 0;
+        $amount    = Cart::getSubTotal();
+
+        // ============================
+        // 🔹 LOGGED-IN USER
+        // ============================
+        if ($request->filled('billing_address_id')) {
+
+            $address = BillingAddress::find($request->billing_address_id);
+
+            if (!$address) {
+                return response()->json(['error' => 'Invalid billing address'], 422);
+            }
+
+            $streetAddress = $address->street;
+            $toCity        = $address->town;
+            $toState       = $address->state ?? 'SC'; // make sure column exists
+            $toZip         = $address->postcode;
         }
+
+        // ============================
+        // 🔹 GUEST USER
+        // ============================
+        else {
+            $streetAddress = $request->guest_street;
+            $toCity        = $request->guest_city;
+            $toState       = $request->guest_state;
+            $toZip         = $request->guest_postal_code;
+        }
+
+        // ============================
+        // 🔹 SAFETY CHECK
+        // ============================
+        if (!$streetAddress || !$toCity || !$toState || !$toZip) {
+            return response()->json(['error' => 'Incomplete address'], 422);
+        }
+
+        // ============================
+        // 🔹 TAXJAR CALL
+        // ============================
+        $tax = $this->taxJarService->calculateSalesTax(
+            $fromCountry,
+            $fromState,
+            $fromZip,
+            $fromCity,
+            $toCountry,
+            $streetAddress,
+            $toState,
+            $toZip,
+            $toCity,
+            $amount,
+            $shipping
+        );
+
+        if ($tax && isset($tax->amount_to_collect)) {
+
+            session(['tax_amount' => $tax->amount_to_collect]);
+
+            return response()->json([
+                'tax'   => number_format($tax->amount_to_collect, 2),
+                'total' => number_format($tax->order_total_amount, 2),
+                'rate'  => $tax->rate
+            ]);
+        }
+
+        return response()->json(['error' => 'Unable to calculate tax'], 500);
     }
+
     public function store(Request $request)
     {
         try {
@@ -181,7 +228,11 @@ class OrderController extends Controller
             }
 
             StripeAPI::setApiKey(config('services.stripe.secret'));
-            $amount = Cart::getTotal() * 100; // cents
+            // $taxAmount   = (float) $request->tax_amount;
+            // $finalTotal = (float) $request->final_total;
+
+            // // Stripe expects cents
+            // $amount = round($finalTotal * 100); // cents
 
             //check user
             if (Auth::check()) {
@@ -205,6 +256,14 @@ class OrderController extends Controller
                 }
             }
             $cartItems = Cart::getContent();
+            $subtotal  = Cart::getSubTotal();
+            $taxAmount = session('tax_amount', 0);
+            $discount  = session('discount')['discount'] ?? 0;
+
+            $finalTotal = $subtotal + $taxAmount - $discount;
+
+            // Stripe needs cents
+            $amount = (int) round($finalTotal * 100);
             // Create PaymentIntent with token
             $payment = PaymentIntent::create([
                 'amount' => $amount,
@@ -251,7 +310,8 @@ class OrderController extends Controller
                 $order->payment_status = 'paid';
                 $order->order_status = 'Pending';
                 $order->order_date = date('Y-m-d');
-                $order->total_amount = Cart::getTotal();
+                $order->tax_amount   = $taxAmount;
+                $order->total_amount = $finalTotal;
 
                 // Store guest information if not logged in
                 if (!Auth::check()) {

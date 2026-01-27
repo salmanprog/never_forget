@@ -64,6 +64,9 @@
 
     <!-- Template Main JS File -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=<?php echo e(config('services.google.places_key')); ?>&libraries=places"
+    async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -222,6 +225,7 @@
     </script>
     <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
     </script>
+    
 </body>
 
 </html>

@@ -1,21 +1,20 @@
-@extends('layouts.individual.app')
-@section('title', $page_title)
-@section('content')
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('content'); ?>
     <section class="content-header">
         <div class="content-header-left">
             <h1>Add Billing Address</h1>
         </div>
         <div class="content-header-right">
-            <a href="{{ route('billing_address.index') }}" class="btn btn-primary btn-sm">View All</a>
+            <a href="<?php echo e(route('billing_address.index')); ?>" class="btn btn-primary btn-sm">View All</a>
         </div>
     </section>
 
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <form action="{{ route('billing_address.store') }}" id="regform" class="form-horizontal"
+                <form action="<?php echo e(route('billing_address.store')); ?>" id="regform" class="form-horizontal"
                     enctype="multipart/form-data" method="post" accept-charset="utf-8">
-                    @csrf
+                    <?php echo csrf_field(); ?>
                     <div class="box box-info">
                         <div class="box-body">
                             <div class="form-group">
@@ -23,8 +22,8 @@
                                         style="color: red">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="text" autocomplete="off" class="form-control" name="first_name"
-                                        value="{{ old('first_name') }}" placeholder="Enter first name">
-                                    <span style="color: red">{{ $errors->first('first_name') }}</span>
+                                        value="<?php echo e(old('first_name')); ?>" placeholder="Enter first name">
+                                    <span style="color: red"><?php echo e($errors->first('first_name')); ?></span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -32,8 +31,8 @@
                                         style="color: red">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="text" autocomplete="off" class="form-control" name="last_name"
-                                        value="{{ old('last_name') }}" placeholder="Enter last name">
-                                    <span style="color: red">{{ $errors->first('last_name') }}</span>
+                                        value="<?php echo e(old('last_name')); ?>" placeholder="Enter last name">
+                                    <span style="color: red"><?php echo e($errors->first('last_name')); ?></span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -41,8 +40,8 @@
                                         style="color: red">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="text" autocomplete="off" class="form-control" name="company"
-                                        value="{{ old('company') }}" placeholder="Enter company">
-                                    <span style="color: red">{{ $errors->first('company') }}</span>
+                                        value="<?php echo e(old('company')); ?>" placeholder="Enter company">
+                                    <span style="color: red"><?php echo e($errors->first('company')); ?></span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -50,19 +49,18 @@
                                         style="color: red">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="text" autocomplete="off" class="form-control" name="country"
-                                        value="{{ old('country') }}" placeholder="Enter country">
-                                    <span style="color: red">{{ $errors->first('country') }}</span>
+                                        value="<?php echo e(old('country')); ?>" placeholder="Enter country">
+                                    <span style="color: red"><?php echo e($errors->first('country')); ?></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label">Street<span
                                         style="color: red">*</span></label>
                                 <div class="col-sm-9">
-                                    {{-- <input type="text" autocomplete="off" class="form-control" name="street"
-                                        value="{{ old('street') }}" placeholder="Enter street"> --}}
+                                    
                                     <input type="text" id="billing_autocomplete" class="form-control" name="street"
                                         placeholder="Start typing address" required>
-                                    <span style="color: red">{{ $errors->first('street') }}</span>
+                                    <span style="color: red"><?php echo e($errors->first('street')); ?></span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -70,8 +68,8 @@
                                         style="color: red">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="text" autocomplete="off" class="form-control" name="state"
-                                        value="{{ old('state') }}" placeholder="Enter State">
-                                    <span style="color: red">{{ $errors->first('state') }}</span>
+                                        value="<?php echo e(old('state')); ?>" placeholder="Enter State">
+                                    <span style="color: red"><?php echo e($errors->first('state')); ?></span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -79,8 +77,8 @@
                                         style="color: red">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="text" autocomplete="off" class="form-control" name="town"
-                                        value="{{ old('town') }}" placeholder="Enter town">
-                                    <span style="color: red">{{ $errors->first('town') }}</span>
+                                        value="<?php echo e(old('town')); ?>" placeholder="Enter town">
+                                    <span style="color: red"><?php echo e($errors->first('town')); ?></span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -88,8 +86,8 @@
                                         style="color: red">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="number" autocomplete="off" class="form-control" name="postcode"
-                                        value="{{ old('postcode') }}" placeholder="Enter postcode">
-                                    <span style="color: red">{{ $errors->first('postcode') }}</span>
+                                        value="<?php echo e(old('postcode')); ?>" placeholder="Enter postcode">
+                                    <span style="color: red"><?php echo e($errors->first('postcode')); ?></span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -97,8 +95,8 @@
                                         style="color: red">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="tel" autocomplete="off" class="form-control" name="phone"
-                                        value="{{ old('phone') }}" placeholder="Enter phone">
-                                    <span style="color: red">{{ $errors->first('phone') }}</span>
+                                        value="<?php echo e(old('phone')); ?>" placeholder="Enter phone">
+                                    <span style="color: red"><?php echo e($errors->first('phone')); ?></span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -106,8 +104,8 @@
                                         style="color: red">*</span></label>
                                 <div class="col-sm-9">
                                     <input type="email" autocomplete="off" class="form-control" name="email"
-                                        value="{{ old('email') }}" placeholder="Enter email">
-                                    <span style="color: red">{{ $errors->first('email') }}</span>
+                                        value="<?php echo e(old('email')); ?>" placeholder="Enter email">
+                                    <span style="color: red"><?php echo e($errors->first('email')); ?></span>
                                 </div>
                             </div>
 
@@ -124,8 +122,8 @@
             </div>
         </div>
     </section>
-@endsection
-@push('js')
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('js'); ?>
     <script>
         $(document).ready(function() {
             if ($(".texteditor").length > 0) {
@@ -212,4 +210,6 @@
             }, 200);
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.individual.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/admin/billing_address/create.blade.php ENDPATH**/ ?>
