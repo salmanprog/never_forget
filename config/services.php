@@ -49,4 +49,10 @@ return [
         'api_key' => env('TAXJAR_API_KEY'),
     ],
 
+    'twilio' => [
+        'account_sid' => trim((string) env('TWILIO_ACCOUNT_SID', '')),
+        'auth_token' => trim((string) env('TWILIO_AUTH_TOKEN', '')),
+        'from' => trim((string) env('TWILIO_FROM_NUMBER', '')), // E.164 e.g. +18667640235
+    ],
+
 ];

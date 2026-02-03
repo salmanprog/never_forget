@@ -235,7 +235,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('mts-dashboard', 'admin\MTSDashboardController');
     Route::post('mts-dashboard/{id}/update-assigned-salesperson', 'admin\MTSDashboardController@updateAssignedSalesperson')->name('mts-dashboard.update-assigned-salesperson');
 
-    Route::post('send-text', 'admin\MTSDashboardController@sendText')->name('send-text');
+    Route::post('send-sms', [\App\Http\Controllers\SmsController::class, 'send'])->name('send-sms');
 
     //permissions
     Route::resource('permission', 'admin\PermissionController');
