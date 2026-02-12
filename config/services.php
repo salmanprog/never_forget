@@ -52,7 +52,8 @@ return [
     'twilio' => [
         'account_sid' => trim((string) env('TWILIO_ACCOUNT_SID', '')),
         'auth_token' => trim((string) env('TWILIO_AUTH_TOKEN', '')),
-        'from' => trim((string) env('TWILIO_FROM_NUMBER', '')), // E.164 e.g. +18667640235
+        'from' => trim((string) env('TWILIO_FROM_NUMBER', '')), // E.164 e.g. +18667640235 (SMS + Voice)
+        'agent_phone' => trim((string) env('TWILIO_AGENT_PHONE', '')), // Optional: fallback when logged-in user has no phone (click-to-call).
     ],
 
 ];

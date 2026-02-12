@@ -35,6 +35,9 @@ Route::get('/route-clear', function () {
 });
 
 
+// Twilio webhook for incoming SMS replies (must be public, no auth/CSRF)
+
+
 Route::post('user-authenticate', 'WebController@authenticate')->name('user-authenticate');
 Route::get('signup', 'WebController@signUp')->name('signup');
 Route::get('cart-login', 'WebController@cartLogin')->name('cart-login');
@@ -234,9 +237,13 @@ Route::group(['middleware' => ['auth']], function () {
     // MTS Dashboard Routes
     Route::resource('mts-dashboard', 'admin\MTSDashboardController');
     Route::post('mts-dashboard/{id}/update-assigned-salesperson', 'admin\MTSDashboardController@updateAssignedSalesperson')->name('mts-dashboard.update-assigned-salesperson');
+    Route::post('mts-dashboard-send-email', [\App\Http\Controllers\admin\MTSDashboardController::class, 'sendEmail'])->name('mts-dashboard.send-email');
 
     Route::post('send-sms', [\App\Http\Controllers\SmsController::class, 'send'])->name('send-sms');
-
+    Route::post('initiate-call', [\App\Http\Controllers\SmsController::class, 'initiateCall'])->name('initiate-call');
+    Route::get('sms/conversation', [\App\Http\Controllers\SmsController::class, 'conversationHistory'])->name('sms.conversation');
+    Route::get('sms-replies', [\App\Http\Controllers\admin\MTSDashboardController::class, 'smsReplies'])->name('sms-replies');
+    
     //permissions
     Route::resource('permission', 'admin\PermissionController');
 
@@ -308,10 +315,18 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('business-card-options/{businessCardOption}/toggle-active', 'admin\BusinessCardOptionController@toggleActive')->name('business-card-options.toggle_active');
     Route::get('business-card-options/type/{type}', 'admin\BusinessCardOptionController@getByType')->name('business-card-options.by_type');
 
+    Route::get('email-templates', [\App\Http\Controllers\admin\EmailTemplateController::class, 'index'])->name('email-templates.index');
+    Route::get('email-templates/{day}', [\App\Http\Controllers\admin\EmailTemplateController::class, 'show'])->name('email-templates.show');
 
     /*  //Payment
     Route::resource('payment', 'PaymentController'); */
 });
+
+Route::post('/twilio/sms', [\App\Http\Controllers\SmsController::class, 'handleReply'])->name('twilio.sms');
+Route::get('/twilio/voice/dial', [\App\Http\Controllers\SmsController::class, 'dialTwiml'])->name('twilio.voice.dial');
+
+
+
 
 //DomPDF
 Route::get('generate-invoice-pdf', array('as' => 'generate.invoice.pdf', 'uses' => 'PDFController@generateInvoicePDF'));

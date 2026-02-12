@@ -122,6 +122,55 @@
         border-color: #cfa40c;
         color: #081e37;
     }
+    /* Recent messages - chat-style blocks */
+    #messageModalHistory {
+        max-height: 200px;
+        overflow-y: auto;
+        font-size: 13px;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 10px;
+    }
+    #messageModalHistory .sms-msg {
+        margin-bottom: 12px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+    }
+    #messageModalHistory .sms-msg:last-child { margin-bottom: 0; }
+    #messageModalHistory .sms-msg-out {
+        background: #e8f4fd;
+        border-color: #b8daff;
+        margin-left: 0;
+        margin-right: 20%;
+    }
+    #messageModalHistory .sms-msg-in {
+        background: #f0f7f0;
+        border-color: #c3e6cb;
+        margin-left: 20%;
+        margin-right: 0;
+    }
+    #messageModalHistory .sms-msg-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+        font-weight: 600;
+        font-size: 12px;
+    }
+    #messageModalHistory .sms-msg-out .sms-msg-header { color: #0d6efd; }
+    #messageModalHistory .sms-msg-in .sms-msg-header { color: #198754; }
+    #messageModalHistory .sms-msg-header small {
+        font-weight: normal;
+        color: #6c757d;
+        font-size: 11px;
+    }
+    #messageModalHistory .sms-msg-body {
+        color: #333;
+        line-height: 1.4;
+        word-break: break-word;
+    }
 </style>
 
 <section class="content">
@@ -284,13 +333,12 @@
                 </button>
             </div>
             <div class="modal-body">
+                
                 <div class="form-group">
-                    <label>Name</label>
-                    <p class="form-control-plaintext" id="messageModalUserName"></p>
-                </div>
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <p class="form-control-plaintext" id="messageModalUserPhone"></p>
+                    <label>Recent messages (last 10)</label>
+                    <div id="messageModalHistory">
+                        <span class="text-muted">Loading...</span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="messageModalText">Message</label>
@@ -300,7 +348,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-success" id="messageModalSendBtn">
-                    <i class="fa fa-paper-plane"></i> Send
+                    <span class="" style="margin-right: 5px;"><i class="fa fa-paper-plane"></i></span> Send
                 </button>
             </div>
         </div>
@@ -312,7 +360,7 @@
 <script>
 $(document).ready(function() {
 
-// Message modal: open and populate (store phone in data for send)
+// Message modal: open and populate (store phone in data for send), then load conversation history
 $(document).on('click', '.btn-open-message-modal', function() {
     var name = $(this).data('name') || '';
     var lastName = $(this).data('last-name') || '';
@@ -322,7 +370,28 @@ $(document).on('click', '.btn-open-message-modal', function() {
     $('#messageModalUserPhone').text(phone);
     $('#messageModal').data('phone', phone);
     $('#messageModalText').val('');
+    $('#messageModalHistory').html('<span class="text-muted">Loading...</span>');
     $('#messageModal').modal('show');
+    // Fetch last 10 messages for this user
+    $.get('<?php echo e(route("sms.conversation")); ?>', { phone: phone }, function(res) {
+        var messages = res.messages || [];
+        if (messages.length === 0) {
+            $('#messageModalHistory').html('<span class="text-muted">No messages yet.</span>');
+            return;
+        }
+        var html = '';
+        messages.forEach(function(m) {
+            var dir = m.direction === 'out' ? 'out' : 'in';
+            var who = m.direction === 'out' ? 'You' : 'Them';
+            html += '<div class="sms-msg sms-msg-' + dir + '">';
+            html += '<div class="sms-msg-header">' + who + '<small>' + m.at + '</small></div>';
+            html += '<div class="sms-msg-body">' + $('<div/>').text(m.text).html() + '</div>';
+            html += '</div>';
+        });
+        $('#messageModalHistory').html(html);
+    }).fail(function() {
+        $('#messageModalHistory').html('<span class="text-muted">Could not load history.</span>');
+    });
 });
 
 // Message modal: send via Twilio (AJAX to backend) — prevent any sms: link
@@ -375,25 +444,26 @@ $(document).on('click', '#messageModalSendBtn', function(e) {
 });
 
 // Action functions
-function sendText(phone, name) {
-    if (confirm('Send text message to ' + name + ' (' + phone + ')?')) {
-        window.open('sms:' + phone, '_blank');
-    }
-}
+// function sendText(phone, name) {
+//     if (confirm('Send text message to ' + name + ' (' + phone + ')?')) {
+//         window.open('sms:' + phone, '_blank');
+//     }
+//     alert('Send text message to');
+// }
 
-function makeCall(phone, name) {
-    if (confirm('Call ' + name + ' at ' + phone + '?')) {
-        // Open phone app or redirect to calling service
-        window.open('tel:' + phone, '_blank');
-    }
-}
+// function makeCall(phone, name) {
+//     if (confirm('Call ' + name + ' at ' + phone + '?')) {
+//         // Open phone app or redirect to calling service
+//         window.open('tel:' + phone, '_blank');
+//     }
+// }
 
-function sendEmail(email, name) {
-    if (confirm('Send email to ' + name + ' (' + email + ')?')) {
-        // Open email client or redirect to email service
-        window.open('mailto:' + email, '_blank');
-    }
-}
+// function sendEmail(email, name) {
+//     if (confirm('Send email to ' + name + ' (' + email + ')?')) {
+//         // Open email client or redirect to email service
+//         window.open('mailto:' + email, '_blank');
+//     }
+// }
 
 // Handle salesperson assignment dropdown change
 $(document).on('change', '.assigned-salesperson-select', function() {

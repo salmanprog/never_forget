@@ -17,9 +17,7 @@ class MTSDashboardController extends Controller
         $this->middleware('permission:user-list', ['only' => ['index']]);
     }
 
-    /**
-     * Display MTS Dashboard
-     */
+    
     public function index(Request $request)
     {
         $user = Auth::user();

@@ -1,4 +1,4 @@
-@php
+<?php
     if (Auth::user()->hasRole('Admin')) {
         $layout = 'layouts.admin.app';
     } elseif (Auth::user()->hasRole('Individual')) {
@@ -10,14 +10,14 @@
     } else {
         $layout = 'layouts.sales-person.app';
     }
-@endphp
-@extends($layout)
-@section('title', $page_title)
-@section('content')
-<input type="hidden" id="page_url" value="{{ route('mts-dashboard.index') }}">
+?>
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('content'); ?>
+<input type="hidden" id="page_url" value="<?php echo e(route('mts-dashboard.index')); ?>">
 <section class="content-header">
     <div class="content-header-left">
-        <h1>{{ $page_title }}</h1>
+        <h1><?php echo e($page_title); ?></h1>
     </div> 
 </section>
 <style> 
@@ -190,42 +190,43 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
-            @if (session('success'))
+            <?php if(session('success')): ?>
                 <div class="callout callout-success">
-                    {{ session('success') }}
+                    <?php echo e(session('success')); ?>
+
                 </div>
-            @endif
+            <?php endif; ?>
 
             <div class="box box-info">
                 <div class="box-body">
-                    <form method="GET" action="{{ route('mts-dashboard.index') }}">
+                    <form method="GET" action="<?php echo e(route('mts-dashboard.index')); ?>">
                         <div class="row" style="margin-bottom:10px">
                             <div class="d-flex col-sm-6">
-                                <input type="text" name="search" id="search" class="form-control" placeholder="Search by name, email, or phone" value="{{ request('search') }}">
+                                <input type="text" name="search" id="search" class="form-control" placeholder="Search by name, email, or phone" value="<?php echo e(request('search')); ?>">
                             </div>
-                            @if(Auth::user()->isAdmin())
+                            <?php if(Auth::user()->isAdmin()): ?>
                             <div class="d-flex col-sm-3">
                                 <select name="account_type" id="account_type" class="form-control account_type" style="margin-bottom:5px" onchange="this.form.submit()">
-                                    <option value="All" {{ request('account_type') == 'All' ? 'selected' : '' }}>All Types</option>
-                                    <option value="Individual" {{ request('account_type') == 'Individual' ? 'selected' : '' }}>Individual</option>
-                                    <option value="Company" {{ request('account_type') == 'Company' ? 'selected' : '' }}>Company</option>
-                                    <option value="Sales Person" {{ request('account_type') == 'Sales Person' ? 'selected' : '' }}>Sales Person</option>
+                                    <option value="All" <?php echo e(request('account_type') == 'All' ? 'selected' : ''); ?>>All Types</option>
+                                    <option value="Individual" <?php echo e(request('account_type') == 'Individual' ? 'selected' : ''); ?>>Individual</option>
+                                    <option value="Company" <?php echo e(request('account_type') == 'Company' ? 'selected' : ''); ?>>Company</option>
+                                    <option value="Sales Person" <?php echo e(request('account_type') == 'Sales Person' ? 'selected' : ''); ?>>Sales Person</option>
                                 </select>
                             </div>
-                            @elseif(Auth::user()->hasRole('Sales Person'))
+                            <?php elseif(Auth::user()->hasRole('Sales Person')): ?>
                             <div class="d-flex col-sm-3">
                                 <select name="account_type" id="account_type" class="form-control account_type" style="margin-bottom:5px" onchange="this.form.submit()">
-                                    <option value="All" {{ request('account_type') == 'All' ? 'selected' : '' }}>All Types</option>
-                                    <option value="Individual" {{ request('account_type') == 'Individual' ? 'selected' : '' }}>Individual</option>
-                                    <option value="Company" {{ request('account_type') == 'Company' ? 'selected' : '' }}>Company</option>
+                                    <option value="All" <?php echo e(request('account_type') == 'All' ? 'selected' : ''); ?>>All Types</option>
+                                    <option value="Individual" <?php echo e(request('account_type') == 'Individual' ? 'selected' : ''); ?>>Individual</option>
+                                    <option value="Company" <?php echo e(request('account_type') == 'Company' ? 'selected' : ''); ?>>Company</option>
                                 </select>
                             </div>
-                            @endif
+                            <?php endif; ?>
                             <div class="d-flex col-sm-3">
                                 <select name="status" id="status" class="form-control status" style="margin-bottom:5px" onchange="this.form.submit()">
-                                    <option value="All" {{ request('status') == 'All' ? 'selected' : '' }}>All Status</option>
-                                    <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Active</option>
-                                    <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>In-Active</option>
+                                    <option value="All" <?php echo e(request('status') == 'All' ? 'selected' : ''); ?>>All Status</option>
+                                    <option value="1" <?php echo e(request('status') == '1' ? 'selected' : ''); ?>>Active</option>
+                                    <option value="2" <?php echo e(request('status') == '2' ? 'selected' : ''); ?>>In-Active</option>
                                 </select>
                             </div>
                             
@@ -243,91 +244,92 @@
                                 <!-- <th>Date of Birth</th> -->
                                  
                                 <th>Account Type</th> 
-                                @if(Auth::user()->isAdmin())
+                                <?php if(Auth::user()->isAdmin()): ?>
                                 <th>Assigned To</th>
-                                @endif
+                                <?php endif; ?>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="body">
-                            @foreach($users as $key=>$user)
-                                @if($user->hasRole('Admin'))
-                                    @continue;
-                                @endif
-                                <tr id="id-{{ $user->id }}">
-                                    <td>{{ $users->firstItem()+$key }}.</td>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->last_name ?? 'N/A' }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->phone ?? 'N/A' }}</td>
-                                    <!-- <td>{{ $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('M d, Y') : 'N/A' }}</td> -->
+                            <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php if($user->hasRole('Admin')): ?>
+                                    <?php continue; ?>;
+                                <?php endif; ?>
+                                <tr id="id-<?php echo e($user->id); ?>">
+                                    <td><?php echo e($users->firstItem()+$key); ?>.</td>
+                                    <td><?php echo e($user->name); ?></td>
+                                    <td><?php echo e($user->last_name ?? 'N/A'); ?></td>
+                                    <td><?php echo e($user->email); ?></td>
+                                    <td><?php echo e($user->phone ?? 'N/A'); ?></td>
+                                    <!-- <td><?php echo e($user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('M d, Y') : 'N/A'); ?></td> -->
                                     <td>
-                                        @if($user->account_type == 'Company')
+                                        <?php if($user->account_type == 'Company'): ?>
                                             <span class="badge badge-company">
                                                 Company
                                             </span>
-                                        @elseif($user->account_type == 'Sales Person')
+                                        <?php elseif($user->account_type == 'Sales Person'): ?>
                                             <span class="badge badge-salesperson">
                                                 Sales Person
                                             </span>
-                                        @else
+                                        <?php else: ?>
                                             <span class="badge badge-individual">
                                                 Individual
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                     </td>
                                      
-                                    @if(Auth::user()->isAdmin())
+                                    <?php if(Auth::user()->isAdmin()): ?>
                                     <td>
-                                        <select class="form-control assigned-salesperson-select" data-user-id="{{ $user->id }}" style="min-width: 150px;">
+                                        <select class="form-control assigned-salesperson-select" data-user-id="<?php echo e($user->id); ?>" style="min-width: 150px;">
                                             <option value="">-- Select Salesperson --</option>
-                                            @foreach($salespersons as $salesperson)
-                                                <option value="{{ $salesperson->id }}" {{ $user->assigned_to_user_id == $salesperson->id ? 'selected' : '' }}>
-                                                    {{ $salesperson->name }} {{ $salesperson->last_name ?? '' }} ({{ $salesperson->email }})
+                                            <?php $__currentLoopData = $salespersons; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $salesperson): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($salesperson->id); ?>" <?php echo e($user->assigned_to_user_id == $salesperson->id ? 'selected' : ''); ?>>
+                                                    <?php echo e($salesperson->name); ?> <?php echo e($salesperson->last_name ?? ''); ?> (<?php echo e($salesperson->email); ?>)
                                                 </option>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </select>
                                     </td>
-                                    @endif
+                                    <?php endif; ?>
                                     <td>
-                                        @if($user->status)
+                                        <?php if($user->status): ?>
                                             <span class="badge label-success">Active</span>
-                                        @else
+                                        <?php else: ?>
                                             <span class="badge label-danger">In-Active</span>
-                                        @endif
+                                        <?php endif; ?>
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            @if($user->phone)
+                                            <?php if($user->phone): ?>
                                                 <button type="button" class="btn btn-success btn-xs btn-open-message-modal" title="Send Text"
-                                                    data-name="{{ $user->name }}"
-                                                    data-last-name="{{ $user->last_name ?? '' }}"
-                                                    data-phone="{{ $user->phone }}">
+                                                    data-name="<?php echo e($user->name); ?>"
+                                                    data-last-name="<?php echo e($user->last_name ?? ''); ?>"
+                                                    data-phone="<?php echo e($user->phone); ?>">
                                                     <i class="fa fa-comment"></i>
                                                 </button>
-                                            @endif
-                                            @if($user->phone)
+                                            <?php endif; ?>
+                                            <?php if($user->phone): ?>
                                                 <button type="button" class="btn btn-primary btn-xs btn-initiate-call" title="Make Call (Twilio)"
-                                                    data-phone="{{ $user->phone }}"
-                                                    data-name="{{ $user->name }} {{ $user->last_name ?? '' }}">
+                                                    data-phone="<?php echo e($user->phone); ?>"
+                                                    data-name="<?php echo e($user->name); ?> <?php echo e($user->last_name ?? ''); ?>">
                                                     <i class="fa fa-phone"></i>
                                                 </button>
-                                            @endif
+                                            <?php endif; ?>
                                             <button type="button" class="btn btn-info btn-xs btn-open-email-modal" title="Send Email"
-                                                data-email="{{ $user->email }}"
-                                                data-name="{{ $user->name }} {{ $user->last_name ?? '' }}">
+                                                data-email="<?php echo e($user->email); ?>"
+                                                data-name="<?php echo e($user->name); ?> <?php echo e($user->last_name ?? ''); ?>">
                                                 <i class="fa fa-envelope"></i>
                                             </button>
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td colspan="{{ Auth::user()->isAdmin() ? '11' : '10' }}">
-                                    Displaying {{$users->firstItem()}} to {{$users->lastItem()}} of {{$users->total()}} records
+                                <td colspan="<?php echo e(Auth::user()->isAdmin() ? '11' : '10'); ?>">
+                                    Displaying <?php echo e($users->firstItem()); ?> to <?php echo e($users->lastItem()); ?> of <?php echo e($users->total()); ?> records
                                     <div class="d-flex justify-content-center">
-                                        {!! $users->links('pagination::bootstrap-4') !!}
+                                        <?php echo $users->links('pagination::bootstrap-4'); ?>
+
                                     </div>
                                 </td>
                             </tr>
@@ -349,14 +351,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                {{-- <div class="form-group">
-                    <label>Name</label>
-                    <p class="form-control-plaintext" id="messageModalUserName"></p>
-                </div>
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <p class="form-control-plaintext" id="messageModalUserPhone"></p>
-                </div> --}}
+                
                 <div class="form-group">
                     <label>Recent messages (last 10)</label>
                     <div id="messageModalHistory">
@@ -411,9 +406,9 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
 <script>
 $(document).ready(function() {
 
@@ -430,7 +425,7 @@ $(document).on('click', '.btn-open-message-modal', function() {
     $('#messageModalHistory').html('<span class="text-muted">Loading...</span>');
     $('#messageModal').modal('show');
     // Fetch last 10 messages for this user
-    $.get('{{ route("sms.conversation") }}', { phone: phone }, function(res) {
+    $.get('<?php echo e(route("sms.conversation")); ?>', { phone: phone }, function(res) {
         var messages = res.messages || [];
         if (messages.length === 0) {
             $('#messageModalHistory').html('<span class="text-muted">No messages yet.</span>');
@@ -468,10 +463,10 @@ $(document).on('click', '#messageModalSendBtn', function(e) {
     var btn = $(this);
     btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Sending...');
     $.ajax({
-        url: '{{ route("send-sms") }}',
+        url: '<?php echo e(route("send-sms")); ?>',
         type: 'POST',
         data: {
-            _token: '{{ csrf_token() }}',
+            _token: '<?php echo e(csrf_token()); ?>',
             phone: phone,
             message: message
         },
@@ -521,9 +516,9 @@ $(document).on('click', '.btn-initiate-call', function() {
         if (!result.isConfirmed) return;
         btn.prop('disabled', true).find('i').removeClass('fa-phone').addClass('fa-spinner fa-spin');
         $.ajax({
-            url: '{{ route("initiate-call") }}',
+            url: '<?php echo e(route("initiate-call")); ?>',
             type: 'POST',
-            data: { _token: '{{ csrf_token() }}', phone: phone },
+            data: { _token: '<?php echo e(csrf_token()); ?>', phone: phone },
             success: function(response) {
                 if (response.success) {
                     Swal.fire({
@@ -585,10 +580,10 @@ $(document).on('click', '#emailModalSendBtn', function() {
     var btn = $(this);
     btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Sending...');
     $.ajax({
-        url: '{{ route("mts-dashboard.send-email") }}',
+        url: '<?php echo e(route("mts-dashboard.send-email")); ?>',
         type: 'POST',
         data: {
-            _token: '{{ csrf_token() }}',
+            _token: '<?php echo e(csrf_token()); ?>',
             to_email: toEmail,
             to_name: toName,
             subject: subject,
@@ -628,14 +623,14 @@ $(document).on('change', '.assigned-salesperson-select', function() {
     // Disable the select while updating
     selectElement.prop('disabled', true);
     
-    var baseUrl = '{{ route("mts-dashboard.update-assigned-salesperson", ":id") }}';
+    var baseUrl = '<?php echo e(route("mts-dashboard.update-assigned-salesperson", ":id")); ?>';
     var url = baseUrl.replace(':id', userId);
     
     $.ajax({
         url: url,
         type: 'POST',
         data: {
-            _token: '{{ csrf_token() }}',
+            _token: '<?php echo e(csrf_token()); ?>',
             assigned_to_user_id: salespersonId
         },
         success: function(response) {
@@ -675,4 +670,6 @@ $(document).on('focus', '.assigned-salesperson-select', function() {
 });
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make($layout, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never-forget\resources\views/admin/mts-dashboard/index.blade.php ENDPATH**/ ?>

@@ -8,8 +8,13 @@
             </li>
              
             <li class="treeview">
-                <a href="{{ route('mts-dashboard.index') }}" class="{{ request()->is('mts-dashboard*') ? 'active' : '' }}">
+                <a href="{{ route('mts-dashboard.index') }}" class="{{ request()->is('mts-dashboard*') && !request()->is('sms-replies') ? 'active' : '' }}">
                     <i class="fa fa-gift"></i> <span>MTS Dashboard</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="{{ route('sms-replies') }}" class="{{ request()->is('sms-replies') ? 'active' : '' }}">
+                    <i class="fa fa-comment"></i> <span>SMS Replies</span>
                 </a>
             </li>
  

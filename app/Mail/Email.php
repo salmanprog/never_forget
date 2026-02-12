@@ -50,6 +50,10 @@ class Email extends Mailable
             $email = $this->subject($this->details['title'])
                         ->view('emails.collaborate-quote')
                         ->with(['details' => $this->details]);
+        } elseif ($this->details['from'] == 'mts-dashboard-email') {
+            $email = $this->subject($this->details['subject'])
+                        ->view('emails.mts-dashboard-email')
+                        ->with(['body' => $this->details['body'], 'recipientName' => $this->details['recipient_name'] ?? '']);
         }
 
         if (

@@ -212,15 +212,15 @@
                 </ul>
             </li>
 
-            <li class="treeview <?php echo e(request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') || request()->is('business-card-orders') ? 'active': ''); ?>">
-                <a href="" class="<?php echo e(request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') || request()->is('business-card-orders') ? 'active': ''); ?>">
+            <li class="treeview <?php echo e(request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('email-templates') || request()->is('email-templates/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') || request()->is('business-card-orders') ? 'active': ''); ?>">
+                <a href="" class="<?php echo e(request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('email-templates') || request()->is('email-templates/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') || request()->is('business-card-orders') ? 'active': ''); ?>">
                     <i class="fa fa-gift"></i> <span>MTS Dashboard</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
 
-                <ul class="treeview-menu" style="display: <?php echo e(request()->is('mts-dashboard*') || request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*/show') || request()->is('enquires/journey_expert') || request()->is('enquires/quality_logo') || request()->is('business-card-orders')  ? 'block' : 'none'); ?>;">
+                <ul class="treeview-menu" style="display: <?php echo e(request()->is('mts-dashboard*') || request()->is('email-templates') || request()->is('email-templates/*') || request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*/show') || request()->is('enquires/journey_expert') || request()->is('enquires/quality_logo') || request()->is('business-card-orders')  ? 'block' : 'none'); ?>;">
                      <li class="treeview <?php echo e(request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show')  ||request()->is('user') ||request()->is('user/*')  ? 'active' : ''); ?>"
                         style="height: auto;">
                         <a href="#"
@@ -264,16 +264,19 @@
                    
                         <li class="treeview">
                             <a href="<?php echo e(route('mts-dashboard.index') . '?search=&account_type=All&status=All'); ?>"
-                                class="<?php echo e(request()->is('mts-dashboard*') && !request()->is('sms-replies') ? 'active' : ''); ?>">
+                                class="<?php echo e(request()->is('mts-dashboard*') ? 'active' : ''); ?>">
                                 <i class="fa fa-envelope"></i> <span>Resources List</span>
                             </a>
                         </li>
+                        
+                        <?php if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Sales Person')): ?>
                         <li class="treeview">
-                            <a href="<?php echo e(route('sms-replies')); ?>"
-                                class="<?php echo e(request()->is('sms-replies') ? 'active' : ''); ?>">
-                                <i class="fa fa-comment"></i> <span>SMS Replies</span>
+                            <a href="<?php echo e(route('email-templates.index')); ?>"
+                                class="<?php echo e(request()->is('email-templates') || request()->is('email-templates/*') ? 'active' : ''); ?>">
+                                <i class="fa fa-envelope-o"></i> <span>Email Templates</span>
                             </a>
                         </li>
+                        <?php endif; ?>
                         <li class="treeview">
                             <a href="<?php echo e(route('contactus.index')); ?>"
                                 class="<?php echo e(request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ? 'active' : ''); ?>">
@@ -341,4 +344,4 @@
         </ul>
     </section>
 </aside>
-<?php /**PATH C:\xampp\htdocs\never-forget-13nov\resources\views/layouts/admin/sidebar.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\never-forget\resources\views/layouts/admin/sidebar.blade.php ENDPATH**/ ?>

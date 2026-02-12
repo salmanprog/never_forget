@@ -5,13 +5,15 @@ namespace App\Http\Controllers\admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\SmsReply;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class MTSDashboardController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:user-list', ['only' => ['index']]);
+        $this->middleware('permission:user-list', ['only' => ['index', 'smsReplies']]);
     }
 
     /**
@@ -159,5 +161,49 @@ class MTSDashboardController extends Controller
             'success' => true,
             'message' => 'Salesperson assigned successfully'
         ]);
+    }
+
+    /**
+     * Display incoming SMS replies from users.
+     */
+    public function smsReplies(Request $request)
+    {
+        $replies = SmsReply::orderBy('created_at', 'desc')->paginate(20);
+        $page_title = 'SMS Replies';
+        return view('admin.mts-dashboard.sms-replies', compact('replies', 'page_title'));
+    }
+
+    /**
+     * Send email from MTS Dashboard compose modal (no redirect to Gmail).
+     */
+    public function sendEmail(Request $request)
+    {
+        $request->validate([
+            'to_email' => 'required|email',
+            'subject' => 'required|string|max:255',
+            'body' => 'required|string|max:10000',
+            'to_name' => 'nullable|string|max:255',
+        ]);
+
+        $details = [
+            'from' => 'mts-dashboard-email',
+            'subject' => $request->subject,
+            'body' => $request->body,
+            'recipient_name' => $request->to_name ?? '',
+        ];
+
+        try {
+            Mail::to($request->to_email)->send(new \App\Mail\Email($details));
+            return response()->json([
+                'success' => true,
+                'message' => 'Email sent successfully.',
+            ]);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('MTS Dashboard send email failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send email. Please try again or check mail configuration.',
+            ], 422);
+        }
     }
 }
