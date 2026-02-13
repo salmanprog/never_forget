@@ -405,10 +405,14 @@
                                 </li>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link <?php echo e(request('category') == 'balloons' ? 'active' : ''); ?>"
-                                    id="pills-balloons-tab" data-bs-toggle="pill" data-bs-target="#pills-balloons"
-                                    type="button" role="tab" aria-controls="pills-balloons"
-                                    aria-selected="<?php echo e(request('category') == 'balloons' ? 'true' : 'false'); ?>">Balloons</button>
+                                <a href="<?php echo e(route('shop', ['category' => 'balloons'])); ?>"
+                                    class="nav-link <?php echo e(request('category') == 'balloons' ? 'active' : ''); ?>"
+                                    id="pills-balloons-tab" role="tab">Balloons</a>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
+                                <a href="<?php echo e(route('shop', ['category' => 'perfect-gift'])); ?>"
+                                    class="nav-link <?php echo e(request('category') == 'perfect-gift' ? 'active' : ''); ?>"
+                                    id="pills-perfect-gift-tab" role="tab">Perfect Gift</a>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
                                 <button class="nav-link <?php echo e(request('category') == 'qualitylogo' ? 'active' : ''); ?>"
@@ -750,6 +754,46 @@
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
+
+                    <!-- perfect gift category tab -->
+                    <div class="tab-pane fade <?php echo e(request('category') == 'perfect-gift' ? 'active show' : ''); ?>"
+                        id="pills-perfect-gift" role="tabpanel" aria-labelledby="pills-perfect-gift-tab"
+                        tabindex="0">
+                        <div class="row">
+                            <?php $__currentLoopData = $perfectGifts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $perfectGift): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <div class="col-lg-4 col-md-6 product-item visible">
+                                    <div class="gift-card-wrapper balloon-images">
+                                        <img src="<?php echo e(asset('/public/' . $perfectGift->images)); ?>" alt="Perfect Gift">
+                                        <div class="product-info">
+                                            <h3 class="product-title"><?php echo e($perfectGift->title); ?></h3>
+
+                                            <?php if(in_array($perfectGift->id, $addedPerfectGiftIds ?? [])): ?>
+                                                <a href="<?php echo e(route('perfect-gift-items')); ?>"
+                                                    class="add-to-cart balloon-btn"
+                                                    style="width:100%; text-align:center;">
+                                                    View
+                                                </a>
+                                            <?php else: ?>
+                                                <form class="perfect-gift-form" method="POST"
+                                                    action="<?php echo e(route('create-perfect-gift-enquiry-item')); ?>">
+                                                    <?php echo csrf_field(); ?>
+                                                    <input type="hidden" name="perfect_gift_id"
+                                                        value="<?php echo e($perfectGift->id); ?>">
+                                                    <input type="hidden" name="quantity" value="1"
+                                                        min="1">
+                                                    <button type="submit" class="add-to-cart balloon-btn"
+                                                        data-id='btnid' style="width: 100%">
+                                                        Add
+                                                    </button>
+                                                </form>
+                                            <?php endif; ?>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -859,6 +903,36 @@
 
                         $(form).find('button[type="submit"]').replaceWith(link);
 
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            $(document).on('submit', '.perfect-gift-form', function(e) {
+                e.preventDefault();
+
+                const form = this;
+                const formData = new FormData(form);
+
+                $.ajax({
+                    url: $(form).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        const cartUrl = "<?php echo e(route('perfect-gift-items')); ?>";
+                        const link = `
+                            <a href="${cartUrl}" class="add-to-cart balloon-btn">
+                                View
+                            </a>
+                        `;
+                        $(form).find('button[type="submit"]').replaceWith(link);
+                    },
+                    complete: function() {
+                        console.log('complete');
                     },
                     error: function(xhr) {
                         console.error(xhr.responseText);

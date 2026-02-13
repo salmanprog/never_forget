@@ -406,10 +406,14 @@
                                 </li>
                             @endforeach
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link {{ request('category') == 'balloons' ? 'active' : '' }}"
-                                    id="pills-balloons-tab" data-bs-toggle="pill" data-bs-target="#pills-balloons"
-                                    type="button" role="tab" aria-controls="pills-balloons"
-                                    aria-selected="{{ request('category') == 'balloons' ? 'true' : 'false' }}">Balloons</button>
+                                <a href="{{ route('shop', ['category' => 'balloons']) }}"
+                                    class="nav-link {{ request('category') == 'balloons' ? 'active' : '' }}"
+                                    id="pills-balloons-tab" role="tab">Balloons</a>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
+                                <a href="{{ route('shop', ['category' => 'perfect-gift']) }}"
+                                    class="nav-link {{ request('category') == 'perfect-gift' ? 'active' : '' }}"
+                                    id="pills-perfect-gift-tab" role="tab">Perfect Gift</a>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
                                 <button class="nav-link {{ request('category') == 'qualitylogo' ? 'active' : '' }}"
@@ -751,6 +755,46 @@
                             @endforeach
                         </div>
                     </div>
+
+                    <!-- perfect gift category tab -->
+                    <div class="tab-pane fade {{ request('category') == 'perfect-gift' ? 'active show' : '' }}"
+                        id="pills-perfect-gift" role="tabpanel" aria-labelledby="pills-perfect-gift-tab"
+                        tabindex="0">
+                        <div class="row">
+                            @foreach ($perfectGifts as $perfectGift)
+                                <div class="col-lg-4 col-md-6 product-item visible">
+                                    <div class="gift-card-wrapper balloon-images">
+                                        <img src="{{ asset('/public/' . $perfectGift->images) }}" alt="Perfect Gift">
+                                        <div class="product-info">
+                                            <h3 class="product-title">{{ $perfectGift->title }}</h3>
+
+                                            @if (in_array($perfectGift->id, $addedPerfectGiftIds ?? []))
+                                                <a href="{{ route('perfect-gift-items') }}"
+                                                    class="add-to-cart balloon-btn"
+                                                    style="width:100%; text-align:center;">
+                                                    View
+                                                </a>
+                                            @else
+                                                <form class="perfect-gift-form" method="POST"
+                                                    action="{{ route('create-perfect-gift-enquiry-item') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="perfect_gift_id"
+                                                        value="{{ $perfectGift->id }}">
+                                                    <input type="hidden" name="quantity" value="1"
+                                                        min="1">
+                                                    <button type="submit" class="add-to-cart balloon-btn"
+                                                        data-id='btnid' style="width: 100%">
+                                                        Add
+                                                    </button>
+                                                </form>
+                                            @endif
+
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -860,6 +904,36 @@
 
                         $(form).find('button[type="submit"]').replaceWith(link);
 
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            $(document).on('submit', '.perfect-gift-form', function(e) {
+                e.preventDefault();
+
+                const form = this;
+                const formData = new FormData(form);
+
+                $.ajax({
+                    url: $(form).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        const cartUrl = "{{ route('perfect-gift-items') }}";
+                        const link = `
+                            <a href="${cartUrl}" class="add-to-cart balloon-btn">
+                                View
+                            </a>
+                        `;
+                        $(form).find('button[type="submit"]').replaceWith(link);
+                    },
+                    complete: function() {
+                        console.log('complete');
                     },
                     error: function(xhr) {
                         console.error(xhr.responseText);

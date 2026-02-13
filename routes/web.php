@@ -201,6 +201,12 @@ Route::post('/balloon-enquiry', [WebController::class, 'storeBalloonEnquiry'])->
 Route::get('/balloon-items', [WebController::class, 'balloonItems'])->name('balloon-items');
 Route::post('/balloon-items/{id}', [WebController::class, 'destroyBalloonEnquiry'])->name('balloon-items-delete');
 Route::post('/submit-balloon-enquiry', [WebController::class, 'submitBalloonEnquiry'])->name('submit-balloon-enquiry');
+
+Route::post('/create-perfect-gift-enquiry-item', [WebController::class, 'createPerfectGiftEnquiryItem'])->name('create-perfect-gift-enquiry-item');
+Route::post('/perfect-gift-items/update-quantity', [WebController::class, 'updatePerfectGiftQuantity'])->name('perfect-gift-items.update-quantity');
+Route::post('/perfect-gift-enquiry', [WebController::class, 'storePerfectGiftEnquiry'])->name('perfect-gift.enquiry');
+Route::get('/perfect-gift-items', [WebController::class, 'perfectGiftItems'])->name('perfect-gift-items');
+Route::post('/perfect-gift-items/{id}', [WebController::class, 'destroyPerfectGiftEnquiry'])->name('perfect-gift-items-delete');
 Route::group(['middleware' => ['auth']], function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
@@ -295,6 +301,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     //BallonEnquiry
     Route::resource('balloon_enquiry', 'admin\BalloonEnquiryController');
+    Route::resource('perfect_gift_enquiry', 'admin\PerfectGiftEnquiryController');
 
     //Enquires
     Route::resource('enquires-detail', 'admin\EnquiresController')->except(['index', 'create', 'edit', 'delete']);

@@ -456,6 +456,20 @@
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
+                        <img src="{{ asset('public/assets/website/images') }}/perfect-gifts/01.png" alt="Perfect Gifts"
+                            class="img-fluid">
+                    </div>
+                    <div class="card-bottom text-center">
+                        <h5 class="heading light-black fs-24 fw-600 mb-20">
+                            Perfect Gifts
+                        </h5>
+                        <a href="{{ route('shop', ['category' => 'perfect-gift']) }}"
+                            class="btn primary-btn border-0"><span>See
+                                More</span></a>
+                    </div>
+                </div>
+                <div class="card-wrapper">
+                    <div class="category-image mb-20">
                         <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/trade-show-desktop.webp"
                             alt="Quality Logo" class="img-fluid">
                     </div>

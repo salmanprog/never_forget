@@ -30,6 +30,9 @@ use App\Models\Company;
 use App\Models\BalloonsCategory;
 use App\Models\BalloonsEnquiry;
 use App\Models\BalloonEnquiryItem;
+use App\Models\PerfectGiftCategory;
+use App\Models\PerfectGiftEnquiry;
+use App\Models\PerfectGiftEnquiryItem;
 use App\Models\Enquires;
 use Illuminate\Support\Str;
 
@@ -175,15 +178,23 @@ class WebController extends Controller
         })->where('status', 1)->get();
 
         $balloons = BalloonsCategory::all();
+        $perfectGifts = PerfectGiftCategory::all();
 
         $addedBalloonIds = [];
         if (auth()->check()) {
-            $addedBalloonIds = BalloonEnquiryItem::where('user_id', auth()->id())->pluck('balloon_id')->toArray();
+            $addedBalloonIds = BalloonEnquiryItem::where('user_id', auth()->id())->whereNull('enquiry_id')->pluck('balloon_id')->toArray();
         } elseif (session()->has('guest_token')) {
-            $addedBalloonIds = BalloonEnquiryItem::where('guest_token', session('guest_token'))->pluck('balloon_id')->toArray();
+            $addedBalloonIds = BalloonEnquiryItem::where('guest_token', session('guest_token'))->whereNull('enquiry_id')->pluck('balloon_id')->toArray();
         }
 
-        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds'));
+        $addedPerfectGiftIds = [];
+        if (auth()->check()) {
+            $addedPerfectGiftIds = PerfectGiftEnquiryItem::where('user_id', auth()->id())->whereNull('enquiry_id')->pluck('perfect_gift_id')->toArray();
+        } elseif (session()->has('guest_token')) {
+            $addedPerfectGiftIds = PerfectGiftEnquiryItem::where('guest_token', session('guest_token'))->whereNull('enquiry_id')->pluck('perfect_gift_id')->toArray();
+        }
+        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds'));
+        
     }
 
     public function createBalloonEnquiryItem(Request $request)
@@ -249,7 +260,13 @@ class WebController extends Controller
 
         $itemsId = explode(',', $request->balloon_ids);
         foreach ($itemsId as $itemId) {
-            $item = BalloonEnquiryItem::where('balloon_id', $itemId)->where('user_id', auth()->id())->first();
+            $query = BalloonEnquiryItem::where('balloon_id', $itemId)->whereNull('enquiry_id');
+            if (auth()->check()) {
+                $query->where('user_id', auth()->id());
+            } else {
+                $query->where('guest_token', session('guest_token'));
+            }
+            $item = $query->first();
             if ($item) {
                 $item->update([
                     'enquiry_id' => $enquiry->id,
@@ -318,6 +335,112 @@ class WebController extends Controller
         ]);
 
         BalloonEnquiryItem::where('id', $request->id)
+            ->update([
+                'quantity' => $request->quantity
+            ]);
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
+    public function createPerfectGiftEnquiryItem(Request $request)
+    {
+        if (!session()->has('guest_token')) {
+            session(['guest_token' => Str::uuid()->toString()]);
+        }
+
+        PerfectGiftEnquiryItem::create([
+            'user_id' => auth()->id(),
+            'guest_token' => auth()->check() ? null : session('guest_token'),
+            'perfect_gift_id' => $request->perfect_gift_id,
+            'quantity' => 1,
+        ]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Perfect Gift enquiry item created successfully',
+        ]);
+    }
+
+    public function perfectGiftItems()
+    {
+        $page_title = 'Perfect Gift | Never Forget';
+
+        $enquiries = PerfectGiftEnquiryItem::with(['perfectGift', 'enquiry'])
+            ->where(function ($query) {
+                if (auth()->check()) {
+                    $query->where('user_id', auth()->id());
+                } else {
+                    $query->where('guest_token', session('guest_token'));
+                }
+            })
+            ->whereNull('enquiry_id')
+            ->get();
+
+        return view('website.perfect-gift-items', compact('page_title', 'enquiries'));
+    }
+
+    public function storePerfectGiftEnquiry(Request $request)
+    {
+        if (!auth()->check()) {
+            $request->validate([
+                'user_name'  => 'required|string|max:100',
+                'email' => 'required|email',
+                'phone' => 'nullable|string|max:20',
+            ]);
+        }
+
+        $user = auth()->user();
+        $enquiry = PerfectGiftEnquiry::create([
+            'message' => $request->message,
+            'is_submitted' => 1,
+            'user_name' => $user ? $user->name : $request->user_name,
+            'email'     => $user ? $user->email : $request->email,
+            'phone' => $user ? $user->phone : $request->phone,
+        ]);
+
+        $itemsId = explode(',', $request->perfect_gift_ids);
+        foreach ($itemsId as $itemId) {
+            $query = PerfectGiftEnquiryItem::where('perfect_gift_id', $itemId)->whereNull('enquiry_id');
+            if (auth()->check()) {
+                $query->where('user_id', auth()->id());
+            } else {
+                $query->where('guest_token', session('guest_token'));
+            }
+            $item = $query->first();
+            if ($item) {
+                $item->update([
+                    'enquiry_id' => $enquiry->id,
+                ]);
+            }
+        }
+        return redirect()->route('perfect-gift-items');
+    }
+
+    public function destroyPerfectGiftEnquiry($id)
+    {
+        $enquiryItem = PerfectGiftEnquiryItem::findOrFail($id);
+        if (!$enquiryItem) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Record not found'
+            ]);
+        }
+        $enquiryItem->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Item Successfully Removed',
+        ]);
+    }
+
+    public function updatePerfectGiftQuantity(Request $request)
+    {
+        $request->validate([
+            'id'       => 'required|integer',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        PerfectGiftEnquiryItem::where('id', $request->id)
             ->update([
                 'quantity' => $request->quantity
             ]);
