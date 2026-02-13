@@ -1,3 +1,4 @@
+{{-- home page --}}
 @extends('layouts.website.master')
 @section('title', $page_title)
 @section('meta')
