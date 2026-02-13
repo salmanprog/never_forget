@@ -412,7 +412,7 @@
                             <li class="nav-item swiper-slide" role="presentation">
                                 <a href="<?php echo e(route('shop', ['category' => 'perfect-gift'])); ?>"
                                     class="nav-link <?php echo e(request('category') == 'perfect-gift' ? 'active' : ''); ?>"
-                                    id="pills-perfect-gift-tab" role="tab">Perfect Gift</a>
+                                    id="pills-perfect-gift-tab" role="tab">Perfect Gifts</a>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
                                 <button class="nav-link <?php echo e(request('category') == 'qualitylogo' ? 'active' : ''); ?>"

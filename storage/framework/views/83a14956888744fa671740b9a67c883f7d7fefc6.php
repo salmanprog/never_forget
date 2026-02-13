@@ -127,7 +127,7 @@
     <section class="inner-banner">
         <div class="container">
             <h1 class="heading fs-74" data-aos="fade-down" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
-                Perfect Gift
+                Perfect Gifts
             </h1>
         </div>
     </section>
@@ -149,7 +149,7 @@
                             </thead>
                         <?php else: ?>
                             <div class="text-center">
-                                <h4>No perfect gift enquiry items found</h4>
+                                <h4>No perfect gifts enquiry items found</h4>
                             </div>
                         <?php endif; ?>
 
@@ -254,7 +254,7 @@ unset($__errorArgs, $__bag); ?>
                                             Add More
                                         </a>
                                         <button type="submit" class="golbal-btn-submit"
-                                        style="">Submit Perfect Gift Enquiry</button>
+                                        style="">Submit Perfect Gifts Enquiry</button>
                                     </div>
                                 </div>
                             </div>
@@ -360,7 +360,7 @@ unset($__errorArgs, $__bag); ?>
                     Swal.fire({
                         icon: 'success',
                         title: 'Thank You!',
-                        text: 'Your perfect gift enquiry has been submitted successfully.',
+                        text: 'Your perfect gifts enquiry has been submitted successfully.',
                         confirmButtonColor: '#cfa40c'
                     }).then(() => {
                         window.location.href = "<?php echo e(route('shop')); ?>";

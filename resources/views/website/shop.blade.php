@@ -413,7 +413,7 @@
                             <li class="nav-item swiper-slide" role="presentation">
                                 <a href="{{ route('shop', ['category' => 'perfect-gift']) }}"
                                     class="nav-link {{ request('category') == 'perfect-gift' ? 'active' : '' }}"
-                                    id="pills-perfect-gift-tab" role="tab">Perfect Gift</a>
+                                    id="pills-perfect-gift-tab" role="tab">Perfect Gifts</a>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
                                 <button class="nav-link {{ request('category') == 'qualitylogo' ? 'active' : '' }}"
