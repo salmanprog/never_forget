@@ -416,6 +416,11 @@
                                     id="pills-perfect-gift-tab" role="tab">Perfect Gifts</a>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
+                                <a href="{{ route('shop', ['category' => 'e-cards']) }}"
+                                    class="nav-link {{ request('category') == 'e-cards' ? 'active' : '' }}"
+                                    id="pills-e-cards-tab" role="tab">E Cards</a>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
                                 <button class="nav-link {{ request('category') == 'qualitylogo' ? 'active' : '' }}"
                                     id="pills-qualitylogo-tab" data-bs-toggle="pill" data-bs-target="#pills-qualitylogo"
                                     type="button" role="tab" aria-controls="pills-qualitylogo"
@@ -793,6 +798,23 @@
                                     </div>
                                 </div>
                             @endforeach
+                        </div>
+                    </div>
+                    <div class="tab-pane fade {{ request('category') == 'e-cards' ? 'active show' : '' }}"
+                        id="pills-e-cards" role="tabpanel" aria-labelledby="pills-e-cards-tab"
+                        tabindex="0">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 product-item visible">
+                                <div class="gift-card-wrapper balloon-images">
+                                    <img src="{{ asset('public/assets/website/images/e-card-img.jpeg') }}" alt="E Card">
+                                    <div class="product-info">
+                                        <h3 class="product-title">E Card</h3>
+                                        <a href="{{ route('create-e-card') }}" class="add-to-cart balloon-btn" style="width:100%; text-align:center;">
+                                            Order E Card
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

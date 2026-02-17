@@ -57,15 +57,38 @@
                     <i class="fa fa-gift"></i> <span>Employee Gifting</span>
                 </a>
             </li>
+            <li class="treeview {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') ? 'active' : '' }}" style="height: auto;">
+                <a href="#" class="{{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') ? 'active' : '' }}">
+                    <i class="fa fa-envelope"></i>
+                    <span>Enquiries</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu" style="display: {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') ? 'block' : 'none' }};">
+                    <li class="treeview">
+                        <a href="{{ route('my-e-card-enquiries') }}" class="{{ request()->is('my-e-card-enquiries') && !request()->is('my-e-card-enquiries/*') ? 'active' : '' }}">
+                            <i class="fa fa-circle-o"></i> <span>E-Card Enquiry</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li class="treeview">
                 <a href="{{route('account-settings-support.index')}}" class="">
                     <i class="fa fa-life-ring"></i> <span>Account Settings & Support</span>
                 </a>
             </li>
             <li class="treeview">
-                <a href="{{route('settings.index')}}" class="">
-                    <i class="fa fa-cog"></i> <span>Logout / Settings</span>
+                <a class="" href="{{ route('admin.logout') }}"
+                    onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                    <span><i class="fa-solid fa-arrow-right-from-bracket" style="width: 20px;"></i></span>
+                    {{ __('Logout') }}
                 </a>
+
+                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
             </li>
 
           

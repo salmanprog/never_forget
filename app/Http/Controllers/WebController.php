@@ -33,8 +33,10 @@ use App\Models\BalloonEnquiryItem;
 use App\Models\PerfectGiftCategory;
 use App\Models\PerfectGiftEnquiry;
 use App\Models\PerfectGiftEnquiryItem;
+use App\Models\ECardEnquiry;
 use App\Models\Enquires;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 
 use DB;
@@ -195,6 +197,113 @@ class WebController extends Controller
         }
         return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds'));
         
+    }
+
+    public function createEcard()
+    {
+        $page_title = 'Create E-Card || Never Forget';
+        return view('website.create-e-card', compact('page_title'));
+    }
+
+    public function storeEcard(Request $request)
+    {
+        $rules = [
+            'occasion' => 'required|string|max:100',
+            'recipient_name' => 'required|string|max:255',
+            'recipient_email_phone' => 'required|string|max:255',
+            'send_date' => 'required|date',
+            'send_time' => 'required',
+            'physical_gift' => 'required|in:Yes,No',
+            'upload_logo_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+        ];
+        if (!auth()->check()) {
+            $rules['sender_name'] = 'required|string|max:255';
+            $rules['sender_email'] = 'required|email';
+        }
+        $request->validate($rules);
+
+        $uploadPath = null;
+        if ($request->hasFile('upload_logo_photo')) {
+            $file = $request->file('upload_logo_photo');
+            $name = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
+            $file->move(public_path('e_card_uploads'), $name);
+            $uploadPath = 'e_card_uploads/' . $name;
+        }
+
+        $user = auth()->user();
+        $data = [
+            'occasion' => $request->occasion,
+            'recipient_name' => $request->recipient_name,
+            'recipient_email_phone' => $request->recipient_email_phone,
+            'message' => $request->message,
+            'card_style' => $request->card_style,
+            'upload_logo_photo' => $uploadPath,
+            'send_date' => $request->send_date,
+            'send_time' => $request->send_time,
+            'physical_gift' => $request->physical_gift,
+            'physical_gift_type' => $request->physical_gift === 'Yes' ? $request->physical_gift_type : null,
+            'user_id' => $user ? $user->id : null,
+        ];
+        if ($user) {
+            $data['sender_name'] = trim($user->name . ' ' . ($user->last_name ?? ''));
+            $data['sender_email'] = $user->email;
+            $data['sender_phone'] = $user->phone;
+            $data['company_name'] = optional($user->company)->name;
+        } else {
+            $data['sender_name'] = $request->sender_name;
+            $data['sender_email'] = $request->sender_email;
+            $data['sender_phone'] = $request->sender_phone;
+            $data['company_name'] = $request->company_name;
+        }
+
+        ECardEnquiry::create($data);
+
+        $senderEmail = $data['sender_email'];
+        if ($senderEmail) {
+            try {
+                $details = [
+                    'from' => 'e-card-confirmation',
+                    'sender_name' => $data['sender_name'],
+                    'occasion' => $data['occasion'],
+                    'recipient_name' => $data['recipient_name'],
+                    'recipient_email_phone' => $data['recipient_email_phone'],
+                    'send_date' => \Carbon\Carbon::parse($data['send_date'])->format('d M Y'),
+                    'send_time' => \Carbon\Carbon::parse($data['send_time'])->format('h:i A'),
+                    'card_style' => $data['card_style'],
+                ];
+                \Mail::to($senderEmail)->send(new \App\Mail\Email($details));
+            } catch (\Exception $e) {
+                \Log::error('E-Card confirmation email failed: ' . $e->getMessage());
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Your E-Card enquiry has been submitted successfully.',
+        ]);
+    }
+
+    public function myEcardEnquiries(Request $request)
+    {
+        $page_title = 'E-Card Enquiry';
+        $query = ECardEnquiry::where('user_id', auth()->id())->latest();
+
+        if ($request->ajax()) {
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $query->where(function ($q) use ($search) {
+                    $q->where('recipient_name', 'like', '%' . $search . '%')
+                        ->orWhere('recipient_email_phone', 'like', '%' . $search . '%')
+                        ->orWhere('occasion', 'like', '%' . $search . '%')
+                        ->orWhere('status', 'like', '%' . $search . '%');
+                });
+            }
+            $enquiries = $query->paginate(10);
+            return (string) view('admin.my-e-card-enquiries.partials.table', compact('enquiries'));
+        }
+
+        $enquiries = $query->paginate(10);
+        return view('admin.my-e-card-enquiries.index', compact('page_title', 'enquiries'));
     }
 
     public function createBalloonEnquiryItem(Request $request)

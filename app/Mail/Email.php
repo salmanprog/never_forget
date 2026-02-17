@@ -54,6 +54,18 @@ class Email extends Mailable
             $email = $this->subject($this->details['subject'])
                         ->view('emails.mts-dashboard-email')
                         ->with(['body' => $this->details['body'], 'recipientName' => $this->details['recipient_name'] ?? '']);
+        } elseif ($this->details['from'] == 'e-card-confirmation') {
+            $email = $this->subject('E-Card Request Received - NEVER FORGET')
+                        ->view('emails.e-card-confirmation')
+                        ->with([
+                            'senderName' => $this->details['sender_name'] ?? '',
+                            'occasion' => $this->details['occasion'] ?? '',
+                            'recipientName' => $this->details['recipient_name'] ?? '',
+                            'recipientEmailPhone' => $this->details['recipient_email_phone'] ?? '',
+                            'sendDate' => $this->details['send_date'] ?? '',
+                            'sendTime' => $this->details['send_time'] ?? '',
+                            'cardStyle' => $this->details['card_style'] ?? '',
+                        ]);
         }
 
         if (

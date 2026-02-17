@@ -207,6 +207,10 @@ Route::post('/perfect-gift-items/update-quantity', [WebController::class, 'updat
 Route::post('/perfect-gift-enquiry', [WebController::class, 'storePerfectGiftEnquiry'])->name('perfect-gift.enquiry');
 Route::get('/perfect-gift-items', [WebController::class, 'perfectGiftItems'])->name('perfect-gift-items');
 Route::post('/perfect-gift-items/{id}', [WebController::class, 'destroyPerfectGiftEnquiry'])->name('perfect-gift-items-delete');
+
+Route::get('/create-e-card', [WebController::class, 'createEcard'])->name('create-e-card');
+Route::post('/store-e-card', [WebController::class, 'storeEcard'])->name('store-e-card');
+
 Route::group(['middleware' => ['auth']], function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
@@ -302,6 +306,9 @@ Route::group(['middleware' => ['auth']], function () {
     //BallonEnquiry
     Route::resource('balloon_enquiry', 'admin\BalloonEnquiryController');
     Route::resource('perfect_gift_enquiry', 'admin\PerfectGiftEnquiryController');
+    Route::get('e_card_enquiry', [\App\Http\Controllers\admin\ECardEnquiryController::class, 'index'])->name('e_card_enquiry.index');
+    Route::get('e_card_enquiry/{id}', [\App\Http\Controllers\admin\ECardEnquiryController::class, 'show'])->name('e_card_enquiry.show');
+    Route::post('e_card_enquiry/{id}/update-status', [\App\Http\Controllers\admin\ECardEnquiryController::class, 'updateStatus'])->name('e_card_enquiry.update-status');
 
     //Enquires
     Route::resource('enquires-detail', 'admin\EnquiresController')->except(['index', 'create', 'edit', 'delete']);
@@ -337,6 +344,9 @@ Route::get('/twilio/voice/dial', [\App\Http\Controllers\SmsController::class, 'd
 
 //DomPDF
 Route::get('generate-invoice-pdf', array('as' => 'generate.invoice.pdf', 'uses' => 'PDFController@generateInvoicePDF'));
+
+// User's E-Card Enquiries (Individual & Company dashboard)
+Route::get('my-e-card-enquiries', [WebController::class, 'myEcardEnquiries'])->name('my-e-card-enquiries')->middleware('auth');
 
 //order
 Route::resource('order', 'OrderController');
@@ -462,3 +472,16 @@ Route::post('/calculate-tax', [OrderController::class, 'calculateTax'])->name('c
 
 //     return '✅ Test mail sent! Check your inbox (or spam folder).';
 // });
+
+Route::get('/dev/email-preview', function () {
+
+    return view('emails.verify-email', [
+        'details' => [
+            'title' => 'Hello John 👋',
+            'body' => 'Thank you for joining our platform. We are excited to have you onboard.',
+            'account_type' => 'premium',
+            'verify_token' => 'dummy-token-123'
+        ]
+    ]);
+
+});
