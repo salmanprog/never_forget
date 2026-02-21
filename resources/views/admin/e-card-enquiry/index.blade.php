@@ -13,7 +13,8 @@
                     <div class="callout callout-success">{{ session('success') }}</div>
                 @endif
                 <div class="box box-info">
-                    <div class="box-body">
+                    <div class="box-body table-responsive">
+
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -46,6 +47,32 @@
                                         <td>
                                             <a href="{{ route('e_card_enquiry.show', $enquiry->id) }}" class="btn btn-info btn-sm">View</a>
                                         </td>
+                                        <td>
+                                            <div class="btn-group mts-contacts-btn-group" role="group">
+                                                @if ($enquiry->phone)
+                                                    <button type="button"
+                                                        class="btn btn-success btn-xs btn-open-message-modal"
+                                                        title="Send Text" data-name="{{ $enquiry->name }}"
+                                                        data-last-name="{{ $enquiry->last_name ?? '' }}"
+                                                        data-phone="{{ $enquiry->phone }}">
+                                                        <i class="fa fa-comment"></i>
+                                                    </button>
+                                                @endif
+                                                @if ($enquiry->phone)
+                                                    <button type="button"
+                                                        class="btn btn-primary btn-xs btn-initiate-call"
+                                                        title="Make Call (Twilio)" data-phone="{{ $enquiry->phone }}"
+                                                        data-name="{{ $enquiry->name }} {{ $enquiry->last_name ?? '' }}">
+                                                        <i class="fa fa-phone"></i>
+                                                    </button>
+                                                @endif
+                                                <button type="button" class="btn btn-info btn-xs btn-open-email-modal"
+                                                    title="Send Email" data-email="{{ $enquiry->email }}"
+                                                    data-name="{{ $enquiry->name }} {{ $enquiry->last_name ?? '' }}">
+                                                    <i class="fa fa-envelope"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 <tr>
@@ -63,9 +90,11 @@
             </div>
         </div>
     </section>
+    @include('includes.admin.mts-modals')
 @endsection
 
 @push('js')
+@include('includes.admin.mts-functions')
 <script>
 $(document).ready(function() {
     $(document).on('change', '.ecard-status-select', function() {

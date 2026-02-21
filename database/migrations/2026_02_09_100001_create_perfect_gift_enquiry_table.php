@@ -15,6 +15,7 @@ class CreatePerfectGiftEnquiryTable extends Migration
             $table->integer('is_submitted')->default(0);
             $table->string('user_name', 100)->nullable();
             $table->string('email', 150)->nullable();
+            $table->enum('business_type', ['small_business', 'corporate'])->nullable();
             $table->timestamps();
         });
     }

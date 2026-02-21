@@ -138,7 +138,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="cart-of-table cart-table">
-                    <table class="table-responsive table table-striped dt-responsive nowrap">
+                    {{-- <table class="table-responsive table table-striped dt-responsive nowrap">
                         @if (count($enquiries) > 0)
                             <thead>
                                 <tr>
@@ -191,8 +191,8 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                    </table>
-                    @if (count($enquiries) > 0)
+                    </table> --}}
+                    {{-- @if (count($enquiries) > 0) --}}
                         @php
                             $user = auth()->user();
                         @endphp
@@ -200,7 +200,7 @@
                         <form action="{{ route('perfect-gift.enquiry') }}" class="field-wrapper enquiry-form">
                             @csrf
                             <div class="row row-gap-20">
-                                <input type="hidden" name="perfect_gift_ids" value="{{ implode(',', $item_ids) }}">
+                                {{-- <input type="hidden" name="perfect_gift_ids" value="{{ implode(',', $item_ids) }}"> --}}
                                 @if (!$user)
                                     <div class="col-lg-6">
                                         <input type="text" id="user_name" class="input-field" name="user_name"
@@ -223,7 +223,27 @@
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </div>
+                                    {{-- <div class="col-12">
+                                        <select name="type" id="type" class="input-field form-select">
+                                            <option value="" selected disabled>Select Type</option>
+                                            <option value="small_business">Small Business</option>
+                                            <option value="corporate">Corporate</option>
+                                        </select>
+                                        @error('perfect_gift_id')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div> --}}
                                 @endif
+                                <div class="col-12">
+                                    <select name="business_type" id="type" class="input-field form-select">
+                                        <option value="" selected disabled>Select Type</option>
+                                        <option value="small_business">Small Business</option>
+                                        <option value="corporate">Corporate</option>
+                                    </select>
+                                    @error('perfect_gift_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                                 <div class="col-12">
                                     <textarea name="message" id="message" placeholder="Message" class="input-field"></textarea>
                                 </div>
@@ -239,7 +259,7 @@
                             </div>
                         </form>
 
-                    @endif
+                    {{-- @endif --}}
                 </div>
             </div>
         </div>
@@ -356,7 +376,6 @@
                 }
             });
         });
-
     })
 </script>
 @endpush

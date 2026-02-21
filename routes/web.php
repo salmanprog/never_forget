@@ -329,6 +329,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('business-card-options/{businessCardOption}/toggle-active', 'admin\BusinessCardOptionController@toggleActive')->name('business-card-options.toggle_active');
     Route::get('business-card-options/type/{type}', 'admin\BusinessCardOptionController@getByType')->name('business-card-options.by_type');
 
+    Route::get('templates', [\App\Http\Controllers\admin\TemplatesController::class, 'index'])->name('templates.index');
+    Route::get('templates/text-messages', function () { return redirect()->route('text-message-templates.index'); })->name('templates.text-messages');
+    Route::get('templates/phone-scripts', function () { return redirect()->route('phone-script-templates.index'); })->name('templates.phone-scripts');
+    Route::get('text-message-templates', [\App\Http\Controllers\admin\TextMessageTemplateController::class, 'index'])->name('text-message-templates.index');
+    Route::get('phone-script-templates', [\App\Http\Controllers\admin\PhoneScriptTemplateController::class, 'index'])->name('phone-script-templates.index');
+    Route::get('phone-script-templates/{day}', [\App\Http\Controllers\admin\PhoneScriptTemplateController::class, 'show'])->name('phone-script-templates.show');
+    Route::get('text-message-templates/{day}', [\App\Http\Controllers\admin\TextMessageTemplateController::class, 'show'])->name('text-message-templates.show');
     Route::get('email-templates', [\App\Http\Controllers\admin\EmailTemplateController::class, 'index'])->name('email-templates.index');
     Route::get('email-templates/{day}', [\App\Http\Controllers\admin\EmailTemplateController::class, 'show'])->name('email-templates.show');
 

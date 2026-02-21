@@ -491,6 +491,9 @@ class WebController extends Controller
 
     public function storePerfectGiftEnquiry(Request $request)
     {
+        $request->validate([
+            'business_type' => 'required|in:small_business,corporate',
+        ]);
         if (!auth()->check()) {
             $request->validate([
                 'user_name'  => 'required|string|max:100',
@@ -506,6 +509,7 @@ class WebController extends Controller
             'user_name' => $user ? $user->name : $request->user_name,
             'email'     => $user ? $user->email : $request->email,
             'phone' => $user ? $user->phone : $request->phone,
+            'business_type' => $request->business_type,
         ]);
 
         $itemsId = explode(',', $request->perfect_gift_ids);

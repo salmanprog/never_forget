@@ -35,7 +35,7 @@
                                     <td>{{ $perfectGiftEnquiry->created_at->format('d M Y') }}</td>
                                 </tr>
                             </tbody>
-                            <thead>
+                            {{-- <thead>
                                 <tr>
                                     <th>Products</th>
                                 </tr>
@@ -59,7 +59,7 @@
                                     <td>{{ $item->quantity }}</td>
                                 </tr>
                                 @endforeach
-                            </tbody>
+                            </tbody> --}}
                         </table>
                     </div>
                 </div>

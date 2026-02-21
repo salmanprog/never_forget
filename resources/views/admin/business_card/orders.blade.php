@@ -14,7 +14,7 @@
 
 @section('title', $page_title)
 @section('content')
-<input type="hidden" id="page_url" value="{{ route('business-card.orders') }}">
+    <input type="hidden" id="page_url" value="{{ route('business-card.orders') }}">
     <section class="content-header">
         <div class="content-header-left">
             <h1>All Business Card Orders</h1>
@@ -43,86 +43,115 @@
                                 </select>
                             </div>
                         </div>
-                        <table id="" class="table table-bordered table-hover table-striped">
-                            <thead>
-                                <tr>
-                                    <th>SL</th>
-                                    <th>Order No#</th>
-                                    <th>Product </th>
-                                    <th>Price</th>
-                                    <th>Date</th>
-                                    @if (Auth::user()->hasRole('Admin'))
-                                        <th>Action</th>
-                                    @endif
-                                </tr>
-                            </thead>
-                            <tbody id="body">
-                                @foreach ($models as $key => $model)
-                                    <tr id="id-{{ $model->slug }}">
-                                        <td>{{ $models->firstItem() + $key }}.</td>
+                        <div class="table-responsive">
+                            <table id="" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>Order No#</th>
+                                        <th>Product </th>
+                                        <th>Price</th>
+                                        <th>Date</th>
+                                        @if (Auth::user()->hasRole('Admin'))
+                                            <th>Action</th>
+                                        @endif
+                                        <th>Contacts</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="body">
+                                    @foreach ($models as $key => $model)
+                                        <tr id="id-{{ $model->slug }}">
+                                            <td>{{ $models->firstItem() + $key }}.</td>
 
-                                        <td width="80px">{{ $model->order_number }}</td>
-										<td>
-											@foreach ($model->hasOrderDetails as $orderDetail)
-												@if ($orderDetail->productsItem)
-													{{ $orderDetail->productsItem->name }} 
-                                                @elseif($orderDetail->product_slug)
-                                                    {{ $orderDetail->product_slug }}
-												@else
-													<span class="badge badge-danger">No Product</span>
-												@endif
-                                                <br>
-											@endforeach
-										</td>
-                                        <td>
-											@foreach ($model->hasOrderDetails as $orderDetail)
-											  ${{ number_format($orderDetail->price, 2) }}<br>
-											@endforeach
-                                        </td>
-                                        <td>{{ date('d, m-Y H:i A', strtotime($model->created_at)) }}</td>
+                                            <td width="80px">{{ $model->order_number }}</td>
+                                            <td>
+                                                @foreach ($model->hasOrderDetails as $orderDetail)
+                                                    @if ($orderDetail->productsItem)
+                                                        {{ $orderDetail->productsItem->name }}
+                                                    @elseif($orderDetail->product_slug)
+                                                        {{ $orderDetail->product_slug }}
+                                                    @else
+                                                        <span class="badge badge-danger">No Product</span>
+                                                    @endif
+                                                    <br>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($model->hasOrderDetails as $orderDetail)
+                                                    ${{ number_format($orderDetail->price, 2) }}<br>
+                                                @endforeach
+                                            </td>
+                                            <td>{{ date('d, m-Y H:i A', strtotime($model->created_at)) }}</td>
 
-                                        <td>
-                                            <a href="{{ route('business-card-orders.ordersshow', $model->id) }}" class="btn btn-info btn-sm">
-                                                View
-                                            </a>
-                                        </td>
+                                            <td>
+                                                <a href="{{ route('business-card-orders.ordersshow', $model->id) }}"
+                                                    class="btn btn-info btn-sm">
+                                                    View
+                                                </a>
+                                            </td>
 
-                                        <td width="100px">
-                                            @can('order-show')
-                                                <a href="{{ route('order.show', $model->id) }}" data-toggle="tooltip"
-                                                    data-placement="top" title="Show order" class="btn btn-info btn-xs"><i
-                                                        class="fa fa-eye"></i></a>
-                                            @endcan
-                                            @can('order-edit')
-                                                <!-- <a href="{{ route('order.edit', $model->id) }}" data-toggle="tooltip"
-                                                    data-placement="top" title="Edit order" class="btn btn-primary btn-xs"><i
-                                                        class="fa fa-edit"></i></a> -->
-                                            @endcan
-                                            @can('order-invoice')
-                                                <!-- <a href="{{ route('order.invoice', ['id' => $model->id]) }}"
-                                                    data-toggle="tooltip" data-placement="top" title="Order Invoice"
-                                                    class="btn btn-warning btn-xs"><i class="fa fa-file"></i></a> -->
-                                            @endcan
+                                            <td width="100px">
+                                                @can('order-show')
+                                                    <a href="{{ route('order.show', $model->id) }}" data-toggle="tooltip"
+                                                        data-placement="top" title="Show order" class="btn btn-info btn-xs"><i
+                                                            class="fa fa-eye"></i></a>
+                                                @endcan
+                                                @can('order-edit')
+                                                    <!-- <a href="{{ route('order.edit', $model->id) }}" data-toggle="tooltip"
+                                                                    data-placement="top" title="Edit order" class="btn btn-primary btn-xs"><i
+                                                                        class="fa fa-edit"></i></a> -->
+                                                @endcan
+                                                @can('order-invoice')
+                                                    <!-- <a href="{{ route('order.invoice', ['id' => $model->id]) }}"
+                                                                    data-toggle="tooltip" data-placement="top" title="Order Invoice"
+                                                                    class="btn btn-warning btn-xs"><i class="fa fa-file"></i></a> -->
+                                                @endcan
+                                                <div class="btn-group mts-contacts-btn-group" role="group">
+                                                    @if ($model->phone)
+                                                        <button type="button"
+                                                            class="btn btn-success btn-xs btn-open-message-modal"
+                                                            title="Send Text" data-name="{{ $model->name }}"
+                                                            data-last-name="{{ $model->last_name ?? '' }}"
+                                                            data-phone="{{ $model->phone }}">
+                                                            <i class="fa fa-comment"></i>
+                                                        </button>
+                                                    @endif
+                                                    @if ($model->phone)
+                                                        <button type="button"
+                                                            class="btn btn-primary btn-xs btn-initiate-call"
+                                                            title="Make Call (Twilio)" data-phone="{{ $model->phone }}"
+                                                            data-name="{{ $model->name }} {{ $model->last_name ?? '' }}">
+                                                            <i class="fa fa-phone"></i>
+                                                        </button>
+                                                    @endif
+                                                    <button type="button" class="btn btn-info btn-xs btn-open-email-modal"
+                                                        title="Send Email" data-email="{{ $model->email }}"
+                                                        data-name="{{ $model->name }} {{ $model->last_name ?? '' }}">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    <tr>
+                                        <td colspan="7">
+                                            Displying {{ $models->firstItem() }} to {{ $models->lastItem() }} of
+                                            {{ $models->total() }} records
+                                            <div class="d-flex justify-content-center">
+                                                {!! $models->links('pagination::bootstrap-4') !!}
+                                            </div>
                                         </td>
                                     </tr>
-                                @endforeach
-                                <tr>
-                                    <td colspan="7">
-                                        Displying {{ $models->firstItem() }} to {{ $models->lastItem() }} of
-                                        {{ $models->total() }} records
-                                        <div class="d-flex justify-content-center">
-                                            {!! $models->links('pagination::bootstrap-4') !!}
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    @include('includes.admin.mts-modals')
 @endsection
-
 @push('js')
+    @include('includes.admin.mts-functions')
 @endpush

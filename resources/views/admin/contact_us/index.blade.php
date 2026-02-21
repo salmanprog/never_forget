@@ -38,6 +38,7 @@
                             </select>
                         </div>
                     </div>
+					<div class="table-responsive">
 					<table id="" class="table table-bordered table-striped">
 						<thead>
 							<tr>
@@ -88,6 +89,7 @@
                             </tr>
 						</tbody>
 					</table>
+					</div>
 				</div>
 			</div>
 		</div>

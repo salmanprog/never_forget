@@ -37,7 +37,7 @@ class PerfectGiftEnquiryController extends Controller
 
     public function show($id)
     {
-        $page_title = 'Perfect Gift Item';
+        $page_title = 'Perfect Gift';
         $perfectGiftEnquiry = PerfectGiftEnquiry::with(['items.perfectGift'])
             ->findOrFail($id);
         return view('admin.perfect-gift-enquiry.show', compact('page_title', 'perfectGiftEnquiry'));

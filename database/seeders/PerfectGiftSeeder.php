@@ -14,29 +14,7 @@ class PerfectGiftSeeder extends Seeder
     public function run()
     {
         $items = [
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
-            ['title' => 'title here', 'images' => 'assets/website/images/perfect-gifts/01.png'],
+            ['title' => 'Perfect Gifts Template', 'images' => 'assets/website/images/perfect-gifts/01.png'],
         ];
         foreach ($items as $index => $item) {
             $id = $index + 1;
