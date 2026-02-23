@@ -25,13 +25,14 @@
                                     <th>Send Date & Time</th>
                                     <th>Status</th>
                                     <th width="100">Action</th>
+                                    <th style="min-width: 200px;">Contacts</th>
                                 </tr>
                             </thead>
                             <tbody id="body">
                                 @foreach($enquiries as $key => $enquiry)
                                     <tr>
                                         <td>{{ $enquiries->firstItem() + $key }}</td>
-                                        <td>{{ $enquiry->sender_name ?? 'N/A' }}<br><small>{{ $enquiry->sender_email ?? '' }}</small></td>
+                                        <td>{{ $enquiry->sender_name ?? 'N/A' }}<br><small>{{ $enquiry->sender_email ?? '' }}</small>@if($enquiry->sender_phone)<br><small>{{ $enquiry->sender_phone }}</small>@else<br><small class="text-muted">No Phone</small>@endif</td>
                                         <td>{{ $enquiry->recipient_name }}<br><small>{{ $enquiry->recipient_email_phone }}</small></td>
                                         <td>{{ $enquiry->occasion }}</td>
                                         <td>{{ \Carbon\Carbon::parse($enquiry->send_date)->format('d M Y') }} {{ \Carbon\Carbon::parse($enquiry->send_time)->format('h:i A') }}</td>
@@ -49,26 +50,26 @@
                                         </td>
                                         <td>
                                             <div class="btn-group mts-contacts-btn-group" role="group">
-                                                @if ($enquiry->phone)
+                                                @if ($enquiry->sender_phone)
                                                     <button type="button"
                                                         class="btn btn-success btn-xs btn-open-message-modal"
-                                                        title="Send Text" data-name="{{ $enquiry->name }}"
-                                                        data-last-name="{{ $enquiry->last_name ?? '' }}"
-                                                        data-phone="{{ $enquiry->phone }}">
+                                                        title="Send Text" data-name="{{ $enquiry->sender_name ?? '' }}"
+                                                        data-last-name=""
+                                                        data-phone="{{ $enquiry->sender_phone }}">
                                                         <i class="fa fa-comment"></i>
                                                     </button>
                                                 @endif
-                                                @if ($enquiry->phone)
+                                                @if ($enquiry->sender_phone)
                                                     <button type="button"
                                                         class="btn btn-primary btn-xs btn-initiate-call"
-                                                        title="Make Call (Twilio)" data-phone="{{ $enquiry->phone }}"
-                                                        data-name="{{ $enquiry->name }} {{ $enquiry->last_name ?? '' }}">
+                                                        title="Make Call (Twilio)" data-phone="{{ $enquiry->sender_phone }}"
+                                                        data-name="{{ $enquiry->sender_name ?? '' }}">
                                                         <i class="fa fa-phone"></i>
                                                     </button>
                                                 @endif
                                                 <button type="button" class="btn btn-info btn-xs btn-open-email-modal"
-                                                    title="Send Email" data-email="{{ $enquiry->email }}"
-                                                    data-name="{{ $enquiry->name }} {{ $enquiry->last_name ?? '' }}">
+                                                    title="Send Email" data-email="{{ $enquiry->sender_email ?? '' }}"
+                                                    data-name="{{ $enquiry->sender_name ?? '' }}">
                                                     <i class="fa fa-envelope"></i>
                                                 </button>
                                             </div>
@@ -76,7 +77,7 @@
                                     </tr>
                                 @endforeach
                                 <tr>
-                                    <td colspan="7">
+                                    <td colspan="8">
                                         Displaying {{ $enquiries->firstItem() }} to {{ $enquiries->lastItem() }} of {{ $enquiries->total() }} records
                                         <div class="d-flex justify-content-center">
                                             {!! $enquiries->links('pagination::bootstrap-4') !!}

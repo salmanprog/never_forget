@@ -211,7 +211,7 @@ class WebController extends Controller
             'occasion' => 'required|string|max:100',
             'recipient_name' => 'required|string|max:255',
             'recipient_email_phone' => 'required|string|max:255',
-            'send_date' => 'required|date',
+            'send_date' => 'required|date|after_or_equal:today',
             'send_time' => 'required',
             'physical_gift' => 'required|in:Yes,No',
             'upload_logo_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
@@ -382,6 +382,31 @@ class WebController extends Controller
                 ]);
             }
         }
+
+        $senderEmail = $enquiry->email;
+        if ($senderEmail) {
+            try {
+                $enquiry->load(['items.balloon']);
+                $itemsSummary = $enquiry->items->map(function ($item) {
+                    return $item->balloon ? ($item->balloon->title . ' (Qty: ' . $item->quantity . ')') : '';
+                })->filter()->implode(', ');
+                $confirmationDetails = [
+                    'from' => 'balloon-confirmation',
+                    'sender_name' => $enquiry->user_name,
+                    'email' => $enquiry->email,
+                    'phone' => $enquiry->phone,
+                    'message' => $enquiry->message,
+                    'items_summary' => $itemsSummary ?: '—',
+                ];
+                \Mail::to($senderEmail)->send(new \App\Mail\Email($confirmationDetails));
+            } catch (\Throwable $e) {
+                \Log::error('Balloon confirmation email failed: ' . $e->getMessage(), [
+                    'exception' => $e->getTraceAsString(),
+                    'recipient' => $senderEmail,
+                ]);
+            }
+        }
+
         return redirect()->route('balloon-items');
     }
 
@@ -527,6 +552,28 @@ class WebController extends Controller
                 ]);
             }
         }
+
+        $senderEmail = $enquiry->email;
+        if ($senderEmail) {
+            try {
+                $businessTypeLabel = $enquiry->business_type === 'small_business' ? 'Small Business' : ($enquiry->business_type === 'corporate' ? 'Corporate' : $enquiry->business_type);
+                $confirmationDetails = [
+                    'from' => 'perfect-gift-confirmation',
+                    'sender_name' => $enquiry->user_name,
+                    'email' => $enquiry->email,
+                    'phone' => $enquiry->phone,
+                    'message' => $enquiry->message,
+                    'business_type_label' => $businessTypeLabel,
+                ];
+                \Mail::to($senderEmail)->send(new \App\Mail\Email($confirmationDetails));
+            } catch (\Throwable $e) {
+                \Log::error('Perfect Gift confirmation email failed: ' . $e->getMessage(), [
+                    'exception' => $e->getTraceAsString(),
+                    'recipient' => $senderEmail,
+                ]);
+            }
+        }
+
         return redirect()->route('perfect-gift-items');
     }
 
@@ -1260,6 +1307,44 @@ class WebController extends Controller
         ]);
 
         \Mail::to('cruise@neverforgetappreciation.com')->send(new \App\Mail\Email($details));
+
+        $identifier = trim((string) ($params['identifier'] ?? ''));
+        if ($identifier === 'journey_expert') {
+            try {
+                \Log::info('Sending Travel & Experience confirmation email to: ' . $data['email']);
+                $confirmationDetails = [
+                    'from' => 'travel-experience-confirmation',
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'phone' => $data['phone'],
+                    'message' => $data['message'],
+                ];
+                \Mail::to($data['email'])->send(new \App\Mail\Email($confirmationDetails));
+                \Log::info('Travel & Experience confirmation email sent successfully to: ' . $data['email']);
+            } catch (\Throwable $e) {
+                \Log::error('Travel & Experience confirmation email failed: ' . $e->getMessage(), [
+                    'exception' => $e->getTraceAsString(),
+                    'recipient' => $data['email'],
+                ]);
+            }
+        } elseif ($identifier === 'quality_logo') {
+            try {
+                $confirmationDetails = [
+                    'from' => 'quality-logo-confirmation',
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'phone' => $data['phone'],
+                    'message' => $data['message'],
+                    'product' => $params['product'] ?? '',
+                ];
+                \Mail::to($data['email'])->send(new \App\Mail\Email($confirmationDetails));
+            } catch (\Throwable $e) {
+                \Log::error('Quality Logo confirmation email failed: ' . $e->getMessage(), [
+                    'exception' => $e->getTraceAsString(),
+                    'recipient' => $data['email'],
+                ]);
+            }
+        }
 
         return back()->with('success', 'Your inquiry has been sent successfully!');
     }

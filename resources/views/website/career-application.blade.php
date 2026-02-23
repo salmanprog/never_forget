@@ -84,7 +84,7 @@
     }
 
     /* Custom SweetAlert Styling */
-    .swal2-popup {
+    /* .swal2-popup {
         border-radius: 20px !important;
         font-family: inherit !important;
     }
@@ -117,7 +117,7 @@
     .swal2-success-line-tip,
     .swal2-success-line-long {
         background-color: #0B1B48 !important;
-    }
+    } */
 </style>
 <!-- Inner Page Banner  -->
 <main class="inner-bg">

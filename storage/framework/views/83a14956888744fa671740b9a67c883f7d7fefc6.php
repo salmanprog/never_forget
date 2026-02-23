@@ -1,6 +1,5 @@
-@extends('layouts.website.master')
-@section('content')
-@section('title', $page_title)
+<?php $__env->startSection('content'); ?>
+<?php $__env->startSection('title', $page_title); ?>
 <style>
     .cart-main {
         background: #298dff38;
@@ -138,111 +137,77 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="cart-of-table cart-table">
-                    {{-- <table class="table-responsive table table-striped dt-responsive nowrap">
-                        @if (count($enquiries) > 0)
-                            <thead>
-                                <tr>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                    <th scope="col">Product</th>
-                                    <th scope="col">Quantity</th>
-                                </tr>
-                            </thead>
-                        @else
-                            <div class="text-center">
-                                <h4>No perfect gifts enquiry items found</h4>
-                            </div>
-                        @endif
-
-                        <tbody>
-                            @php
-                                $item_ids = [];
-                            @endphp
-                            @foreach ($enquiries as $enquiry)
-                                @php
-                                    array_push($item_ids, $enquiry->perfect_gift_id);
-                                @endphp
-                                <tr id="">
-                                    <td><button data-id="{{ $enquiry->id }}" type="button" scope="row"
-                                            class="remove-btn delete"><span class="croos"><i
-                                                    class="fa fa-trash"></i></span></button></td>
-                                    <td>
-                                        @if ($enquiry->perfectGift->images)
-                                            <img src="{{ asset('/public/' . $enquiry->perfectGift->images) }}"
-                                                alt="{{ $enquiry->perfectGift->title }}"
-                                                style="width: 100px; height: 100px;">
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ $enquiry->perfectGift->title }}
-                                    </td>
-                                    <td>
-                                        <div class="quantity_goods">
-                                            <button type="button" class="quantity-btn minus"
-                                                data-id="{{ $enquiry->id }}">-</button>
-
-                                            <input type="number" class="update_quantity" data-id="{{ $enquiry->id }}"
-                                                min="1" value="{{ $enquiry->quantity }}">
-
-                                            <button type="button" class="quantity-btn plus"
-                                                data-id="{{ $enquiry->id }}">+</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table> --}}
-                    {{-- @if (count($enquiries) > 0) --}}
-                        @php
+                    
+                    
+                        <?php
                             $user = auth()->user();
-                        @endphp
+                        ?>
 
-                        <form action="{{ route('perfect-gift.enquiry') }}" class="field-wrapper enquiry-form">
-                            @csrf
+                        <form action="<?php echo e(route('perfect-gift.enquiry')); ?>" class="field-wrapper enquiry-form">
+                            <?php echo csrf_field(); ?>
                             <div class="row row-gap-20">
-                                {{-- <input type="hidden" name="perfect_gift_ids" value="{{ implode(',', $item_ids) }}"> --}}
-                                @if (!$user)
+                                
+                                <?php if(!$user): ?>
                                     <div class="col-lg-6">
                                         <input type="text" id="user_name" class="input-field" name="user_name"
-                                            placeholder="Enter Your Name" value="{{ old('user_name') }}" />
-                                        @error('user_name')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                            placeholder="Enter Your Name" value="<?php echo e(old('user_name')); ?>" />
+                                        <?php $__errorArgs = ['user_name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                            <small class="text-danger"><?php echo e($message); ?></small>
+                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
                                     <div class="col-lg-6">
                                         <input type="text" id="email" class="input-field" name="email"
-                                            placeholder="Enter Your Email" value="{{ old('email') }}" />
-                                        @error('email')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                            placeholder="Enter Your Email" value="<?php echo e(old('email')); ?>" />
+                                        <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                            <small class="text-danger"><?php echo e($message); ?></small>
+                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
                                     <div class="col-12">
                                         <input type="text" id="phone" class="input-field" name="phone"
-                                            placeholder="Enter Your Phone" value="{{ old('phone') }}" />
-                                        @error('phone')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                            placeholder="Enter Your Phone" value="<?php echo e(old('phone')); ?>" />
+                                        <?php $__errorArgs = ['phone'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                            <small class="text-danger"><?php echo e($message); ?></small>
+                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
-                                    {{-- <div class="col-12">
-                                        <select name="type" id="type" class="input-field form-select">
-                                            <option value="" selected disabled>Select Type</option>
-                                            <option value="small_business">Small Business</option>
-                                            <option value="corporate">Corporate</option>
-                                        </select>
-                                        @error('perfect_gift_id')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div> --}}
-                                @endif
+                                    
+                                <?php endif; ?>
                                 <div class="col-12">
                                     <select name="business_type" id="type" class="input-field form-select">
                                         <option value="" selected disabled>Select Type</option>
                                         <option value="small_business">Small Business</option>
                                         <option value="corporate">Corporate</option>
                                     </select>
-                                    @error('perfect_gift_id')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
+                                    <?php $__errorArgs = ['perfect_gift_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <small class="text-danger"><?php echo e($message); ?></small>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                                 <div class="col-12">
                                     <textarea name="message" id="message" placeholder="Message" class="input-field"></textarea>
@@ -256,14 +221,14 @@
                             </div>
                         </form>
 
-                    {{-- @endif --}}
+                    
                 </div>
             </div>
         </div>
     </div>
 </section>
-@endsection
-@push('js')
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('js'); ?>
 <script>
     $(document).ready(function() {
         $('.delete').click(function(e) {
@@ -285,7 +250,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: 'POST',
-                        url: '{{ url('/perfect-gift-items') }}/' + id,
+                        url: '<?php echo e(url('/perfect-gift-items')); ?>/' + id,
                         success: function(response) {
                             if (response) {
                                 row.fadeOut(300, function() {
@@ -330,9 +295,9 @@
 
             $.ajax({
                 type: 'POST',
-                url: '{{ url('/perfect-gift-items/update-quantity') }}',
+                url: '<?php echo e(url('/perfect-gift-items/update-quantity')); ?>',
                 data: {
-                    _token: '{{ csrf_token() }}',
+                    _token: '<?php echo e(csrf_token()); ?>',
                     id: id,
                     quantity: qty
                 },
@@ -362,7 +327,7 @@
                         text: 'Your perfect gifts enquiry has been submitted successfully.',
                         confirmButtonColor: '#cfa40c'
                     }).then(() => {
-                        window.location.href = "{{ route('shop') }}";
+                        window.location.href = "<?php echo e(route('shop')); ?>";
                     });
                 },
                 complete: function() {
@@ -381,4 +346,6 @@
         });
     })
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\never-forget\resources\views/website/perfect-gift-items.blade.php ENDPATH**/ ?>

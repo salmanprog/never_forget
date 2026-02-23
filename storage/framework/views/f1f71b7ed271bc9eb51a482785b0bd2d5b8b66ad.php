@@ -127,7 +127,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="travel-img-wrapper">
-                    <img src="{{asset('public/assets/website/images')}}/travel-experience.jpeg" alt="Travel & Experience" width="100%">
+                    <img src="<?php echo e(asset('public/assets/website/images')); ?>/travel-experience.jpeg" alt="Travel & Experience" width="100%">
                 </div>
                 <div class="contact-form-wrapper">
                     <div class="row justify-content-center text-center">
@@ -138,45 +138,73 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('send.inquiry') }}" method="POST" enctype="multipart/form-data" data-aos="fade-up" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
-                        @csrf 
+                    <form action="<?php echo e(route('send.inquiry')); ?>" method="POST" enctype="multipart/form-data" data-aos="fade-up" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
+                        <?php echo csrf_field(); ?> 
                         <input type="hidden" name="title" id="title" value="You have received new journey expert user inquiry from">
                         <input type="hidden" name="identifier" id="identifier" value="journey_expert">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group mb-30">
                                     <label for="name" class="form-label">Full Name *</label>
-                                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter your full name" value="{{ old('name') }}" required>
-                                    @error('name')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter your full name" value="<?php echo e(old('name')); ?>" required>
+                                    <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group mb-30">
                                     <label for="email" class="form-label">Email Address *</label>
-                                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" value="{{ old('email') }}" required>
-                                    @error('email')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" value="<?php echo e(old('email')); ?>" required>
+                                    <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group mb-30">
                             <label for="phone" class="form-label">Phone Number</label>
-                            <input type="tel" name="phone" id="phone" class="form-control" placeholder="Enter your phone number" value="{{ old('phone') }}">
-                            @error('phone')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <input type="tel" name="phone" id="phone" class="form-control" placeholder="Enter your phone number" value="<?php echo e(old('phone')); ?>">
+                            <?php $__errorArgs = ['phone'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <span class="text-danger"><?php echo e($message); ?></span>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <div class="form-group mb-30">
                             <label for="message" class="form-label">Message</label>
-                            <textarea name="message" id="message" class="form-control" rows="6" placeholder="Tell us ...">{{ old('message') }}</textarea>
-                            @error('message')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <textarea name="message" id="message" class="form-control" rows="6" placeholder="Tell us ..."><?php echo e(old('message')); ?></textarea>
+                            <?php $__errorArgs = ['message'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <span class="text-danger"><?php echo e($message); ?></span>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-primary btn-lg"> Send Inquiry <i class="fas fa-paper-plane ms-2"></i></button>
@@ -190,13 +218,13 @@
 
 
 
-@if(session('success'))
+<?php if(session('success')): ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         Swal.fire({
             icon: 'success',
             title: 'Inquiry Submitted!',
-            text: '{{ session("success") }}',
+            text: '<?php echo e(session("success")); ?>',
             timer: 5000,
             showConfirmButton: true,
             confirmButtonText: 'OK',
@@ -204,15 +232,15 @@
         });
     });
 </script>
-@endif
+<?php endif; ?>
 
-@if(session('error'))
+<?php if(session('error')): ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         Swal.fire({
             icon: 'error',
             title: 'Error!',
-            text: '{{ session("error") }}',
+            text: '<?php echo e(session("error")); ?>',
             timer: 5000,
             showConfirmButton: true,
             confirmButtonText: 'OK',
@@ -220,11 +248,11 @@
         });
     });
 </script>
-@endif
+<?php endif; ?>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form[action="{{ route("send.inquiry") }}"]');
+    const form = document.querySelector('form[action="<?php echo e(route("send.inquiry")); ?>"]');
     const submitBtn = form.querySelector('button[type="submit"]');
     
     if (form && submitBtn) {
@@ -268,3 +296,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+<?php /**PATH C:\xampp\htdocs\never-forget\resources\views/website/partials/_journey_expert.blade.php ENDPATH**/ ?>

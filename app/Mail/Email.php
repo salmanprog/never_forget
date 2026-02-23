@@ -66,6 +66,45 @@ class Email extends Mailable
                             'sendTime' => $this->details['send_time'] ?? '',
                             'cardStyle' => $this->details['card_style'] ?? '',
                         ]);
+        } elseif ($this->details['from'] == 'travel-experience-confirmation') {
+            $email = $this->subject('Travel & Experience Inquiry Received - NEVER FORGET')
+                        ->view('emails.travel-experience-confirmation')
+                        ->with([
+                            'name' => $this->details['name'] ?? '',
+                            'email' => $this->details['email'] ?? '',
+                            'phone' => $this->details['phone'] ?? '',
+                            'inquiry_message' => $this->details['message'] ?? '',
+                        ]);
+        } elseif ($this->details['from'] == 'quality-logo-confirmation') {
+            $email = $this->subject('Quality Logo Request Received - NEVER FORGET')
+                        ->view('emails.quality-logo-confirmation')
+                        ->with([
+                            'senderName' => $this->details['name'] ?? '',
+                            'product' => $this->details['product'] ?? '',
+                            'email' => $this->details['email'] ?? '',
+                            'phone' => $this->details['phone'] ?? '',
+                            'inquiry_message' => $this->details['message'] ?? '',
+                        ]);
+        } elseif ($this->details['from'] == 'balloon-confirmation') {
+            $email = $this->subject('Balloon Enquiry Received - NEVER FORGET')
+                        ->view('emails.balloon-confirmation')
+                        ->with([
+                            'senderName' => $this->details['sender_name'] ?? '',
+                            'email' => $this->details['email'] ?? '',
+                            'phone' => $this->details['phone'] ?? '',
+                            'inquiry_message' => $this->details['message'] ?? '',
+                            'items_summary' => $this->details['items_summary'] ?? '',
+                        ]);
+        } elseif ($this->details['from'] == 'perfect-gift-confirmation') {
+            $email = $this->subject('Perfect Gifts Enquiry Received - NEVER FORGET')
+                        ->view('emails.perfect-gift-confirmation')
+                        ->with([
+                            'senderName' => $this->details['sender_name'] ?? '',
+                            'email' => $this->details['email'] ?? '',
+                            'phone' => $this->details['phone'] ?? '',
+                            'business_type_label' => $this->details['business_type_label'] ?? '',
+                            'inquiry_message' => $this->details['message'] ?? '',
+                        ]);
         }
 
         if (
