@@ -70,7 +70,7 @@ class ContactUsController extends Controller
         ]);
 
         $model = new ContactUs();
-        $model->type = $request->type;
+        $model->type = $request->filled('type') ? $request->type : 'request_a_quote';
         $model->first_name = $request->first_name;
         $model->last_name = $request->last_name;
         $model->email = $request->email;

@@ -962,6 +962,10 @@ class WebController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!empty($user) && $user->status == 1) {
+            // Customer login form (user_type=User): do not allow admin here; admin must use /admin/login
+            if ($user->hasRole('Admin') && $request->input('user_type') !== 'Admin') {
+                return redirect()->back()->with('error', 'Please use the admin login page.');
+            }
             if (Auth::attempt($credentials)) {
                 /** @var User $user */
                 $user = Auth::user();
