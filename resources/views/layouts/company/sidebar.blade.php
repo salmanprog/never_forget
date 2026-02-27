@@ -38,7 +38,7 @@
                 </ul>
             </li>
             <li class="treeview">
-                <a href="{{route('member.profile.edit')}}" class="{{ request()->is('member/profile/edit') ? 'active' : '' }}">
+                <a href="{{ route('company.profile') }}" class="{{ request()->is('company/profile') && !request()->is('company/profile/edit') ? 'active' : '' }}">
                     <i class="fa fa-building"></i> <span>Company Profile</span>
                 </a>
             </li>
@@ -73,11 +73,11 @@
                     </li>
                 </ul>
             </li>
-            <li class="treeview">
+            {{-- <li class="treeview">
                 <a href="{{route('account-settings-support.index')}}" class="">
                     <i class="fa fa-life-ring"></i> <span>Account Settings & Support</span>
                 </a>
-            </li>
+            </li> --}}
             <li class="treeview">
                 <a class="" href="{{ route('admin.logout') }}"
                     onclick="event.preventDefault();

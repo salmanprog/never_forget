@@ -8,6 +8,7 @@ use App\Models\BillingAddress;
 use App\Models\ShippingAddress;
 use App\Models\Order;
 use App\Models\Category;
+use App\Models\Company;
 use App\Models\Variations;
 use App\Models\Product;
 use App\Models\Sizes;

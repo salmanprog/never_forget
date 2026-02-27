@@ -5,8 +5,10 @@ use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\Product;
 use App\Models\BillingAddress;
+use App\Models\Company;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 
 class CartController extends Controller
@@ -192,10 +194,22 @@ class CartController extends Controller
         
         // Get billing addresses for logged-in users
         $billing_addresses = collect();
-        if(Auth::check()) {
-            $billing_addresses = BillingAddress::where('customer_id', Auth::user()->id)->where('status', 1)->get();
+        if (Auth::check()) {
+            $user = Auth::user();
+            // For Company users: sync company profile billing (companies table) into billing_addresses so it shows in Select Billing Address
+            if ($user->account_type === 'Company') {
+                $company = $user->administeredCompany ?? $user->company;
+                if ($company && $this->companyHasBillingInfo($company)) {
+                    $this->syncCompanyBillingToAddress($user, $company);
+                }
+            }
+            $query = BillingAddress::where('customer_id', (string) $user->id)->where('status', 1);
+            if (Schema::hasColumn('billing_addresses', 'is_company_profile')) {
+                $query->orderByRaw('COALESCE(is_company_profile, 0) DESC');
+            }
+            $billing_addresses = $query->get();
         }
-        
+
         return view('website.check-out', compact('Items', 'billing_addresses'));
     }
 
@@ -214,5 +228,57 @@ class CartController extends Controller
 
     public function testAttempt(Request $request){
         return $request;
+    }
+
+    /**
+     * Check if company has any billing info (companies table fields).
+     */
+    protected function companyHasBillingInfo(Company $company): bool
+    {
+        return !empty(trim($company->billing_address_line_1 ?? ''))
+            || !empty(trim($company->city ?? ''))
+            || !empty(trim($company->billing_email ?? ''));
+    }
+
+    /**
+     * Sync company billing (companies table) to one BillingAddress so it appears on checkout.
+     */
+    protected function syncCompanyBillingToAddress($user, Company $company): void
+    {
+        $name = trim($company->primary_contact_name ?? $user->name ?? '');
+        $parts = $name !== '' ? explode(' ', $name, 2) : ['', ''];
+        $firstName = $parts[0] ?? '';
+        $lastName = $parts[1] ?? '';
+
+        $street = trim($company->billing_address_line_1 ?? '');
+        if (!empty(trim($company->billing_address_line_2 ?? ''))) {
+            $street .= ', ' . trim($company->billing_address_line_2);
+        }
+
+        $data = [
+            'first_name' => $firstName ?: 'Company',
+            'last_name' => $lastName ?: 'Account',
+            'company' => $company->name ?? null,
+            'country' => $company->billing_country ?? null,
+            'street' => $street ?: null,
+            'state' => $company->state ?? null,
+            'town' => $company->city ?? null,
+            'postcode' => $company->zip_code ?? null,
+            'phone' => $company->billing_phone ?? null,
+            'email' => $company->billing_email ?? $user->email ?? '',
+            'status' => 1,
+        ];
+        if (Schema::hasColumn('billing_addresses', 'is_company_profile')) {
+            $data['is_company_profile'] = true;
+        }
+
+        $uniqueKey = ['customer_id' => (string) $user->id];
+        if (Schema::hasColumn('billing_addresses', 'is_company_profile')) {
+            $uniqueKey['is_company_profile'] = true;
+        } else {
+            $uniqueKey['email'] = $data['email'];
+        }
+
+        BillingAddress::updateOrCreate($uniqueKey, $data);
     }
 }

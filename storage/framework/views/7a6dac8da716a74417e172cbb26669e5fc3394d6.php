@@ -1,0 +1,64 @@
+<?php
+    if (Auth::user()->hasRole('Admin')) {
+        $layout = 'layouts.admin.app';
+    } elseif (Auth::user()->hasRole('Individual')) {
+        $layout = 'layouts.individual.app';
+    } else {
+        $layout = 'layouts.individual.app';
+    }
+?>
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('content'); ?>
+    <input type="hidden" id="page_url" value="<?php echo e(route('member.quality-logo-enquiries')); ?>">
+    <section class="content-header">
+        <div class="content-header-left">
+            <h1><?php echo e($page_title); ?></h1>
+        </div>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Message</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="body">
+                                    <?php echo $__env->make('website.individual-dashboard.quality-logo-enquiries-partials.table', ['enquiries' => $enquiries], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('js'); ?>
+<script>
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(data) {
+                $('#body').html(data);
+            }
+        });
+    });
+</script>
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make($layout, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\never-forget\resources\views/website/individual-dashboard/quality-logo-enquiries.blade.php ENDPATH**/ ?>

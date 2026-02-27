@@ -65,7 +65,10 @@ Route::post('admin/change_password', 'admin\AdminController@changePassword')->na
 Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 
 Route::get('/admin/profile/edit', 'admin\AdminController@editProfile')->name('admin.profile.edit');
+Route::get('/member/profile', 'admin\UserController@IndividualProfileShow')->name('member.profile');
 Route::get('/member/profile/edit', 'admin\UserController@IndividualEditProfile')->name('member.profile.edit');
+Route::get('/company/profile', 'admin\UserController@CompanyProfileShow')->name('company.profile');
+Route::get('/company/profile/edit', 'admin\UserController@CompanyEditProfile')->name('company.profile.edit');
 Route::post('/member/profile/update', 'admin\UserController@IndividualUpdateProfile')->name('member.profile.update');
 Route::get('/salesperson/profile/edit', 'admin\UserController@SalesPersonEditProfile')->name('salesperson.profile.edit');
 Route::post('/salesperson/profile/update', 'admin\UserController@SalesPersonUpdateProfile')->name('salesperson.profile.update');
@@ -354,6 +357,13 @@ Route::get('generate-invoice-pdf', array('as' => 'generate.invoice.pdf', 'uses' 
 
 // User's E-Card Enquiries (Individual & Company dashboard)
 Route::get('my-e-card-enquiries', [WebController::class, 'myEcardEnquiries'])->name('my-e-card-enquiries')->middleware('auth');
+// Individual's Balloon Enquiries (own records only, no Action/Contacts)
+Route::get('member/balloon-enquiries', [WebController::class, 'myBalloonEnquiries'])->name('member.balloon-enquiries')->middleware('auth');
+// Individual's Perfect Gift Enquiries (own records only, no Action/Contacts)
+Route::get('member/perfect-gift-enquiries', [WebController::class, 'myPerfectGiftEnquiries'])->name('member.perfect-gift-enquiries')->middleware('auth');
+Route::get('member/business-card-orders', [WebController::class, 'myBusinessCardOrders'])->name('member.business-card-orders')->middleware('auth');
+Route::get('member/quality-logo-enquiries', [WebController::class, 'myQualityLogoEnquiries'])->name('member.quality-logo-enquiries')->middleware('auth');
+Route::get('member/journey-expert-enquiries', [WebController::class, 'myJourneyExpertEnquiries'])->name('member.journey-expert-enquiries')->middleware('auth');
 
 //order
 Route::resource('order', 'OrderController');

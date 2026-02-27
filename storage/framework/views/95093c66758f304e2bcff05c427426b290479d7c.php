@@ -1,6 +1,5 @@
-@extends('layouts.website.master')
-@section('content')
-@section('title', 'Checkout')
+<?php $__env->startSection('content'); ?>
+<?php $__env->startSection('title', 'Checkout'); ?>
 
 <!-- Google Fonts: Poppins -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -243,35 +242,36 @@
     <div class="row g-4">
         <div class="col-lg-7 order-2 order-lg-1">
             <div class="checkout-card">
-                <form action="{{ route('order.store') }}" method="POST" id="payment-form" autocomplete="off">
-                    @csrf
+                <form action="<?php echo e(route('order.store')); ?>" method="POST" id="payment-form" autocomplete="off">
+                    <?php echo csrf_field(); ?>
                     <div id="step-1">
                         <div class="checkout-title">Checkout</div>
                         <div class="checkout-step">Step 1: Billing Details</div>
-                        @if (session('error'))
-                            <div class="alert alert-danger">{{ session('error') }}</div>
-                        @endif
-                        @if (session('success'))
-                            <div class="alert alert-success">{{ session('success') }}</div>
-                        @endif
+                        <?php if(session('error')): ?>
+                            <div class="alert alert-danger"><?php echo e(session('error')); ?></div>
+                        <?php endif; ?>
+                        <?php if(session('success')): ?>
+                            <div class="alert alert-success"><?php echo e(session('success')); ?></div>
+                        <?php endif; ?>
 
 
-                        @if (Auth::check())
+                        <?php if(Auth::check()): ?>
                             <div class="mb-3">
                                 <label for="billing_address" class="form-label">Select Billing Address</label>
                                 <select name="billing_address_id" id="billing_address" class="form-select" required
                                     aria-label="Select Billing Address">
                                     <option value="">Select Billing Address</option>
-                                    @foreach ($billing_addresses as $address)
-                                        <option value="{{ $address->id }}">
-                                            {{ trim(implode(', ', array_filter([$address->first_name, $address->last_name, $address->company, $address->street, $address->town, $address->state, $address->postcode, $address->country]))) ?: 'Billing Address' }}
+                                    <?php $__currentLoopData = $billing_addresses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $address): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($address->id); ?>">
+                                            <?php echo e(trim(implode(', ', array_filter([$address->first_name, $address->last_name, $address->company, $address->street, $address->town, $address->state, $address->postcode, $address->country]))) ?: 'Billing Address'); ?>
+
                                         </option>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
-                                <a href="{{ route('billing_address.create') }}" class="add-address-btn">Add New
+                                <a href="<?php echo e(route('billing_address.create')); ?>" class="add-address-btn">Add New
                                     Address</a>
                             </div>
-                        @else
+                        <?php else: ?>
                             <!-- Guest Checkout Form -->
                             <div class="mb-3">
                                 <h5 class="text-primary mb-3">Guest Checkout Information</h5>
@@ -279,24 +279,24 @@
                                     <div class="col-md-6">
                                         <label for="guest_first_name" class="form-label">First Name *</label>
                                         <input type="text" class="form-control" id="guest_first_name"
-                                            name="guest_first_name" value="{{ old('guest_first_name') }}" required>
+                                            name="guest_first_name" value="<?php echo e(old('guest_first_name')); ?>" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="guest_last_name" class="form-label">Last Name *</label>
                                         <input type="text" class="form-control" id="guest_last_name"
-                                            name="guest_last_name" value="{{ old('guest_last_name') }}" required>
+                                            name="guest_last_name" value="<?php echo e(old('guest_last_name')); ?>" required>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="guest_email" class="form-label">Email Address *</label>
                                         <input type="email" class="form-control" id="guest_email" name="guest_email"
-                                            value="{{ old('guest_email') }}" required>
+                                            value="<?php echo e(old('guest_email')); ?>" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="guest_phone" class="form-label">Phone Number *</label>
                                         <input type="tel" class="form-control" id="guest_phone" name="guest_phone"
-                                            value="{{ old('guest_phone') }}" required>
+                                            value="<?php echo e(old('guest_phone')); ?>" required>
                                     </div>
                                 </div>
                             </div>
@@ -308,34 +308,34 @@
                                     <div class="col-12">
                                         <label for="guest_company" class="form-label">Company</label>
                                         <input type="text" class="form-control" id="guest_company"
-                                            value="{{ old('guest_company') }}" name="guest_company">
+                                            value="<?php echo e(old('guest_company')); ?>" name="guest_company">
                                     </div>
 
 
                                     <div class="col-md-12">
                                         <label for="guest_street" class="form-label">Street Address *</label>
                                         <input type="text" class="form-control" id="autocomplete_address"
-                                            name="guest_street" value="{{ old('guest_street') }}" required>
+                                            name="guest_street" value="<?php echo e(old('guest_street')); ?>" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="guest_state" class="form-label">State *</label>
                                         <input type="text" class="form-control" id="guest_state"
-                                            value="{{ old('guest_state') }}" name="guest_state" required>
+                                            value="<?php echo e(old('guest_state')); ?>" name="guest_state" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="guest_country" class="form-label">Country *</label>
                                         <input type="text" class="form-control" id="guest_country"
-                                            value="{{ old('guest_country') }}" name="guest_country" required>
+                                            value="<?php echo e(old('guest_country')); ?>" name="guest_country" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="guest_city" class="form-label">City/Town *</label>
                                         <input type="text" class="form-control" id="guest_city" name="guest_city"
-                                            value="{{ old('guest_city') }}" required>
+                                            value="<?php echo e(old('guest_city')); ?>" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="guest_postal_code" class="form-label">Postal Code *</label>
                                         <input type="text" class="form-control" id="guest_postal_code"
-                                            name="guest_postal_code" value="{{ old('guest_postal_code') }}" required>
+                                            name="guest_postal_code" value="<?php echo e(old('guest_postal_code')); ?>" required>
                                     </div>
                                     <div class="col-12">
                                         <div class="d-flex gap-10 mb-10">
@@ -356,11 +356,11 @@
                                         </div>
                                         <div class="d-flex gap-10 mb-10 form-links">
                                             <div>
-                                                <a class="navs" href="{{ route('privacy-policy') }}">Privacy
+                                                <a class="navs" href="<?php echo e(route('privacy-policy')); ?>">Privacy
                                                     Policy</a>
                                             </div>
                                             <div>
-                                                <a class="navs" href="{{ route('disclaimer') }}">Disclaimer</a>
+                                                <a class="navs" href="<?php echo e(route('disclaimer')); ?>">Disclaimer</a>
                                             </div>
                                         </div>
                                     </div>
@@ -371,7 +371,7 @@
 
                             <!-- Hidden field for guest billing address -->
                             <input type="hidden" name="billing_address_id" value="0">
-                        @endif
+                        <?php endif; ?>
                         <button type="button" class="checkout-btn mt-3" id="next-step-btn">
                             Next
                         </button>
@@ -393,7 +393,7 @@
                             </button>
                             <button type="submit" class="checkout-btn mt-0" id="submit-button">
                                 <span class="lock-icon"><i class="fa fa-lock"></i></span>
-                                <span id="pay-btn-text">Pay Now (${{ number_format(\Cart::getTotal(), 2) }})</span>
+                                <span id="pay-btn-text">Pay Now ($<?php echo e(number_format(\Cart::getTotal(), 2)); ?>)</span>
                                 <span class="spinner-border spinner-border-sm d-none" id="pay-btn-spinner"
                                     role="status" aria-hidden="true"></span>
                             </button>
@@ -406,29 +406,30 @@
             <div class="order-summary-card order-summary-sticky">
                 <input type="hidden" name="tax_amount" id="tax-hidden" value="0">
                 <input type="hidden" name="final_total" id="final-total-hidden"
-                    value="{{ \Cart::getSubTotal() }}">
+                    value="<?php echo e(\Cart::getSubTotal()); ?>">
                 <div class="order-summary-title">Order Summary</div>
                 <div class="order-summary-list">
-                    @foreach ($Items as $item)
+                    <?php $__currentLoopData = $Items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="d-flex justify-content-between mb-2">
-                            <span>{{ $item->product_name ?? $item->name }} x {{ $item->quantity }}</span>
-                            <span>${{ number_format(($item->product_price ?? $item->price) * $item->quantity, 2) }}</span>
+                            <span><?php echo e($item->product_name ?? $item->name); ?> x <?php echo e($item->quantity); ?></span>
+                            <span>$<?php echo e(number_format(($item->product_price ?? $item->price) * $item->quantity, 2)); ?></span>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
                 <div class="order-summary-divider"></div>
                 <div class="order-summary-list order-summary-totals d-flex justify-content-between mb-2">
                     <strong>Subtotal</strong>
-                    <span id="subtotal-amount" data-subtotal="{{ \Cart::getSubTotal() }}">
-                        ${{ number_format(\Cart::getSubTotal(), 2) }}
+                    <span id="subtotal-amount" data-subtotal="<?php echo e(\Cart::getSubTotal()); ?>">
+                        $<?php echo e(number_format(\Cart::getSubTotal(), 2)); ?>
+
                     </span>
                 </div>
-                @if (Session::has('discount'))
+                <?php if(Session::has('discount')): ?>
                     <div class="order-summary-list order-summary-totals d-flex justify-content-between mb-2">
                         <strong>Discount</strong>
-                        <span>-${{ number_format(Session::get('discount')['discount'], 2) }}</span>
+                        <span>-$<?php echo e(number_format(Session::get('discount')['discount'], 2)); ?></span>
                     </div>
-                @endif
+                <?php endif; ?>
                 <div class="order-summary-list order-summary-totals d-flex justify-content-between mb-2">
                     <strong>Tax</strong>
                     <span id="tax-amount">$0.00</span> <!-- This will be updated dynamically -->
@@ -436,7 +437,8 @@
                 <div class="order-summary-list order-summary-totals d-flex justify-content-between">
                     <strong>Total</strong>
                     <span id="total-amount">
-                        ${{ number_format(\Cart::getSubTotal(), 2) }}
+                        $<?php echo e(number_format(\Cart::getSubTotal(), 2)); ?>
+
                     </span>
                 </div>
             </div>
@@ -446,7 +448,7 @@
 
 <!-- FontAwesome for lock icon -->
 
-{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /> --}}
+
 <!-- SweetAlert2 for alerts -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://js.stripe.com/v3/"></script>
@@ -584,11 +586,11 @@
             payload.billing_address_id = document.getElementById('billing_address').value;
         }
 
-        fetch("{{ route('calculateTax') }}", {
+        fetch("<?php echo e(route('calculateTax')); ?>", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
                 },
                 body: JSON.stringify(payload)
             })
@@ -632,7 +634,7 @@
         document.getElementById('step-1').style.display = 'block';
     });
     // Create a Stripe client. 
-    var stripe = Stripe("{{ config('services.stripe.key') }}");
+    var stripe = Stripe("<?php echo e(config('services.stripe.key')); ?>");
     // Create an instance of Elements.
     var elements = stripe.elements();
     // Custom styling
@@ -682,7 +684,7 @@
                 document.getElementById('submit-button').disabled = false;
                 document.getElementById('pay-btn-spinner').classList.add('d-none');
                 document.getElementById('pay-btn-text').textContent =
-                    'Pay Now (${{ number_format(\Cart::getTotal(), 2) }})';
+                    'Pay Now ($<?php echo e(number_format(\Cart::getTotal(), 2)); ?>)';
             } else {
                 // Send the token to your server.
                 stripeTokenHandler(result.token);
@@ -715,4 +717,6 @@
         form.submit();
     }
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\never-forget\resources\views/website/check-out.blade.php ENDPATH**/ ?>

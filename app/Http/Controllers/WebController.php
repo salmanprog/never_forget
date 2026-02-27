@@ -306,6 +306,144 @@ class WebController extends Controller
         return view('admin.my-e-card-enquiries.index', compact('page_title', 'enquiries'));
     }
 
+    /**
+     * Individual's own balloon enquiries (Name, Email, Phone, Message, Date only - no Action/Contacts).
+     * Show enquiries linked via items (user_id) OR by logged-in user's email (saved on enquiry when submitted).
+     */
+    public function myBalloonEnquiries(Request $request)
+    {
+        $page_title = 'Balloons Enquiry';
+        $user = auth()->user();
+        $query = BalloonsEnquiry::with(['items'])
+            ->where('is_submitted', 1)
+            ->where(function ($q) use ($user) {
+                $q->whereHas('items', function ($q2) {
+                    $q2->where('user_id', auth()->id());
+                });
+                if ($user && $user->email) {
+                    $q->orWhere('email', $user->email);
+                }
+            })
+            ->latest();
+
+        $balloonEnquiries = $query->paginate(10);
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.balloon-enquiries-partials.table', compact('balloonEnquiries'))->render();
+        }
+
+        return view('website.individual-dashboard.balloon-enquiries', compact('page_title', 'balloonEnquiries'));
+    }
+
+    /**
+     * Individual's own perfect gift enquiries (Name, Email, Phone, Business Type, Message, Date only - no Action/Contacts).
+     * Show enquiries linked via items (user_id) OR by logged-in user's email (saved on enquiry when submitted).
+     */
+    public function myPerfectGiftEnquiries(Request $request)
+    {
+        $page_title = 'Perfect Gift Enquiry';
+        $user = auth()->user();
+        $query = PerfectGiftEnquiry::with(['items'])
+            ->where('is_submitted', 1)
+            ->where(function ($q) use ($user) {
+                $q->whereHas('items', function ($q2) {
+                    $q2->where('user_id', auth()->id());
+                });
+                if ($user && $user->email) {
+                    $q->orWhere('email', $user->email);
+                }
+            })
+            ->latest();
+
+        $perfectGiftEnquiries = $query->paginate(10);
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.perfect-gift-enquiries-partials.table', compact('perfectGiftEnquiries'))->render();
+        }
+
+        return view('website.individual-dashboard.perfect-gift-enquiries', compact('page_title', 'perfectGiftEnquiries'));
+    }
+
+    /**
+     * Individual's own business card orders (Order No#, Product, Price, Date only - no Action/Contacts).
+     */
+    public function myBusinessCardOrders(Request $request)
+    {
+        $page_title = 'Business Card Order';
+        $query = Order::with(['hasOrderDetails' => function ($q) {
+            $q->with('productsItem');
+        }])
+            ->where('customer_id', auth()->id())
+            ->whereHas('orderDetails', function ($q) {
+                $q->where('product_type', 'business_card');
+            })
+            ->orderBy('id', 'desc');
+
+        if ($request->filled('search')) {
+            $query->where('order_number', 'like', '%' . $request->input('search') . '%');
+        }
+
+        $models = $query->paginate(10)->withPath(route('member.business-card-orders'))->withQueryString();
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.business-card-orders-partials.table', compact('models'))->render();
+        }
+
+        return view('website.individual-dashboard.business-card-orders', compact('page_title', 'models'));
+    }
+
+    /**
+     * Individual's own quality logo enquiries (Product Name, Name, Email, Phone, Message, Date - no Action/Contacts).
+     */
+    public function myQualityLogoEnquiries(Request $request)
+    {
+        $page_title = 'Quality Logo Enquiry';
+        $user = auth()->user();
+        $query = Enquires::where('identifier', 'quality_logo')
+            ->where(function ($q) use ($user) {
+                if ($user && $user->email) {
+                    $q->where('user_id', $user->id)->orWhere('email', $user->email);
+                } else {
+                    $q->where('user_id', auth()->id());
+                }
+            })
+            ->latest();
+
+        $enquiries = $query->paginate(10);
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.quality-logo-enquiries-partials.table', compact('enquiries'))->render();
+        }
+
+        return view('website.individual-dashboard.quality-logo-enquiries', compact('page_title', 'enquiries'));
+    }
+
+    /**
+     * Individual's own journey expert enquiries (Name, Email, Phone, Message, Date - no Action/Contacts).
+     */
+    public function myJourneyExpertEnquiries(Request $request)
+    {
+        $page_title = 'Journey Expert Enquiry';
+        $user = auth()->user();
+        $query = Enquires::where('identifier', 'journey_expert')
+            ->where(function ($q) use ($user) {
+                if ($user && $user->email) {
+                    $q->where('user_id', $user->id)->orWhere('email', $user->email);
+                } else {
+                    $q->where('user_id', auth()->id());
+                }
+            })
+            ->latest();
+
+        $enquiries = $query->paginate(10);
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.journey-expert-enquiries-partials.table', compact('enquiries'))->render();
+        }
+
+        return view('website.individual-dashboard.journey-expert-enquiries', compact('page_title', 'enquiries'));
+    }
+
     public function createBalloonEnquiryItem(Request $request)
     {
         if (!session()->has('guest_token')) {
@@ -861,15 +999,12 @@ class WebController extends Controller
             'verify_token' => $verify_token
         ];
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        try {
             \Mail::to($user->email)->send(new \App\Mail\Email($details));
-            //return redirect()->intended('login')->with('success', 'Register successfully');
-            return redirect()->route('login')->with('success', 'You are welcome. You can login from here after verify email.');
-        } else {
-            return redirect()->back()->with('error', 'Something went wrong!');
+            return redirect()->route('login')->with('success', 'Registration successful! Please check your email to verify your account before logging in.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Registration successful but email could not be sent. Please contact support.');
         }
-
-        // return redirect()->back()->with('message', 'We have sent verification email. Click on link and get activation');
     }
 
     private function registerCompany(Request $request)
@@ -1300,7 +1435,7 @@ class WebController extends Controller
         ];
         
         Enquires::create([
-            'user_id' => 0,
+            'user_id' => auth()->check() ? auth()->id() : 0,
             'identifier'    => $params['identifier'],
             'product_name'    => isset($params['product']) ? $params['product'] : '',
             'name'    => $params['name'],

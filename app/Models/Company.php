@@ -11,16 +11,32 @@ class Company extends Model
 
     protected $fillable = [
         'name',
+        'registration_number',
         'website',
         'address',
         'industry',
+        'year_established',
+        'number_of_employees',
+        'logo',
+        'primary_contact_name',
+        'job_title',
         'billing_email',
         'billing_phone',
+        'billing_address_line_1',
+        'billing_address_line_2',
+        'city',
+        'state',
+        'zip_code',
+        'billing_country',
         'plan',
         'options',
         'description',
         'admin_user_id',
-        'company_name'
+        'is_profile_completed'
+    ];
+
+    protected $casts = [
+        'number_of_employees' => 'integer',
     ];
 
     /**

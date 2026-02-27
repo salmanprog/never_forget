@@ -3,10 +3,8 @@
         $layout = 'layouts.admin.app';
     } elseif (Auth::user()->hasRole('Individual')) {
         $layout = 'layouts.individual.app';
-    } elseif (Auth::user()->hasRole('Company')) {
-        $layout = 'layouts.company.app';
     } else {
-        $layout = 'layouts.company.app';
+        $layout = 'layouts.individual.app';
     }
 @endphp
 
@@ -72,7 +70,6 @@
                                 </div>
                             </div>
 
-                           
                             {{-- <div class="form-group">
 							<label for="" class="col-sm-2 control-label">Date of Birth</label>
 							<div class="col-sm-9">

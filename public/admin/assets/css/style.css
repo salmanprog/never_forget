@@ -29,9 +29,6 @@ input, select, textarea {
 
 .error {
 	color: red!important;
-	border: 0;
-	background: 0;
-	padding: 0;
 	margin-bottom: 10px;
 }
 

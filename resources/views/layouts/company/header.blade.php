@@ -46,7 +46,7 @@
                     <ul class="dropdown-menu">
                         <li class="user-footer">
                             <div>
-                                <a href="{{ route('member.profile.edit') }}" class="btn btn-default btn-flat" >Edit Profile</a>
+                                <a href="{{ route('company.profile.edit') }}" class="btn btn-default btn-flat" >Edit Profile</a>
                             </div>
                             <div>
                                 <a class="dropdown-item btn btn-default btn-flat" href="{{ route('admin.logout') }}"
