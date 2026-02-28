@@ -223,6 +223,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('role', 'admin\RoleController');
 
     //users
+    Route::get('user/{user}/resources', 'admin\UserController@viewResources')->name('user.resources');
     Route::resource('user', 'admin\UserController');
 
     // Company Management Routes
@@ -364,6 +365,13 @@ Route::get('member/perfect-gift-enquiries', [WebController::class, 'myPerfectGif
 Route::get('member/business-card-orders', [WebController::class, 'myBusinessCardOrders'])->name('member.business-card-orders')->middleware('auth');
 Route::get('member/quality-logo-enquiries', [WebController::class, 'myQualityLogoEnquiries'])->name('member.quality-logo-enquiries')->middleware('auth');
 Route::get('member/journey-expert-enquiries', [WebController::class, 'myJourneyExpertEnquiries'])->name('member.journey-expert-enquiries')->middleware('auth');
+
+// Company's own enquiries (same as Individual - read-only, filtered by company users)
+Route::get('company/balloon-enquiries', [WebController::class, 'companyBalloonEnquiries'])->name('company.balloon-enquiries')->middleware('auth');
+Route::get('company/perfect-gift-enquiries', [WebController::class, 'companyPerfectGiftEnquiries'])->name('company.perfect-gift-enquiries')->middleware('auth');
+Route::get('company/business-card-orders', [WebController::class, 'companyBusinessCardOrders'])->name('company.business-card-orders')->middleware('auth');
+Route::get('company/quality-logo-enquiries', [WebController::class, 'companyQualityLogoEnquiries'])->name('company.quality-logo-enquiries')->middleware('auth');
+Route::get('company/journey-expert-enquiries', [WebController::class, 'companyJourneyExpertEnquiries'])->name('company.journey-expert-enquiries')->middleware('auth');
 
 //order
 Route::resource('order', 'OrderController');

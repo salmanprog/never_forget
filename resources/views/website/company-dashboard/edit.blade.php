@@ -107,6 +107,22 @@
 							@endif
 							<span style="color: red">{{ $errors->first('company_logo') }}</span>
 						</div>
+						<div class="form-group">
+							<label for="image" class="col-sm-2 control-label">Your Profile Picture</label>
+							<div class="col-sm-6" style="padding-top:5px">
+								<input type="file" class="form-control" accept="image/jpeg,image/jpg,image/png" name="image" id="image">
+								<small class="text-muted">JPG, PNG or JPEG. Max 2 MB.</small>
+								<span style="color: red">{{ $errors->first('image') }}</span>
+							</div>
+							<div class="col-sm-4">
+								@if(!empty($user->image))
+									<img style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;" id="profile_picture_preview" src="{{ asset('public/admin/assets/images/UserImage') }}/{{ $user->image }}" alt="Profile">
+								@else
+									<img style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; background: #eee; display: none;" id="profile_picture_preview" src="" alt="Profile">
+									<span id="profile_picture_placeholder" class="text-muted"><i class="fa fa-user-circle fa-3x"></i><br>No photo</span>
+								@endif
+							</div>
+						</div>
 
 						{{-- Primary Contact Information --}}
 						<hr class="col-sm-11" style="margin: 20px 0; border-color: #cfa40c;">
@@ -369,6 +385,19 @@
 				if (file) {
 					var preview = document.getElementById('company_logo_preview');
 					if (preview) preview.src = URL.createObjectURL(file);
+				}
+			};
+		}
+		var imageInput = document.getElementById('image');
+		var preview = document.getElementById('profile_picture_preview');
+		var placeholder = document.getElementById('profile_picture_placeholder');
+		if (imageInput && preview) {
+			imageInput.onchange = function(evt) {
+				var file = evt.target.files && evt.target.files[0];
+				if (file) {
+					preview.src = URL.createObjectURL(file);
+					preview.style.display = 'block';
+					if (placeholder) placeholder.style.display = 'none';
 				}
 			};
 		}

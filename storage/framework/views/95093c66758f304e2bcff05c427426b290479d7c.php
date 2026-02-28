@@ -261,8 +261,8 @@
                                 <select name="billing_address_id" id="billing_address" class="form-select" required
                                     aria-label="Select Billing Address">
                                     <option value="">Select Billing Address</option>
-                                    <?php $__currentLoopData = $billing_addresses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $address): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <option value="<?php echo e($address->id); ?>">
+                                    <?php $__currentLoopData = $billing_addresses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $address): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($address->id); ?>" <?php echo e($index === 0 ? 'selected' : ''); ?>>
                                             <?php echo e(trim(implode(', ', array_filter([$address->first_name, $address->last_name, $address->company, $address->street, $address->town, $address->state, $address->postcode, $address->country]))) ?: 'Billing Address'); ?>
 
                                         </option>

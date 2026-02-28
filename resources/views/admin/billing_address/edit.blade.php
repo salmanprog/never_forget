@@ -50,6 +50,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">State</label>
+                            <div class="col-sm-9">
+                                <input type="text" autocomplete="off" class="form-control" name="state" value="{{ $address->state ?? '' }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="" class="col-sm-2 control-label">Town<span style="color:red">*</span></label>
                             <div class="col-sm-9">
                                 <input type="text" autocomplete="off" class="form-control" name="town" value="{{$address->town}}">

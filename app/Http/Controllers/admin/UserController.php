@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use App\Models\Company;
+use App\Models\BillingAddress;
+use Illuminate\Support\Facades\Schema;
 
 class UserController extends Controller
 {
@@ -92,6 +94,23 @@ class UserController extends Controller
         
         $users = $query->paginate(10);
         return view('admin.user.index', compact('users','page_title'));
+    }
+
+    /**
+     * Show uploaded resources (employees & clients) for a company user (admin only).
+     */
+    public function viewResources($id)
+    {
+        $companyUser = User::findOrFail($id);
+        $company = $companyUser->administeredCompany;
+        if (!$company) {
+            return redirect()->route('user.index', ['type' => 'company'])->with('error', 'This user has no company or resources.');
+        }
+        $employeesCount = $company->employees()->where('type', 'employee')->count();
+        $clientsCount = $company->employees()->where('type', 'client')->count();
+        $employees = $company->employees()->orderBy('id', 'DESC')->paginate(10);
+        $page_title = $company->name . ' - Resources';
+        return view('admin.user.resources', compact('companyUser', 'company', 'employees', 'employeesCount', 'clientsCount', 'page_title'));
     }
 
     /**
@@ -341,28 +360,6 @@ class UserController extends Controller
     public function individualUpdateProfile(Request $request)
     {
         $user = User::where('id', Auth::user()->id)->first();
-        $user->name = $request->name;
-        /*  $user->middle_name = $request->middle_name; */
-        $user->last_name = $request->last_name;
-        $user->phone = $request->phone ?? $user->phone;
-        $user->address = $request->address ?? $user->address;
-        $user->designation = $request->designation ?? $user->designation;
-       /*  $user->team = $request->team; */
-        $user->about_me = $request->about_me ?? $user->about_me;
-        $user->date_of_birth = $request->date_of_birth ?? $user->date_of_birth;
-        $user->gender = $request->gender ?? $user->gender;
-        $user->whatsapp = $request->whatsapp ?? $user->whatsapp;
-        $user->facebook = $request->facebook ?? $user->facebook;
-        $user->twitter = $request->twitter ?? $user->twitter;
-        $user->linkedin = $request->linkedin ?? $user->linkedin;
-        $user->city_id = $request->city_id ?? $user->city_id;
-        $user->state_id = $request->state_id ?? $user->state_id;
-        $user->zip_code = $request->zip_code ?? $user->zip_code;
-        if (isset($request->image)) {
-            $photo = date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension();
-            $request->image->move(public_path('/admin/assets/images/UserImage'), $photo);
-            $user->image = $photo;
-        }
 
         if (empty($request->name)) {
             $this->validate($request, [
@@ -377,11 +374,22 @@ class UserController extends Controller
                 'name' => 'required',
                 'password' => 'required|same:confirm-password',
             ]);
-            $user->password = Hash::make($request->password);
+        }
+
+        $request->validate([
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('profile_pictures', 'public');
+    
+            $user = auth()->user();
+            $user->image = $path;
+            $user->update();
         }
 
         // Company account type: validate required company fields before saving
-        if ($user->account_type == 'Company') {
+        if (strtolower((string) ($user->account_type ?? '')) === 'company') {
             $companyForValidation = $user->administeredCompany;
             $logoRequired = !$companyForValidation || empty(trim($companyForValidation->logo ?? ''));
             $companyRules = [
@@ -411,10 +419,30 @@ class UserController extends Controller
             ]);
         }
 
-        $user->update();
+        $updateData = [
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone ?? $user->phone,
+            'address' => $request->address ?? $user->address,
+            'designation' => $request->designation ?? $user->designation,
+            'about_me' => $request->about_me ?? $user->about_me,
+            'date_of_birth' => $request->date_of_birth ?? $user->date_of_birth,
+            'gender' => $request->gender ?? $user->gender,
+            'whatsapp' => $request->whatsapp ?? $user->whatsapp,
+            'facebook' => $request->facebook ?? $user->facebook,
+            'twitter' => $request->twitter ?? $user->twitter,
+            'linkedin' => $request->linkedin ?? $user->linkedin,
+            'city_id' => $request->city_id ?? $user->city_id,
+            'state_id' => $request->state_id ?? $user->state_id,
+            'zip_code' => $request->zip_code ?? $user->zip_code,
+        ];
+        if (isset($request->password) && $request->password) {
+            $updateData['password'] = Hash::make($request->password);
+        }
+        $user->update($updateData);
 
         // Company account type: save/update company profile fields
-        if ($user->account_type == 'Company') {
+        if (strtolower((string) ($user->account_type ?? '')) === 'company') {
             $company = $user->administeredCompany;
             if (!$company) {
                 $company = new Company();
@@ -449,6 +477,31 @@ class UserController extends Controller
             }
             $company->is_profile_completed = $this->isCompanyProfileComplete($company) ? 1 : 0;
             $company->save();
+
+            // Keep billing_addresses (company-profile row) in sync so checkout and /billing_address show same data
+            if (Schema::hasColumn('billing_addresses', 'is_company_profile')) {
+                $firstName = trim((string) ($request->billing_first_name ?? ''));
+                $lastName = trim((string) ($request->billing_last_name ?? ''));
+                $street = trim((string) ($request->billing_address_line_1 ?? ''));
+                $billingData = [
+                    'first_name' => $firstName !== '' ? $firstName : 'Company',
+                    'last_name' => $lastName !== '' ? $lastName : 'Account',
+                    'company' => $request->billing_company ?? $company->name,
+                    'country' => $request->billing_country ?? $company->billing_country,
+                    'street' => $street !== '' ? $street : null,
+                    'state' => $request->billing_state ?? $company->state,
+                    'town' => $request->billing_city ?? $company->city,
+                    'postcode' => $request->billing_zip_code ?? $company->zip_code,
+                    'phone' => $request->billing_phone ?? $company->billing_phone,
+                    'email' => $request->billing_email ?? $company->billing_email,
+                    'status' => 1,
+                    'is_company_profile' => true,
+                ];
+                BillingAddress::updateOrCreate(
+                    ['customer_id' => (string) $user->id, 'is_company_profile' => true],
+                    $billingData
+                );
+            }
         }
 
         return redirect()->back()->with('message', 'Profile updated successfully');

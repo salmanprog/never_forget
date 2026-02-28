@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\BillingAddress;
+use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Session;
 use Auth;
 
@@ -77,7 +79,7 @@ class BillingAddressController extends Controller
             'company' => 'required|max:100',
             'country' => 'required|max:20',
             'street' => 'required|max:50',
-            'state' => 'required|max:100',
+            'state' => 'nullable|max:100',
             'town' => 'required|max:20',
             'phone' => 'required|max:20',
             'email' => 'required|max:30',
@@ -97,6 +99,10 @@ class BillingAddressController extends Controller
             $model->postcode = $request->postcode;
             $model->phone = $request->phone;
             $model->email = $request->email;
+            $model->status = 1;
+            if (Schema::hasColumn('billing_addresses', 'is_company_profile')) {
+                $model->is_company_profile = false;
+            }
             $model->save(); 
             return redirect()->route('billing_address.index')->with('message', 'Billing Address Added Successfully !'); 
         }else{
@@ -112,6 +118,9 @@ class BillingAddressController extends Controller
             $update->postcode = $request->postcode;
             $update->phone = $request->phone;
             $update->email = $request->email;
+            if (Schema::hasColumn('billing_addresses', 'is_company_profile')) {
+                $update->is_company_profile = false;
+            }
             $update->update();
             return redirect()->route('billing_address.index')->with('message', 'Billing Address Updated Successfully !');
         }
@@ -158,23 +167,54 @@ class BillingAddressController extends Controller
             'company' => 'required|max:100',
             'country' => 'required|max:20',
             'street' => 'required|max:50',
+            'state' => 'nullable|max:100',
             'town' => 'required|max:20',
             'phone' => 'required|max:20',
             'email' => 'required|max:30',
         ]);
 
         $update = BillingAddress::where('customer_id', Auth::user()->id)->where('id', $id)->first();
+        if (!$update) {
+            return redirect()->route('billing_address.index')->with('error', 'Address not found.');
+        }
+
+        $isCompanyProfileRow = Schema::hasColumn('billing_addresses', 'is_company_profile')
+            && !empty($update->is_company_profile);
 
         $update->first_name = $request->first_name;
         $update->last_name = $request->last_name;
         $update->company = $request->company;
         $update->country = $request->country;
         $update->street = $request->street;
+        $update->state = $request->state;
         $update->town = $request->town;
         $update->postcode = $request->postcode;
         $update->phone = $request->phone;
         $update->email = $request->email;
+        if (Schema::hasColumn('billing_addresses', 'is_company_profile') && !$isCompanyProfileRow) {
+            $update->is_company_profile = false;
+        }
         $update->update();
+
+        // If this is the company-profile address, update companies table so checkout sync does not overwrite with old data
+        if ($isCompanyProfileRow) {
+            $user = Auth::user();
+            $company = $user->administeredCompany ?? $user->company;
+            if ($company) {
+                $company->primary_contact_name = trim($request->first_name . ' ' . $request->last_name);
+                $company->billing_address_line_1 = $request->street;
+                $company->billing_address_line_2 = null;
+                $company->city = $request->town;
+                $company->state = $request->state;
+                $company->zip_code = $request->postcode;
+                $company->billing_country = $request->country;
+                $company->billing_phone = $request->phone;
+                $company->billing_email = $request->email;
+                $company->name = $request->company;
+                $company->save();
+            }
+        }
+
         return redirect()->route('billing_address.index')->with('message', 'Billing Address Updated Successfully !');
     }
 
@@ -189,10 +229,9 @@ class BillingAddressController extends Controller
         $address = BillingAddress::where('customer_id', Auth::user()->id)->where('id', $id)->first();
         if ($address) {
             $address->delete();
-            return true;
-        } else {
-            return response()->json(['message' => 'Failed '], 404);
+            return response()->json(true);
         }
+        return response()->json(['message' => 'Failed'], 404);
     }
 
     public function getBillingAddres(Request $request)

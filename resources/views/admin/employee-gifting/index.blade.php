@@ -16,7 +16,7 @@
 @section('content')
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Employee Gifting</h1>
+		<h1>Resource Gifting</h1>
 	</div>
 	@can('order-create')
 	<div class="content-header-right">

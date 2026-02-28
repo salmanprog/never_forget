@@ -77,7 +77,7 @@
 								</tr>
 							@endforeach
                             <tr>
-                                <td colspan="9">
+                                <td colspan="12">
 									Displying {{$models->firstItem()}} to {{$models->lastItem()}} of {{$models->total()}} records
                                     <div class="d-flex justify-content-center">
                                         {!! $models->links('pagination::bootstrap-4') !!}

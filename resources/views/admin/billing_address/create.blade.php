@@ -66,11 +66,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="" class="col-sm-2 control-label">State<span
-                                        style="color: red">*</span></label>
+                                <label for="" class="col-sm-2 control-label">State</label>
                                 <div class="col-sm-9">
                                     <input type="text" autocomplete="off" class="form-control" name="state"
-                                        value="{{ old('state') }}" placeholder="Enter State">
+                                        value="{{ old('state') }}" placeholder="Enter State (or use address autocomplete above)">
                                     <span style="color: red">{{ $errors->first('state') }}</span>
                                 </div>
                             </div>

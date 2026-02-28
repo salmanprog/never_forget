@@ -37,11 +37,11 @@
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        @if (!empty( Auth::user()->image ))
-                             <img  src="{{ asset('public/admin/assets/images/UserImage') }}/{{  Auth::user()->image }}" style="object-fit: cover;width: 40px;height: 40px;border-radius: 50px;margin-top: -10px;margin-right: 8px;" alt="">
-                        @else 
-                             <i class="fa fa-user-circle" style="font-size: 20px;" aria-hidden="true"></i>
-                        @endif 
+                        @if (!empty(Auth::user()->image))
+                             <img src="{{ asset('public/admin/assets/images/UserImage') }}/{{ Auth::user()->image }}" style="object-fit: cover; width: 40px; height: 40px; border-radius: 50%; margin-top: -10px; margin-right: 8px;" alt="">
+                        @else
+                             <i class="fa fa-user-circle" style="font-size: 40px; margin-top: -5px;" aria-hidden="true"></i>
+                        @endif
                     </a>
                     <ul class="dropdown-menu">
                         <li class="user-footer">

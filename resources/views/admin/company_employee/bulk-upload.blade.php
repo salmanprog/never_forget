@@ -3,7 +3,7 @@
 @section('content')
 <section class="content-header">
     <div class="content-header-left">
-        <h1>Bulk Upload Employees</h1>
+        <h1>Bulk Upload Resources</h1>
     </div>
     <div class="content-header-right">
         <a href="{{ route('admin.company_employee.index') }}" class="btn btn-primary btn-sm">View All</a>
@@ -63,7 +63,7 @@
                             <label for="" class="col-sm-2 control-label"></label>
                             <div class="col-sm-6">
                                 <button type="submit" class="btn btn-success pull-left" name="form1">
-                                    <i class="fa fa-upload"></i> Upload Employees
+                                    <i class="fa fa-upload"></i> Upload
                                 </button>
                             </div>
                         </div>

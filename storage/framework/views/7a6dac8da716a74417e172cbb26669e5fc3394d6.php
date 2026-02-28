@@ -1,6 +1,8 @@
 <?php
     if (Auth::user()->hasRole('Admin')) {
         $layout = 'layouts.admin.app';
+    } elseif (Auth::user()->hasRole('Company')) {
+        $layout = 'layouts.company.app';
     } elseif (Auth::user()->hasRole('Individual')) {
         $layout = 'layouts.individual.app';
     } else {
@@ -8,9 +10,10 @@
     }
 ?>
 
+
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
-    <input type="hidden" id="page_url" value="<?php echo e(route('member.quality-logo-enquiries')); ?>">
+    <input type="hidden" id="page_url" value="<?php echo e($page_url ?? route('member.quality-logo-enquiries')); ?>">
     <section class="content-header">
         <div class="content-header-left">
             <h1><?php echo e($page_title); ?></h1>
@@ -25,12 +28,10 @@
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Product Name</th>
                                         <th>Name</th>
                                         <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Message</th>
                                         <th>Date</th>
+                                        <th width="100">Details</th>
                                     </tr>
                                 </thead>
                                 <tbody id="body">
@@ -57,6 +58,13 @@
                 $('#body').html(data);
             }
         });
+    });
+    $(document).on('click', '.btn-toggle-enquiry-detail', function() {
+        var target = $(this).data('target');
+        var $row = $('#' + target);
+        var expanded = $row.is(':visible');
+        $row.toggle();
+        $(this).attr('aria-expanded', !expanded).html(expanded ? '<i class="fa fa-chevron-down"></i> View details' : '<i class="fa fa-chevron-up"></i> Hide details');
     });
 </script>
 <?php $__env->stopPush(); ?>

@@ -33,6 +33,9 @@
         @can('user-edit')
             <a href="{{ route('user.edit', $user->id)}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
         @endcan
+        @if($user->account_type == 'Company' && $user->administeredCompany)
+            <a href="{{ route('user.resources', $user->id) }}" class="btn btn-info btn-xs"><i class="fa fa-list"></i> View Resources</a>
+        @endif
         {{-- @can('user-delete')
             <button class="btn btn-danger btn-xs delete" data-slug="{{ $user->id }}" data-del-url="{{ url('user', $user->id) }}"><i class="fa fa-trash"></i> Delete</button>
         @endcan --}}

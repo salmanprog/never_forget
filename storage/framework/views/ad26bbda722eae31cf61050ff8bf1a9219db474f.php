@@ -1,6 +1,8 @@
 <?php
     if (Auth::user()->hasRole('Admin')) {
         $layout = 'layouts.admin.app';
+    } elseif (Auth::user()->hasRole('Company')) {
+        $layout = 'layouts.company.app';
     } elseif (Auth::user()->hasRole('Individual')) {
         $layout = 'layouts.individual.app';
     } else {
@@ -8,15 +10,16 @@
     }
 ?>
 
+
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
-    <input type="hidden" id="page_url" value="<?php echo e(route('member.business-card-orders')); ?>">
+    <input type="hidden" id="page_url" value="<?php echo e($page_url ?? route('member.business-card-orders')); ?>">
     <section class="content-header">
         <div class="content-header-left">
             <h1><?php echo e($page_title); ?></h1>
         </div>
         <div class="content-header-right">
-            <input type="text" id="search" class="form-control" placeholder="Search by Order No#" style="max-width: 220px;">
+            <input type="text" id="search" class="form-control" placeholder="Search by Order Number" style="max-width: 250px;">
         </div>
     </section>
     <section class="content">
@@ -30,9 +33,8 @@
                                     <tr>
                                         <th>SL</th>
                                         <th>Order No#</th>
-                                        <th>Product</th>
-                                        <th>Price</th>
                                         <th>Date</th>
+                                        <th width="100">Details</th>
                                     </tr>
                                 </thead>
                                 <tbody id="body">
@@ -60,17 +62,24 @@
             }
         });
     });
-    $('#search').on('keyup', function(e) {
-        if (e.which === 13) {
-            var url = $('#page_url').val() + '?search=' + encodeURIComponent($(this).val());
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function(data) {
-                    $('#body').html(data);
-                }
-            });
-        }
+    $(document).on('keyup', '#search', function() {
+        var search = $(this).val();
+        var url = $('#page_url').val();
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: { search: search },
+            success: function(data) {
+                $('#body').html(data);
+            }
+        });
+    });
+    $(document).on('click', '.btn-toggle-enquiry-detail', function() {
+        var target = $(this).data('target');
+        var $row = $('#' + target);
+        var expanded = $row.is(':visible');
+        $row.toggle();
+        $(this).attr('aria-expanded', !expanded).html(expanded ? '<i class="fa fa-chevron-down"></i> View details' : '<i class="fa fa-chevron-up"></i> Hide details');
     });
 </script>
 <?php $__env->stopPush(); ?>

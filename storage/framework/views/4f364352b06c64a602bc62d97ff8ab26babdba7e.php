@@ -32,7 +32,7 @@
                 <a href="#"
                     class="<?php echo e(request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('member/balloon-enquiries') || request()->is('member/perfect-gift-enquiries') || request()->is('member/business-card-orders') || request()->is('member/quality-logo-enquiries') || request()->is('member/journey-expert-enquiries') ? 'active' : ''); ?>">
                     <i class="fa fa-envelope"></i>
-                    <span>Enquiries</span>
+                    <span>All Enquiries</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -42,37 +42,37 @@
                     <li class="treeview">
                         <a href="<?php echo e(route('my-e-card-enquiries')); ?>"
                             class="<?php echo e(request()->is('my-e-card-enquiries') && !request()->is('my-e-card-enquiries/*') ? 'active' : ''); ?>">
-                            <i class="fa fa-circle-o"></i> <span>All Enquiries</span>
+                            <i class="fa fa-circle-o"></i> <span>E Card</span>
                         </a>
                     </li>
                     <li class="treeview">
                         <a href="<?php echo e(route('member.balloon-enquiries')); ?>"
                             class="<?php echo e(request()->is('member/balloon-enquiries') ? 'active' : ''); ?>">
-                            <i class="fa fa-circle-o"></i> <span>Balloons Enquiry</span>
+                            <i class="fa fa-circle-o"></i> <span>Balloons</span>
                         </a>
                     </li>
                     <li class="treeview">
                         <a href="<?php echo e(route('member.perfect-gift-enquiries')); ?>"
                             class="<?php echo e(request()->is('member/perfect-gift-enquiries') ? 'active' : ''); ?>">
-                            <i class="fa fa-circle-o"></i> <span>Perfect Gift Enquiry</span>
+                            <i class="fa fa-circle-o"></i> <span>Perfect Gift</span>
                         </a>
                     </li>
                     <li class="treeview">
                         <a href="<?php echo e(route('member.business-card-orders')); ?>"
                             class="<?php echo e(request()->is('member/business-card-orders') ? 'active' : ''); ?>">
-                            <i class="fa fa-circle-o"></i> <span>Business Card Order</span>
+                            <i class="fa fa-circle-o"></i> <span>Business Card</span>
                         </a>
                     </li>
                     <li class="treeview">
                         <a href="<?php echo e(route('member.quality-logo-enquiries')); ?>"
                             class="<?php echo e(request()->is('member/quality-logo-enquiries') ? 'active' : ''); ?>">
-                            <i class="fa fa-circle-o"></i> <span>Quality Logo Enquiry</span>
+                            <i class="fa fa-circle-o"></i> <span>Quality Logo</span>
                         </a>
                     </li>
                     <li class="treeview">
                         <a href="<?php echo e(route('member.journey-expert-enquiries')); ?>"
                             class="<?php echo e(request()->is('member/journey-expert-enquiries') ? 'active' : ''); ?>">
-                            <i class="fa fa-circle-o"></i> <span>Journey Expert Enquiry</span>
+                            <i class="fa fa-circle-o"></i> <span>Journey Expert</span>
                         </a>
                     </li>
                 </ul>

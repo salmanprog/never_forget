@@ -4,12 +4,12 @@
 <input type="hidden" id="page_url" value="{{ route('admin.company_employee.index') }}">
 <section class="content-header">
     <div class="content-header-left">
-        <h1>Company Employees</h1>
+        <h1>Company Resources</h1>
     </div>
     <div class="content-header-right">
         @if($company)
             <!-- <a href="{{ route('admin.company.edit') }}" class="btn btn-info btn-sm">Edit Company</a> -->
-            <a href="{{ route('admin.company_employee.create') }}" class="btn btn-primary btn-sm">Add Employee</a>
+            <a href="{{ route('admin.company_employee.create') }}" class="btn btn-primary btn-sm">Add Resource</a>
             <a href="{{ route('admin.company_employee.bulk-upload') }}" class="btn btn-success btn-sm">Bulk Upload</a>
         @else
             <a href="{{ route('admin.company.create') }}" class="btn btn-primary btn-sm">Create Company</a>

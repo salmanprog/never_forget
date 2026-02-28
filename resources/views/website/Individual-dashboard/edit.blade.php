@@ -26,6 +26,7 @@
             right: 28px;
             font-size: initial;
         }
+        .hidden { display: none !important; }
     </style>
 
     <section class="content">
@@ -36,21 +37,28 @@
                         {{ session('success') }}
                     </div>
                 @endif
-                <form action="{{ route('user.profile.update') }}" id="regform" class="form-horizontal"
+                <form action="{{ route('member.profile.update') }}" id="regform" class="form-horizontal"
                     enctype="multipart/form-data" method="post" accept-charset="utf-8">
                     @csrf
 
                     <div class="box box-info">
                         <div class="box-body">
-                            {{-- <div class="form-group">
-							<label for="" class="col-sm-2 control-label">Profile Image</label>
-							<div class="col-sm-6" style="padding-top:5px">
-								<input type="file" class="form-control" accept="image*" name="image" id="image">
-							</div>
-							<div class="col-sm-4">
-								<img style="width: 80px " id="banner_preview" src="{{ asset('public/admin/assets/images/UserImage') }}/{{  $user->image }}" alt="">
-							</div>
-						</div> --}}
+                            <div class="form-group">
+                                <label for="image" class="col-sm-2 control-label">Profile Picture</label>
+                                <div class="col-sm-6" style="padding-top:5px">
+                                    <input type="file" class="form-control" accept="image/jpeg,image/jpg,image/png" name="image" id="image">
+                                    <small class="text-muted">JPG, PNG or JPEG. Max 2 MB.</small>
+                                    <span style="color: red">{{ $errors->first('image') }}</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    @if(!empty($user->image))
+                                        <img style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;" id="profile_picture_preview" src="{{ asset('public/admin/assets/images/UserImage') }}/{{ $user->image }}" alt="Profile">
+                                    @else
+                                        <img style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; background: #eee;" id="profile_picture_preview" src="" alt="Profile" class="hidden">
+                                        <span id="profile_picture_placeholder" class="text-muted"><i class="fa fa-user-circle fa-3x"></i><br>No photo</span>
+                                    @endif
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label">First Name<span
                                         style="color: red">*</span></label>
@@ -321,11 +329,21 @@
                 }
             });
 
-            image.onchange = evt => {
-                const [file] = image.files
-                if (file) {
-                    banner_preview.src = URL.createObjectURL(file)
-                }
+            var imageInput = document.getElementById('image');
+            var preview = document.getElementById('profile_picture_preview');
+            var placeholder = document.getElementById('profile_picture_placeholder');
+            if (imageInput) {
+                imageInput.onchange = function(evt) {
+                    var file = evt.target.files && evt.target.files[0];
+                    if (file) {
+                        if (preview) {
+                            preview.src = URL.createObjectURL(file);
+                            preview.classList.remove('hidden');
+                            preview.style.display = 'block';
+                        }
+                        if (placeholder) placeholder.style.display = 'none';
+                    }
+                };
             }
         });
     </script>

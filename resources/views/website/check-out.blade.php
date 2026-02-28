@@ -262,8 +262,8 @@
                                 <select name="billing_address_id" id="billing_address" class="form-select" required
                                     aria-label="Select Billing Address">
                                     <option value="">Select Billing Address</option>
-                                    @foreach ($billing_addresses as $address)
-                                        <option value="{{ $address->id }}">
+                                    @foreach ($billing_addresses as $index => $address)
+                                        <option value="{{ $address->id }}" {{ $index === 0 ? 'selected' : '' }}>
                                             {{ trim(implode(', ', array_filter([$address->first_name, $address->last_name, $address->company, $address->street, $address->town, $address->state, $address->postcode, $address->country]))) ?: 'Billing Address' }}
                                         </option>
                                     @endforeach

@@ -40,13 +40,13 @@ class CompanyEmployeeController extends Controller
         
         // If no company, show empty page with message to create company
         if (!$company) {
-            $page_title = 'Company Employees';
+            $page_title = 'Company Resources';
             // Create a paginator with empty collection
             $employees = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10, 1);
             return view('admin.company_employee.index', compact('employees', 'page_title', 'company'));
         }
              
-        $page_title = 'Company Employees';
+        $page_title = 'Company Resources';
         
         // Build query
         $query = $company->employees()->orderBy('id', 'DESC');
@@ -93,7 +93,7 @@ class CompanyEmployeeController extends Controller
                 ->with('error', 'Please create a company first before adding employees.');
         }
         
-        $page_title = 'Add Employee';
+        $page_title = 'Add Resource';
         return view('admin.company_employee.create', compact('page_title'));
     }
 
@@ -153,7 +153,7 @@ class CompanyEmployeeController extends Controller
                 ->with('error', 'Please create a company first before uploading employees.');
         }
         
-        $page_title = 'Bulk Upload Employees';
+        $page_title = 'Bulk Upload Resources';
         return view('admin.company_employee.bulk-upload', compact('page_title'));
     }
 

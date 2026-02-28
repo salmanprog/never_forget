@@ -314,7 +314,7 @@ class WebController extends Controller
     {
         $page_title = 'Balloons Enquiry';
         $user = auth()->user();
-        $query = BalloonsEnquiry::with(['items'])
+        $query = BalloonsEnquiry::with(['items.balloon'])
             ->where('is_submitted', 1)
             ->where(function ($q) use ($user) {
                 $q->whereHas('items', function ($q2) {
@@ -343,7 +343,7 @@ class WebController extends Controller
     {
         $page_title = 'Perfect Gift Enquiry';
         $user = auth()->user();
-        $query = PerfectGiftEnquiry::with(['items'])
+        $query = PerfectGiftEnquiry::with(['items.perfectGift'])
             ->where('is_submitted', 1)
             ->where(function ($q) use ($user) {
                 $q->whereHas('items', function ($q2) {
@@ -442,6 +442,202 @@ class WebController extends Controller
         }
 
         return view('website.individual-dashboard.journey-expert-enquiries', compact('page_title', 'enquiries'));
+    }
+
+    /**
+     * Get user IDs that belong to the current user's company (admin + users with company_id).
+     * Used for Company role to filter enquiries to only those submitted by someone in the company.
+     */
+    protected function getCompanyUserIds(): array
+    {
+        $user = auth()->user();
+        $company = $user->company ?? $user->administeredCompany;
+        if (!$company) {
+            return [];
+        }
+        return collect([$company->admin_user_id])
+            ->merge(User::where('company_id', $company->id)->pluck('id'))
+            ->unique()
+            ->filter()
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Company's own balloon enquiries (same UI as Individual, filtered by company user ids).
+     */
+    public function companyBalloonEnquiries(Request $request)
+    {
+        $page_title = 'Balloons Enquiry';
+        $companyUserIds = $this->getCompanyUserIds();
+        if (empty($companyUserIds)) {
+            $balloonEnquiries = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            if ($request->ajax()) {
+                return view('website.individual-dashboard.balloon-enquiries-partials.table', compact('balloonEnquiries'))->render();
+            }
+            $page_url = route('company.balloon-enquiries');
+            return view('website.individual-dashboard.balloon-enquiries', compact('page_title', 'balloonEnquiries', 'page_url'));
+        }
+
+        $user = auth()->user();
+        $query = BalloonsEnquiry::with(['items.balloon'])
+            ->where('is_submitted', 1)
+            ->where(function ($q) use ($companyUserIds, $user) {
+                $q->whereHas('items', function ($q2) use ($companyUserIds) {
+                    $q2->whereIn('user_id', $companyUserIds);
+                });
+                if ($user && $user->email) {
+                    $q->orWhere('email', $user->email);
+                }
+            })
+            ->latest();
+
+        $balloonEnquiries = $query->paginate(10)->withPath(route('company.balloon-enquiries'));
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.balloon-enquiries-partials.table', compact('balloonEnquiries'))->render();
+        }
+
+        $page_url = route('company.balloon-enquiries');
+        return view('website.individual-dashboard.balloon-enquiries', compact('page_title', 'balloonEnquiries', 'page_url'));
+    }
+
+    /**
+     * Company's own perfect gift enquiries (same UI as Individual, filtered by company user ids).
+     */
+    public function companyPerfectGiftEnquiries(Request $request)
+    {
+        $page_title = 'Perfect Gift Enquiry';
+        $companyUserIds = $this->getCompanyUserIds();
+        if (empty($companyUserIds)) {
+            $perfectGiftEnquiries = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            if ($request->ajax()) {
+                return view('website.individual-dashboard.perfect-gift-enquiries-partials.table', compact('perfectGiftEnquiries'))->render();
+            }
+            $page_url = route('company.perfect-gift-enquiries');
+            return view('website.individual-dashboard.perfect-gift-enquiries', compact('page_title', 'perfectGiftEnquiries', 'page_url'));
+        }
+
+        $user = auth()->user();
+        $query = PerfectGiftEnquiry::with(['items.perfectGift'])
+            ->where('is_submitted', 1)
+            ->where(function ($q) use ($companyUserIds, $user) {
+                $q->whereHas('items', function ($q2) use ($companyUserIds) {
+                    $q2->whereIn('user_id', $companyUserIds);
+                });
+                if ($user && $user->email) {
+                    $q->orWhere('email', $user->email);
+                }
+            })
+            ->latest();
+
+        $perfectGiftEnquiries = $query->paginate(10)->withPath(route('company.perfect-gift-enquiries'));
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.perfect-gift-enquiries-partials.table', compact('perfectGiftEnquiries'))->render();
+        }
+
+        $page_url = route('company.perfect-gift-enquiries');
+        return view('website.individual-dashboard.perfect-gift-enquiries', compact('page_title', 'perfectGiftEnquiries', 'page_url'));
+    }
+
+    /**
+     * Company's own business card orders (same UI as Individual, filtered by company user ids).
+     */
+    public function companyBusinessCardOrders(Request $request)
+    {
+        $page_title = 'Business Card Order';
+        $companyUserIds = $this->getCompanyUserIds();
+        if (empty($companyUserIds)) {
+            $models = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            if ($request->ajax()) {
+                return view('website.individual-dashboard.business-card-orders-partials.table', compact('models'))->render();
+            }
+            $page_url = route('company.business-card-orders');
+            return view('website.individual-dashboard.business-card-orders', compact('page_title', 'models', 'page_url'));
+        }
+
+        $query = Order::with(['hasOrderDetails' => function ($q) {
+            $q->with('productsItem');
+        }])
+            ->whereIn('customer_id', $companyUserIds)
+            ->whereHas('orderDetails', function ($q) {
+                $q->where('product_type', 'business_card');
+            })
+            ->orderBy('id', 'desc');
+
+        if ($request->filled('search')) {
+            $query->where('order_number', 'like', '%' . $request->input('search') . '%');
+        }
+
+        $models = $query->paginate(10)->withPath(route('company.business-card-orders'))->withQueryString();
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.business-card-orders-partials.table', compact('models'))->render();
+        }
+
+        $page_url = route('company.business-card-orders');
+        return view('website.individual-dashboard.business-card-orders', compact('page_title', 'models', 'page_url'));
+    }
+
+    /**
+     * Company's own quality logo enquiries (same UI as Individual, filtered by company user ids).
+     */
+    public function companyQualityLogoEnquiries(Request $request)
+    {
+        $page_title = 'Quality Logo Enquiry';
+        $companyUserIds = $this->getCompanyUserIds();
+        if (empty($companyUserIds)) {
+            $enquiries = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            if ($request->ajax()) {
+                return view('website.individual-dashboard.quality-logo-enquiries-partials.table', compact('enquiries'))->render();
+            }
+            $page_url = route('company.quality-logo-enquiries');
+            return view('website.individual-dashboard.quality-logo-enquiries', compact('page_title', 'enquiries', 'page_url'));
+        }
+
+        $query = Enquires::where('identifier', 'quality_logo')
+            ->whereIn('user_id', $companyUserIds)
+            ->latest();
+
+        $enquiries = $query->paginate(10)->withPath(route('company.quality-logo-enquiries'));
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.quality-logo-enquiries-partials.table', compact('enquiries'))->render();
+        }
+
+        $page_url = route('company.quality-logo-enquiries');
+        return view('website.individual-dashboard.quality-logo-enquiries', compact('page_title', 'enquiries', 'page_url'));
+    }
+
+    /**
+     * Company's own journey expert enquiries (same UI as Individual, filtered by company user ids).
+     */
+    public function companyJourneyExpertEnquiries(Request $request)
+    {
+        $page_title = 'Journey Expert Enquiry';
+        $companyUserIds = $this->getCompanyUserIds();
+        if (empty($companyUserIds)) {
+            $enquiries = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            if ($request->ajax()) {
+                return view('website.individual-dashboard.journey-expert-enquiries-partials.table', compact('enquiries'))->render();
+            }
+            $page_url = route('company.journey-expert-enquiries');
+            return view('website.individual-dashboard.journey-expert-enquiries', compact('page_title', 'enquiries', 'page_url'));
+        }
+
+        $query = Enquires::where('identifier', 'journey_expert')
+            ->whereIn('user_id', $companyUserIds)
+            ->latest();
+
+        $enquiries = $query->paginate(10)->withPath(route('company.journey-expert-enquiries'));
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.journey-expert-enquiries-partials.table', compact('enquiries'))->render();
+        }
+
+        $page_url = route('company.journey-expert-enquiries');
+        return view('website.individual-dashboard.journey-expert-enquiries', compact('page_title', 'enquiries', 'page_url'));
     }
 
     public function createBalloonEnquiryItem(Request $request)

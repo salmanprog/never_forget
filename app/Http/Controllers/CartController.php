@@ -196,8 +196,8 @@ class CartController extends Controller
         $billing_addresses = collect();
         if (Auth::check()) {
             $user = Auth::user();
-            // For Company users: sync company profile billing (companies table) into billing_addresses so it shows in Select Billing Address
-            if ($user->account_type === 'Company') {
+            // For Company users: sync company profile billing (company/profile/edit) into billing_addresses so it shows in Select Billing Address as default
+            if (strtolower((string) ($user->account_type ?? '')) === 'company') {
                 $company = $user->administeredCompany ?? $user->company;
                 if ($company && $this->companyHasBillingInfo($company)) {
                     $this->syncCompanyBillingToAddress($user, $company);
@@ -272,13 +272,14 @@ class CartController extends Controller
             $data['is_company_profile'] = true;
         }
 
-        $uniqueKey = ['customer_id' => (string) $user->id];
-        if (Schema::hasColumn('billing_addresses', 'is_company_profile')) {
-            $uniqueKey['is_company_profile'] = true;
-        } else {
-            $uniqueKey['email'] = $data['email'];
+        // Only create company-profile row when it does not exist — never overwrite (edits from company/profile/edit or billing_address must persist)
+        if (!Schema::hasColumn('billing_addresses', 'is_company_profile')) {
+            return;
         }
-
-        BillingAddress::updateOrCreate($uniqueKey, $data);
+        $uniqueKey = [
+            'customer_id' => (string) $user->id,
+            'is_company_profile' => true,
+        ];
+        BillingAddress::firstOrCreate($uniqueKey, $data);
     }
 }

@@ -9,7 +9,7 @@
             <li class="treeview {{ request()->is('company/employees*') ? 'active' : '' }}" style="height: auto;">
                 <a href="#" class="{{ request()->is('company/employees*') ? 'active' : '' }}">
                     <i class="fa fa-users"></i>
-                    <span>Employee Management</span>
+                    <span>Resource Management</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -17,12 +17,12 @@
                 <ul class="treeview-menu" style="display: {{ request()->is('company/employees*') || request()->is('company/create') || request()->is('company/edit') ? 'block' : 'none' }};">
                     <li class="treeview">
                         <a href="{{ route('admin.company_employee.index') }}" class="{{ request()->is('company/employees') && !request()->is('company/employees/create') && !request()->is('company/employees/bulk-upload') && !request()->is('company/employees/*/edit') ? 'active' : '' }}">
-                            <i class="fa fa-list"></i> <span>All Employees</span>
+                            <i class="fa fa-list"></i> <span>All Resources</span>
                         </a>
                     </li>
                     <li class="treeview">
                         <a href="{{ route('admin.company_employee.create') }}" class="{{ request()->is('company/employees/create') ? 'active' : '' }}">
-                            <i class="fa fa-user-plus"></i> <span>Add Employee</span>
+                            <i class="fa fa-user-plus"></i> <span>Add Resource</span>
                         </a>
                     </li>
                     <li class="treeview">
@@ -43,32 +43,52 @@
                 </a>
             </li>
             <li class="treeview">
-                <a href="{{route('bulk-orders.index')}}" class="">
-                    <i class="fa fa-shopping-cart"></i> <span>Bulk Orders</span>
-                </a>
-            </li>
-            <li class="treeview">
-                <a href="{{route('order-history-invoices.index')}}" class="">
-                    <i class="fa fa-file-text"></i> <span>Order History & Invoices</span>
+                <a href="{{ route('order.index') }}" class="">
+                    <i class="fa fa-shopping-cart"></i> <span>Orders</span>
                 </a>
             </li>
             <li class="treeview">
                 <a href="{{route('employee-gifting.index')}}" class="">
-                    <i class="fa fa-gift"></i> <span>Employee Gifting</span>
+                    <i class="fa fa-gift"></i> <span>Resource Gifting</span>
                 </a>
             </li>
-            <li class="treeview {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') ? 'active' : '' }}" style="height: auto;">
-                <a href="#" class="{{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') ? 'active' : '' }}">
+            <li class="treeview {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') ? 'active' : '' }}" style="height: auto;">
+                <a href="#" class="{{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') ? 'active' : '' }}">
                     <i class="fa fa-envelope"></i>
-                    <span>Enquiries</span>
+                    <span>All Enquiries</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
-                <ul class="treeview-menu" style="display: {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') ? 'block' : 'none' }};">
+                <ul class="treeview-menu" style="display: {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') ? 'block' : 'none' }};">
                     <li class="treeview">
                         <a href="{{ route('my-e-card-enquiries') }}" class="{{ request()->is('my-e-card-enquiries') && !request()->is('my-e-card-enquiries/*') ? 'active' : '' }}">
-                            <i class="fa fa-circle-o"></i> <span>E-Card Enquiry</span>
+                            <i class="fa fa-circle-o"></i> <span>E Card</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="{{ route('company.balloon-enquiries') }}" class="{{ request()->is('company/balloon-enquiries') ? 'active' : '' }}">
+                            <i class="fa fa-circle-o"></i> <span>Balloons</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="{{ route('company.perfect-gift-enquiries') }}" class="{{ request()->is('company/perfect-gift-enquiries') ? 'active' : '' }}">
+                            <i class="fa fa-circle-o"></i> <span>Perfect Gift</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="{{ route('company.business-card-orders') }}" class="{{ request()->is('company/business-card-orders') ? 'active' : '' }}">
+                            <i class="fa fa-circle-o"></i> <span>Business Card</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="{{ route('company.quality-logo-enquiries') }}" class="{{ request()->is('company/quality-logo-enquiries') ? 'active' : '' }}">
+                            <i class="fa fa-circle-o"></i> <span>Quality Logo</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="{{ route('company.journey-expert-enquiries') }}" class="{{ request()->is('company/journey-expert-enquiries') ? 'active' : '' }}">
+                            <i class="fa fa-circle-o"></i> <span>Journey Expert</span>
                         </a>
                     </li>
                 </ul>
