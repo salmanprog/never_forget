@@ -7,6 +7,7 @@
 		<h1>Product Details</h1>
 	</div>
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('product.index') }}" class="btn btn-primary btn-sm">View All Products</a>
 	</div>
 </section>

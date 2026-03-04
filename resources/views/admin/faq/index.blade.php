@@ -8,6 +8,7 @@
 	</div>
 	@can('faq-create')
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('faq.create') }}" class="btn btn-primary btn-sm">Add Faqs</a>
 	</div>
 	@endcan

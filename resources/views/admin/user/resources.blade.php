@@ -18,7 +18,7 @@
         <h1>{{ $page_title }}</h1>
     </div>
     <div class="content-header-right">
-        <a href="{{ route('user.index') }}?type=company" class="btn btn-default btn-sm"><i class="fa fa-arrow-left"></i> Back to Company Users</a>
+        @include('includes.buttons.back')
     </div>
 </section>
 

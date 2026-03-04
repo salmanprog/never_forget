@@ -7,7 +7,8 @@
         <h1>{{ $page_title }}</h1>
     </div>
     <div class="content-header-right">
-        <a href="{{ route('templates.index') }}" class="btn btn-default btn-sm" style="color: white;"><i class="fa fa-arrow-left"></i> Back to Templates</a>
+        @include('includes.buttons.back')
+        <a href="{{ route('templates.index') }}" class="btn btn-primary btn-sm" style="color: white;"><i class="fa fa-arrow-left"></i> <span class="ml-2">Back to Templates</span></a>
     </div>
 </section>
 

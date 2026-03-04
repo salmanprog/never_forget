@@ -477,6 +477,10 @@ Route::get('/orders/{order}', [OrderController::class, 'show'])
 // Route::post('/checkout/tax', [OrderController::class, 'calculateTax'])->name('checkout.calculateTax');
 Route::post('/calculate-tax', [OrderController::class, 'calculateTax'])->name('calculateTax');
 
+Route::get('paypal/checkout', 'PaypalController@checkout')->name('paypal.checkout');
+Route::get('paypal/complete', 'PaypalController@complete')->name('paypal.complete');
+Route::get('paypal/cancel', 'PaypalController@cancel')->name('paypal.cancel');
+
 
 // Route::get('/product/{slug}', [ProductController::class, 'show'])
 //     ->name('product.show');

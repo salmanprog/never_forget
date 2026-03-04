@@ -19,6 +19,9 @@
         <div class="content-header-left">
             <h1>All Business Card Orders</h1>
         </div>
+        <div class="content-header-right">
+            @include('includes.buttons.back')
+        </div>
         @can('order-create')
             <div class="content-header-right">
                 {{-- <a href="{{ route('order.create') }}" class="btn btn-primary btn-sm">Add order</a> --}}

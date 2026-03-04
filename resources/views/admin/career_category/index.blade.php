@@ -8,6 +8,7 @@
 	</div>
 	@can('career_category-create')
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('career_category.create') }}" class="btn btn-primary btn-sm">{{ $page_title_add }}</a>
 	</div>
 	@endcan

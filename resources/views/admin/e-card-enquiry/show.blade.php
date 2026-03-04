@@ -6,7 +6,7 @@
             <h1>{{ $page_title }}</h1>
         </div>
         <div class="content-header-right">
-            <a href="{{ route('e_card_enquiry.index') }}" class="btn btn-primary btn-sm">Back to List</a>
+            @include('includes.buttons.back')
         </div>
     </section>
     <section class="content">

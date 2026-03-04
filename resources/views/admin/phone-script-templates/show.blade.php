@@ -6,6 +6,7 @@
         <h1>{{ $page_title }}</h1>
     </div>
     <div class="content-header-right">
+        @include('includes.buttons.back')
         <a href="{{ route('phone-script-templates.index') }}" class="btn btn-primary btn-sm">All templates</a>
     </div>
 </section>

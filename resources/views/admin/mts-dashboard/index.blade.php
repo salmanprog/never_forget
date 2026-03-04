@@ -17,7 +17,11 @@
     <input type="hidden" id="page_url" value="{{ route('mts-dashboard.index') }}">
     <section class="content-header">
         <div class="content-header-left">
+
             <h1>{{ $page_title }}</h1>
+        </div>
+        <div class="content-header-right">
+            @include('includes.buttons.back')
         </div>
     </section>
     <style>

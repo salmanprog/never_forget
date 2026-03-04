@@ -19,7 +19,7 @@
             <h1>BusinessCard Details</h1>
         </div>
         <div class="content-header-right">
-            <a href="{{ route('order.index') }}" class="btn btn-primary btn-sm">View All</a>
+            @include('includes.buttons.back')
         </div>
     </section>
 

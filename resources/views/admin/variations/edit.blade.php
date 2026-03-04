@@ -7,6 +7,7 @@
 		<h1>Edit Variations</h1>
 	</div>
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('variations.index') }}" class="btn btn-primary btn-sm">View All</a>
 	</div>
 </section>

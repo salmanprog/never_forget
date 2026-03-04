@@ -7,7 +7,7 @@
 		<h1>Edit Customer</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="{{ route('user.index') }}" class="btn btn-primary btn-sm">View All</a>
+		@include('includes.buttons.back')
 	</div>
 </section>
 
@@ -25,7 +25,7 @@
 								<select name="roles" id="" class="form-control">
 									<option value="" selected>Select role</option>
 									@foreach ($roles as $role)
-										<option value="{{ $role->id }}" {{ $user->roles[0]->id==$role->id?'selected':'' }}>{{ $role->name }}</option>
+										<option value="{{ $role->id }}" {{ (optional($user->roles->first())->id ?? null) == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
 									@endforeach
 								</select>
 								<span style="color: red">{{ $errors->first('name') }}</span>
@@ -255,7 +255,7 @@
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label"></label>
 							<div class="col-sm-6">
-							<input type="hidden" class="form-control" name="user_role" value="{{ $user->roles[0]->name }}">
+							<input type="hidden" class="form-control" name="user_role" value="{{ optional($user->roles->first())->name ?? '' }}">
 								<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
 							</div>
 						</div>

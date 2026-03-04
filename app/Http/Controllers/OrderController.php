@@ -198,10 +198,6 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         try {
-            if (!$request->stripeToken) {
-                return back()->with('error', 'Stripe token missing!');
-            }
-
             // Check if cart is empty
             if (Cart::isEmpty()) {
                 return back()->with('error', 'Your cart is empty. Please add products before checking out.');
@@ -225,6 +221,46 @@ class OrderController extends Controller
                 $request->validate([
                     'billing_address_id' => 'required|exists:billing_addresses,id',
                 ]);
+            }
+
+            // PayPal flow: store billing + cart in session and redirect to PayPal
+            if ($request->get('pay_with') === 'paypal') {
+                $subtotal = Cart::getSubTotal();
+                $taxAmount = (float) (session('tax_amount', 0));
+                $discount = session('discount');
+                $discountAmount = $discount['discount'] ?? 0;
+                $finalTotal = $subtotal + $taxAmount - $discountAmount;
+
+                $cartItems = [];
+                foreach (Cart::getContent() as $item) {
+                    $cartItems[] = [
+                        'id' => $item->id,
+                        'name' => $item->name,
+                        'price' => $item->price,
+                        'quantity' => $item->quantity,
+                        'attributes' => $item->attributes->toArray(),
+                    ];
+                }
+
+                session([
+                    'paypal_checkout' => [
+                        'amount' => round($finalTotal, 2),
+                        'tax_amount' => $taxAmount,
+                        'discount' => $discount,
+                        'billing_address_id' => $request->billing_address_id,
+                        'guest' => $request->only([
+                            'guest_first_name', 'guest_last_name', 'guest_email', 'guest_phone',
+                            'guest_company', 'guest_country', 'guest_street', 'guest_state',
+                            'guest_city', 'guest_postal_code',
+                        ]),
+                        'cart_items' => $cartItems,
+                    ],
+                ]);
+                return redirect()->route('paypal.checkout');
+            }
+
+            if (!$request->stripeToken) {
+                return back()->with('error', 'Stripe token missing!');
             }
 
             StripeAPI::setApiKey(config('services.stripe.secret'));

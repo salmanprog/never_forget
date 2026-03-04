@@ -8,6 +8,7 @@
 	</div>
 	@can('variations-create')
         <div class="content-header-right">
+			@include('includes.buttons.back')
             <a href="{{ route('variations.create') }}" class="btn btn-primary btn-sm">Add Variations</a>
         </div>
 	@endcan

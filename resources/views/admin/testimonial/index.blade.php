@@ -8,6 +8,7 @@
 	</div>
 	@can('testimonial-create')
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('testimonial.create') }}" class="btn btn-primary btn-sm">Add Testimonial</a>
 	</div>
 	@endcan

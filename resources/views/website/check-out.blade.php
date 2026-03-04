@@ -117,6 +117,20 @@
         box-shadow: 0 6px 24px rgba(25, 118, 210, 0.18);
     }
 
+    .payment-method-option {
+        cursor: pointer;
+        transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+    }
+    .payment-method-option:hover {
+        border-color: #1976d2 !important;
+        background-color: #f8fbff;
+    }
+    .payment-method-option.selected {
+        border-color: #1976d2 !important;
+        box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.25);
+        background-color: #f0f7ff;
+    }
+
     .checkout-btn[disabled] {
         opacity: 0.7;
         pointer-events: none;
@@ -377,26 +391,62 @@
                         </button>
                     </div>
                     <div id="step-2" style="display:none;">
-                        <div class="mb-3">
-                            <div class="checkout-step">Step 2: Payment</div>
-                            <label for="card-element" class="form-label">Credit or Debit Card</label>
-                            <img src="https://stripe.com/img/v3/home/social.png" alt="Powered by Stripe"
-                                class="stripe-logo" aria-label="Powered by Stripe">
-                            <div id="card-element" class="form-control" aria-label="Card input">
-                                <!-- A Stripe Element will be inserted here. -->
+                        <div class="checkout-step mb-3">Step 2: Payment Method</div>
+                        <p class="text-muted mb-4">Choose how you would like to pay</p>
+                        <div class="row g-3 mb-4">
+                            <div class="col-12">
+                                <div class="payment-method-option rounded border p-4 h-100 cursor-pointer" data-method="card" id="option-card">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="payment-method-icon bg-light rounded p-3">
+                                            <i class="fa fa-credit-card fa-2x text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <strong class="d-block">Credit or Debit Card</strong>
+                                            <small class="text-muted">Visa, Mastercard, Amex — secure by Stripe</small>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+                            <div class="col-12">
+                                <div class="payment-method-option rounded border p-4 h-100 cursor-pointer" data-method="paypal" id="option-paypal">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="payment-method-icon bg-light rounded p-3">
+                                            <i class="fa fa-paypal fa-2x text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <strong class="d-block">PayPal</strong>
+                                            <small class="text-muted">Pay with your PayPal account</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="d-flex gap-20 align-items-center mt-20">
-                            <button type="button" class="checkout-btn mt-3" id="back-step-btn">
-                                Back
-                            </button>
-                            <button type="submit" class="checkout-btn mt-0" id="submit-button">
-                                <span class="lock-icon"><i class="fa fa-lock"></i></span>
-                                <span id="pay-btn-text">Pay Now (${{ number_format(\Cart::getTotal(), 2) }})</span>
-                                <span class="spinner-border spinner-border-sm d-none" id="pay-btn-spinner"
-                                    role="status" aria-hidden="true"></span>
-                            </button>
+                        <input type="hidden" name="pay_with" value="" id="pay_with_input">
+                        <div id="payment-card-area" style="display:none;">
+                            <div class="mb-3">
+                                <label for="card-element" class="form-label">Card details</label>
+                                <img src="https://stripe.com/img/v3/home/social.png" alt="Powered by Stripe" class="stripe-logo" aria-label="Powered by Stripe">
+                                <div id="card-element" class="form-control" aria-label="Card input"></div>
+                                <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+                            </div>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button type="button" class="btn primary-btn" id="back-step-btn">Back</button>
+                                <button type="submit" class="checkout-btn mt-0" id="submit-button" name="pay_with" value="stripe">
+                                    <span class="lock-icon"><i class="fa fa-lock"></i></span>
+                                    <span id="pay-btn-text">Pay Now (${{ number_format(\Cart::getTotal(), 2) }})</span>
+                                    <span class="spinner-border spinner-border-sm d-none" id="pay-btn-spinner" role="status" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="payment-paypal-area" style="display:none;">
+                            <p class="text-muted mb-3">You will be redirected to PayPal to complete your payment securely.</p>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button type="button" class="btn primary-btn" id="back-step-btn-paypal">Back</button>
+                                <button type="submit" form="payment-form" name="pay_with" value="paypal" class="btn btn-primary btn-lg">
+                                    <i class="fa fa-paypal"></i> Checkout with PayPal
+                                </button>
+                                
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -615,19 +665,53 @@
                 document.getElementById('pay-btn-text').innerText =
                     'Pay Now ($' + total.toFixed(2) + ')';
 
-                // ✅ Move to payment step ONLY after tax success
+                // ✅ Move to payment method step ONLY after tax success
                 document.getElementById('step-1').style.display = 'none';
                 document.getElementById('step-2').style.display = 'block';
-
-                if (!window.cardMounted) {
-                    card.mount('#card-element');
-                    window.cardMounted = true;
-                }
+                document.getElementById('payment-card-area').style.display = 'none';
+                document.getElementById('payment-paypal-area').style.display = 'none';
+                document.querySelectorAll('.payment-method-option').forEach(function(el) { el.classList.remove('selected'); });
+                document.getElementById('pay_with_input').value = '';
             })
             .catch(() => alert('Tax calculation failed'));
     });
 
+    function showPaymentMethodChoiceOnly() {
+        document.getElementById('payment-card-area').style.display = 'none';
+        document.getElementById('payment-paypal-area').style.display = 'none';
+        document.querySelectorAll('.payment-method-option').forEach(function(el) { el.classList.remove('selected'); });
+        document.getElementById('pay_with_input').value = '';
+    }
+
+    document.querySelectorAll('.payment-method-option').forEach(function(opt) {
+        opt.addEventListener('click', function() {
+            var method = this.getAttribute('data-method');
+            document.querySelectorAll('.payment-method-option').forEach(function(el) { el.classList.remove('selected'); });
+            this.classList.add('selected');
+            if (method === 'card') {
+                document.getElementById('pay_with_input').value = 'stripe';
+                document.getElementById('payment-paypal-area').style.display = 'none';
+                document.getElementById('payment-card-area').style.display = 'block';
+                if (!window.cardMounted) {
+                    card.mount('#card-element');
+                    window.cardMounted = true;
+                }
+            } else {
+                document.getElementById('pay_with_input').value = 'paypal';
+                document.getElementById('payment-card-area').style.display = 'none';
+                document.getElementById('payment-paypal-area').style.display = 'block';
+            }
+        });
+    });
+
     document.getElementById('back-step-btn').addEventListener('click', function() {
+        showPaymentMethodChoiceOnly();
+        document.getElementById('step-2').style.display = 'none';
+        document.getElementById('step-1').style.display = 'block';
+    });
+    var backPaypal = document.getElementById('back-step-btn-paypal');
+    if (backPaypal) backPaypal.addEventListener('click', function() {
+        showPaymentMethodChoiceOnly();
         document.getElementById('step-2').style.display = 'none';
         document.getElementById('step-1').style.display = 'block';
     });
@@ -651,12 +735,10 @@
             iconColor: '#fa755a'
         }
     };
-    // Create an instance of the card Element.
+    // Create an instance of the card Element (mounted when user selects Card in step 2).
     var card = elements.create('card', {
         style: style
     });
-    // Add an instance of the card Element into the `card-element` <div>.
-    card.mount('#card-element');
     // Handle real-time validation errors from the card Element.
     card.addEventListener('change', function(event) {
         var displayError = document.getElementById('card-errors');
@@ -669,6 +751,10 @@
     // Handle form submission.
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
+        // PayPal submit: let form submit normally (no Stripe token)
+        if (event.submitter && event.submitter.getAttribute('value') === 'paypal') {
+            return;
+        }
         event.preventDefault();
         // Disable the submit button to prevent repeated clicks
         document.getElementById('submit-button').disabled = true;

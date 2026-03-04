@@ -18,13 +18,14 @@
     <div class="content-header-left">
         <h1>{{ $page_title }}</h1>
     </div>
-    @can('user-create')
-        @if(request()->get('type') == 'salesperson')
-        <div class="content-header-right">
+    <div class="content-header-right">
+        @include('includes.buttons.back')
+        @can('user-create')
+            @if(request()->get('type') == 'salesperson')
             <a href="{{ route('user.create', ['type' => 'salesperson']) }}" class="btn btn-primary btn-sm">Add New Sales Person</a>
-        </div>
-        @endif
-    @endcan
+            @endif
+        @endcan
+    </div>
 </section>
 <style> 
     .badge-company {
@@ -107,6 +108,7 @@
                                             <span class="badge badge-salesperson">
                                                 Sales Person
                                             </span>
+                                            
                                         @else
                                             <span class="badge badge-individual">
                                                 Individual
