@@ -47,11 +47,11 @@
                     <i class="fa fa-shopping-cart"></i> <span>Orders</span>
                 </a>
             </li>
-            <li class="treeview">
+            {{-- <li class="treeview">
                 <a href="{{route('employee-gifting.index')}}" class="">
                     <i class="fa fa-gift"></i> <span>Resource Gifting</span>
                 </a>
-            </li>
+            </li> --}}
             <li class="treeview {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') ? 'active' : '' }}" style="height: auto;">
                 <a href="#" class="{{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') ? 'active' : '' }}">
                     <i class="fa fa-envelope"></i>

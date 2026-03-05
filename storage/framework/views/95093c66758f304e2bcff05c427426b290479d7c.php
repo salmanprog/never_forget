@@ -202,6 +202,9 @@
         color: #fff;
         text-decoration: none;
     }
+    .back-btn {
+        padding: 10px 15px;
+    }
 
     @media (max-width: 767.98px) {
         .checkout-container {
@@ -394,24 +397,12 @@
                         <div class="checkout-step mb-3">Step 2: Payment Method</div>
                         <p class="text-muted mb-4">Choose how you would like to pay</p>
                         <div class="row g-3 mb-4">
-                            <div class="col-12">
-                                <div class="payment-method-option rounded border p-4 h-100 cursor-pointer" data-method="card" id="option-card">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="payment-method-icon bg-light rounded p-3">
-                                            <i class="fa fa-credit-card fa-2x text-primary"></i>
-                                        </div>
-                                        <div>
-                                            <strong class="d-block">Credit or Debit Card</strong>
-                                            <small class="text-muted">Visa, Mastercard, Amex — secure by Stripe</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                             <div class="col-12">
                                 <div class="payment-method-option rounded border p-4 h-100 cursor-pointer" data-method="paypal" id="option-paypal">
                                     <div class="d-flex align-items-center gap-3">
                                         <div class="payment-method-icon bg-light rounded p-3">
-                                            <i class="fa fa-paypal fa-2x text-primary"></i>
+                                            <i class="fa-brands fa-paypal fa-2x text-primary"></i>
                                         </div>
                                         <div>
                                             <strong class="d-block">PayPal</strong>
@@ -420,17 +411,34 @@
                                     </div>
                                 </div>
                             </div>
+                            <?php if(config('services.authorize.api_login_id') && config('services.authorize.client_key')): ?>
+                            <div class="col-12">
+                                <div class="payment-method-option rounded border p-4 h-100 cursor-pointer" data-method="authorize" id="option-authorize">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="payment-method-icon bg-light rounded p-3">
+                                            <i class="fa fa-credit-card fa-2x text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <strong class="d-block">Credit / Debit Card (Authorize.net)</strong>
+                                            <small class="text-muted">Visa, Mastercard, Amex — secure by Authorize.net</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endif; ?>
                         </div>
                         <input type="hidden" name="pay_with" value="" id="pay_with_input">
+                        <input type="hidden" name="authorizenet_data_descriptor" id="authorizenet_data_descriptor" value="">
+                        <input type="hidden" name="authorizenet_data_value" id="authorizenet_data_value" value="">
                         <div id="payment-card-area" style="display:none;">
                             <div class="mb-3">
-                                <label for="card-element" class="form-label">Card details</label>
+                                <label for="card-element" class="form-label mb-10">Card details</label>
                                 <img src="https://stripe.com/img/v3/home/social.png" alt="Powered by Stripe" class="stripe-logo" aria-label="Powered by Stripe">
                                 <div id="card-element" class="form-control" aria-label="Card input"></div>
                                 <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                             </div>
                             <div class="d-flex gap-2 flex-wrap">
-                                <button type="button" class="btn primary-btn" id="back-step-btn">Back</button>
+                                <button type="button" class="btn primary-btn w-100 mb-10" id="back-step-btn">Back</button>
                                 <button type="submit" class="checkout-btn mt-0" id="submit-button" name="pay_with" value="stripe">
                                     <span class="lock-icon"><i class="fa fa-lock"></i></span>
                                     <span id="pay-btn-text">Pay Now ($<?php echo e(number_format(\Cart::getTotal(), 2)); ?>)</span>
@@ -439,14 +447,47 @@
                             </div>
                         </div>
                         <div id="payment-paypal-area" style="display:none;">
-                            <p class="text-muted mb-3">You will be redirected to PayPal to complete your payment securely.</p>
+                            <p class="text-muted mb-10 mt-10">You will be redirected to PayPal to complete your payment securely. Delivery charges apply; no card processing fee.</p>
                             <div class="d-flex gap-2 flex-wrap">
-                                <button type="button" class="btn primary-btn" id="back-step-btn-paypal">Back</button>
-                                <button type="submit" form="payment-form" name="pay_with" value="paypal" class="btn btn-primary btn-lg">
+                                <button type="button" class="btn primary-btn" id="back-step-btn-paypal back-btn">Back</button>
+                                <button type="submit" form="payment-form" name="pay_with" value="paypal" class="btn primary-btn btn-lg">
                                     <i class="fa fa-paypal"></i> Checkout with PayPal
+                                </button>                         
+                            </div>
+                        </div>
+                        <?php if(config('services.authorize.api_login_id') && config('services.authorize.client_key')): ?>
+                        <div id="payment-authorize-area" style="display:none;">
+                            
+                            <p class="text-muted mb-3">Enter your card details securely (powered by Authorize.net). Delivery charges apply. Card payments include an additional 3% card processing fee.</p>
+                            <p class="small text-muted mb-3">Fee may vary based on order weight and credit card processing costs.</p>
+                            <div class="mb-3">
+                                <label for="auth-card-number" class="form-label">Card Number</label>
+                                <input type="text" id="auth-card-number" class="form-control" placeholder="4111111111111111" maxlength="19" autocomplete="off" data-accept="cardNumber">
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label for="auth-exp-month" class="form-label">Exp. Month</label>
+                                    <input type="text" id="auth-exp-month" class="form-control" placeholder="MM" maxlength="2" autocomplete="off" data-accept="month">
+                                </div>
+                                <div class="col-6">
+                                    <label for="auth-exp-year" class="form-label">Exp. Year</label>
+                                    <input type="text" id="auth-exp-year" class="form-control" placeholder="YYYY" maxlength="4" autocomplete="off" data-accept="year">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="auth-card-code" class="form-label">CVV</label>
+                                <input type="text" id="auth-card-code" class="form-control" placeholder="123" maxlength="4" autocomplete="off" data-accept="cardCode">
+                            </div>
+                            <div id="authorize-errors" class="text-danger mb-2"></div>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button type="button" class="btn primary-btn w-100 back-btn mb-10" id="back-step-btn-authorize">Back</button>
+                                <button type="button" class="checkout-btn mt-0" id="submit-authorize-btn">
+                                    <span class="lock-icon"><i class="fa fa-lock"></i></span>
+                                    <span id="authorize-btn-text">Pay with Card ($<?php echo e(number_format(\Cart::getTotal(), 2)); ?>)</span>
                                 </button>
                             </div>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </form>
             </div>
@@ -456,6 +497,7 @@
                 <input type="hidden" name="tax_amount" id="tax-hidden" value="0">
                 <input type="hidden" name="final_total" id="final-total-hidden"
                     value="<?php echo e(\Cart::getSubTotal()); ?>">
+                <span id="discount-value" data-discount="<?php echo e(Session::has('discount') ? Session::get('discount')['discount'] : 0); ?>" style="display:none;"></span>
                 <div class="order-summary-title">Order Summary</div>
                 <div class="order-summary-list">
                     <?php $__currentLoopData = $Items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -481,8 +523,17 @@
                 <?php endif; ?>
                 <div class="order-summary-list order-summary-totals d-flex justify-content-between mb-2">
                     <strong>Tax</strong>
-                    <span id="tax-amount">$0.00</span> <!-- This will be updated dynamically -->
+                    <span id="tax-amount">$0.00</span>
                 </div>
+                <div id="delivery-row" class="order-summary-list order-summary-totals d-flex justify-content-between mb-2" style="display:none;">
+                    <strong>Delivery charges</strong>
+                    <span id="delivery-amount">$0.00</span>
+                </div>
+                <div id="card-charges-row" class="order-summary-list order-summary-totals d-flex justify-content-between mb-2" style="display:none;">
+                    <strong>Card charges (3%)</strong>
+                    <span id="card-charges-amount">$0.00</span>
+                </div>
+                <p id="fee-note" class="small text-muted mb-2" style="display:none;">Fee may vary based on order weight and credit card processing costs.</p>
                 <div class="order-summary-list order-summary-totals d-flex justify-content-between">
                     <strong>Total</strong>
                     <span id="total-amount">
@@ -501,6 +552,9 @@
 <!-- SweetAlert2 for alerts -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://js.stripe.com/v3/"></script>
+<?php if(config('services.authorize.api_login_id') && config('services.authorize.client_key')): ?>
+<script src="<?php echo e(config('services.authorize.mode') === 'live' ? 'https://js.authorize.net/v1/Accept.js' : 'https://jstest.authorize.net/v1/Accept.js'); ?>" charset="utf-8"></script>
+<?php endif; ?>
 
 <script>
     let autocomplete;
@@ -656,21 +710,35 @@
 
                 const tax = parseFloat(data.tax);
                 const subtotal = parseFloat(document.getElementById('subtotal-amount').dataset.subtotal);
-                const total = subtotal + tax;
+                const discountEl = document.getElementById('discount-value');
+                const discount = discountEl ? parseFloat(discountEl.getAttribute('data-discount') || 0) : 0;
+                const baseTotal = subtotal + tax - discount;
+                const deliveryFee = baseTotal < 350 ? 39 : 45;
+                const totalWithDelivery = baseTotal + deliveryFee;
+
+                window.checkoutBaseTotal = baseTotal;
+                window.deliveryFee = deliveryFee;
 
                 document.getElementById('tax-amount').innerText = '$' + tax.toFixed(2);
-                document.getElementById('total-amount').innerText = '$' + total.toFixed(2);
+                document.getElementById('delivery-row').style.display = 'flex';
+                document.getElementById('delivery-amount').innerText = '$' + deliveryFee.toFixed(2);
+                document.getElementById('card-charges-row').style.display = 'none';
+                document.getElementById('fee-note').style.display = 'block';
+                document.getElementById('total-amount').innerText = '$' + totalWithDelivery.toFixed(2);
                 document.getElementById('tax-hidden').value = tax.toFixed(2);
-                document.getElementById('final-total-hidden').value = total.toFixed(2);
+                document.getElementById('final-total-hidden').value = totalWithDelivery.toFixed(2);
 
-                document.getElementById('pay-btn-text').innerText =
-                    'Pay Now ($' + total.toFixed(2) + ')';
+                var authBtnText = document.getElementById('authorize-btn-text');
+                if (authBtnText) authBtnText.innerText = 'Pay with Card ($' + totalWithDelivery.toFixed(2) + ')';
 
                 // ✅ Move to payment method step ONLY after tax success
                 document.getElementById('step-1').style.display = 'none';
                 document.getElementById('step-2').style.display = 'block';
-                document.getElementById('payment-card-area').style.display = 'none';
+                var cardArea = document.getElementById('payment-card-area');
+                if (cardArea) cardArea.style.display = 'none';
                 document.getElementById('payment-paypal-area').style.display = 'none';
+                var authArea = document.getElementById('payment-authorize-area');
+                if (authArea) authArea.style.display = 'none';
                 document.querySelectorAll('.payment-method-option').forEach(function(el) { el.classList.remove('selected'); });
                 document.getElementById('pay_with_input').value = '';
             })
@@ -678,29 +746,78 @@
     });
 
     function showPaymentMethodChoiceOnly() {
-        document.getElementById('payment-card-area').style.display = 'none';
+        var cardArea = document.getElementById('payment-card-area');
+        if (cardArea) cardArea.style.display = 'none';
         document.getElementById('payment-paypal-area').style.display = 'none';
+        var authArea = document.getElementById('payment-authorize-area');
+        if (authArea) authArea.style.display = 'none';
+        document.getElementById('card-charges-row').style.display = 'none';
+        document.getElementById('card-charges-amount').innerText = '$0.00';
+        document.getElementById('delivery-row').style.display = 'flex';
+        if (window.checkoutBaseTotal != null && window.deliveryFee != null) {
+            var totalPayPal = window.checkoutBaseTotal + window.deliveryFee;
+            document.getElementById('total-amount').innerText = '$' + totalPayPal.toFixed(2);
+            document.getElementById('final-total-hidden').value = totalPayPal.toFixed(2);
+        }
         document.querySelectorAll('.payment-method-option').forEach(function(el) { el.classList.remove('selected'); });
         document.getElementById('pay_with_input').value = '';
+        document.getElementById('authorizenet_data_descriptor').value = '';
+        document.getElementById('authorizenet_data_value').value = '';
     }
 
     document.querySelectorAll('.payment-method-option').forEach(function(opt) {
         opt.addEventListener('click', function() {
             var method = this.getAttribute('data-method');
+            var base = window.checkoutBaseTotal;
+            var delivery = window.deliveryFee;
+            if (base == null) base = parseFloat(document.getElementById('final-total-hidden').value) - (delivery || 0);
+            if (delivery == null) delivery = base < 350 ? 39 : 45;
             document.querySelectorAll('.payment-method-option').forEach(function(el) { el.classList.remove('selected'); });
             this.classList.add('selected');
+            document.getElementById('delivery-row').style.display = 'flex';
+            document.getElementById('delivery-amount').innerText = '$' + delivery.toFixed(2);
+            document.getElementById('fee-note').style.display = 'block';
             if (method === 'card') {
                 document.getElementById('pay_with_input').value = 'stripe';
                 document.getElementById('payment-paypal-area').style.display = 'none';
-                document.getElementById('payment-card-area').style.display = 'block';
-                if (!window.cardMounted) {
+                var cardArea = document.getElementById('payment-card-area');
+                if (cardArea) cardArea.style.display = 'block';
+                var authArea = document.getElementById('payment-authorize-area');
+                if (authArea) authArea.style.display = 'none';
+                document.getElementById('card-charges-row').style.display = 'none';
+                var totalPayPal = base + delivery;
+                document.getElementById('total-amount').innerText = '$' + totalPayPal.toFixed(2);
+                document.getElementById('final-total-hidden').value = totalPayPal.toFixed(2);
+                if (!window.cardMounted && typeof card !== 'undefined') {
                     card.mount('#card-element');
                     window.cardMounted = true;
                 }
-            } else {
+            } else if (method === 'paypal') {
                 document.getElementById('pay_with_input').value = 'paypal';
-                document.getElementById('payment-card-area').style.display = 'none';
+                var cardArea = document.getElementById('payment-card-area');
+                if (cardArea) cardArea.style.display = 'none';
                 document.getElementById('payment-paypal-area').style.display = 'block';
+                var authArea = document.getElementById('payment-authorize-area');
+                if (authArea) authArea.style.display = 'none';
+                document.getElementById('card-charges-row').style.display = 'none';
+                document.getElementById('card-charges-amount').innerText = '$0.00';
+                var totalPayPal = base + delivery;
+                document.getElementById('total-amount').innerText = '$' + totalPayPal.toFixed(2);
+                document.getElementById('final-total-hidden').value = totalPayPal.toFixed(2);
+            } else if (method === 'authorize') {
+                document.getElementById('pay_with_input').value = 'authorize';
+                var cardArea = document.getElementById('payment-card-area');
+                if (cardArea) cardArea.style.display = 'none';
+                document.getElementById('payment-paypal-area').style.display = 'none';
+                document.getElementById('payment-authorize-area').style.display = 'block';
+                var cardFee = Math.round(base * 0.03 * 100) / 100;
+                document.getElementById('card-charges-row').style.display = 'flex';
+                document.getElementById('card-charges-amount').innerText = '$' + cardFee.toFixed(2);
+                var totalAuth = base + delivery + cardFee;
+                document.getElementById('total-amount').innerText = '$' + totalAuth.toFixed(2);
+                document.getElementById('final-total-hidden').value = totalAuth.toFixed(2);
+                var authBtnText = document.getElementById('authorize-btn-text');
+                if (authBtnText) authBtnText.innerText = 'Pay with Card ($' + totalAuth.toFixed(2) + ')';
             }
         });
     });
@@ -712,6 +829,12 @@
     });
     var backPaypal = document.getElementById('back-step-btn-paypal');
     if (backPaypal) backPaypal.addEventListener('click', function() {
+        showPaymentMethodChoiceOnly();
+        document.getElementById('step-2').style.display = 'none';
+        document.getElementById('step-1').style.display = 'block';
+    });
+    var backAuthorize = document.getElementById('back-step-btn-authorize');
+    if (backAuthorize) backAuthorize.addEventListener('click', function() {
         showPaymentMethodChoiceOnly();
         document.getElementById('step-2').style.display = 'none';
         document.getElementById('step-1').style.display = 'block';
@@ -752,8 +875,11 @@
     // Handle form submission.
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
-        // PayPal submit: let form submit normally (no Stripe token)
+        // PayPal or Authorize submit: let form submit normally (no Stripe token)
         if (event.submitter && event.submitter.getAttribute('value') === 'paypal') {
+            return;
+        }
+        if (document.getElementById('pay_with_input').value === 'authorize') {
             return;
         }
         event.preventDefault();
@@ -801,6 +927,67 @@
         // Submit the form
         form.submit();
     }
+
+    <?php if(config('services.authorize.api_login_id') && config('services.authorize.client_key')): ?>
+    var submitAuthorizeBtn = document.getElementById('submit-authorize-btn');
+    if (submitAuthorizeBtn) {
+        submitAuthorizeBtn.addEventListener('click', function() {
+            var cardNumber = (document.getElementById('auth-card-number') || {}).value.replace(/\s/g, '');
+            var month = (document.getElementById('auth-exp-month') || {}).value.trim();
+            var year = (document.getElementById('auth-exp-year') || {}).value.trim();
+            var cardCode = (document.getElementById('auth-card-code') || {}).value.trim();
+            var errEl = document.getElementById('authorize-errors');
+            errEl.textContent = '';
+            if (!cardNumber || cardNumber.length < 13) {
+                errEl.textContent = 'Please enter a valid card number.';
+                return;
+            }
+            if (!month || !year) {
+                errEl.textContent = 'Please enter expiration month and year.';
+                return;
+            }
+            if (!cardCode || cardCode.length < 3) {
+                errEl.textContent = 'Please enter a valid CVV.';
+                return;
+            }
+            if (typeof Accept === 'undefined') {
+                errEl.textContent = 'Payment script not loaded. Please refresh and try again.';
+                return;
+            }
+            submitAuthorizeBtn.disabled = true;
+            var authData = {
+                clientKey: "<?php echo e(config('services.authorize.client_key')); ?>",
+                apiLoginID: "<?php echo e(config('services.authorize.api_login_id')); ?>"
+            };
+            var cardData = {
+                cardNumber: cardNumber,
+                month: month,
+                year: year.length === 2 ? '20' + year : year,
+                cardCode: cardCode
+            };
+            Accept.dispatchData({
+                authData: authData,
+                cardData: cardData
+            }, function(response) {
+                submitAuthorizeBtn.disabled = false;
+                if (response.messages.resultCode === 'Error') {
+                    var msg = (response.messages.message && response.messages.message[0]) ? response.messages.message[0].text : 'Card data invalid. Please check and try again.';
+                    errEl.textContent = msg;
+                    return;
+                }
+                if (response.opaqueData) {
+                    document.getElementById('authorizenet_data_descriptor').value = response.opaqueData.dataDescriptor;
+                    document.getElementById('authorizenet_data_value').value = response.opaqueData.dataValue;
+                    document.getElementById('pay_with_input').value = 'authorize';
+                    Swal.fire({ title: 'Processing...', text: 'Please wait.', icon: 'info', allowOutsideClick: false, showConfirmButton: false, didOpen: function() { Swal.showLoading(); } });
+                    form.submit();
+                } else {
+                    errEl.textContent = 'Could not get payment token. Please try again.';
+                }
+            });
+        });
+    }
+    <?php endif; ?>
 </script>
 <?php $__env->stopSection(); ?>
 

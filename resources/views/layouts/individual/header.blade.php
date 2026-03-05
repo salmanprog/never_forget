@@ -21,7 +21,7 @@
                         @if (!empty(Auth::user()->image))
                         <img src="{{ asset('storage/' . Auth::user()->image) }}" style="object-fit: cover; width: 40px; height: 40px; border-radius: 50%; margin-top: -10px; margin-right: 8px;" alt="">
                         @else
-                             <i class="fa fa-user-circle" style="font-size: 40px; margin-top: -5px;" aria-hidden="true"></i>
+                             <i class="fa fa-user-circle" style="font-size: 40px; margin-top: -11px;" aria-hidden="true"></i>
                         @endif
                     </a>
                     <ul class="dropdown-menu">

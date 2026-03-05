@@ -377,7 +377,7 @@ class UserController extends Controller
         }
 
         $request->validate([
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         if ($request->hasFile('image')) {
@@ -388,15 +388,15 @@ class UserController extends Controller
             $user->update();
         }
 
-        // Company account type: validate required company fields before saving
+        // Company account type: validate required company fields before saving (billing fields nullable - form section commented out)
         if (strtolower((string) ($user->account_type ?? '')) === 'company') {
             $companyForValidation = $user->administeredCompany;
             $logoRequired = !$companyForValidation || empty(trim($companyForValidation->logo ?? ''));
             $companyRules = [
-                'billing_first_name' => 'required|max:255',
-                'billing_last_name'  => 'required|max:255',
-                'billing_company'    => 'required|max:255',
-                'billing_country'   => 'required|max:255',
+                'billing_first_name' => 'nullable|max:255',
+                'billing_last_name'  => 'nullable|max:255',
+                'billing_company'    => 'nullable|max:255',
+                'billing_country'   => 'nullable|max:255',
                 'number_of_employees' => 'required|integer|min:0',
                 'billing_email'     => 'required|email',
                 'billing_phone'     => 'required|max:50',
@@ -405,10 +405,6 @@ class UserController extends Controller
                 $companyRules['company_logo'] = 'required';
             }
             $this->validate($request, $companyRules, [
-                'billing_first_name.required' => 'First Name is required.',
-                'billing_last_name.required'  => 'Last Name is required.',
-                'billing_company.required'   => 'Company is required.',
-                'billing_country.required'   => 'Country is required.',
                 'number_of_employees.required' => 'Number of Employees is required.',
                 'number_of_employees.integer'  => 'Number of Employees must be a number.',
                 'number_of_employees.min'      => 'Number of Employees must be 0 or more.',

@@ -12,6 +12,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\BillingAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
@@ -223,13 +224,15 @@ class OrderController extends Controller
                 ]);
             }
 
-            // PayPal flow: store billing + cart in session and redirect to PayPal
+            // PayPal flow: store billing + cart in session and redirect to PayPal (delivery charges apply; no 3% card fee)
             if ($request->get('pay_with') === 'paypal') {
                 $subtotal = Cart::getSubTotal();
                 $taxAmount = (float) (session('tax_amount', 0));
                 $discount = session('discount');
                 $discountAmount = $discount['discount'] ?? 0;
-                $finalTotal = $subtotal + $taxAmount - $discountAmount;
+                $baseTotal = round($subtotal + $taxAmount - $discountAmount, 2);
+                $deliveryFee = $baseTotal < 350 ? 39 : 45;
+                $finalTotal = round($baseTotal + $deliveryFee, 2);
 
                 $cartItems = [];
                 foreach (Cart::getContent() as $item) {
@@ -259,8 +262,137 @@ class OrderController extends Controller
                 return redirect()->route('paypal.checkout');
             }
 
+            // Authorize.net flow: delivery charges + 3% card charges (card only); then create order
+            if ($request->get('pay_with') === 'authorize') {
+                $request->validate([
+                    'authorizenet_data_descriptor' => 'required|string',
+                    'authorizenet_data_value' => 'required|string',
+                ]);
+                $subtotal = Cart::getSubTotal();
+                $taxAmount = (float) (session('tax_amount', 0));
+                $discount = session('discount');
+                $discountAmount = $discount['discount'] ?? 0;
+                $baseTotal = round($subtotal + $taxAmount - $discountAmount, 2);
+                $deliveryFee = $baseTotal < 350 ? 39 : 45;
+                $cardFee = round($baseTotal * 0.03, 2);
+                $finalTotal = round($baseTotal + $deliveryFee + $cardFee, 2);
+                $authResult = $this->chargeAuthorizeNet(
+                    $finalTotal,
+                    $request->authorizenet_data_descriptor,
+                    $request->authorizenet_data_value
+                );
+                if (!$authResult['success']) {
+                    return back()->with('error', $authResult['error'] ?? 'Authorize.net payment failed. Please try again.');
+                }
+                // Resolve or create user
+                if (Auth::check()) {
+                    $user = Auth::user();
+                } else {
+                    $user = User::where('email', $request->guest_email)->first();
+                    if (!$user) {
+                        do {
+                            $user_id = rand(1000, 9999);
+                        } while (User::where('user_id', $user_id)->first());
+                        $user = User::create([
+                            'first_name' => $request->guest_first_name,
+                            'last_name' => $request->guest_last_name,
+                            'account_type' => 'app_user',
+                            'email' => $request->guest_email,
+                            'user_id' => $user_id,
+                            'phone' => $request->guest_phone,
+                            'password' => Hash::make('Test@123'),
+                        ]);
+                    }
+                }
+                $billing_address_id = $request->billing_address_id;
+                if (!Auth::check() && (int) $request->billing_address_id === 0) {
+                    $guest_address = BillingAddress::create([
+                        'customer_id' => $user->id,
+                        'first_name' => $request->guest_first_name,
+                        'last_name' => $request->guest_last_name,
+                        'company' => $request->guest_company ?? '',
+                        'country' => $request->guest_country,
+                        'street' => $request->guest_street,
+                        'state' => $request->guest_state,
+                        'town' => $request->guest_city,
+                        'postcode' => $request->guest_postal_code,
+                        'phone' => $request->guest_phone,
+                        'email' => $request->guest_email,
+                        'status' => 1,
+                    ]);
+                    $billing_address_id = $guest_address->id;
+                }
+                $cartItems = Cart::getContent();
+                $order = new Order();
+                $order->billing_address_id = $billing_address_id;
+                $order->payment_id = $authResult['transaction_id'] ?? 'auth_' . uniqid();
+                $order->order_number = mt_rand(100000, 999999);
+                $order->customer_id = Auth::check() ? Auth::id() : $user->id;
+                $order->payment_status = 'paid';
+                $order->order_status = 'Pending';
+                $order->order_date = date('Y-m-d');
+                $order->tax_amount = $taxAmount;
+                $order->total_amount = $finalTotal;
+                if (!Auth::check()) {
+                    $order->guest_email = $request->guest_email;
+                    $order->guest_first_name = $request->guest_first_name;
+                    $order->guest_last_name = $request->guest_last_name;
+                    $order->guest_phone = $request->guest_phone;
+                }
+                $discountData = session('discount');
+                if ($discountData) {
+                    $order->coupon_code = $discountData['coupon'] ?? ($discountData['code'] ?? null);
+                    $order->discount_amount = $discountData['discount'] ?? null;
+                }
+                $order->save();
+                $item_front_images = [];
+                $item_back_images = [];
+                foreach ($cartItems as $item) {
+                    $front = $item->attributes->get('card_front_image');
+                    $back = $item->attributes->get('card_back_image');
+                    if (!empty($front)) $item_front_images[] = $front;
+                    if (!empty($back)) $item_back_images[] = $back;
+                    OrderDetail::create([
+                        'order_id' => $order->id,
+                        'product_type' => $item->attributes->product_type ?? 'product',
+                        'product_id' => $item->attributes->business_card_id ?? ($item->attributes->product_id ?? 0),
+                        'product_slug' => $item->name,
+                        'category_id' => $item->attributes->category_id ?? null,
+                        'sub_category_id' => $item->attributes->sub_category_id ?? null,
+                        'price' => $item->price,
+                        'quantity' => $item->quantity,
+                        'message' => $item->attributes->message ?? null,
+                        'variation_id' => $item->attributes->variation_id ?? null,
+                        'discount_type' => $discountData['type'] ?? null,
+                        'discount_amount' => $discountData['discount'] ?? null,
+                        'tax' => null,
+                        'sub_total' => $item->price * $item->quantity,
+                        'order_status' => 'Succeeded',
+                        'order_date' => date('Y-m-d'),
+                    ]);
+                }
+                Cart::clear();
+                session()->forget('discount');
+                try {
+                    $customer_email = Auth::check() ? Auth::user()->email : $order->guest_email;
+                    if ($customer_email) {
+                        $details = ['from' => 'customer-new-booking', 'title' => 'Your order has been placed successfully.', 'body' => $order, 'front_images' => $item_front_images ?? [], 'back_images' => $item_back_images ?? []];
+                        Mail::to($customer_email)->send(new \App\Mail\Email($details));
+                    }
+                    $admin = User::role('Admin')->where('status', 1)->first();
+                    if ($admin) {
+                        $customer_name = Auth::check() ? Auth::user()->name . ' ' . Auth::user()->last_name : ($order->guest_first_name . ' ' . $order->guest_last_name);
+                        $details = ['from' => 'admin-new-booking', 'title' => "You have received the following order from " . $customer_name, 'body' => $order, 'front_images' => $item_front_images ?? [], 'back_images' => $item_back_images ?? []];
+                        Mail::to($admin->email)->send(new \App\Mail\Email($details));
+                    }
+                } catch (\Exception $e) {
+                    \Log::warning('Order confirmation email failed: ' . $e->getMessage());
+                }
+                return redirect()->route('order.success')->with('order', $order)->with('success', 'Order placed and payment successful!');
+            }
+
             if (!$request->stripeToken) {
-                return back()->with('error', 'Stripe token missing!');
+                return back()->with('error', 'Please select a payment method and complete card details.');
             }
 
             StripeAPI::setApiKey(config('services.stripe.secret'));
@@ -539,5 +671,67 @@ class OrderController extends Controller
 
         $pdf = PDF::loadView('admin.order.mypdf', compact('orders', 'order_details'));
         return $pdf->download('order-invoice.pdf');
+    }
+
+    /**
+     * Charge via Authorize.net using Accept.js payment nonce (opaque data).
+     *
+     * @param float  $amount
+     * @param string $dataDescriptor
+     * @param string $dataValue
+     * @return array{success: bool, transaction_id?: string, error?: string}
+     */
+    private function chargeAuthorizeNet(float $amount, string $dataDescriptor, string $dataValue): array
+    {
+        $apiLoginId = config('services.authorize.api_login_id');
+        $transactionKey = config('services.authorize.transaction_key');
+        $apiUrl = config('services.authorize.api_url');
+
+        if (empty($apiLoginId) || empty($transactionKey)) {
+            return ['success' => false, 'error' => 'Authorize.net is not configured.'];
+        }
+
+        $payload = [
+            'createTransactionRequest' => [
+                'merchantAuthentication' => [
+                    'name' => $apiLoginId,
+                    'transactionKey' => $transactionKey,
+                ],
+                'refId' => 'ref' . uniqid(),
+                'transactionRequest' => [
+                    'transactionType' => 'authCaptureTransaction',
+                    'amount' => round($amount, 2),
+                    'payment' => [
+                        'opaqueData' => [
+                            'dataDescriptor' => $dataDescriptor,
+                            'dataValue' => $dataValue,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        try {
+            $response = Http::timeout(30)->post($apiUrl, $payload);
+            $body = $response->json();
+            $wrapper = $body['createTransactionResponse'] ?? $body;
+            $txResponse = $wrapper['transactionResponse'] ?? $wrapper['transactionResponse'] ?? null;
+            $messages = $wrapper['messages'] ?? $body['messages'] ?? [];
+
+            if ($txResponse && isset($txResponse['responseCode']) && (string) $txResponse['responseCode'] === '1') {
+                $transId = $txResponse['transId'] ?? null;
+                return ['success' => true, 'transaction_id' => $transId];
+            }
+
+            $errors = is_array($txResponse) ? ($txResponse['errors'] ?? []) : [];
+            $errorText = isset($errors[0]['errorText']) ? $errors[0]['errorText'] : null;
+            if (!$errorText && isset($messages['message'][0]['text'])) {
+                $errorText = $messages['message'][0]['text'];
+            }
+            return ['success' => false, 'error' => $errorText ?: 'Transaction declined.'];
+        } catch (\Exception $e) {
+            \Log::error('Authorize.net charge error: ' . $e->getMessage());
+            return ['success' => false, 'error' => 'Payment could not be processed. Please try again.'];
+        }
     }
 }

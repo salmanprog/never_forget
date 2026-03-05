@@ -56,4 +56,14 @@ return [
         'agent_phone' => trim((string) env('TWILIO_AGENT_PHONE', '')), // Optional: fallback when logged-in user has no phone (click-to-call).
     ],
 
+    'authorize' => [
+        'api_login_id' => env('AUTHORIZE_API_LOGIN_ID'),
+        'transaction_key' => env('AUTHORIZE_TRANSACTION_KEY'),
+        'client_key' => env('AUTHORIZE_CLIENT_KEY'),
+        'mode' => env('AUTHORIZE_MODE', 'sandbox'),
+        'api_url' => env('AUTHORIZE_MODE', 'sandbox') === 'live'
+            ? 'https://api.authorize.net/xml/v1/request.api'
+            : 'https://apitest.authorize.net/xml/v1/request.api',
+    ],
+
 ];

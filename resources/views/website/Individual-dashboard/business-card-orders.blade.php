@@ -19,7 +19,7 @@
             <h1>{{ $page_title }}</h1>
         </div>
         <div class="content-header-right">
-            <input type="text" id="search" class="form-control" placeholder="Search by Order Number" style="max-width: 250px;">
+            @include('includes.buttons.back')
         </div>
     </section>
     <section class="content">

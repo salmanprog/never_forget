@@ -19,12 +19,9 @@
         <div class="content-header-left">
             <h1>All Orders</h1>
         </div>
-        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('order-create')): ?>
-            <div class="content-header-right">
-                <?php echo $__env->make('includes.buttons.back', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                
-            </div>
-        <?php endif; ?>
+        <div class="content-header-right">
+            <?php echo $__env->make('includes.buttons.back', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        </div>
     </section>
 
     <section class="content">

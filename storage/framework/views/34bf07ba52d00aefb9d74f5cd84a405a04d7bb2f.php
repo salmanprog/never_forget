@@ -1,6 +1,6 @@
 <header class="main-header">
-    <a href="{{ route('dashboard') }}" class="logo">
-        <img class="logo-lg" src="{{ asset('public/admin/assets/images/page') }}/{{ $home_page_data['admin_header_logo'] }}" style="width: 200px;position: absolute;left: 1%;top: 20%;" alt="">
+    <a href="<?php echo e(route('dashboard')); ?>" class="logo">
+        <img class="logo-lg" src="<?php echo e(asset('public/admin/assets/images/page')); ?>/<?php echo e($home_page_data['admin_header_logo']); ?>" style="width: 200px;position: absolute;left: 1%;top: 20%;" alt="">
     </a>
     <nav class="navbar navbar-static-top">
 
@@ -8,7 +8,7 @@
             <span class="sr-only">Toggle navigation</span>
         </a>
 
-        <span style="float:left;line-height:50px;color:rgb(255, 255, 255);font-weight: 600;padding-left:15px;font-size:15px;"><span class="logo-lg">{{ $companyName ?? '' }}</span></span>
+        <span style="float:left;line-height:50px;color:rgb(255, 255, 255);font-weight: 600;padding-left:15px;font-size:15px;"><span class="logo-lg"><?php echo e($companyName ?? ''); ?></span></span>
 
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
@@ -24,39 +24,40 @@
                                 <li style="padding: 10px; text-align: center; color: #999;">Loading notifications...</li>
                             </ul>
                         </li>
-                        @can('notification-list')
+                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('notification-list')): ?>
                         <li class="footer" style="padding: 10px; text-align: center; border-top: 1px solid #eee;">
-                            <a href="{{ route('notification.index') }}">View all</a>
+                            <a href="<?php echo e(route('notification.index')); ?>">View all</a>
                         </li>
-                        @endcan
+                        <?php endif; ?>
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ url('/') }}" target="_blank">Visit Website</a>
+                    <a href="<?php echo e(url('/')); ?>" target="_blank">Visit Website</a>
                 </li>
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        @if (!empty(Auth::user()->image))
-                             <img src="{{ asset('public/admin/assets/images/UserImage') }}/{{ Auth::user()->image }}" style="object-fit: cover; width: 40px; height: 40px; border-radius: 50%; margin-top: -10px; margin-right: 8px;" alt="">
-                        @else
+                        <?php if(!empty(Auth::user()->image)): ?>
+                             <img src="<?php echo e(asset('public/admin/assets/images/UserImage')); ?>/<?php echo e(Auth::user()->image); ?>" style="object-fit: cover; width: 40px; height: 40px; border-radius: 50%; margin-top: -10px; margin-right: 8px;" alt="">
+                        <?php else: ?>
                              <i class="fa fa-user-circle" style="font-size: 40px; margin-top: -11px;" aria-hidden="true"></i>
-                        @endif
+                        <?php endif; ?>
                     </a>
                     <ul class="dropdown-menu">
                         <li class="user-footer">
                             <div>
-                                <a href="{{ route('company.profile.edit') }}" class="btn btn-default btn-flat" >Edit Profile</a>
+                                <a href="<?php echo e(route('company.profile.edit')); ?>" class="btn btn-default btn-flat" >Edit Profile</a>
                             </div>
                             <div>
-                                <a class="dropdown-item btn btn-default btn-flat" href="{{ route('admin.logout') }}"
+                                <a class="dropdown-item btn btn-default btn-flat" href="<?php echo e(route('admin.logout')); ?>"
                                     onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                                    <?php echo e(__('Logout')); ?>
+
                                 </a>
 
-                                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
-                                    @csrf
+                                <form id="logout-form" action="<?php echo e(route('admin.logout')); ?>" method="POST" class="d-none">
+                                    <?php echo csrf_field(); ?>
                                 </form>
                             </div>
                         </li>
@@ -81,7 +82,7 @@
         function loadNotifications() {
             // Get notification count
             $.ajax({
-                url: '{{ route("notifications.count") }}',
+                url: '<?php echo e(route("notifications.count")); ?>',
                 type: 'GET',
                 success: function(response) {
                     $('.notification-count').text(response.count);
@@ -95,7 +96,7 @@
 
             // Get notification list
             $.ajax({
-                url: '{{ route("notifications.list") }}',
+                url: '<?php echo e(route("notifications.list")); ?>',
                 type: 'GET',
                 success: function(response) {
                     $('.notification-header').text('You have ' + response.unread_count + ' unread notifications');
@@ -105,7 +106,7 @@
                         response.notifications.forEach(function(notification) {
                             var readClass = notification.is_read ? '' : 'background-color: #f0f8ff;';
                             var readBadge = notification.is_read ? '' : '<span class="badge label-warning" style="margin-left: 5px;">New</span>';
-                            var notificationUrl = '{{ route("notification.show", ":id") }}'.replace(':id', notification.id);
+                            var notificationUrl = '<?php echo e(route("notification.show", ":id")); ?>'.replace(':id', notification.id);
                             
                             html += '<li style="padding: 10px; border-bottom: 1px solid #eee; ' + readClass + '">';
                             html += '<a href="' + notificationUrl + '" class="notification-item" data-id="' + notification.id + '" style="display: block; color: #333; text-decoration: none;">';
@@ -134,14 +135,14 @@
         // Mark notification as read when clicked (before navigation)
         $(document).on('click', '.notification-item', function(e) {
             var notificationId = $(this).data('id');
-            var notificationUrl = '{{ route("notifications.mark-read", ":id") }}'.replace(':id', notificationId);
+            var notificationUrl = '<?php echo e(route("notifications.mark-read", ":id")); ?>'.replace(':id', notificationId);
             
             // Mark as read via AJAX (don't prevent default, let the link work)
             $.ajax({
                 url: notificationUrl,
                 type: 'POST',
                 data: {
-                    _token: '{{ csrf_token() }}'
+                    _token: '<?php echo e(csrf_token()); ?>'
                 },
                 async: false // Wait for this to complete before navigation
             });
@@ -175,4 +176,4 @@
         width: 50px;
         display: none;
     }
-</style>
+</style><?php /**PATH D:\xampp\htdocs\never-forget\resources\views/layouts/company/header.blade.php ENDPATH**/ ?>

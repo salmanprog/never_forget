@@ -18,6 +18,9 @@
         <div class="content-header-left">
             <h1>{{ $page_title }}</h1>
         </div>
+        <div class="content-header-right">
+            @include('includes.buttons.back')
+        </div>
     </section>
     <section class="content">
         <div class="row">

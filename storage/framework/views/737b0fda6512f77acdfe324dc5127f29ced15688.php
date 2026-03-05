@@ -1,4 +1,4 @@
-@php
+<?php
     if (Auth::user()->hasRole('Admin')) {
         $layout = 'layouts.admin.app';
     } elseif (Auth::user()->hasRole('Company')) {
@@ -8,18 +8,18 @@
     } else {
         $layout = 'layouts.individual.app';
     }
-@endphp
+?>
 
-@extends($layout)
-@section('title', $page_title)
-@section('content')
-    <input type="hidden" id="page_url" value="{{ $page_url ?? route('member.balloon-enquiries') }}">
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('content'); ?>
+    <input type="hidden" id="page_url" value="<?php echo e($page_url ?? route('member.balloon-enquiries')); ?>">
     <section class="content-header">
         <div class="content-header-left">
-            <h1>{{ $page_title }}</h1>
+            <h1><?php echo e($page_title); ?></h1>
         </div>
         <div class="content-header-right">
-            @include('includes.buttons.back')
+            <?php echo $__env->make('includes.buttons.back', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         </div>
     </section>
     <section class="content">
@@ -39,7 +39,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="body">
-                                    @include('website.individual-dashboard.balloon-enquiries-partials.table', ['balloonEnquiries' => $balloonEnquiries])
+                                    <?php echo $__env->make('website.individual-dashboard.balloon-enquiries-partials.table', ['balloonEnquiries' => $balloonEnquiries], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                 </tbody>
                             </table>
                         </div>
@@ -48,9 +48,9 @@
             </div>
         </div>
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
 <script>
     $(document).on('click', '.pagination a', function(e) {
         e.preventDefault();
@@ -71,4 +71,6 @@
         $(this).attr('aria-expanded', !expanded).html(expanded ? '<i class="fa fa-chevron-down"></i> View details' : '<i class="fa fa-chevron-up"></i> Hide details');
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make($layout, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\never-forget\resources\views/website/individual-dashboard/balloon-enquiries.blade.php ENDPATH**/ ?>

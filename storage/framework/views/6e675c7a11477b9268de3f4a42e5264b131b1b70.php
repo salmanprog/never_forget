@@ -1,4 +1,4 @@
-@php
+<?php
     if (Auth::user()->hasRole('Admin')) {
         $layout = 'layouts.admin.app';
     } elseif (Auth::user()->hasRole('Individual')) {
@@ -8,17 +8,17 @@
     } else {
         $layout = 'layouts.individual.app';
     }
-@endphp
-@extends($layout)
-@section('title', $page_title)
-@section('content')
-    <input type="hidden" id="page_url" value="{{ route('my-e-card-enquiries') }}">
+?>
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('content'); ?>
+    <input type="hidden" id="page_url" value="<?php echo e(route('my-e-card-enquiries')); ?>">
     <section class="content-header">
         <div class="content-header-left">
             <h1>E-Card Enquiry</h1>
         </div>
         <div class="content-header-right">
-            @include('includes.buttons.back')
+            <?php echo $__env->make('includes.buttons.back', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         </div>
     </section>
     <section class="content">
@@ -42,34 +42,35 @@
                                 </tr>
                             </thead>
                             <tbody id="body">
-                                @foreach ($enquiries as $key => $enquiry)
+                                <?php $__currentLoopData = $enquiries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $enquiry): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <td>{{ $enquiries->firstItem() + $key }}.</td>
-                                        <td>{{ $enquiry->recipient_name }}<br><small>{{ $enquiry->recipient_email_phone }}</small></td>
-                                        <td>{{ $enquiry->occasion }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($enquiry->send_date)->format('d M Y') }} {{ \Carbon\Carbon::parse($enquiry->send_time)->format('h:i A') }}</td>
+                                        <td><?php echo e($enquiries->firstItem() + $key); ?>.</td>
+                                        <td><?php echo e($enquiry->recipient_name); ?><br><small><?php echo e($enquiry->recipient_email_phone); ?></small></td>
+                                        <td><?php echo e($enquiry->occasion); ?></td>
+                                        <td><?php echo e(\Carbon\Carbon::parse($enquiry->send_date)->format('d M Y')); ?> <?php echo e(\Carbon\Carbon::parse($enquiry->send_time)->format('h:i A')); ?></td>
                                         <td>
-                                            @if($enquiry->status == 'New Request')
+                                            <?php if($enquiry->status == 'New Request'): ?>
                                                 <span class="badge label-info">New Request</span>
-                                            @elseif($enquiry->status == 'Waiting for Design')
+                                            <?php elseif($enquiry->status == 'Waiting for Design'): ?>
                                                 <span class="badge label-warning">Waiting for Design</span>
-                                            @elseif($enquiry->status == 'Awaiting Client Approval')
+                                            <?php elseif($enquiry->status == 'Awaiting Client Approval'): ?>
                                                 <span class="badge label-primary">Awaiting Client Approval</span>
-                                            @elseif($enquiry->status == 'Ready to Send')
+                                            <?php elseif($enquiry->status == 'Ready to Send'): ?>
                                                 <span class="badge label-success">Ready to Send</span>
-                                            @elseif($enquiry->status == 'Completed')
+                                            <?php elseif($enquiry->status == 'Completed'): ?>
                                                 <span class="badge label-success">Completed</span>
-                                            @else
-                                                <span class="badge label-default">{{ $enquiry->status }}</span>
-                                            @endif
+                                            <?php else: ?>
+                                                <span class="badge label-default"><?php echo e($enquiry->status); ?></span>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td colspan="5">
-                                        Displaying {{ $enquiries->firstItem() }} to {{ $enquiries->lastItem() }} of {{ $enquiries->total() }} records
+                                        Displaying <?php echo e($enquiries->firstItem()); ?> to <?php echo e($enquiries->lastItem()); ?> of <?php echo e($enquiries->total()); ?> records
                                         <div class="d-flex justify-content-center">
-                                            {!! $enquiries->links('pagination::bootstrap-4') !!}
+                                            <?php echo $enquiries->links('pagination::bootstrap-4'); ?>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -80,4 +81,6 @@
             </div>
         </div>
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make($layout, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\never-forget\resources\views/admin/my-e-card-enquiries/index.blade.php ENDPATH**/ ?>

@@ -19,12 +19,9 @@
         <div class="content-header-left">
             <h1>All Orders</h1>
         </div>
-        @can('order-create')
-            <div class="content-header-right">
-                @include('includes.buttons.back')
-                {{-- <a href="{{ route('order.create') }}" class="btn btn-primary btn-sm">Add order</a> --}}
-            </div>
-        @endcan
+        <div class="content-header-right">
+            @include('includes.buttons.back')
+        </div>
     </section>
 
     <section class="content">
