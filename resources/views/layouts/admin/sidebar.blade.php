@@ -46,6 +46,12 @@
                             </a>
                         </li>
                     @endcan
+                    <li class="treeview">
+                        <a href="{{ route('admin.package_setting.index') }}"
+                            class="{{ request()->is('package-settings') ? 'active' : '' }}">
+                            <i class="fa fa-box-open"></i> <span>Package / Upgrade</span>
+                        </a>
+                    </li>
                     <li class="treeview {{ request()->is('variations') || request()->is('variations/create') || request()->is('variations/*/show') || request()->is('variations/*/edit') || request()->is('variations/*') || request()->is('product') || request()->is('product/create') || request()->is('product/*/edit') || request()->is('product/*') || request()->is('category') || request()->is('category/create') || request()->is('category/*/edit') ? 'active' : '' }}"
                         style="height: auto;">
                         <a href="#"

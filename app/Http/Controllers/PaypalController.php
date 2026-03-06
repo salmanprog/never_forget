@@ -202,6 +202,7 @@ class PaypalController extends Controller
             ]);
         }
 
+        \App\Http\Controllers\OrderController::applyPackageUpgradeFromItems($order, $cartItems);
         Cart::clear();
         session()->forget('paypal_checkout');
         session()->forget('discount');
@@ -240,6 +241,10 @@ class PaypalController extends Controller
     public function cancel()
     {
         session()->forget('paypal_checkout');
+        if (session()->has('paypal_cancel_redirect')) {
+            $url = session()->pull('paypal_cancel_redirect');
+            return redirect($url)->with('error', 'Payment was cancelled.');
+        }
         return redirect()->route('check-out')->with('error', 'Payment was cancelled.');
     }
 }

@@ -31,10 +31,33 @@ class CompanyEmployeeController extends Controller
     }
 
     /**
+     * Get resource limits (employees, clients) for the current user from user record or config defaults.
+     *
+     * @return array{employees: int, clients: int}
+     */
+    private function getLimits()
+    {
+        $user = Auth::user();
+        $employees = (int) ($user->employees ?? config('resources.limits.employees', 10));
+        $clients   = (int) ($user->clients ?? config('resources.limits.clients', 5));
+        return ['employees' => $employees, 'clients' => $clients];
+    }
+
+    /**
+     * URL for the company user to upgrade package (dashboard page).
+     */
+    private function getUpgradeUrl()
+    {
+        return route('company.package-upgrade');
+    }
+
+    /**
      * Display a listing of employees for the company
      */
     public function index(Request $request)
     {
+        // Ensure we have latest limits from DB (e.g. after package upgrade payment)
+        Auth::user()->refresh();
         $user = Auth::user();
         $company = $this->getCompany();
         
@@ -77,8 +100,12 @@ class CompanyEmployeeController extends Controller
         if ($request->ajax()) {
             return view('admin.company_employee.search', compact('employees'));
         }
+
+        $limits = $this->getLimits();
+        $employeeCount = $company->employees()->where('type', 'employee')->count();
+        $clientCount = $company->employees()->where('type', 'client')->count();
         
-        return view('admin.company_employee.index', compact('employees', 'page_title', 'company'));
+        return view('admin.company_employee.index', compact('employees', 'page_title', 'company', 'limits', 'employeeCount', 'clientCount'));
     }
 
     /**
@@ -86,15 +113,20 @@ class CompanyEmployeeController extends Controller
      */
     public function create()
     {
+        Auth::user()->refresh();
         $company = $this->getCompany();
         
         if (!$company) {
             return redirect()->route('admin.company.create')
                 ->with('error', 'Please create a company first before adding employees.');
         }
+
+        $limits = $this->getLimits();
+        $employeeCount = $company->employees()->where('type', 'employee')->count();
+        $clientCount = $company->employees()->where('type', 'client')->count();
         
         $page_title = 'Add Resource';
-        return view('admin.company_employee.create', compact('page_title'));
+        return view('admin.company_employee.create', compact('page_title', 'limits', 'employeeCount', 'clientCount'));
     }
 
     /**
@@ -118,6 +150,29 @@ class CompanyEmployeeController extends Controller
         }
 
         $company = $this->getCompany();
+        if (!$company) {
+            return redirect()->back()->with('error', 'Company not found.');
+        }
+
+        $limits = $this->getLimits();
+        $employeeCount = $company->employees()->where('type', 'employee')->count();
+        $clientCount = $company->employees()->where('type', 'client')->count();
+        $type = $request->type;
+
+        if ($type === 'employee' && $employeeCount >= $limits['employees']) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'You have reached your default limit of ' . $limits['employees'] . ' employees. To add more, please upgrade your package.')
+                ->with('upgrade_required', true)
+                ->with('upgrade_url', $this->getUpgradeUrl());
+        }
+        if ($type === 'client' && $clientCount >= $limits['clients']) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'You have reached your default limit of ' . $limits['clients'] . ' clients. To add more, please upgrade your package.')
+                ->with('upgrade_required', true)
+                ->with('upgrade_url', $this->getUpgradeUrl());
+        }
         
         // Format date_of_birth to YYYY-MM-DD format (date only, no time)
         $dateOfBirth = $request->date_of_birth ? Carbon::parse($request->date_of_birth)->format('Y-m-d') : null;
@@ -146,15 +201,20 @@ class CompanyEmployeeController extends Controller
      */
     public function bulkUpload()
     {
+        Auth::user()->refresh();
         $company = $this->getCompany();
         
         if (!$company) {
             return redirect()->route('admin.company.create')
                 ->with('error', 'Please create a company first before uploading employees.');
         }
+
+        $limits = $this->getLimits();
+        $employeeCount = $company->employees()->where('type', 'employee')->count();
+        $clientCount = $company->employees()->where('type', 'client')->count();
         
         $page_title = 'Bulk Upload Resources';
-        return view('admin.company_employee.bulk-upload', compact('page_title'));
+        return view('admin.company_employee.bulk-upload', compact('page_title', 'limits', 'employeeCount', 'clientCount'));
     }
 
     /**
@@ -173,6 +233,14 @@ class CompanyEmployeeController extends Controller
         }
 
         $company = $this->getCompany();
+        if (!$company) {
+            return redirect()->back()->with('error', 'Company not found.');
+        }
+
+        $limits = $this->getLimits();
+        $employeeCount = $company->employees()->where('type', 'employee')->count();
+        $clientCount = $company->employees()->where('type', 'client')->count();
+
         $file = $request->file('csv_file');
         $csvData = array_map('str_getcsv', file($file->getRealPath()));
         
@@ -182,6 +250,7 @@ class CompanyEmployeeController extends Controller
         $successCount = 0;
         $errorCount = 0;
         $errors = [];
+        $limitReached = false;
 
         foreach ($csvData as $index => $row) {
             if (count($row) < 4) {
@@ -213,6 +282,20 @@ class CompanyEmployeeController extends Controller
                 continue;
             }
 
+            $type = strtolower($data['type'] ?? 'employee');
+            if ($type === 'employee' && $employeeCount >= $limits['employees']) {
+                $errors[] = "Row " . ($index + 2) . ": Employee limit reached (" . $limits['employees'] . "). Please upgrade your package to add more.";
+                $errorCount++;
+                $limitReached = true;
+                continue;
+            }
+            if ($type === 'client' && $clientCount >= $limits['clients']) {
+                $errors[] = "Row " . ($index + 2) . ": Client limit reached (" . $limits['clients'] . "). Please upgrade your package to add more.";
+                $errorCount++;
+                $limitReached = true;
+                continue;
+            }
+
             try {
                 $employee = CompanyEmployee::create([
                     'company_id' => $company->id,
@@ -225,6 +308,11 @@ class CompanyEmployeeController extends Controller
                     'invited_at' => Carbon::now()
                 ]);
 
+                if ($type === 'employee') {
+                    $employeeCount++;
+                } else {
+                    $clientCount++;
+                }
                 // Send invitation email
                 //$this->sendInvitationEmail($employee);
                 $successCount++;
@@ -244,8 +332,13 @@ class CompanyEmployeeController extends Controller
             }
         }
 
-        return redirect()->route('admin.company_employee.index')
+        $redirect = redirect()->route('admin.company_employee.index')
             ->with($errorCount > 0 ? 'warning' : 'success', $message);
+        if ($limitReached) {
+            $redirect->with('upgrade_required', true)->with('upgrade_url', $this->getUpgradeUrl())
+                ->with('error', 'You have reached your default limit of ' . $limits['employees'] . ' employees and ' . $limits['clients'] . ' clients. To add more, please upgrade your package.');
+        }
+        return $redirect;
     }
 
     /**

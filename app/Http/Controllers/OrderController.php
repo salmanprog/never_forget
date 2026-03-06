@@ -371,6 +371,7 @@ class OrderController extends Controller
                         'order_date' => date('Y-m-d'),
                     ]);
                 }
+                self::applyPackageUpgradeFromItems($order, $cartItems);
                 Cart::clear();
                 session()->forget('discount');
                 try {
@@ -532,6 +533,7 @@ class OrderController extends Controller
                     ]);
                 }
 
+                self::applyPackageUpgradeFromItems($order, $cartItems);
                 // Clear cart and discount
                 Cart::clear();
                 session()->forget('discount');
@@ -597,6 +599,10 @@ class OrderController extends Controller
      */
     public function success()
     {
+        if (session()->has('order_success_redirect')) {
+            $url = session()->pull('order_success_redirect');
+            return redirect($url)->with('order', session('order'))->with('success', 'Order placed and payment successful! Your package limits have been updated.');
+        }
         return view('website.order-success');
     }
 
@@ -732,6 +738,89 @@ class OrderController extends Controller
         } catch (\Exception $e) {
             \Log::error('Authorize.net charge error: ' . $e->getMessage());
             return ['success' => false, 'error' => 'Payment could not be processed. Please try again.'];
+        }
+    }
+
+    /**
+     * Public static wrapper for package upgrade charge (dashboard modal).
+     *
+     * @return array{success: bool, transaction_id?: string, error?: string}
+     */
+    public static function chargeAuthorizeNetForAmount(float $amount, string $dataDescriptor, string $dataValue): array
+    {
+        $apiLoginId = config('services.authorize.api_login_id');
+        $transactionKey = config('services.authorize.transaction_key');
+        $apiUrl = config('services.authorize.api_url');
+        if (empty($apiLoginId) || empty($transactionKey)) {
+            return ['success' => false, 'error' => 'Authorize.net is not configured.'];
+        }
+        $payload = [
+            'createTransactionRequest' => [
+                'merchantAuthentication' => ['name' => $apiLoginId, 'transactionKey' => $transactionKey],
+                'refId' => 'ref' . uniqid(),
+                'transactionRequest' => [
+                    'transactionType' => 'authCaptureTransaction',
+                    'amount' => round($amount, 2),
+                    'payment' => ['opaqueData' => ['dataDescriptor' => $dataDescriptor, 'dataValue' => $dataValue]],
+                ],
+            ],
+        ];
+        try {
+            $response = Http::timeout(30)->post($apiUrl, $payload);
+            $body = $response->json();
+            $wrapper = $body['createTransactionResponse'] ?? $body;
+            $txResponse = $wrapper['transactionResponse'] ?? null;
+            $messages = $wrapper['messages'] ?? $body['messages'] ?? [];
+            if ($txResponse && isset($txResponse['responseCode']) && (string) $txResponse['responseCode'] === '1') {
+                return ['success' => true, 'transaction_id' => $txResponse['transId'] ?? null];
+            }
+            $errors = is_array($txResponse) ? ($txResponse['errors'] ?? []) : [];
+            $errorText = isset($errors[0]['errorText']) ? $errors[0]['errorText'] : null;
+            if (!$errorText && isset($messages['message'][0]['text'])) {
+                $errorText = $messages['message'][0]['text'];
+            }
+            return ['success' => false, 'error' => $errorText ?: 'Transaction declined.'];
+        } catch (\Exception $e) {
+            \Log::error('Authorize.net charge error: ' . $e->getMessage());
+            return ['success' => false, 'error' => 'Payment could not be processed. Please try again.'];
+        }
+    }
+
+    /**
+     * If the order contains a package upgrade cart item, update the customer's employees and clients limits.
+     *
+     * @param  Order  $order
+     * @param  \Illuminate\Support\Collection|array  $cartItems  Cart::getContent() or session cart_items array
+     */
+    public static function applyPackageUpgradeFromItems(Order $order, $cartItems): void
+    {
+        $customerId = $order->customer_id;
+        if (!$customerId) {
+            return;
+        }
+        $user = User::find($customerId);
+        if (!$user) {
+            return;
+        }
+        foreach ($cartItems as $item) {
+            $id = is_array($item) ? ($item['id'] ?? null) : $item->id;
+            if ((string) $id !== 'package_upgrade') {
+                continue;
+            }
+            $attrs = is_array($item) ? ($item['attributes'] ?? []) : $item->attributes;
+            $employees = is_array($attrs) ? ($attrs['package_employees'] ?? null) : $attrs->get('package_employees');
+            $clients = is_array($attrs) ? ($attrs['package_clients'] ?? null) : $attrs->get('package_clients');
+            if ($employees !== null && $employees !== '') {
+                $user->employees = (int) $employees;
+            }
+            if ($clients !== null && $clients !== '') {
+                $user->clients = (int) $clients;
+            }
+            $user->save();
+            if (\Illuminate\Support\Facades\Auth::check() && (int) \Illuminate\Support\Facades\Auth::id() === (int) $customerId) {
+                \Illuminate\Support\Facades\Auth::user()->refresh();
+            }
+            break;
         }
     }
 }

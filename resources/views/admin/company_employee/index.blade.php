@@ -21,6 +21,7 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
+            @include('includes.upgrade_alert')
             @if (session('success'))
                 <div class="callout callout-success">
                     {{ session('success') }}

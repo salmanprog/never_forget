@@ -25,7 +25,25 @@ function globalData()
     return $home_page_data;
 }
 
-
+/**
+ * Get upgrade package settings (amount, employees, clients) from admin-configured PageSetting.
+ *
+ * @return array{amount: float, employees: int, clients: int, name: string}
+ */
+function getPackageSettings()
+{
+    $settings = \App\Models\PageSetting::where('parent_slug', 'package')->get()->keyBy('key');
+    $get = function ($key, $default) use ($settings) {
+        $row = $settings->get($key);
+        return $row ? $row->value : $default;
+    };
+    return [
+        'amount'    => (float) ($get('package_amount', 99)),
+        'employees' => (int) ($get('package_employees', 20)),
+        'clients'   => (int) ($get('package_clients', 10)),
+        'name'      => (string) ($get('package_name', 'Resource Upgrade Package')),
+    ];
+}
 
 if (!function_exists('_t')) {
     /**

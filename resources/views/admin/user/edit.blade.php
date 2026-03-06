@@ -204,6 +204,26 @@
 								<span style="color: red">{{ $errors->first('billing_email') }}</span>
 							</div>
 						</div>
+
+						{{-- Package limits: admin can set employees/clients limits for this company user --}}
+						<hr class="col-sm-11" style="margin: 20px 0; border-color: #cfa40c;">
+						<div class="col-sm-12"><h4 style="color: #cfa40c; margin-bottom: 15px;">Package Limits</h4></div>
+						<div class="form-group">
+							<label for="user_employees_limit" class="col-sm-2 control-label">Employees limit</label>
+							<div class="col-sm-8">
+								<input type="number" min="1" class="form-control" name="user_employees_limit" id="user_employees_limit" value="{{ old('user_employees_limit', $user->employees ?? 10) }}" placeholder="e.g. 20">
+								<small class="help-block">Maximum number of employees this user can add. Default: 10.</small>
+								<span style="color: red">{{ $errors->first('user_employees_limit') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="user_clients_limit" class="col-sm-2 control-label">Clients limit</label>
+							<div class="col-sm-8">
+								<input type="number" min="0" class="form-control" name="user_clients_limit" id="user_clients_limit" value="{{ old('user_clients_limit', $user->clients ?? 5) }}" placeholder="e.g. 10">
+								<small class="help-block">Maximum number of clients this user can add. Default: 5.</small>
+								<span style="color: red">{{ $errors->first('user_clients_limit') }}</span>
+							</div>
+						</div>
 						<hr class="col-sm-11" style="margin: 20px 0; border-color: #cfa40c;">
 						@endif
 						<div class="col-sm-12"><h4 style="color: #cfa40c; margin-bottom: 15px;">Personal Information</h4></div>

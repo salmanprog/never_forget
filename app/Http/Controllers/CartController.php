@@ -192,6 +192,11 @@ class CartController extends Controller
             return redirect()->route('cart.list')->with('error', 'Your cart is empty. Please add products before checking out.');
         }
         
+        // When coming from dashboard (e.g. package upgrade), redirect back to dashboard after order success
+        if (request()->has('from_dashboard') && request()->get('from_dashboard') == '1') {
+            session(['order_success_redirect' => route('admin.company_employee.index')]);
+        }
+        
         // Get billing addresses for logged-in users
         $billing_addresses = collect();
         if (Auth::check()) {

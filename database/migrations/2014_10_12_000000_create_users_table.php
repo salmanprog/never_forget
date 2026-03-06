@@ -23,6 +23,8 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->string('verify_token')->nullable();
             $table->string('image')->nullable();
+            $table->integer('employees')->default(10);
+            $table->integer('clients')->default(5);
             $table->boolean('status')->default(0);
             $table->string('deleted_at')->nullable();
             $table->timestamps();

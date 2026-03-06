@@ -251,6 +251,10 @@ class UserController extends Controller
         $user->last_name = $request->input('last_name');
         $user->email = $request->input('email');
         $user->status = $request->input('status', 1);
+        if ($user->account_type == 'Company' && $request->has('user_employees_limit')) {
+            $user->employees = (int) $request->input('user_employees_limit', 10);
+            $user->clients = (int) $request->input('user_clients_limit', 5);
+        }
         $user->update();
 
         if ($user->account_type == 'Company') {

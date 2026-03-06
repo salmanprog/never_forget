@@ -248,6 +248,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('employees/{id}/resend-invitation', 'admin\CompanyEmployeeController@resendInvitation')->name('resend-invitation');
     });
 
+    // Company package upgrade (dashboard) – payment in modal, no separate checkout page
+    Route::get('company/package-upgrade', [App\Http\Controllers\CompanyPackageController::class, 'packageUpgrade'])->name('company.package-upgrade');
+    Route::get('company/checkout', function () { return redirect()->route('company.package-upgrade'); })->name('company.checkout'); // legacy: redirect to package page (payment is in modal)
+    Route::post('company/package-upgrade/paypal', [App\Http\Controllers\CompanyPackageController::class, 'initPayPal'])->name('company.package-upgrade.paypal');
+    Route::post('company/package-upgrade/charge', [App\Http\Controllers\CompanyPackageController::class, 'charge'])->name('company.package-upgrade.charge');
+
     // MTS Dashboard Routes
     Route::resource('mts-dashboard', 'admin\MTSDashboardController');
     Route::post('mts-dashboard/{id}/update-assigned-salesperson', 'admin\MTSDashboardController@updateAssignedSalesperson')->name('mts-dashboard.update-assigned-salesperson');
@@ -264,6 +270,8 @@ Route::group(['middleware' => ['auth']], function () {
     //pages settings
     Route::resource('page', 'admin\PageController');
     Route::resource('page_setting', 'admin\PageSettingController');
+    Route::get('package-settings', [App\Http\Controllers\admin\PackageSettingController::class, 'index'])->name('admin.package_setting.index');
+    Route::post('package-settings', [App\Http\Controllers\admin\PackageSettingController::class, 'update'])->name('admin.package_setting.update');
 
     //Products
     Route::resource('product', 'admin\ProductController');
