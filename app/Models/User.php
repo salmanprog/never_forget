@@ -126,4 +126,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Product::class, 'wishlists');
     }
+
+    public function friendsFamilies()
+    {
+        return $this->hasMany(FriendFamily::class);
+    }
 }

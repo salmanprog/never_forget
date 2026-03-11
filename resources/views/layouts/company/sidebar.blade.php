@@ -6,27 +6,27 @@
                     <i class="fa fa-home"></i> <span>Dashboard</span>
                 </a>
             </li>
-            <li class="treeview {{ request()->is('company/employees*') ? 'active' : '' }}" style="height: auto;">
-                <a href="#" class="{{ request()->is('company/employees*') ? 'active' : '' }}">
+            <li class="treeview {{ request()->is('company/resources*') ? 'active' : '' }}" style="height: auto;">
+                <a href="#" class="{{ request()->is('company/resources*') ? 'active' : '' }}">
                     <i class="fa fa-users"></i>
                     <span>Resource Management</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
-                <ul class="treeview-menu" style="display: {{ request()->is('company/employees*') || request()->is('company/create') || request()->is('company/edit') ? 'block' : 'none' }};">
+                <ul class="treeview-menu" style="display: {{ request()->is('company/resources*') || request()->is('company/create') || request()->is('company/edit') ? 'block' : 'none' }};">
                     <li class="treeview">
-                        <a href="{{ route('admin.company_employee.index') }}" class="{{ request()->is('company/employees') && !request()->is('company/employees/create') && !request()->is('company/employees/bulk-upload') && !request()->is('company/employees/*/edit') ? 'active' : '' }}">
+                        <a href="{{ route('admin.company_employee.index') }}" class="{{ request()->is('company/resources') && !request()->is('company/resources/create') && !request()->is('company/resources/bulk-upload') && !request()->is('company/resources/*/edit') ? 'active' : '' }}">
                             <i class="fa fa-list"></i> <span>All Resources</span>
                         </a>
                     </li>
                     <li class="treeview">
-                        <a href="{{ route('admin.company_employee.create') }}" class="{{ request()->is('company/employees/create') ? 'active' : '' }}">
+                        <a href="{{ route('admin.company_employee.create') }}" class="{{ request()->is('company/resources/create') ? 'active' : '' }}">
                             <i class="fa fa-user-plus"></i> <span>Add Resource</span>
                         </a>
                     </li>
                     <li class="treeview">
-                        <a href="{{ route('admin.company_employee.bulk-upload') }}" class="{{ request()->is('company/employees/bulk-upload') ? 'active' : '' }}">
+                        <a href="{{ route('admin.company_employee.bulk-upload') }}" class="{{ request()->is('company/resources/bulk-upload') ? 'active' : '' }}">
                             <i class="fa fa-upload"></i> <span>Bulk Upload</span>
                         </a>
                     </li>
@@ -47,11 +47,11 @@
                     <i class="fa fa-shopping-cart"></i> <span>Orders</span>
                 </a>
             </li>
-            {{-- <li class="treeview">
+            <li class="treeview">
                 <a href="{{route('employee-gifting.index')}}" class="">
                     <i class="fa fa-gift"></i> <span>Resource Gifting</span>
                 </a>
-            </li> --}}
+            </li>
             <li class="treeview {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') ? 'active' : '' }}" style="height: auto;">
                 <a href="#" class="{{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') ? 'active' : '' }}">
                     <i class="fa fa-envelope"></i>

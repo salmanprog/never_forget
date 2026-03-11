@@ -110,9 +110,7 @@ Route::get('/order-history-invoices', function () {
     return view('admin.order-history-invoices.index');
 })->name('order-history-invoices.index');
 
-Route::get('/employee-gifting', function () {
-    return view('admin.employee-gifting.index');
-})->name('employee-gifting.index');
+Route::get('/employee-gifting', 'admin\CompanyEmployeeController@giftingIndex')->name('employee-gifting.index');
 
 Route::get('/account-settings-support', function () {
     return view('admin.account-settings-support.index');
@@ -224,6 +222,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     //users
     Route::get('user/{user}/resources', 'admin\UserController@viewResources')->name('user.resources');
+    Route::patch('user/{user}/resources/{employee}/delivery-status', 'admin\UserController@updateDeliveryStatus')->name('user.resources.delivery-status');
     Route::resource('user', 'admin\UserController');
 
     // Company Management Routes
@@ -234,18 +233,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('update', 'admin\CompanyController@update')->name('update');
     });
 
-    // Company Employee Management Routes
+    // Company Resources Management Routes (URL: company/resources)
     Route::prefix('company')->name('admin.company_employee.')->group(function () {
-        Route::get('employees', 'admin\CompanyEmployeeController@index')->name('index');
-        Route::get('employees/create', 'admin\CompanyEmployeeController@create')->name('create');
-        Route::post('employees', 'admin\CompanyEmployeeController@store')->name('store');
-        Route::get('employees/{id}/edit', 'admin\CompanyEmployeeController@edit')->name('edit');
-        Route::put('employees/{id}', 'admin\CompanyEmployeeController@update')->name('update');
-        Route::delete('employees/{id}', 'admin\CompanyEmployeeController@destroy')->name('destroy');
-        Route::get('employees/bulk-upload', 'admin\CompanyEmployeeController@bulkUpload')->name('bulk-upload');
-        Route::post('employees/process-bulk-upload', 'admin\CompanyEmployeeController@processBulkUpload')->name('process-bulk-upload');
-        Route::get('employees/download-template', 'admin\CompanyEmployeeController@downloadTemplate')->name('download-template');
-        Route::get('employees/{id}/resend-invitation', 'admin\CompanyEmployeeController@resendInvitation')->name('resend-invitation');
+        Route::get('resources', 'admin\CompanyEmployeeController@index')->name('index');
+        Route::get('resources/create', 'admin\CompanyEmployeeController@create')->name('create');
+        Route::post('resources', 'admin\CompanyEmployeeController@store')->name('store');
+        Route::get('resources/{id}/edit', 'admin\CompanyEmployeeController@edit')->name('edit');
+        Route::put('resources/{id}', 'admin\CompanyEmployeeController@update')->name('update');
+        Route::delete('resources/{id}', 'admin\CompanyEmployeeController@destroy')->name('destroy');
+        Route::get('resources/bulk-upload', 'admin\CompanyEmployeeController@bulkUpload')->name('bulk-upload');
+        Route::post('resources/process-bulk-upload', 'admin\CompanyEmployeeController@processBulkUpload')->name('process-bulk-upload');
+        Route::get('resources/download-template', 'admin\CompanyEmployeeController@downloadTemplate')->name('download-template');
+        Route::get('resources/{id}/resend-invitation', 'admin\CompanyEmployeeController@resendInvitation')->name('resend-invitation');
     });
 
     // Company package upgrade (dashboard) – payment in modal, no separate checkout page
@@ -373,6 +372,27 @@ Route::get('member/perfect-gift-enquiries', [WebController::class, 'myPerfectGif
 Route::get('member/business-card-orders', [WebController::class, 'myBusinessCardOrders'])->name('member.business-card-orders')->middleware('auth');
 Route::get('member/quality-logo-enquiries', [WebController::class, 'myQualityLogoEnquiries'])->name('member.quality-logo-enquiries')->middleware('auth');
 Route::get('member/journey-expert-enquiries', [WebController::class, 'myJourneyExpertEnquiries'])->name('member.journey-expert-enquiries')->middleware('auth');
+
+// Individual: Friends/Family Management
+Route::get('member/friends-family', [App\Http\Controllers\FriendsFamilyController::class, 'index'])->name('member.friends_family.index')->middleware('auth');
+Route::get('member/friends-family/create', [App\Http\Controllers\FriendsFamilyController::class, 'create'])->name('member.friends_family.create')->middleware('auth');
+Route::post('member/friends-family', [App\Http\Controllers\FriendsFamilyController::class, 'store'])->name('member.friends_family.store')->middleware('auth');
+Route::get('member/friends-family/{id}/edit', [App\Http\Controllers\FriendsFamilyController::class, 'edit'])->name('member.friends_family.edit')->middleware('auth');
+Route::put('member/friends-family/{id}', [App\Http\Controllers\FriendsFamilyController::class, 'update'])->name('member.friends_family.update')->middleware('auth');
+Route::delete('member/friends-family/{id}', [App\Http\Controllers\FriendsFamilyController::class, 'destroy'])->name('member.friends_family.destroy')->middleware('auth');
+Route::get('member/friends-family/bulk-upload', function () {
+    return view('admin.friends_family.bulk-upload', ['page_title' => 'Bulk Upload Friends/Family']);
+})->name('member.friends_family.bulk-upload')->middleware('auth');
+Route::get('member/friends-family/download-template', function () {
+    $filePath = public_path('csvs/individual-gifting-csv.xlsx');
+    if (!file_exists($filePath)) {
+        abort(404, 'Template file not found.');
+    }
+    return response()->download($filePath, 'individual-gifting-csv.xlsx');
+})->name('member.friends_family.download-template')->middleware('auth');
+Route::post('member/friends-family/process-bulk-upload', function () {
+    return redirect()->route('member.friends_family.bulk-upload')->with('info', 'Bulk upload will be enabled soon.');
+})->name('member.friends_family.process-bulk-upload')->middleware('auth');
 
 // Company's own enquiries (same as Individual - read-only, filtered by company users)
 Route::get('company/balloon-enquiries', [WebController::class, 'companyBalloonEnquiries'])->name('company.balloon-enquiries')->middleware('auth');

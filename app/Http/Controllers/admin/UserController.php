@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use App\Models\Company;
+use App\Models\CompanyEmployee;
 use App\Models\BillingAddress;
 use Illuminate\Support\Facades\Schema;
 
@@ -111,6 +112,22 @@ class UserController extends Controller
         $employees = $company->employees()->orderBy('id', 'DESC')->paginate(10);
         $page_title = $company->name . ' - Resources';
         return view('admin.user.resources', compact('companyUser', 'company', 'employees', 'employeesCount', 'clientsCount', 'page_title'));
+    }
+
+    /**
+     * Update delivery status for a resource (admin only). Company view will show the updated value.
+     */
+    public function updateDeliveryStatus(Request $request, $userId, $employeeId)
+    {
+        $companyUser = User::findOrFail($userId);
+        $company = $companyUser->administeredCompany;
+        if (!$company) {
+            return response()->json(['success' => false, 'message' => 'Company not found.'], 404);
+        }
+        $employee = $company->employees()->findOrFail($employeeId);
+        $status = $request->input('delivery_status', 'pending');
+        $employee->update(['delivery_status' => $status]);
+        return response()->json(['success' => true, 'delivery_status' => $status]);
     }
 
     /**

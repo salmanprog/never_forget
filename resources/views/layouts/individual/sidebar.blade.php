@@ -24,6 +24,32 @@
                     <i class="fa fa-shopping-cart"></i> <span>My Profile</span>
                 </a>
             </li>
+            <li class="treeview {{ request()->is('member/friends-family*') ? 'active' : '' }}" style="height: auto;">
+                <a href="#" class="{{ request()->is('member/friends-family*') ? 'active' : '' }}">
+                    <i class="fa fa-users"></i>
+                    <span>Friends/Family Management</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu" style="display: {{ request()->is('member/friends-family*') ? 'block' : 'none' }};">
+                    <li class="treeview">
+                        <a href="{{ route('member.friends_family.index') }}" class="{{ request()->is('member/friends-family') && !request()->is('member/friends-family/create') && !request()->is('member/friends-family/bulk-upload') && !request()->is('member/friends-family/*/edit') ? 'active' : '' }}">
+                            <i class="fa fa-list"></i> <span>All friends/family</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="{{ route('member.friends_family.create') }}" class="{{ request()->is('member/friends-family/create') ? 'active' : '' }}">
+                            <i class="fa fa-user-plus"></i> <span>Add friends/family</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="{{ route('member.friends_family.bulk-upload') }}" class="{{ request()->is('member/friends-family/bulk-upload') ? 'active' : '' }}">
+                            <i class="fa fa-upload"></i> <span>Bulk upload</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li class="treeview">
                 <a href="{{ route('order.index') }}"
                     class="{{ request()->is('order') || request()->is('order/create') || request()->is('order/*/edit') ? 'active' : '' }}">
