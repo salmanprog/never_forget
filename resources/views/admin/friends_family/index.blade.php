@@ -10,7 +10,6 @@
 @extends($layout)
 @section('title', $page_title ?? 'All Friends/Family')
 @section('content')
-<input type="hidden" id="page_url" value="{{ route('member.friends_family.index') }}">
 <section class="content-header">
     <div class="content-header-left">
         <h1>All Friends/Family</h1>
@@ -25,6 +24,7 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
+            @include('includes.upgrade_alert_individual')
             @if (session('success'))
                 <div class="callout callout-success">
                     {{ session('success') }}
@@ -52,7 +52,7 @@
                         <div class="row" style="margin-bottom: 15px;">
                             <div class="col-sm-6">
                                 <div class="input-group">
-                                    <input type="text" name="search" id="search" class="form-control" placeholder="Search by name, email, or phone" value="{{ request('search') }}">
+                                    <input type="text" name="search" id="friends_family_search" class="form-control" placeholder="Search by name, email, or phone" value="{{ request('search') }}">
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-primary">Search</button>
                                     </span>
@@ -85,6 +85,7 @@
                                     <th>Message with gift</th>
                                     <th>Payment Method</th>
                                     <th>Tracking Number</th>
+                                    <th>Delivery Status</th>
                                     <th>Notes</th>
                                     <th>Action</th>
                                 </tr>
@@ -113,6 +114,7 @@
                                         <td>{{ \Illuminate\Support\Str::limit($row->message_with_gift ?? '', 30) }}</td>
                                         <td>{{ $row->payment_method ?? '—' }}</td>
                                         <td>{{ $row->tracking_number ?? '—' }}</td>
+                                        <td>{{ ucfirst($row->delivery_status ?? 'pending') }}</td>
                                         <td>{{ \Illuminate\Support\Str::limit($row->notes ?? '', 30) }}</td>
                                         <td>
                                             <a href="{{ route('member.friends_family.edit', $row->id) }}" class="btn btn-primary btn-xs">
@@ -125,12 +127,12 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="24" class="text-center">No friends/family found.</td>
+                                        <td colspan="25" class="text-center">No friends/family found.</td>
                                     </tr>
                                 @endforelse
                                 @if($records->count() > 0)
                                     <tr>
-                                        <td colspan="24" style="padding: 15px; background: #f9f9f9;">
+                                        <td colspan="25" style="padding: 15px; background: #f9f9f9;">
                                             <div style="margin-bottom: 10px;">Displaying {{ $records->firstItem() }} to {{ $records->lastItem() }} of {{ $records->total() }} records</div>
                                             <div class="text-center">
                                                 {!! $records->appends(request()->query())->links('pagination::bootstrap-4') !!}
@@ -151,12 +153,21 @@
 @push('js')
 <script>
 $(document).ready(function() {
-    $('#search').on('keypress', function(e) {
+    $('#friends_family_search').on('keypress', function(e) {
         if (e.which === 13) {
             e.preventDefault();
             $(this).closest('form').submit();
         }
     });
+    // Prevent global search.js from replacing #body: use normal navigation for pagination on this page
+    $(document).on('click', '.pagination a', function(e) {
+        if ($('#friends_family_search').length) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = $(this).attr('href');
+            return false;
+        }
+    }, true);
 
     $(document).on('click', '.delete', function() {
         var id = $(this).data('id');

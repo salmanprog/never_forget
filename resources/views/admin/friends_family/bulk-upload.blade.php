@@ -23,11 +23,18 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
+            @include('includes.upgrade_alert_individual')
             @if (session('success'))
                 <div class="callout callout-success">{{ session('success') }}</div>
             @endif
             @if (session('info'))
                 <div class="callout callout-info">{{ session('info') }}</div>
+            @endif
+            @if (session('warning'))
+                <div class="callout callout-warning">{{ session('warning') }}</div>
+            @endif
+            @if (session('error'))
+                <div class="callout callout-danger">{{ session('error') }}</div>
             @endif
             @if ($errors->any())
                 <div class="callout callout-danger">

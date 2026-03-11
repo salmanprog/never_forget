@@ -804,23 +804,33 @@ class OrderController extends Controller
         }
         foreach ($cartItems as $item) {
             $id = is_array($item) ? ($item['id'] ?? null) : $item->id;
-            if ((string) $id !== 'package_upgrade') {
-                continue;
-            }
             $attrs = is_array($item) ? ($item['attributes'] ?? []) : $item->attributes;
-            $employees = is_array($attrs) ? ($attrs['package_employees'] ?? null) : $attrs->get('package_employees');
-            $clients = is_array($attrs) ? ($attrs['package_clients'] ?? null) : $attrs->get('package_clients');
-            if ($employees !== null && $employees !== '') {
-                $user->employees = (int) $employees;
+            if ((string) $id === 'package_upgrade') {
+                $employees = is_array($attrs) ? ($attrs['package_employees'] ?? null) : $attrs->get('package_employees');
+                $clients = is_array($attrs) ? ($attrs['package_clients'] ?? null) : $attrs->get('package_clients');
+                if ($employees !== null && $employees !== '') {
+                    $user->employees = (int) $employees;
+                }
+                if ($clients !== null && $clients !== '') {
+                    $user->clients = (int) $clients;
+                }
+                $user->save();
+                if (\Illuminate\Support\Facades\Auth::check() && (int) \Illuminate\Support\Facades\Auth::id() === (int) $customerId) {
+                    \Illuminate\Support\Facades\Auth::user()->refresh();
+                }
+                break;
             }
-            if ($clients !== null && $clients !== '') {
-                $user->clients = (int) $clients;
+            if ((string) $id === 'individual_package_upgrade') {
+                $friendsFamily = is_array($attrs) ? ($attrs['package_friends_family'] ?? null) : $attrs->get('package_friends_family');
+                if ($friendsFamily !== null && $friendsFamily !== '') {
+                    $user->friends_family = (int) $friendsFamily;
+                }
+                $user->save();
+                if (\Illuminate\Support\Facades\Auth::check() && (int) \Illuminate\Support\Facades\Auth::id() === (int) $customerId) {
+                    \Illuminate\Support\Facades\Auth::user()->refresh();
+                }
+                break;
             }
-            $user->save();
-            if (\Illuminate\Support\Facades\Auth::check() && (int) \Illuminate\Support\Facades\Auth::id() === (int) $customerId) {
-                \Illuminate\Support\Facades\Auth::user()->refresh();
-            }
-            break;
         }
     }
 }

@@ -10,7 +10,6 @@
 
 <?php $__env->startSection('title', $page_title ?? 'All Friends/Family'); ?>
 <?php $__env->startSection('content'); ?>
-<input type="hidden" id="page_url" value="<?php echo e(route('member.friends_family.index')); ?>">
 <section class="content-header">
     <div class="content-header-left">
         <h1>All Friends/Family</h1>
@@ -25,6 +24,7 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
+            <?php echo $__env->make('includes.upgrade_alert_individual', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <?php if(session('success')): ?>
                 <div class="callout callout-success">
                     <?php echo e(session('success')); ?>
@@ -52,15 +52,20 @@
 
             <div class="box box-info">
                 <div class="box-body">
-                    <form method="GET" action="<?php echo e(route('member.friends_family.index')); ?>">
-                        <div class="row" style="margin-bottom:10px">
-                            <div class="d-flex col-sm-6">
-                                <input type="text" name="search" id="search" class="form-control" placeholder="Search by name, email, or phone" value="<?php echo e(request('search')); ?>">
+                    <form method="GET" action="<?php echo e(route('member.friends_family.index')); ?>" id="search-form">
+                        <div class="row" style="margin-bottom: 15px;">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" name="search" id="friends_family_search" class="form-control" placeholder="Search by name, email, or phone" value="<?php echo e(request('search')); ?>">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary">Search</button>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </form>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
+                    <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                        <table class="table table-bordered table-striped" style="margin-bottom: 0;">
                             <thead>
                                 <tr>
                                     <th>SL</th>
@@ -84,6 +89,7 @@
                                     <th>Message with gift</th>
                                     <th>Payment Method</th>
                                     <th>Tracking Number</th>
+                                    <th>Delivery Status</th>
                                     <th>Notes</th>
                                     <th>Action</th>
                                 </tr>
@@ -112,6 +118,7 @@
                                         <td><?php echo e(\Illuminate\Support\Str::limit($row->message_with_gift ?? '', 30)); ?></td>
                                         <td><?php echo e($row->payment_method ?? '—'); ?></td>
                                         <td><?php echo e($row->tracking_number ?? '—'); ?></td>
+                                        <td><?php echo e(ucfirst($row->delivery_status ?? 'pending')); ?></td>
                                         <td><?php echo e(\Illuminate\Support\Str::limit($row->notes ?? '', 30)); ?></td>
                                         <td>
                                             <a href="<?php echo e(route('member.friends_family.edit', $row->id)); ?>" class="btn btn-primary btn-xs">
@@ -124,15 +131,15 @@
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                     <tr>
-                                        <td colspan="24" class="text-center">No friends/family found.</td>
+                                        <td colspan="25" class="text-center">No friends/family found.</td>
                                     </tr>
                                 <?php endif; ?>
                                 <?php if($records->count() > 0): ?>
                                     <tr>
-                                        <td colspan="24">
-                                            Displaying <?php echo e($records->firstItem()); ?> to <?php echo e($records->lastItem()); ?> of <?php echo e($records->total()); ?> records
-                                            <div class="d-flex justify-content-center">
-                                                <?php echo $records->links('pagination::bootstrap-4'); ?>
+                                        <td colspan="25" style="padding: 15px; background: #f9f9f9;">
+                                            <div style="margin-bottom: 10px;">Displaying <?php echo e($records->firstItem()); ?> to <?php echo e($records->lastItem()); ?> of <?php echo e($records->total()); ?> records</div>
+                                            <div class="text-center">
+                                                <?php echo $records->appends(request()->query())->links('pagination::bootstrap-4'); ?>
 
                                             </div>
                                         </td>
@@ -151,12 +158,21 @@
 <?php $__env->startPush('js'); ?>
 <script>
 $(document).ready(function() {
-    $('#search').on('keypress', function(e) {
+    $('#friends_family_search').on('keypress', function(e) {
         if (e.which === 13) {
             e.preventDefault();
             $(this).closest('form').submit();
         }
     });
+    // Prevent global search.js from replacing #body: use normal navigation for pagination on this page
+    $(document).on('click', '.pagination a', function(e) {
+        if ($('#friends_family_search').length) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = $(this).attr('href');
+            return false;
+        }
+    }, true);
 
     $(document).on('click', '.delete', function() {
         var id = $(this).data('id');

@@ -1613,13 +1613,22 @@ class WebController extends Controller
 
     public function send_inquiry(Request $request)
     {
-        $data = $request->validate([
+        if (auth()->check()) {
+            $request->merge([
+                'name' => $request->input('name') ?: (auth()->user()->name ?? ''),
+                'email' => $request->input('email') ?: (auth()->user()->email ?? ''),
+                'phone' => $request->input('phone') ?: (auth()->user()->phone ?? ''),
+            ]);
+        }
+
+        $rules = [
             'title' => 'required|string|max:100',
             'name' => 'required|string|max:100',
             'email' => 'required|email',
-            'phone' => 'required|string|max:20',
+            'phone' => (auth()->check() ? 'nullable|' : 'required|') . 'string|max:20',
             'message' => 'required|string|max:500',
-        ]);
+        ];
+        $data = $request->validate($rules);
 
         $params = $request->all();
 

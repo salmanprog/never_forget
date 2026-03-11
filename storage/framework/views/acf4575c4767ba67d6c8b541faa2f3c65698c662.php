@@ -1,7 +1,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/cool-swag-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/cool-swag-desktop.webp"
                 alt="Cool Swag">
             <div class="home-categories__menu">
                 <ul>
@@ -24,7 +24,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/pens-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/pens-desktop.webp"
                 alt="Custom Pens">
             <div class="home-categories__menu">
                 <ul>
@@ -47,7 +47,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/tote-bags-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/tote-bags-desktop.webp"
                 alt="Custom Tote Bags">
             <div class="home-categories__menu">
                 <ul>
@@ -69,7 +69,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/water-bottles-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/water-bottles-desktop.webp"
                 alt="Custom Tote Bags">
             <div class="home-categories__menu">
                 <ul>
@@ -93,7 +93,7 @@
     <div class="gift-card-wrapper quality_logo">
 
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/bags-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/bags-desktop.webp"
                 alt="Custom Bags">
             <div class="home-categories__menu">
                 <ul>
@@ -116,7 +116,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/phone-accessories-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/phone-accessories-desktop.webp"
                 alt="Phone Accessories">
             <div class="home-categories__menu">
                 <ul>
@@ -139,7 +139,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-            <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/apparel-desktop.webp"
+            <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/apparel-desktop.webp"
                 alt="Custom Apparel">
             <div class="home-categories__menu">
                 <ul>
@@ -162,7 +162,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-        <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/trade-show-desktop.webp"
+        <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/trade-show-desktop.webp"
             alt="Trade Show Giveaways">
             <div class="home-categories__menu">
                 <ul>
@@ -186,7 +186,7 @@
 <div class="col-lg-4 col-md-6 product-item visible">
     <div class="gift-card-wrapper quality_logo">
         <div class="position-relative">
-        <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/koozies-desktop.webp"
+        <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/koozies-desktop.webp"
             alt="Custom KOOZIES">
             <div class="home-categories__menu">
                 <ul>
@@ -213,16 +213,16 @@
 <div class="modal fade" id="inquiryModal" tabindex="-1" aria-labelledby="inquiryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content py-20 px-20 ">
-            <form id="inquiryForm" action="{{ route('send.inquiry') }}" method="POST" @auth data-logged-in="1" @endauth>
-                @csrf
+            <form id="inquiryForm" action="<?php echo e(route('send.inquiry')); ?>" method="POST" <?php if(auth()->guard()->check()): ?> data-logged-in="1" <?php endif; ?>>
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="title" id="title"
                     value="You have received new quality logo user inquiry from">
                     <input type="hidden" name="identifier" id="identifier" value="quality_logo">
-                @auth
-                    <input type="hidden" name="name" value="{{ Auth::user()->name ?? '' }}">
-                    <input type="hidden" name="email" value="{{ Auth::user()->email ?? '' }}">
-                    <input type="hidden" name="phone" value="{{ Auth::user()->phone ?? '' }}">
-                @endauth
+                <?php if(auth()->guard()->check()): ?>
+                    <input type="hidden" name="name" value="<?php echo e(Auth::user()->name ?? ''); ?>">
+                    <input type="hidden" name="email" value="<?php echo e(Auth::user()->email ?? ''); ?>">
+                    <input type="hidden" name="phone" value="<?php echo e(Auth::user()->phone ?? ''); ?>">
+                <?php endif; ?>
                 <div class="modal-header">
                     <h5 class="modal-title heading text-secondry-theme-light fs-25 fw-600" id="inquiryModalLabel">Request Inquiry</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -232,7 +232,7 @@
                         <label class="form-label">Product</label>
                         <input type="text" name="product" id="inquiryProduct" class="form-control" readonly>
                     </div>
-                    @guest
+                    <?php if(auth()->guard()->guest()): ?>
                     <div class="mb-3">
                         <label class="form-label">Name</label>
                         <input type="text" name="name" class="form-control" required>
@@ -245,7 +245,7 @@
                         <label class="form-label">Phone</label>
                         <input type="tel" name="phone" class="form-control" required>
                     </div>
-                    @endguest
+                    <?php endif; ?>
                     <div class="mb-3">
                         <label class="form-label">Message</label>
                         <textarea name="message" class="form-control" rows="3" required></textarea>
@@ -274,3 +274,4 @@
         });
     });
 </script>
+<?php /**PATH D:\xampp\htdocs\never-forget\resources\views/website/partials/_quality_logo_category.blade.php ENDPATH**/ ?>

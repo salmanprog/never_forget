@@ -31,6 +31,7 @@ class FriendFamily extends Model
         'message_with_gift',
         'payment_method',
         'tracking_number',
+        'delivery_status',
         'notes',
     ];
 

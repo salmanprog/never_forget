@@ -23,6 +23,7 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
+            @include('includes.upgrade_alert_individual')
             @if ($errors->any())
                 <div class="callout callout-danger">
                     <ul style="margin-bottom: 0;">

@@ -45,6 +45,20 @@ function getPackageSettings()
     ];
 }
 
+/**
+ * Get individual (Friends/Family) upgrade package settings. Limit after upgrade = 10 (5 + 5 more).
+ *
+ * @return array{amount: float, name: string, friends_family: int}
+ */
+function getIndividualPackageSettings()
+{
+    return [
+        'amount' => (float) config('individual.package.amount', 50),
+        'name' => (string) config('individual.package.name', 'Friends/Family Upgrade Package'),
+        'friends_family' => (int) config('individual.package.friends_family', 10),
+    ];
+}
+
 if (!function_exists('_t')) {
     /**
      * Translate the given message dynamically.

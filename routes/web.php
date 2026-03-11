@@ -223,6 +223,8 @@ Route::group(['middleware' => ['auth']], function () {
     //users
     Route::get('user/{user}/resources', 'admin\UserController@viewResources')->name('user.resources');
     Route::patch('user/{user}/resources/{employee}/delivery-status', 'admin\UserController@updateDeliveryStatus')->name('user.resources.delivery-status');
+    Route::get('user/{user}/friends-family', 'admin\UserController@viewFriendsFamily')->name('user.friends_family');
+    Route::patch('user/{user}/friends-family/{id}/delivery-status', 'admin\UserController@updateFriendFamilyDeliveryStatus')->name('user.friends_family.delivery-status');
     Route::resource('user', 'admin\UserController');
 
     // Company Management Routes
@@ -380,9 +382,8 @@ Route::post('member/friends-family', [App\Http\Controllers\FriendsFamilyControll
 Route::get('member/friends-family/{id}/edit', [App\Http\Controllers\FriendsFamilyController::class, 'edit'])->name('member.friends_family.edit')->middleware('auth');
 Route::put('member/friends-family/{id}', [App\Http\Controllers\FriendsFamilyController::class, 'update'])->name('member.friends_family.update')->middleware('auth');
 Route::delete('member/friends-family/{id}', [App\Http\Controllers\FriendsFamilyController::class, 'destroy'])->name('member.friends_family.destroy')->middleware('auth');
-Route::get('member/friends-family/bulk-upload', function () {
-    return view('admin.friends_family.bulk-upload', ['page_title' => 'Bulk Upload Friends/Family']);
-})->name('member.friends_family.bulk-upload')->middleware('auth');
+Route::get('member/friends-family/bulk-upload', [App\Http\Controllers\FriendsFamilyController::class, 'bulkUpload'])->name('member.friends_family.bulk-upload')->middleware('auth');
+Route::get('member/friends-family-gifting', [App\Http\Controllers\FriendsFamilyController::class, 'giftingIndex'])->name('member.friends_family.gifting')->middleware('auth');
 Route::get('member/friends-family/download-template', function () {
     $filePath = public_path('csvs/individual-gifting-csv.xlsx');
     if (!file_exists($filePath)) {
@@ -390,9 +391,12 @@ Route::get('member/friends-family/download-template', function () {
     }
     return response()->download($filePath, 'individual-gifting-csv.xlsx');
 })->name('member.friends_family.download-template')->middleware('auth');
-Route::post('member/friends-family/process-bulk-upload', function () {
-    return redirect()->route('member.friends_family.bulk-upload')->with('info', 'Bulk upload will be enabled soon.');
-})->name('member.friends_family.process-bulk-upload')->middleware('auth');
+Route::post('member/friends-family/process-bulk-upload', [App\Http\Controllers\FriendsFamilyController::class, 'processBulkUpload'])->name('member.friends_family.process-bulk-upload')->middleware('auth');
+
+// Individual: Friends/Family package upgrade (same flow as company package upgrade)
+Route::get('member/package-upgrade', [App\Http\Controllers\IndividualPackageController::class, 'packageUpgrade'])->name('member.package-upgrade')->middleware('auth');
+Route::post('member/package-upgrade/paypal', [App\Http\Controllers\IndividualPackageController::class, 'initPayPal'])->name('member.package-upgrade.paypal')->middleware('auth');
+Route::post('member/package-upgrade/charge', [App\Http\Controllers\IndividualPackageController::class, 'charge'])->name('member.package-upgrade.charge')->middleware('auth');
 
 // Company's own enquiries (same as Individual - read-only, filtered by company users)
 Route::get('company/balloon-enquiries', [WebController::class, 'companyBalloonEnquiries'])->name('company.balloon-enquiries')->middleware('auth');

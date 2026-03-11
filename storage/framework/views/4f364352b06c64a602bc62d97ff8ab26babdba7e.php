@@ -42,6 +42,11 @@
                 </ul>
             </li>
             <li class="treeview">
+                <a href="<?php echo e(route('member.friends_family.gifting')); ?>" class="<?php echo e(request()->is('member/friends-family-gifting') ? 'active' : ''); ?>">
+                    <i class="fa fa-gift"></i> <span>Friends/Family Gifting</span>
+                </a>
+            </li>
+            <li class="treeview">
                 <a href="<?php echo e(route('order.index')); ?>"
                     class="<?php echo e(request()->is('order') || request()->is('order/create') || request()->is('order/*/edit') ? 'active' : ''); ?>">
                     <i class="fa fa-shopping-cart"></i> <span>Orders</span>

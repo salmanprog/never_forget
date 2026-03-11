@@ -36,6 +36,9 @@
         @if($user->account_type == 'Company' && $user->administeredCompany)
             <a href="{{ route('user.resources', $user->id) }}" class="btn btn-info btn-xs"><i class="fa fa-list"></i> View Resources</a>
         @endif
+        @if($user->account_type == 'Individual')
+            <a href="{{ route('user.friends_family', $user->id) }}" class="btn btn-info btn-xs"><i class="fa fa-list"></i> View Friends/Family</a>
+        @endif
         {{-- @can('user-delete')
             <button class="btn btn-danger btn-xs delete" data-slug="{{ $user->id }}" data-del-url="{{ url('user', $user->id) }}"><i class="fa fa-trash"></i> Delete</button>
         @endcan --}}

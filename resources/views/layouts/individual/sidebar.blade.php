@@ -51,6 +51,11 @@
                 </ul>
             </li>
             <li class="treeview">
+                <a href="{{ route('member.friends_family.gifting') }}" class="{{ request()->is('member/friends-family-gifting') ? 'active' : '' }}">
+                    <i class="fa fa-gift"></i> <span>Friends/Family Gifting</span>
+                </a>
+            </li>
+            <li class="treeview">
                 <a href="{{ route('order.index') }}"
                     class="{{ request()->is('order') || request()->is('order/create') || request()->is('order/*/edit') ? 'active' : '' }}">
                     <i class="fa fa-shopping-cart"></i> <span>Orders</span>

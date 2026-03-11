@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use App\Models\Company;
 use App\Models\CompanyEmployee;
+use App\Models\FriendFamily;
 use App\Models\BillingAddress;
 use Illuminate\Support\Facades\Schema;
 
@@ -127,6 +128,31 @@ class UserController extends Controller
         $employee = $company->employees()->findOrFail($employeeId);
         $status = $request->input('delivery_status', 'pending');
         $employee->update(['delivery_status' => $status]);
+        return response()->json(['success' => true, 'delivery_status' => $status]);
+    }
+
+    /**
+     * Show friends/family list for an individual user (admin only). Same UI as company resources.
+     * Route parameter is {user} so argument must be $user to receive the id.
+     */
+    public function viewFriendsFamily($user)
+    {
+        $user = User::findOrFail($user);
+        $records = FriendFamily::where('user_id', $user->id)->orderBy('id', 'DESC')->paginate(10);
+        $page_title = ($user->name ?? 'User') . ' - Friends/Family';
+        return view('admin.user.friends_family', compact('user', 'records', 'page_title'));
+    }
+
+    /**
+     * Update delivery status for a friend/family record (admin only). Individual dashboard will show updated value.
+     * Route: user/{user}/friends-family/{id}/delivery-status - params: $user (id), $id (friend_family id).
+     */
+    public function updateFriendFamilyDeliveryStatus(Request $request, $user, $id)
+    {
+        $userModel = User::findOrFail($user);
+        $record = FriendFamily::where('user_id', $userModel->id)->where('id', $id)->firstOrFail();
+        $status = $request->input('delivery_status', 'pending');
+        $record->update(['delivery_status' => $status]);
         return response()->json(['success' => true, 'delivery_status' => $status]);
     }
 
