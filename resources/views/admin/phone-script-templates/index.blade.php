@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends($layout ?? 'layouts.admin.app')
 @section('title', $page_title)
 @section('content')
 <input type="hidden" id="page_url" value="{{ route('phone-script-templates.index') }}">

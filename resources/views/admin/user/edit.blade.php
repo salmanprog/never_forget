@@ -132,7 +132,7 @@
 						@php
 							$billingNameParts = $company && trim(optional($company)->primary_contact_name ?? '') ? explode(' ', trim($company->primary_contact_name), 2) : ['', ''];
 						@endphp
-						<hr class="col-sm-11" style="margin: 20px 0; border-color: #cfa40c;">
+						{{-- <hr class="col-sm-11" style="margin: 20px 0; border-color: #cfa40c;">
 						<div class="col-sm-12"><h4 style="color: #cfa40c; margin-bottom: 15px;">Billing Information (Required)</h4></div>
 						<div class="form-group">
 							<label for="billing_first_name" class="col-sm-2 control-label">First Name <span style="color: red">*</span></label>
@@ -203,7 +203,7 @@
 								<input type="email" autocomplete="off" class="form-control" name="billing_email" id="billing_email" value="{{ old('billing_email', optional($company)->billing_email) }}" placeholder="Enter email">
 								<span style="color: red">{{ $errors->first('billing_email') }}</span>
 							</div>
-						</div>
+						</div> --}}
 
 						{{-- Package limits: admin can set employees/clients limits for this company user --}}
 						<hr class="col-sm-11" style="margin: 20px 0; border-color: #cfa40c;">

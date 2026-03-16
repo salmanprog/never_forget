@@ -78,12 +78,14 @@ class TextMessageTemplateController extends Controller
 
     /**
      * List all text message templates (cards grid).
+     * Sales Person sees sales-person layout (no admin panel access).
      */
     public function index()
     {
         $page_title = '30-Day Text Message Templates';
         $templates = static::templates();
-        return view('admin.text-message-templates.index', compact('page_title', 'templates'));
+        $layout = auth()->user()->hasRole('Sales Person') ? 'layouts.sales-person.app' : 'layouts.admin.app';
+        return view('admin.text-message-templates.index', compact('page_title', 'templates', 'layout'));
     }
 
     /**
@@ -97,6 +99,7 @@ class TextMessageTemplateController extends Controller
             abort(404);
         }
         $page_title = 'Day ' . $template['day'] . ' – ' . $template['focus'];
-        return view('admin.text-message-templates.show', compact('page_title', 'template'));
+        $layout = auth()->user()->hasRole('Sales Person') ? 'layouts.sales-person.app' : 'layouts.admin.app';
+        return view('admin.text-message-templates.show', compact('page_title', 'template', 'layout'));
     }
 }

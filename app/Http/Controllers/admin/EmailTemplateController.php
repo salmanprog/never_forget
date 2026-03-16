@@ -90,12 +90,14 @@ class EmailTemplateController extends Controller
 
     /**
      * List all email templates (cards grid).
+     * Sales Person sees sales-person layout (no admin panel access).
      */
     public function index()
     {
         $page_title = '30-Day Email Templates';
         $templates = static::templates();
-        return view('admin.email-templates.index', compact('page_title', 'templates'));
+        $layout = auth()->user()->hasRole('Sales Person') ? 'layouts.sales-person.app' : 'layouts.admin.app';
+        return view('admin.email-templates.index', compact('page_title', 'templates', 'layout'));
     }
 
     /**
@@ -109,6 +111,7 @@ class EmailTemplateController extends Controller
             abort(404);
         }
         $page_title = 'Day ' . $template['day'] . ' – ' . $template['focus'];
-        return view('admin.email-templates.show', compact('page_title', 'template'));
+        $layout = auth()->user()->hasRole('Sales Person') ? 'layouts.sales-person.app' : 'layouts.admin.app';
+        return view('admin.email-templates.show', compact('page_title', 'template', 'layout'));
     }
 }

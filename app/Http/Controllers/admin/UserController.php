@@ -25,6 +25,19 @@ use Illuminate\Support\Facades\Schema;
 class UserController extends Controller
 {
     /**
+     * Map URL type param to database account_type value (case-sensitive).
+     */
+    private static function mapRequestTypeToAccountType($type)
+    {
+        $map = [
+            'salesperson' => 'Sales Person',
+            'company'     => 'Company',
+            'individual'  => 'Individual',
+        ];
+        return $map[strtolower((string) $type)] ?? ucfirst($type);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -49,10 +62,9 @@ class UserController extends Controller
                 $company = $user->administeredCompany;
                 $query->where('company_id', $company->id);
             } else {
-                // Admin can see all users, filter by type if specified
+                // Admin can see all users, filter by type if specified (tab-specific)
                 if($request['type'] && $request['type'] != "All"){
-                    // Map 'salesperson' to 'Sales Person' for database query
-                    $accountType = $request['type'] == 'salesperson' ? 'Sales Person' : $request['type'];
+                    $accountType = self::mapRequestTypeToAccountType($request['type']);
                     $query->where('account_type', $accountType);
                 }
             }
@@ -83,12 +95,11 @@ class UserController extends Controller
             $query->where('company_id', $company->id);
             $page_title = $company->name . ' - Company Users';
         } else {
-            // Admin can see all users, filter by type if specified
+            // Admin can see all users, filter by type if specified (tab-specific)
             if($request->get('type')){
-                // Map 'salesperson' to 'Sales Person' for database query
-                $accountType = $request->get('type') == 'salesperson' ? 'Sales Person' : $request->get('type');
+                $accountType = self::mapRequestTypeToAccountType($request->get('type'));
                 $query->where('account_type', $accountType);
-                $page_title = $accountType == 'Sales Person' ? 'Sales Person Users' : ucfirst($request->get('type')) . ' Users';
+                $page_title = $accountType == 'Sales Person' ? 'Sales Person Users' : $accountType . ' Users';
             } else {
                 $page_title = 'All Users';
             }
@@ -211,7 +222,11 @@ class UserController extends Controller
             'user_id' => $user_id,
         ]);
 
-        $user->assignRole($request->input('account_type'));
+        try {
+            $user->assignRole($request->input('account_type'));
+        } catch (\Exception $e) {
+            Log::warning('Sales Person created but role assign failed: ' . $e->getMessage());
+        }
 
         // Generate verification link
         $verification_link = route('email-verification', $verify_token);
@@ -231,15 +246,17 @@ class UserController extends Controller
 
         try {
             \Mail::to($user->email)->send(new \App\Mail\Email($details));
-            $message = 'Sales Person created successfully. An email has been sent with login credentials and verification link.';
+            $message = 'Sales person with email ' . $request->email . ' has been added successfully. An email has been sent with login credentials and verification link.';
         } catch (\Exception $e) {
             // Log the error for debugging
             Log::error('Failed to send email to salesperson: ' . $e->getMessage());
-            // Still show success but include verification link in message
-            $message = 'Sales Person created successfully. Email could not be sent (check logs). Verification link: ' . $verification_link;
+            $message = 'Sales person with email ' . $request->email . ' has been added successfully. Email could not be sent (check logs).';
         }
 
-        return redirect()->route('user.index')
+        $routeParams = $request->input('account_type') === 'Sales Person'
+            ? ['type' => 'salesperson']
+            : [];
+        return redirect()->route('user.index', $routeParams)
                         ->with('success', $message);
     }
 
@@ -305,12 +322,14 @@ class UserController extends Controller
             if (!$company) {
                 $company = new Company();
                 $company->admin_user_id = $user->id;
-                $company->name = $request->input('billing_company', $request->input('company_name', $user->name));
+                $companyName = trim((string) ($request->input('billing_company') ?: $request->input('company_name') ?: $user->name ?? ''));
+                $company->name = $companyName !== '' ? $companyName : ('Company ' . $user->id);
                 $company->plan = 'Basic';
                 $company->options = 'Both';
                 $company->save();
             }
-            $company->name = $request->input('billing_company', $request->input('company_name', $company->name));
+            $companyName = trim((string) ($request->input('billing_company') ?: $request->input('company_name') ?: $company->name ?? ''));
+            $company->name = $companyName !== '' ? $companyName : ($company->name ?: 'Company ' . $user->id);
             $company->registration_number = $request->input('registration_number', $company->registration_number);
             $company->industry = $request->input('industry', $company->industry);
             $company->website = $request->input('company_website', $company->website);

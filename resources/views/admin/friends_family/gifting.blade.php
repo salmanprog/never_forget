@@ -12,7 +12,7 @@
 @section('content')
 <section class="content-header">
     <div class="content-header-left">
-        <h1>Friends/Family Gifting</h1>
+        <h1>Friends/Family Gifting History</h1>
     </div>
     <div class="content-header-right">
         @include('includes.buttons.back')

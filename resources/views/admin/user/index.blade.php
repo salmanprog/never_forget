@@ -14,6 +14,7 @@
 @section('title', $page_title)
 @section('content')
 <input type="hidden" id="page_url" value="{{ route('user.index') }}">
+<input type="hidden" id="type" value="{{ request()->get('type', '') }}">
 <section class="content-header">
     <div class="content-header-left">
         <h1>{{ $page_title }}</h1>
@@ -59,7 +60,12 @@
         <div class="col-md-12">
             @if (session('success'))
                 <div class="callout callout-success">
-                    {{ session('status') }}
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if (session('message'))
+                <div class="callout callout-success">
+                    {{ session('message') }}
                 </div>
             @endif
 

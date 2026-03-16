@@ -9,11 +9,13 @@ class TemplatesController extends Controller
 {
     /**
      * Templates landing: 3 options (Email, Text Messages, Phone Scripts).
+     * Sales Person sees sales-person layout (no admin panel access).
      */
     public function index()
     {
         $page_title = 'Templates';
-        return view('admin.templates.index', compact('page_title'));
+        $layout = auth()->user()->hasRole('Sales Person') ? 'layouts.sales-person.app' : 'layouts.admin.app';
+        return view('admin.templates.index', compact('page_title', 'layout'));
     }
 
     /**

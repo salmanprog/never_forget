@@ -14,6 +14,7 @@
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
 <input type="hidden" id="page_url" value="<?php echo e(route('user.index')); ?>">
+<input type="hidden" id="type" value="<?php echo e(request()->get('type', '')); ?>">
 <section class="content-header">
     <div class="content-header-left">
         <h1><?php echo e($page_title); ?></h1>
@@ -59,7 +60,13 @@
         <div class="col-md-12">
             <?php if(session('success')): ?>
                 <div class="callout callout-success">
-                    <?php echo e(session('status')); ?>
+                    <?php echo e(session('success')); ?>
+
+                </div>
+            <?php endif; ?>
+            <?php if(session('message')): ?>
+                <div class="callout callout-success">
+                    <?php echo e(session('message')); ?>
 
                 </div>
             <?php endif; ?>

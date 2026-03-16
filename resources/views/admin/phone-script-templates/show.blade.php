@@ -1,4 +1,4 @@
-@extends('layouts.admin.app')
+@extends($layout ?? 'layouts.admin.app')
 @section('title', $page_title)
 @section('content')
 <section class="content-header">

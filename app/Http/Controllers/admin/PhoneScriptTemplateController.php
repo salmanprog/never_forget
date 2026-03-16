@@ -73,12 +73,14 @@ class PhoneScriptTemplateController extends Controller
 
     /**
      * List all phone script templates (cards grid).
+     * Sales Person sees sales-person layout (no admin panel access).
      */
     public function index()
     {
         $page_title = '30-Day Phone Script Templates';
         $templates = static::templates();
-        return view('admin.phone-script-templates.index', compact('page_title', 'templates'));
+        $layout = auth()->user()->hasRole('Sales Person') ? 'layouts.sales-person.app' : 'layouts.admin.app';
+        return view('admin.phone-script-templates.index', compact('page_title', 'templates', 'layout'));
     }
 
     /**
@@ -92,6 +94,7 @@ class PhoneScriptTemplateController extends Controller
             abort(404);
         }
         $page_title = 'Day ' . $template['day'] . ' – ' . $template['focus'];
-        return view('admin.phone-script-templates.show', compact('page_title', 'template'));
+        $layout = auth()->user()->hasRole('Sales Person') ? 'layouts.sales-person.app' : 'layouts.admin.app';
+        return view('admin.phone-script-templates.show', compact('page_title', 'template', 'layout'));
     }
 }

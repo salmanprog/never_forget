@@ -13,7 +13,17 @@ class MTSDashboardController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:user-list', ['only' => ['index', 'smsReplies']]);
+        $this->middleware(function ($request, $next) {
+            $user = $request->user();
+            if (!$user) {
+                return redirect()->route('login');
+            }
+            // Allow if user has user-list permission OR is Sales Person (role or account_type)
+            if ($user->can('user-list') || $user->hasRole('Sales Person') || $user->account_type === 'Sales Person') {
+                return $next($request);
+            }
+            abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS.');
+        })->only(['index', 'smsReplies']);
     }
 
     /**
@@ -28,20 +38,24 @@ class MTSDashboardController extends Controller
                 ->whereNotNull('account_type')
                 ->whereIn('account_type', ['Company', 'Individual', 'Sales Person']);
             
+            // Normalize account_type filter: "All", empty, null, or "undefined" (from JS) = show all relevant types
+            $accountType = $request->get('account_type') ?? $request->get('type');
+            $accountTypeNorm = $accountType !== null && $accountType !== '' ? strtolower(trim((string) $accountType)) : 'all';
+            $filterByType = !in_array($accountTypeNorm, ['all', 'undefined'], true);
+
             // Check user role and permissions
             if($user->isAdmin()) {
                 // Admin role: can see all users and filter by type
-                if($request['account_type'] && $request['account_type'] != "All"){
-                    $query->where('account_type', $request['account_type']);
+                if($filterByType){
+                    $query->where('account_type', $request['account_type'] ?? $request['type']);
                 }
-            } elseif($user->hasRole('Sales Person')) {
-                // Sales Person role: can see companies and individuals assigned to them
+            } elseif($user->hasRole('Sales Person') || $user->account_type === 'Sales Person') {
+                // Sales Person: can see companies and individuals assigned to them
                 $query->where('assigned_to_user_id', $user->id);
-                // Allow filtering by account type
-                if($request['account_type'] && $request['account_type'] != "All"){
-                    $query->where('account_type', $request['account_type']);
+                if($filterByType){
+                    $query->where('account_type', $request['account_type'] ?? $request['type']);
                 } else {
-                    // Default: show both Company and Individual
+                    // All Types: show all assigned (Company + Individual)
                     $query->whereIn('account_type', ['Company', 'Individual']);
                 }
             } elseif($user->isCompany() && $user->isCompanyAdmin()) {
@@ -61,11 +75,10 @@ class MTSDashboardController extends Controller
                       ->orWhere('phone', 'like', '%'. $request['search'].'%');
                 });
             }
-            if($request['status']!="All"){
-                if($request['status']==2){
-                    $request['status'] = 0;
-                }
-                $query->where('status', $request['status']);
+            // Only apply status filter when explicitly set (not on initial load when param is missing)
+            if($request->has('status') && $request['status'] !== '' && $request['status'] !== "All"){
+                $status = $request['status'] == 2 ? 0 : $request['status'];
+                $query->where('status', $status);
             }
             $users = $query->paginate(10);
             
@@ -82,24 +95,28 @@ class MTSDashboardController extends Controller
             ->whereNotNull('account_type')
             ->whereIn('account_type', ['Company', 'Individual', 'Sales Person']);
         
+        // Normalize account_type filter: "All", empty, null, or "undefined" (from JS) = show all relevant types
+        $accountType = $request->get('account_type') ?? $request->get('type');
+        $accountTypeNorm = $accountType !== null && $accountType !== '' ? strtolower(trim((string) $accountType)) : 'all';
+        $filterByType = !in_array($accountTypeNorm, ['all', 'undefined'], true);
+
         // Check user role and permissions
         if($user->isAdmin()) {
             // Admin role: can see all users and filter by type
-            if($request->get('account_type') && $request->get('account_type') != "All"){
-                $query->where('account_type', $request->get('account_type'));
-                $page_title = ucfirst($request->get('account_type')) . ' Users - MTS Dashboard';
+            if($filterByType){
+                $query->where('account_type', $request->get('account_type') ?? $request->get('type'));
+                $page_title = ucfirst($request->get('account_type') ?? $request->get('type')) . ' Users - MTS Dashboard';
             } else {
                 $page_title = 'MTS Dashboard';
             }
-        } elseif($user->hasRole('Sales Person')) {
-            // Sales Person role: can see companies and individuals assigned to them
+        } elseif($user->hasRole('Sales Person') || $user->account_type === 'Sales Person') {
+            // Sales Person: can see companies and individuals assigned to them
             $query->where('assigned_to_user_id', $user->id);
-            // Allow filtering by account type
-            if($request->get('account_type') && $request->get('account_type') != "All"){
-                $query->where('account_type', $request->get('account_type'));
-                $page_title = 'My Assigned ' . ucfirst($request->get('account_type')) . 's - MTS Dashboard';
+            if($filterByType){
+                $query->where('account_type', $request->get('account_type') ?? $request->get('type'));
+                $page_title = 'My Assigned ' . ucfirst($request->get('account_type') ?? $request->get('type')) . 's - MTS Dashboard';
             } else {
-                // Default: show both Company and Individual
+                // All Types: show all assigned (Company + Individual)
                 $query->whereIn('account_type', ['Company', 'Individual']);
                 $page_title = 'My Assigned Accounts - MTS Dashboard';
             }
@@ -124,12 +141,9 @@ class MTSDashboardController extends Controller
             });
         }
         
-        // Apply status filter
-        if($request->get('status') != "All"){
-            $status = $request->get('status');
-            if($status == 2){
-                $status = 0;
-            }
+        // Apply status filter only when explicitly set (initial load with no params = show all statuses)
+        if($request->filled('status') && $request->get('status') !== "All"){
+            $status = $request->get('status') == 2 ? 0 : $request->get('status');
             $query->where('status', $status);
         }
         

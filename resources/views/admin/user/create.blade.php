@@ -34,7 +34,7 @@
 						<div class="form-group">
 							{{-- <label for="" class="col-sm-2 control-label">Role Name <span style="color: red">*</span></label> --}}
 							<div class="col-sm-8">
-								<input type="hidden" class="form-control" value="{{ $salesperson_roles->first()->name ?? '' }}" name="account_type" readonly>
+								<input type="hidden" class="form-control" value="{{ optional($salesperson_roles->first())->name ?? 'Sales Person' }}" name="account_type" readonly>
 							</div>
 						</div>
 						<div class="form-group">
