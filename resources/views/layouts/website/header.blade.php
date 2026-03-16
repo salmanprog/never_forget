@@ -18,14 +18,13 @@
         <div class="container-fluid">
             <div class="row align-items-center">
                 {{-- Marquee - 4 columns --}}
-                {{-- <div class="col-md-4">
+                <div class="col-md-4">
                     <marquee>
                         <h3>Our prices are updated daily to reflect the latest market conditions and ensure accuracy.
                             This allows us to offer you the most current rates and the best possible value. Please check
                             back regularly to see any changes.</h3>
                     </marquee>
-                </div> --}}
-                {{-- adsasdasd --}}
+                </div>
 
                 {{-- Top bar content - 8 columns --}}
                 <div class="col-md-8">
