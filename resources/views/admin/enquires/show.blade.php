@@ -20,26 +20,48 @@
                         <table id="" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    @if($hasProductName)
+                                    @if ($hasProductName)
                                         <th>Product Name</th>
                                     @endif
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
-                                    <th>Message</th>
+                                    <th>Travel Type</th>
+                                    <th>Duration</th>
+                                    <th>Destination</th>
+                                    <th>Country</th>
+                                    <th>Amenity</th>
+                                    <th>Budget</th>
                                     <th>Date</th>
+                                    <th>Message</th>
                                 </tr>
                             </thead>
                             <tbody id="body">
                                 <tr>
-                                    @if($hasProductName)
+                                    @if ($hasProductName)
                                         <td>{{ $enquiries->product_name }}</td>
                                     @endif
                                     <td>{{ $enquiries->name }}</td>
                                     <td>{{ $enquiries->email }}</td>
                                     <td>{{ $enquiries->phone }}</td>
+                                    <td>{{ $enquiries->travel_type }}</td>
+                                    <td>
+                                        {{ getDurationName($enquiries->duration) }}
+                                    </td>
+                                    <td>
+                                        {{ getDestinationName($enquiries->destination) }}
+                                    </td>
+                                    <td>
+                                        {{ $enquiries->country == null ? 'N/A' : getCountryName($enquiries->country) }}
+                                    </td>
+                                    <td>
+                                        {{ $enquiries->amenity == null ? 'N/A' : getAmenityName($enquiries->amenity) }}
+                                    </td>
+                                    <td>
+                                        {{ $enquiries->budget == null ? 'N/A' : getBudgetName($enquiries->budget) }}
+                                    </td>
+                                    <td>{{ $enquiries->date }}</td>
                                     <td>{{ $enquiries->message }}</td>
-                                    <td>{{ $enquiries->created_at->format('d M Y') }}</td>
                                 </tr>
                             </tbody>
                         </table>

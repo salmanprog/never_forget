@@ -127,7 +127,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="travel-img-wrapper">
-                    <img src="{{ asset('public/assets/website/images') }}/travel-experience.jpeg"
+                    <img src="<?php echo e(asset('public/assets/website/images')); ?>/travel-experience.jpeg"
                         alt="Travel & Experience" width="100%">
                 </div>
                 <div class="contact-form-wrapper">
@@ -140,38 +140,52 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('send.inquiry') }}" method="POST" enctype="multipart/form-data"
+                    <form action="<?php echo e(route('send.inquiry')); ?>" method="POST" enctype="multipart/form-data"
                         data-aos="fade-up" data-aos-easing="ease-out-cubic" data-aos-duration="1000"
-                        id="journey-expert-form" @auth data-logged-in="1" @endauth>
-                        @csrf
+                        id="journey-expert-form" <?php if(auth()->guard()->check()): ?> data-logged-in="1" <?php endif; ?>>
+                        <?php echo csrf_field(); ?>
                         <input type="hidden" name="title" id="title"
                             value="You have received new journey expert user inquiry from">
                         <input type="hidden" name="identifier" id="identifier" value="journey_expert">
-                        @auth
-                            <input type="hidden" name="name" value="{{ old('name', Auth::user()->name ?? '') }}">
-                            <input type="hidden" name="email" value="{{ old('email', Auth::user()->email ?? '') }}">
-                            <input type="hidden" name="phone" value="{{ old('phone', Auth::user()->phone ?? '') }}">
-                        @endauth
-                        @guest
+                        <?php if(auth()->guard()->check()): ?>
+                            <input type="hidden" name="name" value="<?php echo e(old('name', Auth::user()->name ?? '')); ?>">
+                            <input type="hidden" name="email" value="<?php echo e(old('email', Auth::user()->email ?? '')); ?>">
+                            <input type="hidden" name="phone" value="<?php echo e(old('phone', Auth::user()->phone ?? '')); ?>">
+                        <?php endif; ?>
+                        <?php if(auth()->guard()->guest()): ?>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group mb-30">
                                         <label for="name" class="form-label">Full Name *</label>
                                         <input type="text" name="name" id="name" class="form-control"
-                                            placeholder="Enter your full name" value="{{ old('name') }}" required>
-                                        @error('name')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                            placeholder="Enter your full name" value="<?php echo e(old('name')); ?>" required>
+                                        <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                            <span class="text-danger"><?php echo e($message); ?></span>
+                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group mb-30">
                                         <label for="email" class="form-label">Email Address *</label>
                                         <input type="email" name="email" id="email" class="form-control"
-                                            placeholder="Enter your email" value="{{ old('email') }}" required>
-                                        @error('email')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                            placeholder="Enter your email" value="<?php echo e(old('email')); ?>" required>
+                                        <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                            <span class="text-danger"><?php echo e($message); ?></span>
+                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
                                 </div>
                             </div>
@@ -179,12 +193,19 @@
                             <div class="form-group mb-30">
                                 <label for="phone" class="form-label">Phone Number</label>
                                 <input type="tel" name="phone" id="phone" class="form-control"
-                                    placeholder="Enter your phone number" value="{{ old('phone') }}">
-                                @error('phone')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                    placeholder="Enter your phone number" value="<?php echo e(old('phone')); ?>">
+                                <?php $__errorArgs = ['phone'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <span class="text-danger"><?php echo e($message); ?></span>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                             </div>
-                        @endguest
+                        <?php endif; ?>
                         <div class="row travel-type-wrapper">
                             <div class="col-md-6 col-lg-4 travel-type-field">
                                 <div class="form-group mb-30">
@@ -194,9 +215,16 @@
                                         <option value="tour">Tour</option>
                                         <option value="all_inclusive">All Inclusive</option>
                                     </select>
-                                    @error('travel_type')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['travel_type'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
 
@@ -211,9 +239,16 @@
                                         <option value="15">15+ Nights</option>
                                         <option value="cruise">Cruise</option>
                                     </select>
-                                    @error('duration')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['duration'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
 
                             </div>
@@ -256,9 +291,16 @@
                                         <option value="246">U.S. Virgin Islands</option>
                                         <option value="183">United States</option>
                                     </select>
-                                    @error('country')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['country'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-4 destination-field">
@@ -339,9 +381,16 @@
                                         <option value="s10">U.S. West Coast</option>
                                         <option value="s41">World Cruise (Exotic)</option>
                                     </select>
-                                    @error('destination')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['destination'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-4 amenity-field display-none">
@@ -367,9 +416,16 @@
                                         <option value="waterpark">Water Park</option>
                                         <option value="wifi">Wifi Included</option>
                                     </select>
-                                    @error('amenity')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['amenity'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-4 budget-field display-none">
@@ -381,27 +437,48 @@
                                         <option value="luxury">Luxury ($$$)</option>
                                         <option value="ultra_luxury">Ultra Luxury ($$$$)</option>
                                     </select>
-                                    @error('budget')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <?php $__errorArgs = ['budget'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group mb-30">
-                                    {{-- add date  --}}
+                                    
                                    <input type="text" name="date" id="date" class="form-control date_range" placeholder="Select a date" required>
-                                   @error('date')
-                                       <span class="text-danger">{{ $message }}</span>
-                                   @enderror
+                                   <?php $__errorArgs = ['date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                       <span class="text-danger"><?php echo e($message); ?></span>
+                                   <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group mb-30">
                             <label for="message" class="form-label">Message</label>
-                            <textarea name="message" id="message" class="form-control" rows="6" placeholder="Tell us ...">{{ old('message') }}</textarea>
-                            @error('message')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                            <textarea name="message" id="message" class="form-control" rows="6" placeholder="Tell us ..."><?php echo e(old('message')); ?></textarea>
+                            <?php $__errorArgs = ['message'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <span class="text-danger"><?php echo e($message); ?></span>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-primary btn-lg"> Send Inquiry <i
@@ -416,13 +493,13 @@
 
 
 
-@if (session('success'))
+<?php if(session('success')): ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 icon: 'success',
                 title: 'Inquiry Submitted!',
-                text: '{{ session('success') }}',
+                text: '<?php echo e(session('success')); ?>',
                 timer: 5000,
                 showConfirmButton: true,
                 confirmButtonText: 'OK',
@@ -430,15 +507,15 @@
             });
         });
     </script>
-@endif
+<?php endif; ?>
 
-@if (session('error'))
+<?php if(session('error')): ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 icon: 'error',
                 title: 'Error!',
-                text: '{{ session('error') }}',
+                text: '<?php echo e(session('error')); ?>',
                 timer: 5000,
                 showConfirmButton: true,
                 confirmButtonText: 'OK',
@@ -446,7 +523,7 @@
             });
         });
     </script>
-@endif
+<?php endif; ?>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -540,3 +617,4 @@
     });
     toggleFields(travelType.value);
 </script>
+<?php /**PATH D:\xampp\htdocs\never-forget\resources\views/website/partials/_journey_expert.blade.php ENDPATH**/ ?>

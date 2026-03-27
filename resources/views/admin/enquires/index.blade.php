@@ -54,9 +54,9 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Phone</th>
-                                        {{-- <th>Quantity</th> --}}
-                                        <th>Message</th>
+                                        <th>Travel Type</th>
                                         <th>Date</th>
+                                        <th>Message</th>
                                         <th width="140">Action</th>
                                         <th>Contacts</th>
                                     </tr>
@@ -78,12 +78,16 @@
                                                 {{ $enquiry->phone }}
                                             </td>
                                             <td>
+                                                {{ $enquiry->travel_type }}
+                                            </td>
+                                            <td>{{ $enquiry->date }}</td>
+                                            <td>
                                                 @if (!$enquiry->message)
                                                     <span>No message</span>
                                                 @endif
                                                 {{ $enquiry->message }}
                                             </td>
-                                            <td>{{ $enquiry->created_at->format('d M Y') }}</td>
+                                            {{-- <td>{{ $enquiry->created_at->format('d M Y') }}</td> --}}
                                             <td>
                                                 <a class="btn btn-info btn-sm"
                                                     href="{{ route('enquires-detail.show', $enquiry->id) }}">view</a>

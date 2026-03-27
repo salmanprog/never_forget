@@ -1513,6 +1513,12 @@ ul.footer-links {
 .nav-dropdown-menu-wrapper.open .nav-dropdown-menu {
   visibility: visible;
 }
+.show-arrow {
+  -webkit-appearance: auto;
+}
+.display-none {
+  display: none;
+}
 
 /* responsive */
 @media(max-width: 1700px) {

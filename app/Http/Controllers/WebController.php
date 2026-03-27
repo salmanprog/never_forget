@@ -1621,13 +1621,59 @@ class WebController extends Controller
             ]);
         }
 
-        $rules = [
-            'title' => 'required|string|max:100',
-            'name' => 'required|string|max:100',
-            'email' => 'required|email',
-            'phone' => (auth()->check() ? 'nullable|' : 'required|') . 'string|max:20',
-            'message' => 'required|string|max:500',
-        ];
+        $identifier = trim((string) ($request->input('identifier') ?? ''));
+
+        if ($identifier === 'quality_logo') {
+            $rules = [
+                'title' => 'required|string|max:100',
+                'name' => 'required|string|max:100',
+                'email' => 'required|email',
+                'phone' => (auth()->check() ? 'nullable|' : 'required|') . 'string|max:20',
+                'message' => 'required|string|max:500',
+                'product' => 'nullable|string|max:255',
+            ];
+        } elseif ($identifier === 'journey_expert') {
+            // Form shows either (cruise/tour: duration + destination) OR (all_inclusive: country + amenity + budget)
+            $rules = [
+                'title' => 'required|string|max:100',
+                'name' => 'required|string|max:100',
+                'email' => 'required|email',
+                'phone' => (auth()->check() ? 'nullable|' : 'nullable|') . 'string|max:20',
+                'message' => 'required|string|max:500',
+                'travel_type' => 'required|string|in:cruise,tour,all_inclusive',
+                'date' => 'required|string|max:100',
+            ];
+            $travelType = $request->input('travel_type');
+            if ($travelType === 'all_inclusive') {
+                $rules['country'] = 'required|string|max:100';
+                $rules['amenity'] = 'required|string|max:100';
+                $rules['budget'] = 'required|string|max:100';
+                $rules['duration'] = 'nullable|string|max:100';
+                $rules['destination'] = 'nullable|string|max:100';
+            } else {
+                $rules['duration'] = 'required|string|max:100';
+                $rules['destination'] = 'required|string|max:100';
+                $rules['country'] = 'nullable|string|max:100';
+                $rules['amenity'] = 'nullable|string|max:100';
+                $rules['budget'] = 'nullable|string|max:100';
+            }
+        } else {
+            $rules = [
+                'title' => 'required|string|max:100',
+                'name' => 'required|string|max:100',
+                'email' => 'required|email',
+                'phone' => (auth()->check() ? 'nullable|' : 'required|') . 'string|max:20',
+                'message' => 'required|string|max:500',
+                'travel_type' => 'required|string|max:100',
+                'duration' => 'required|string|max:100',
+                'destination' => 'required|string|max:100',
+                'country' => 'required|string|max:100',
+                'amenity' => 'required|string|max:100',
+                'budget' => 'required|string|max:100',
+                'date' => 'required|string|max:100',
+            ];
+        }
+
         $data = $request->validate($rules);
 
         $params = $request->all();
@@ -1638,21 +1684,26 @@ class WebController extends Controller
             'title'         => $data['title'] . ' ' . $data['name'] . ',',
             'body'          => (object) $data
         ];
-        
         Enquires::create([
             'user_id' => auth()->check() ? auth()->id() : 0,
-            'identifier'    => $params['identifier'],
-            'product_name'    => isset($params['product']) ? $params['product'] : '',
-            'name'    => $params['name'],
-            'email'   => $params['email'],
-            'phone'   => $params['phone'],
+            'identifier' => $params['identifier'] ?? '',
+            'product_name' => $params['product'] ?? '',
+            'name' => $params['name'],
+            'email' => $params['email'],
+            'phone' => $params['phone'] ?? '',
             'message' => $params['message'],
-            'status'  => 1,
+            'status' => 1,
+            'travel_type' => $params['travel_type'] ?? '',
+            'duration' => $params['duration'] ?? '',
+            'destination' => $params['destination'] ?? '',
+            'country' => $params['country'] ?? '',
+            'amenity' => $params['amenity'] ?? '',
+            'budget' => $params['budget'] ?? '',
+            'date' => $params['date'] ?? '',
         ]);
 
         \Mail::to('cruise@neverforgetappreciation.com')->send(new \App\Mail\Email($details));
 
-        $identifier = trim((string) ($params['identifier'] ?? ''));
         if ($identifier === 'journey_expert') {
             try {
                 \Log::info('Sending Travel & Experience confirmation email to: ' . $data['email']);
@@ -1662,6 +1713,13 @@ class WebController extends Controller
                     'email' => $data['email'],
                     'phone' => $data['phone'],
                     'message' => $data['message'],
+                    'travel_type' => $params['travel_type'],
+                    'duration' => $params['duration'],
+                    'destination' => $params['destination'],
+                    'country' => $params['country'],
+                    'amenity' => $params['amenity'],
+                    'budget' => $params['budget'],
+                    'date' => $params['date'],
                 ];
                 \Mail::to($data['email'])->send(new \App\Mail\Email($confirmationDetails));
                 \Log::info('Travel & Experience confirmation email sent successfully to: ' . $data['email']);
@@ -1702,6 +1760,7 @@ class WebController extends Controller
             'phone' => 'required|string|max:20',
             'message' => 'nullable|string|max:1000',
             'company_name' => 'required|string|max:100',
+            
         ]);
 
         $model = new ContactUs();
@@ -1712,6 +1771,7 @@ class WebController extends Controller
         $model->phone = $request->phone;
         $model->message = $request->message;
         $model->company_name = $request->company_name;
+       
         $model->save();
 
         // Prepare email data
