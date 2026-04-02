@@ -105,6 +105,17 @@ class Email extends Mailable
                             'business_type_label' => $this->details['business_type_label'] ?? '',
                             'inquiry_message' => $this->details['message'] ?? '',
                         ]);
+        } elseif ($this->details['from'] == 'greetings-appreciation-confirmation') {
+            $email = $this->subject('Greetings & Appreciation Enquiry Received - NEVER FORGET')
+                        ->view('emails.greetings-appreciation-confirmation')
+                        ->with([
+                            'senderName' => $this->details['sender_name'] ?? '',
+                            'email' => $this->details['email'] ?? '',
+                            'phone' => $this->details['phone'] ?? '',
+                            'inquiry_message' => $this->details['message'] ?? '',
+                            'items_summary' => $this->details['items_summary'] ?? '',
+                            'specify_type' => $this->details['specify_type'] ?? null,
+                        ]);
         }
 
         if (

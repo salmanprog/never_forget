@@ -34,6 +34,9 @@ use App\Models\PerfectGiftCategory;
 use App\Models\PerfectGiftEnquiry;
 use App\Models\PerfectGiftEnquiryItem;
 use App\Models\ECardEnquiry;
+use App\Models\GreetingsAppreciation;
+use App\Models\GreetingsAppreciationCategory;
+use App\Models\GreetingsAppreciationEnquiryItem;
 use App\Models\Enquires;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -195,7 +198,16 @@ class WebController extends Controller
         } elseif (session()->has('guest_token')) {
             $addedPerfectGiftIds = PerfectGiftEnquiryItem::where('guest_token', session('guest_token'))->whereNull('enquiry_id')->pluck('perfect_gift_id')->toArray();
         }
-        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds'));
+
+        $greetingsCategories = GreetingsAppreciationCategory::orderBy('id')->get();
+        $addedGreetingsCategoryIds = [];
+        if (auth()->check()) {
+            $addedGreetingsCategoryIds = GreetingsAppreciationEnquiryItem::where('user_id', auth()->id())->whereNull('enquiry_id')->pluck('greetings_appreciation_category_id')->toArray();
+        } elseif (session()->has('guest_token')) {
+            $addedGreetingsCategoryIds = GreetingsAppreciationEnquiryItem::where('guest_token', session('guest_token'))->whereNull('enquiry_id')->pluck('greetings_appreciation_category_id')->toArray();
+        }
+
+        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds', 'greetingsCategories', 'addedGreetingsCategoryIds'));
         
     }
 
@@ -941,6 +953,150 @@ class WebController extends Controller
 
         return response()->json([
             'success' => true
+        ]);
+    }
+
+    public function createGreetingsAppreciationEnquiryItem(Request $request)
+    {
+        if (!session()->has('guest_token')) {
+            session(['guest_token' => Str::uuid()->toString()]);
+        }
+
+        GreetingsAppreciationEnquiryItem::create([
+            'user_id' => auth()->id(),
+            'guest_token' => auth()->check() ? null : session('guest_token'),
+            'greetings_appreciation_category_id' => $request->greetings_appreciation_category_id,
+            'quantity' => 1,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Greetings enquiry item created successfully',
+        ]);
+    }
+
+    public function greetingsAppreciationItems()
+    {
+        $page_title = 'Greetings & Appreciation || Never Forget';
+
+        $enquiries = GreetingsAppreciationEnquiryItem::with(['category', 'enquiry'])
+            ->where(function ($query) {
+                if (auth()->check()) {
+                    $query->where('user_id', auth()->id());
+                } else {
+                    $query->where('guest_token', session('guest_token'));
+                }
+            })
+            ->whereNull('enquiry_id')
+            ->get();
+
+        $showSpecifyType = $enquiries->contains(function ($item) {
+            return $item->category && $item->category->is_other;
+        });
+
+        return view('website.greetings-appreciation-items', compact('page_title', 'enquiries', 'showSpecifyType'));
+    }
+
+    public function storeGreetingsAppreciationEnquiry(Request $request)
+    {
+        $categoryIds = array_filter(explode(',', (string) $request->greetings_category_ids));
+        $hasOther = false;
+        if (!empty($categoryIds)) {
+            $hasOther = GreetingsAppreciationCategory::whereIn('id', $categoryIds)->where('is_other', true)->exists();
+        }
+
+        $rules = [];
+        if ($hasOther) {
+            $rules['specify_type'] = 'required|string|max:255';
+        }
+        if (!auth()->check()) {
+            $rules['user_name'] = 'required|string|max:100';
+            $rules['email'] = 'required|email';
+            $rules['phone'] = 'nullable|string|max:20';
+        }
+        if (!empty($rules)) {
+            $request->validate($rules);
+        }
+
+        $user = auth()->user();
+        $enquiry = GreetingsAppreciation::create([
+            'message' => $request->message,
+            'is_submitted' => 1,
+            'user_name' => $user ? $user->name : $request->user_name,
+            'email' => $user ? $user->email : $request->email,
+            'phone' => $user ? $user->phone : $request->phone,
+            'specify_type' => $hasOther ? $request->specify_type : null,
+            'user_id' => $user ? $user->id : null,
+        ]);
+
+        foreach ($categoryIds as $catId) {
+            $query = GreetingsAppreciationEnquiryItem::where('greetings_appreciation_category_id', $catId)->whereNull('enquiry_id');
+            if (auth()->check()) {
+                $query->where('user_id', auth()->id());
+            } else {
+                $query->where('guest_token', session('guest_token'));
+            }
+            $item = $query->first();
+            if ($item) {
+                $item->update([
+                    'enquiry_id' => $enquiry->id,
+                ]);
+            }
+        }
+
+        $senderEmail = $enquiry->email;
+        if ($senderEmail) {
+            try {
+                $enquiry->load(['items.category']);
+                $itemsSummary = $enquiry->items->map(function ($item) {
+                    return $item->category ? ($item->category->title . ' (Qty: ' . $item->quantity . ')') : '';
+                })->filter()->implode(', ');
+                $confirmationDetails = [
+                    'from' => 'greetings-appreciation-confirmation',
+                    'sender_name' => $enquiry->user_name,
+                    'email' => $enquiry->email,
+                    'phone' => $enquiry->phone,
+                    'message' => $enquiry->message,
+                    'items_summary' => $itemsSummary ?: '—',
+                    'specify_type' => $enquiry->specify_type,
+                ];
+                \Mail::to($senderEmail)->send(new \App\Mail\Email($confirmationDetails));
+            } catch (\Throwable $e) {
+                \Log::error('Greetings appreciation confirmation email failed: ' . $e->getMessage(), [
+                    'exception' => $e->getTraceAsString(),
+                    'recipient' => $senderEmail,
+                ]);
+            }
+        }
+
+        return redirect()->route('greetings-appreciation-items');
+    }
+
+    public function destroyGreetingsAppreciationEnquiryItem($id)
+    {
+        $enquiryItem = GreetingsAppreciationEnquiryItem::findOrFail($id);
+        $enquiryItem->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item Successfully Removed',
+        ]);
+    }
+
+    public function updateGreetingsAppreciationQuantity(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        GreetingsAppreciationEnquiryItem::where('id', $request->id)
+            ->update([
+                'quantity' => $request->quantity,
+            ]);
+
+        return response()->json([
+            'success' => true,
         ]);
     }
 

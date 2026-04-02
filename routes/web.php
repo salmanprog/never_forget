@@ -209,6 +209,12 @@ Route::post('/perfect-gift-enquiry', [WebController::class, 'storePerfectGiftEnq
 Route::get('/perfect-gift-items', [WebController::class, 'perfectGiftItems'])->name('perfect-gift-items');
 Route::post('/perfect-gift-items/{id}', [WebController::class, 'destroyPerfectGiftEnquiry'])->name('perfect-gift-items-delete');
 
+Route::post('/create-greetings-appreciation-enquiry-item', [WebController::class, 'createGreetingsAppreciationEnquiryItem'])->name('create-greetings-appreciation-enquiry-item');
+Route::get('/greetings-appreciation-items', [WebController::class, 'greetingsAppreciationItems'])->name('greetings-appreciation-items');
+Route::post('/greetings-appreciation-items/update-quantity', [WebController::class, 'updateGreetingsAppreciationQuantity'])->name('greetings-appreciation-items.update-quantity');
+Route::post('/greetings-appreciation-enquiry', [WebController::class, 'storeGreetingsAppreciationEnquiry'])->name('greetings-appreciation.enquiry');
+Route::post('/greetings-appreciation-items/{id}', [WebController::class, 'destroyGreetingsAppreciationEnquiryItem'])->name('greetings-appreciation-items-delete');
+
 Route::get('/create-e-card', [WebController::class, 'createEcard'])->name('create-e-card');
 Route::post('/store-e-card', [WebController::class, 'storeEcard'])->name('store-e-card');
 
@@ -319,6 +325,7 @@ Route::group(['middleware' => ['auth']], function () {
     //BallonEnquiry
     Route::resource('balloon_enquiry', 'admin\BalloonEnquiryController');
     Route::resource('perfect_gift_enquiry', 'admin\PerfectGiftEnquiryController');
+    Route::resource('greetings_appreciation_enquiry', 'admin\GreetingsAppreciationEnquiryController')->only(['index', 'show']);
     Route::get('e_card_enquiry', [\App\Http\Controllers\admin\ECardEnquiryController::class, 'index'])->name('e_card_enquiry.index');
     Route::get('e_card_enquiry/{id}', [\App\Http\Controllers\admin\ECardEnquiryController::class, 'show'])->name('e_card_enquiry.show');
     Route::post('e_card_enquiry/{id}/update-status', [\App\Http\Controllers\admin\ECardEnquiryController::class, 'updateStatus'])->name('e_card_enquiry.update-status');

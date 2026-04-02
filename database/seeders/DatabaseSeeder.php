@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
         $this->call(balloons::class);
         $this->call(PerfectGiftSeeder::class);
+        $this->call(GreetingsAppreciationCategorySeeder::class);
     }
 }

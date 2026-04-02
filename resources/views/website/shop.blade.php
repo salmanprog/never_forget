@@ -963,6 +963,31 @@
                 });
             });
 
+            $(document).on('submit', '.greetings-appreciation-form', function(e) {
+                e.preventDefault();
+                const form = this;
+                const formData = new FormData(form);
+                $.ajax({
+                    url: $(form).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function() {
+                        const cartUrl = "{{ route('greetings-appreciation-items') }}";
+                        const link = `
+                            <a href="${cartUrl}" class="add-to-cart balloon-btn" style="width:100%; text-align:center;">
+                                View
+                            </a>
+                        `;
+                        $(form).find('button[type="submit"]').replaceWith(link);
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
         });
 
         let page = 1;
