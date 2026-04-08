@@ -13,7 +13,7 @@
     <!-- Favicons -->
     <link rel="icon" href="{{ asset('public/admin/assets/images/page') }}/{{ $home_page_data['header_favicon'] }}"
         type="image/png" sizes="16x16">
-    <link href="{{ asset('public/assets/website/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/website/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -28,7 +28,7 @@
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link href="{{ asset('public/assets/website/vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/website/vendor/aos/aos.css') }}" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -36,11 +36,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <!-- Template Main CSS File -->
-    <link href="{{ asset('public/assets/website/libs/libs.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/assets/website/css/utilities.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/assets/website/css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/assets/website/css/custom.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/assets/website/css/modal.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/website/libs/libs.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/website/css/utilities.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/website/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/website/css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/website/css/modal.css') }}" rel="stylesheet">
 
 
 </head>
@@ -71,10 +71,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="{{ asset('public/assets/website/libs/libs.js') }}"></script>
-    <script src="{{ asset('public/assets/website/js/main.js') }}"></script>
+    <script src="{{ asset('assets/website/libs/libs.js') }}"></script>
+    <script src="{{ asset('assets/website/js/main.js') }}"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('public/assets/website/vendor/aos/aos.js') }}"></script>
+    <script src="{{ asset('assets/website/vendor/aos/aos.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
