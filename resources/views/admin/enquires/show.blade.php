@@ -27,6 +27,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Travel Type</th>
+                                    <th>Any cruise line</th>
                                     <th>Duration</th>
                                     <th>Destination</th>
                                     <th>Country</th>
@@ -45,6 +46,7 @@
                                     <td>{{ $enquiries->email }}</td>
                                     <td>{{ $enquiries->phone }}</td>
                                     <td>{{ $enquiries->travel_type }}</td>
+                                    <td>{{ $enquiries->any_cruise_line ? $enquiries->any_cruise_line : 'N/A' }}</td>
                                     <td>
                                         {{ getDurationName($enquiries->duration) }}
                                     </td>

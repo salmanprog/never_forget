@@ -1806,12 +1806,18 @@ class WebController extends Controller
                 $rules['budget'] = 'required|string|max:100';
                 $rules['duration'] = 'nullable|string|max:100';
                 $rules['destination'] = 'nullable|string|max:100';
+                $rules['any_cruise_line'] = 'nullable|string|max:255';
             } else {
                 $rules['duration'] = 'required|string|max:100';
                 $rules['destination'] = 'required|string|max:100';
                 $rules['country'] = 'nullable|string|max:100';
                 $rules['amenity'] = 'nullable|string|max:100';
                 $rules['budget'] = 'nullable|string|max:100';
+                if ($travelType === 'cruise') {
+                    $rules['any_cruise_line'] = 'required|string|max:255';
+                } else {
+                    $rules['any_cruise_line'] = 'nullable|string|max:255';
+                }
             }
         } else {
             $rules = [
@@ -1850,6 +1856,7 @@ class WebController extends Controller
             'message' => $params['message'],
             'status' => 1,
             'travel_type' => $params['travel_type'] ?? '',
+            'any_cruise_line' => $params['any_cruise_line'] ?? null,
             'duration' => $params['duration'] ?? '',
             'destination' => $params['destination'] ?? '',
             'country' => $params['country'] ?? '',

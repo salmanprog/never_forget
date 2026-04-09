@@ -3,7 +3,6 @@
 @section('title', $page_title)
 <style>
     .cart-main {
-        background: #298dff38;
         padding: 30px 0;
     }
 

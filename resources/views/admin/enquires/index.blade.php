@@ -55,6 +55,7 @@
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Travel Type</th>
+                                        <th>Any cruise line</th>
                                         <th>Date</th>
                                         <th>Message</th>
                                         <th width="140">Action</th>
@@ -80,6 +81,7 @@
                                             <td>
                                                 {{ $enquiry->travel_type }}
                                             </td>
+                                            <td>{{ $enquiry->any_cruise_line ?: '—' }}</td>
                                             <td>{{ $enquiry->date }}</td>
                                             <td>
                                                 @if (!$enquiry->message)
@@ -121,7 +123,7 @@
                                         </tr>
                                     @endforeach
                                     <tr>
-                                        <td colspan="11">
+                                        <td colspan="12">
                                             {{-- Displying {{ $models->firstItem() }} to {{ $models->lastItem() }} of
                                         {{ $models->total() }} records
                                         <div class="d-flex justify-content-center">
@@ -130,7 +132,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="6">
                                             Displaying {{ $enquiries->firstItem() }}
                                             to {{ $enquiries->lastItem() }}
                                             of {{ $enquiries->total() }} records

@@ -121,6 +121,19 @@
         max-height: 390px;
         object-fit: cover;
     }
+
+    /*
+     * Bootstrap .form-control sets appearance:none on selects, which breaks <optgroup>
+     * labels in Chromium (Popular/Luxury headers often missing; only River/Specialty show).
+     * Force native menu so group labels (Popular, Luxury, River, Specialty) render.
+     */
+    select.form-control.cruise-line {
+        -webkit-appearance: menulist;
+        -moz-appearance: menulist;
+        appearance: auto;
+        background-image: none;
+        padding-right: 12px;
+    }
 </style>
 <section class="contact-sec py-150">
     <div class="container">
@@ -148,42 +161,42 @@
                             value="You have received new journey expert user inquiry from">
                         <input type="hidden" name="identifier" id="identifier" value="journey_expert">
                         @auth
-                            <input type="hidden" name="name" value="{{ old('name', Auth::user()->name ?? '') }}">
-                            <input type="hidden" name="email" value="{{ old('email', Auth::user()->email ?? '') }}">
-                            <input type="hidden" name="phone" value="{{ old('phone', Auth::user()->phone ?? '') }}">
+                        <input type="hidden" name="name" value="{{ old('name', Auth::user()->name ?? '') }}">
+                        <input type="hidden" name="email" value="{{ old('email', Auth::user()->email ?? '') }}">
+                        <input type="hidden" name="phone" value="{{ old('phone', Auth::user()->phone ?? '') }}">
                         @endauth
                         @guest
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-30">
-                                        <label for="name" class="form-label">Full Name *</label>
-                                        <input type="text" name="name" id="name" class="form-control"
-                                            placeholder="Enter your full name" value="{{ old('name') }}" required>
-                                        @error('name')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group mb-30">
-                                        <label for="email" class="form-label">Email Address *</label>
-                                        <input type="email" name="email" id="email" class="form-control"
-                                            placeholder="Enter your email" value="{{ old('email') }}" required>
-                                        @error('email')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group mb-30">
-                                <label for="phone" class="form-label">Phone Number</label>
-                                <input type="tel" name="phone" id="phone" class="form-control"
-                                    placeholder="Enter your phone number" value="{{ old('phone') }}">
-                                @error('phone')
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group mb-30">
+                                    <label for="name" class="form-label">Full Name *</label>
+                                    <input type="text" name="name" id="name" class="form-control"
+                                        placeholder="Enter your full name" value="{{ old('name') }}" required>
+                                    @error('name')
                                     <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                    @enderror
+                                </div>
                             </div>
+                            <div class="col-lg-6">
+                                <div class="form-group mb-30">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input type="email" name="email" id="email" class="form-control"
+                                        placeholder="Enter your email" value="{{ old('email') }}" required>
+                                    @error('email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-30">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" name="phone" id="phone" class="form-control"
+                                placeholder="Enter your phone number" value="{{ old('phone') }}">
+                            @error('phone')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
                         @endguest
                         <div class="row travel-type-wrapper">
                             <div class="col-md-6 col-lg-4 travel-type-field">
@@ -195,8 +208,65 @@
                                         <option value="all_inclusive">All Inclusive</option>
                                     </select>
                                     @error('travel_type')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 cruise-line-wrapper" style="display: none;">
+                                <div class="form-group mb-30">
+                                    <select class="form-control show-arrow cruise-line" id="searchbar-bottom_cruise_lines" aria-label="Cruise Line" name="any_cruise_line" disabled>
+                                        <option value="" selected disabled>Any Cruise Line</option>
+                                        <optgroup label="Popular">
+                                            <option value="Carnival Cruise Line">Carnival Cruise Line</option>
+                                            <option value="Celebrity Cruises - Ocean">Celebrity Cruises - Ocean</option>
+                                            <option value="Costa Cruises">Costa Cruises</option>
+                                            <option value="Disney Cruise Line">Disney Cruise Line</option>
+                                            <option value="Holland America Line">Holland America Line</option>
+                                            <option value="MSC Cruises">MSC Cruises</option>
+                                            <option value="Norwegian Cruise Line">Norwegian Cruise Line</option>
+                                            <option value="Princess Cruises">Princess Cruises</option>
+                                            <option value="Royal Caribbean International">Royal Caribbean International</option>
+                                            <option value="Virgin Voyages">Virgin Voyages</option>
+                                        </optgroup>
+                                        <optgroup label="Luxury">
+                                            <option value="Azamara">Azamara</option>
+                                            <option value="Crystal Cruises">Crystal Cruises</option>
+                                            <option value="Cunard Line">Cunard Line</option>
+                                            <option value="Explora Journeys">Explora Journeys</option>
+                                            <option value="Oceania Cruises">Oceania Cruises</option>
+                                            <option value="Regent Seven Seas Cruises">Regent Seven Seas Cruises</option>
+                                            <option value="Seabourn">Seabourn</option>
+                                            <option value="Silversea Cruises">Silversea Cruises</option>
+                                            <option value="The Ritz-Carlton Yacht Collection">The Ritz-Carlton Yacht Collection</option>
+                                            <option value="Viking Ocean Cruises">Viking Ocean Cruises</option>
+                                        </optgroup>
+                                        <optgroup label="River">
+                                            <option value="AMA Waterways">AMA Waterways</option>
+                                            <option value="American Cruise Lines">American Cruise Lines</option>
+                                            <option value="Avalon Waterways">Avalon Waterways</option>
+                                            <option value="Emerald Cruises">Emerald Cruises</option>
+                                            <option value="Scenic Cruises">Scenic Cruises</option>
+                                            <option value="Tauck Cruise">Tauck Cruise</option>
+                                            <option value="Uniworld Boutique River Cruise Collection">Uniworld Boutique River Cruise Collection</option>
+                                            <option value="Viking River Cruises">Viking River Cruises</option>
+                                        </optgroup>
+                                        <optgroup label="Specialty">
+                                            <option value="Atlas Ocean Voyages">Atlas Ocean Voyages</option>
+                                            <option value="Celestyal Cruises">Celestyal Cruises</option>
+                                            <option value="Emerald Yacht Cruises">Emerald Yacht Cruises</option>
+                                            <option value="Hurtigruten">Hurtigruten</option>
+                                            <option value="HX">HX</option>
+                                            <option value="Lindblad Expeditions">Lindblad Expeditions</option>
+                                            <option value="Margaritaville at Sea">Margaritaville at Sea</option>
+                                            <option value="Paul Gauguin Cruises">Paul Gauguin Cruises</option>
+                                            <option value="Ponant">Ponant</option>
+                                            <option value="Quark Expeditions">Quark Expeditions</option>
+                                            <option value="Scenic Ocean Cruises">Scenic Ocean Cruises</option>
+                                            <option value="SeaDream Yacht Club">SeaDream Yacht Club</option>
+                                            <option value="Star Clippers">Star Clippers</option>
+                                            <option value="Windstar Cruises">Windstar Cruises</option>
+                                        </optgroup>
+                                    </select>
                                 </div>
                             </div>
 
@@ -212,7 +282,7 @@
                                         <option value="cruise">Cruise</option>
                                     </select>
                                     @error('duration')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
 
@@ -257,7 +327,7 @@
                                         <option value="183">United States</option>
                                     </select>
                                     @error('country')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
@@ -340,7 +410,7 @@
                                         <option value="s41">World Cruise (Exotic)</option>
                                     </select>
                                     @error('destination')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
@@ -368,7 +438,7 @@
                                         <option value="wifi">Wifi Included</option>
                                     </select>
                                     @error('amenity')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
@@ -382,17 +452,17 @@
                                         <option value="ultra_luxury">Ultra Luxury ($$$$)</option>
                                     </select>
                                     @error('budget')
-                                        <span class="text-danger">{{ $message }}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group mb-30">
                                     {{-- add date  --}}
-                                   <input type="text" name="date" id="date" class="form-control date_range" placeholder="Select a date" required>
-                                   @error('date')
-                                       <span class="text-danger">{{ $message }}</span>
-                                   @enderror
+                                    <input type="text" name="date" id="date" class="form-control date_range" placeholder="Select a date" required>
+                                    @error('date')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -400,7 +470,7 @@
                             <label for="message" class="form-label">Message</label>
                             <textarea name="message" id="message" class="form-control" rows="6" placeholder="Tell us ...">{{ old('message') }}</textarea>
                             @error('message')
-                                <span class="text-danger">{{ $message }}</span>
+                            <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="form-group text-center">
@@ -417,35 +487,37 @@
 
 
 @if (session('success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                icon: 'success',
-                title: 'Inquiry Submitted!',
-                text: '{{ session('success') }}',
-                timer: 5000,
-                showConfirmButton: true,
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#0B1B48'
-            });
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Inquiry Submitted!',
+            text: '{{ session('
+            success ') }}',
+            timer: 5000,
+            showConfirmButton: true,
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#0B1B48'
         });
-    </script>
+    });
+</script>
 @endif
 
 @if (session('error'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: '{{ session('error') }}',
-                timer: 5000,
-                showConfirmButton: true,
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#d33'
-            });
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '{{ session('
+            error ') }}',
+            timer: 5000,
+            showConfirmButton: true,
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#d33'
         });
-    </script>
+    });
+</script>
 @endif
 
 <script>
@@ -509,6 +581,8 @@
     const travelType = document.querySelector('[name="travel_type"]');
     const tourFields = document.querySelectorAll('.duration-field, .destination-field');
     const allInclusiveFields = document.querySelectorAll('.country-field, .amenity-field, .budget-field');
+    const cruiseLineWrapper = document.querySelector('.cruise-line-wrapper');
+    const cruiseLineSelect = document.querySelector('select.cruise-line');
     const country = document.querySelector('[name="country"]');
     const amenity = document.querySelector('[name="amenity"]');
     const budget = document.querySelector('[name="budget"]');
@@ -524,6 +598,11 @@
             budget.required = true;
             duration.required = false;
             destination.required = false;
+            if (cruiseLineWrapper) cruiseLineWrapper.style.display = 'none';
+            if (cruiseLineSelect) {
+                cruiseLineSelect.required = false;
+                cruiseLineSelect.disabled = true;
+            }
 
         } else {
             allInclusiveFields.forEach(el => el.style.display = 'none');
@@ -533,6 +612,19 @@
             budget.required = false;
             duration.required = true;
             destination.required = true;
+            if (value === 'cruise') {
+                if (cruiseLineWrapper) cruiseLineWrapper.style.display = 'block';
+                if (cruiseLineSelect) {
+                    cruiseLineSelect.disabled = false;
+                    cruiseLineSelect.required = true;
+                }
+            } else {
+                if (cruiseLineWrapper) cruiseLineWrapper.style.display = 'none';
+                if (cruiseLineSelect) {
+                    cruiseLineSelect.required = false;
+                    cruiseLineSelect.disabled = true;
+                }
+            }
         }
     }
     travelType.addEventListener('change', function(e) {

@@ -24,6 +24,9 @@
                     @if(!empty($enquiry->phone))
                         <tr><th width="180">Phone</th><td>{{ $enquiry->phone }}</td></tr>
                     @endif
+                    @if(!empty($enquiry->any_cruise_line))
+                        <tr><th width="180">Any cruise line</th><td>{{ $enquiry->any_cruise_line }}</td></tr>
+                    @endif
                     @if(!empty($enquiry->message))
                         <tr><th width="180">Message</th><td>{{ $enquiry->message }}</td></tr>
                     @endif
