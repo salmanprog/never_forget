@@ -1,10 +1,10 @@
-@extends('layouts.website.master')
-@section('title', $page_title)
-@section('meta')
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('meta'); ?>
 <meta content="" name="description">
 <meta content="" name="keywords">
-@endsection
-@section('content')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
 <main class="inner-bg">
   <section class="inner-banner">
     <div class="container">
@@ -25,40 +25,40 @@
         </div>
       </div> -->
     <!-- <div id="blogs-container" class="row row-gap-40">
-        @if(isset($blogs) && $blogs->count() > 0)
-          @foreach($blogs as $index => $blog)
+        <?php if(isset($blogs) && $blogs->count() > 0): ?>
+          <?php $__currentLoopData = $blogs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $blog): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="col-lg-4 col-md-6">
               <div class="blogs-card-wrapper">
-                @if($blog->image)
-                  <img src="{{ asset('public/admin/assets/posts/'.$blog->image) }}" class="w-100 mb-10" alt="{{ $blog->title }}">
-                @else
-                  <img src="{{ asset('public/assets/website/images') }}/blogs/{{ ($index % 9) + 1 }}.png" class="w-100 mb-10" alt="{{ $blog->title }}">
-                @endif
-                <h5 class="pl-20 heading fs-24 mb-30">{{ $blog->title }}</h5>
-                <p class="pl-20 blog-text-{{ $blog->id }}">
-                  <span class="truncated-text-{{ $blog->id }} fs-18 secondry-font">
-                    {!! \Illuminate\Support\Str::limit(strip_tags($blog->description), 100) !!}...
+                <?php if($blog->image): ?>
+                  <img src="<?php echo e(asset('public/admin/assets/posts/'.$blog->image)); ?>" class="w-100 mb-10" alt="<?php echo e($blog->title); ?>">
+                <?php else: ?>
+                  <img src="<?php echo e(asset('public/assets/website/images')); ?>/blogs/<?php echo e(($index % 9) + 1); ?>.png" class="w-100 mb-10" alt="<?php echo e($blog->title); ?>">
+                <?php endif; ?>
+                <h5 class="pl-20 heading fs-24 mb-30"><?php echo e($blog->title); ?></h5>
+                <p class="pl-20 blog-text-<?php echo e($blog->id); ?>">
+                  <span class="truncated-text-<?php echo e($blog->id); ?> fs-18 secondry-font">
+                    <?php echo \Illuminate\Support\Str::limit(strip_tags($blog->description), 100); ?>...
                   </span>
                 </p>
                 <div class="pl-20 pb-20">
-                  <a href="{{ route('blog-detail', $blog->slug) }}" class="btn primary-btn border-0">View</a>
+                  <a href="<?php echo e(route('blog-detail', $blog->slug)); ?>" class="btn primary-btn border-0">View</a>
                 </div>
               </div>
             </div>
-          @endforeach
-        @else
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <?php else: ?>
           <div class="col-lg-12">
             <div class="text-center">
               <p class="fs-18">No blogs available at the moment.</p>
             </div>
           </div>
-        @endif
+        <?php endif; ?>
       </div> -->
     <div class="row row-gap-30 justify-content-center">
       <div class="col-md-6 col-lg-4">
         <div class="blogs-card-wrapper">
           <div class="mb-15">
-            <img src="{{ asset('public/assets/website/images/blogs/1.webp') }}" alt="">
+            <img src="<?php echo e(asset('public/assets/website/images/blogs/1.webp')); ?>" alt="">
           </div>
           <h2 class="mb-15">The Importance of Employee Appreciation in Retention</h2>
           <p class="mb-10">
@@ -75,7 +75,7 @@
       <div class="col-md-6 col-lg-4">
         <div class="blogs-card-wrapper">
           <div class="mb-15">
-            <img src="{{ asset('public/assets/website/images/blogs/2.webp') }}" alt="">
+            <img src="<?php echo e(asset('public/assets/website/images/blogs/2.webp')); ?>" alt="">
           </div>
           <h2 class="mb-15">Making Your Clients Feel Special: Small Gestures, Big Impact</h2>
           <p class="mb-10">
@@ -92,7 +92,7 @@
       <div class="col-md-6 col-lg-4">
         <div class="blogs-card-wrapper">
           <div class="mb-15">
-            <img src="{{ asset('public/assets/website/images/blogs/3.jpg') }}" alt="">
+            <img src="<?php echo e(asset('public/assets/website/images/blogs/3.jpg')); ?>" alt="">
           </div>
           <h3 class="mb-15">The Power of Gratitude in the Digital Age: Keeping Human Connection Alive</h3>
           <p class="mb-10">
@@ -109,7 +109,7 @@
       <div class="col-md-6 col-lg-4">
         <div class="blogs-card-wrapper">
           <div class="mb-15">
-            <img src="{{ asset('public/assets/website/images/blogs/4.webp') }}" alt="">
+            <img src="<?php echo e(asset('public/assets/website/images/blogs/4.webp')); ?>" alt="">
           </div>
           <h3 class="mb-15">Creative Client Appreciation Ideas for the Holiday Season</h3>
           <p class="mb-10">
@@ -126,7 +126,7 @@
       <div class="col-md-6 col-lg-4">
         <div class="blogs-card-wrapper">
           <div class="mb-15">
-            <img src="{{ asset('public/assets/website/images/blogs/5.webp') }}" alt="">
+            <img src="<?php echo e(asset('public/assets/website/images/blogs/5.webp')); ?>" alt="">
           </div>
           <h3 class="mb-15">How to Celebrate Business Milestones with Clients</h3>
           <p class="mb-10">
@@ -143,7 +143,7 @@
       <div class="col-md-6 col-lg-4">
         <div class="blogs-card-wrapper">
           <div class="mb-15">
-            <img src="{{ asset('public/assets/website/images/blogs/6.webp') }}" alt="">
+            <img src="<?php echo e(asset('public/assets/website/images/blogs/6.webp')); ?>" alt="">
           </div>
           <h3 class="mb-15">Why Appreciation Matters for Mental Health in the Workplace</h3>
           <p class="mb-10">
@@ -161,7 +161,7 @@
       <div class="col-md-6 col-lg-4">
         <div class="blogs-card-wrapper">
           <div class="mb-15">
-            <img src="{{ asset('public/assets/website/images/blogs/7.webp') }}" alt="">
+            <img src="<?php echo e(asset('public/assets/website/images/blogs/7.webp')); ?>" alt="">
           </div>
           <h3 class="mb-15">Building Long-Term Relationships Through Acts of Kindness</h3>
           <p class="mb-10">
@@ -178,7 +178,7 @@
       <div class="col-md-6 col-lg-4">
         <div class="blogs-card-wrapper">
           <div class="mb-15">
-            <img src="{{ asset('public/assets/website/images/blogs/8.jpg') }}" alt="">
+            <img src="<?php echo e(asset('public/assets/website/images/blogs/8.jpg')); ?>" alt="">
           </div>
           <h3 class="mb-15">The Art of a Thank-You: How Personalized Cards Can Build Stronger Client Relationships
           </h3>
@@ -195,7 +195,7 @@
         </div>
       </div>
     </div>
-    @if(isset($totalBlogs) && $totalBlogs > 3)
+    <?php if(isset($totalBlogs) && $totalBlogs > 3): ?>
     <div class="row">
       <div class="col-lg-12 text-center mt-40">
         <button id="load-more-blogs-btn" class="btn primary-btn border-0">Load More</button>
@@ -204,7 +204,7 @@
         </div>
       </div>
     </div>
-    @endif
+    <?php endif; ?>
   </div>
 </section>
 
@@ -234,7 +234,7 @@
           loadingSpinner.style.display = 'block';
         }
 
-        fetch(`{{ route('load.more.blogs') }}?page=${currentPage}`, {
+        fetch(`<?php echo e(route('load.more.blogs')); ?>?page=${currentPage}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -299,5 +299,6 @@
   });
 </script>
 
-@include('website.include.perfect-gifting')
-@endSection
+<?php echo $__env->make('website.include.perfect-gifting', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xamp-new\htdocs\never-forget\resources\views/website/blogs.blade.php ENDPATH**/ ?>
