@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <style type="text/css">
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+        @import  url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
         
         body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
         table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
@@ -30,7 +30,7 @@
         .summary-box p { color: #4B5563; margin: 0 0 8px 0; font-size: 14px; font-family: 'Inter', sans-serif; }
         .summary-box p:last-child { margin-bottom: 0; }
 
-        @media screen and (max-width: 600px) {
+        @media  screen and (max-width: 600px) {
             .email-container { margin: 10px; border-radius: 12px; }
             .header-section { padding: 30px 20px; }
             .welcome-title { font-size: 28px; }
@@ -49,16 +49,16 @@
                         <p class="welcome-subtitle">Showing Appreciation</p>
                     </div>
                     <div class="content-section">
-                        <p class="greeting">Hello {{ $senderName }},</p>
+                        <p class="greeting">Hello <?php echo e($senderName); ?>,</p>
                         <p class="message-text">Thank you for submitting your E-Card request. We have received it and will process it shortly.</p>
                         <div class="summary-box">
-                            @if (!empty($ecardCategoryTitle))
-                            <p><strong>E-Card category:</strong> {{ $ecardCategoryTitle }}</p>
-                            @endif
-                            <p><strong>Occasion:</strong> {{ $occasion }}</p>
-                            <p><strong>Recipient:</strong> {{ $recipientName }} ({{ $recipientEmailPhone }})</p>
-                            <p><strong>Send Date & Time:</strong> {{ $sendDate }} at {{ $sendTime }}</p>
-                            <p><strong>Card Style:</strong> {{ $cardStyle ?? 'Not specified' }}</p>
+                            <?php if(!empty($ecardCategoryTitle)): ?>
+                            <p><strong>E-Card category:</strong> <?php echo e($ecardCategoryTitle); ?></p>
+                            <?php endif; ?>
+                            <p><strong>Occasion:</strong> <?php echo e($occasion); ?></p>
+                            <p><strong>Recipient:</strong> <?php echo e($recipientName); ?> (<?php echo e($recipientEmailPhone); ?>)</p>
+                            <p><strong>Send Date & Time:</strong> <?php echo e($sendDate); ?> at <?php echo e($sendTime); ?></p>
+                            <p><strong>Card Style:</strong> <?php echo e($cardStyle ?? 'Not specified'); ?></p>
                         </div>
                         <p class="message-text">If you have any questions, please contact us.</p>
                         <p class="message-text">Best regards,<br><strong>NEVER FORGET Showing Appreciation</strong></p>
@@ -73,3 +73,4 @@
 </body>
 
 </html>
+<?php /**PATH D:\xamp-new\htdocs\never-forget\resources\views/emails/e-card-confirmation.blade.php ENDPATH**/ ?>

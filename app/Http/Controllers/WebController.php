@@ -34,6 +34,7 @@ use App\Models\PerfectGiftCategory;
 use App\Models\PerfectGiftEnquiry;
 use App\Models\PerfectGiftEnquiryItem;
 use App\Models\ECardEnquiry;
+use App\Models\ECardCategory;
 use App\Models\GreetingsAppreciation;
 use App\Models\GreetingsAppreciationCategory;
 use App\Models\GreetingsAppreciationEnquiryItem;
@@ -207,19 +208,27 @@ class WebController extends Controller
             $addedGreetingsCategoryIds = GreetingsAppreciationEnquiryItem::where('guest_token', session('guest_token'))->whereNull('enquiry_id')->pluck('greetings_appreciation_category_id')->toArray();
         }
 
-        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds', 'greetingsCategories', 'addedGreetingsCategoryIds'));
+        $eCardCategories = ECardCategory::orderBy('sort_order')->orderBy('id')->get();
+
+        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds', 'greetingsCategories', 'addedGreetingsCategoryIds', 'eCardCategories'));
         
     }
 
-    public function createEcard()
+    public function createEcard(Request $request)
     {
+        if (!$request->filled('e_card_category_id')) {
+            return redirect()->route('shop', ['category' => 'e-cards']);
+        }
+        $eCardCategory = ECardCategory::findOrFail($request->e_card_category_id);
         $page_title = 'Create E-Card || Never Forget';
-        return view('website.create-e-card', compact('page_title'));
+
+        return view('website.create-e-card', compact('page_title', 'eCardCategory'));
     }
 
     public function storeEcard(Request $request)
     {
         $rules = [
+            'e_card_category_id' => 'required|exists:e_card_categories,id',
             'occasion' => 'required|string|max:100',
             'recipient_name' => 'required|string|max:255',
             'recipient_email_phone' => 'required|string|max:255',
@@ -244,6 +253,7 @@ class WebController extends Controller
 
         $user = auth()->user();
         $data = [
+            'e_card_category_id' => $request->e_card_category_id,
             'occasion' => $request->occasion,
             'recipient_name' => $request->recipient_name,
             'recipient_email_phone' => $request->recipient_email_phone,
@@ -271,6 +281,7 @@ class WebController extends Controller
         ECardEnquiry::create($data);
 
         $senderEmail = $data['sender_email'];
+        $eCardCategoryTitle = optional(ECardCategory::find($request->e_card_category_id))->title;
         if ($senderEmail) {
             try {
                 $details = [
@@ -282,6 +293,7 @@ class WebController extends Controller
                     'send_date' => \Carbon\Carbon::parse($data['send_date'])->format('d M Y'),
                     'send_time' => \Carbon\Carbon::parse($data['send_time'])->format('h:i A'),
                     'card_style' => $data['card_style'],
+                    'ecard_category_title' => $eCardCategoryTitle,
                 ];
                 \Mail::to($senderEmail)->send(new \App\Mail\Email($details));
             } catch (\Exception $e) {
@@ -298,7 +310,7 @@ class WebController extends Controller
     public function myEcardEnquiries(Request $request)
     {
         $page_title = 'E-Card Enquiry';
-        $query = ECardEnquiry::where('user_id', auth()->id())->latest();
+        $query = ECardEnquiry::with('eCardCategory')->where('user_id', auth()->id())->latest();
 
         if ($request->ajax()) {
             if ($request->filled('search')) {
@@ -307,7 +319,10 @@ class WebController extends Controller
                     $q->where('recipient_name', 'like', '%' . $search . '%')
                         ->orWhere('recipient_email_phone', 'like', '%' . $search . '%')
                         ->orWhere('occasion', 'like', '%' . $search . '%')
-                        ->orWhere('status', 'like', '%' . $search . '%');
+                        ->orWhere('status', 'like', '%' . $search . '%')
+                        ->orWhereHas('eCardCategory', function ($q2) use ($search) {
+                            $q2->where('title', 'like', '%' . $search . '%');
+                        });
                 });
             }
             $enquiries = $query->paginate(10);

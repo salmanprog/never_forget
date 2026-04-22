@@ -11,7 +11,7 @@ class ECardEnquiryController extends Controller
     public function index(Request $request)
     {
         $page_title = 'E-Cards';
-        $enquiries = ECardEnquiry::with('user')->latest()->paginate(10);
+        $enquiries = ECardEnquiry::with(['user', 'eCardCategory'])->latest()->paginate(10);
 
         if ($request->ajax()) {
             return view('admin.e-card-enquiry.partials.table', compact('enquiries'))->render();
@@ -23,7 +23,7 @@ class ECardEnquiryController extends Controller
     public function show($id)
     {
         $page_title = 'E-Card Detail';
-        $enquiry = ECardEnquiry::with('user')->findOrFail($id);
+        $enquiry = ECardEnquiry::with(['user', 'eCardCategory'])->findOrFail($id);
         return view('admin.e-card-enquiry.show', compact('page_title', 'enquiry'));
     }
 

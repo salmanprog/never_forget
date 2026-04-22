@@ -36,6 +36,7 @@
                                 <tr>
                                     <th>SL</th>
                                     <th>Recipient</th>
+                                    <th>E-Card category</th>
                                     <th>Occasion</th>
                                     <th>Send Date & Time</th>
                                     <th>Status</th>
@@ -46,6 +47,7 @@
                                     <tr>
                                         <td>{{ $enquiries->firstItem() + $key }}.</td>
                                         <td>{{ $enquiry->recipient_name }}<br><small>{{ $enquiry->recipient_email_phone }}</small></td>
+                                        <td>{{ optional($enquiry->eCardCategory)->title ?? '—' }}</td>
                                         <td>{{ $enquiry->occasion }}</td>
                                         <td>{{ \Carbon\Carbon::parse($enquiry->send_date)->format('d M Y') }} {{ \Carbon\Carbon::parse($enquiry->send_time)->format('h:i A') }}</td>
                                         <td>
@@ -66,7 +68,7 @@
                                     </tr>
                                 @endforeach
                                 <tr>
-                                    <td colspan="5">
+                                    <td colspan="6">
                                         Displaying {{ $enquiries->firstItem() }} to {{ $enquiries->lastItem() }} of {{ $enquiries->total() }} records
                                         <div class="d-flex justify-content-center">
                                             {!! $enquiries->links('pagination::bootstrap-4') !!}

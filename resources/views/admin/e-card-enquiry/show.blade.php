@@ -17,6 +17,7 @@
                         <table class="table table-bordered table-striped">
                             <tr><th colspan="2">E-Card Enquiry Detail</th></tr>
                             <tr><th width="200">Status</th><td><strong>{{ $enquiry->status }}</strong></td></tr>
+                            <tr><th>E-Card category</th><td>{{ optional($enquiry->eCardCategory)->title ?? '—' }}</td></tr>
                             <tr><th>Occasion</th><td>{{ $enquiry->occasion }}</td></tr>
                             <tr><th>Recipient Name</th><td>{{ $enquiry->recipient_name }}</td></tr>
                             <tr><th>Recipient Email / Phone</th><td>{{ $enquiry->recipient_email_phone }}</td></tr>

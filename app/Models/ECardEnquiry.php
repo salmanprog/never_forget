@@ -16,4 +16,9 @@ class ECardEnquiry extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function eCardCategory()
+    {
+        return $this->belongsTo(ECardCategory::class, 'e_card_category_id');
+    }
 }

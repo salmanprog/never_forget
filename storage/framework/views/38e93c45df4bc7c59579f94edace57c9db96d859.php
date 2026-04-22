@@ -803,21 +803,29 @@
                         id="pills-e-cards" role="tabpanel" aria-labelledby="pills-e-cards-tab"
                         tabindex="0">
                         <div class="row justify-content-center">
-                            <div class="col-lg-8 product-item visible">
-                                <div class="gift-card-wrapper balloon-images">
-                                    <img src="<?php echo e(asset('public/assets/website/images/e-card-img.jpeg')); ?>" alt="E Card">
-                                    <div class="product-info" >
-                                        <h3 class="product-title" style="height: auto; margin-bottom: 20px;">Send a Personalized E Card</h3>
-                                        <p class="px-30 mb-10">
-                                        Instant, customized E-Cards for birthdays, anniversaries, thank-you messages, holidays, celebrations, and more.
-                                        Fill out a quick form and our team will create and send your digital card on your behalf.
-                                        </p>
-                                        <a href="<?php echo e(route('create-e-card')); ?>" class="add-to-cart balloon-btn" style="width:100%; text-align:center;">
-                                            Create My E Card
-                                        </a>
+                            <?php $__empty_1 = true; $__currentLoopData = $eCardCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $eCardCategory): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <div class="col-lg-4 col-md-6 product-item visible">
+                                    <div class="gift-card-wrapper balloon-images">
+                                        <?php if($eCardCategory->image): ?>
+                                            <img src="<?php echo e(asset('/public/' . $eCardCategory->image)); ?>"
+                                                alt="<?php echo e($eCardCategory->title); ?>">
+                                        <?php endif; ?>
+                                        <div class="product-info">
+                                            <h3 class="product-title" style="height: auto; margin-bottom: 20px;">
+                                                <?php echo e($eCardCategory->title); ?></h3>
+                                            <p class="px-30 mb-10"><?php echo e($eCardCategory->description); ?></p>
+                                            <a href="<?php echo e(route('create-e-card', ['e_card_category_id' => $eCardCategory->id])); ?>"
+                                                class="add-to-cart balloon-btn" style="width:100%; text-align:center;">
+                                                Create E Card
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                <div class="col-12 text-center">
+                                    <p>No E-Card categories available.</p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

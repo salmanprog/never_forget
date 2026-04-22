@@ -1,6 +1,5 @@
-@extends('layouts.website.master')
-@section('content')
-@section('title', $page_title)
+<?php $__env->startSection('content'); ?>
+<?php $__env->startSection('title', $page_title); ?>
 <style>
     .cart-main {
         padding: 30px 0;
@@ -126,9 +125,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <form action="{{ route('store-e-card') }}" method="POST" enctype="multipart/form-data" class="e-card-form" id="e-card-form">
-                    @csrf
-                    <input type="hidden" name="e_card_category_id" value="{{ $eCardCategory->id }}">
+                <form action="<?php echo e(route('store-e-card')); ?>" method="POST" enctype="multipart/form-data" class="e-card-form" id="e-card-form">
+                    <?php echo csrf_field(); ?>
+                    <input type="hidden" name="e_card_category_id" value="<?php echo e($eCardCategory->id); ?>">
                     <div class="row">
                         <div class="col-lg-6 form-group-ecard">
                             <label for="occasion">Occasion <span style="color: red">*</span></label>
@@ -180,7 +179,7 @@
                         <div class="col-lg-12 form-group-ecard">
                             <label for="send_date">Send Date & Time <span style="color: red">*</span></label>
                             <div class="d-flex gap-2 flex-wrap">
-                                <input type="date" name="send_date" id="send_date" class="input-field" required min="{{ date('Y-m-d') }}" style="flex: 1; min-width: 140px;">
+                                <input type="date" name="send_date" id="send_date" class="input-field" required min="<?php echo e(date('Y-m-d')); ?>" style="flex: 1; min-width: 140px;">
                                 <input type="time" name="send_time" id="send_time" class="input-field" required style="flex: 1; min-width: 120px;">
                             </div>
                         </div>
@@ -207,7 +206,7 @@
                                 </select>
                             </div>
                         </div>
-                        @if(!Auth::check())
+                        <?php if(!Auth::check()): ?>
                         <h2 class="mb-20">Login or Provide Your Details</h2>
                         <div class="col-lg-6 form-group-ecard">
                             <label for="sender_name">Your Name (Sender) <span style="color: red">*</span></label>
@@ -225,7 +224,7 @@
                             <label for="company_name">Company Name (optional)</label>
                             <input type="text" name="company_name" id="company_name" class="input-field" placeholder="Company Name">
                         </div>
-                        @endif
+                        <?php endif; ?>
                         <div class="col-12 form-group-ecard">
                             <button type="submit" class="golbal-btn-submit" id="ecard-submit-btn">Submit</button>
                         </div>
@@ -235,8 +234,8 @@
         </div>
     </div>
 </section>
-@endsection
-@push('js')
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('js'); ?>
 <script>
     $(document).ready(function() {
         $('.physical-gift-radio').on('change', function() {
@@ -319,4 +318,6 @@
         });
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xamp-new\htdocs\never-forget\resources\views/website/create-e-card.blade.php ENDPATH**/ ?>

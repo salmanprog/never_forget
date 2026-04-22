@@ -65,6 +65,7 @@ class Email extends Mailable
                             'sendDate' => $this->details['send_date'] ?? '',
                             'sendTime' => $this->details['send_time'] ?? '',
                             'cardStyle' => $this->details['card_style'] ?? '',
+                            'ecardCategoryTitle' => $this->details['ecard_category_title'] ?? '',
                         ]);
         } elseif ($this->details['from'] == 'travel-experience-confirmation') {
             $email = $this->subject('Travel & Experience Inquiry Received - NEVER FORGET')
