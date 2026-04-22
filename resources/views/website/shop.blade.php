@@ -352,6 +352,21 @@
     .balloon-btn {
         max-width: max-content;
     }
+    .e-card-wrapper .product-info {
+        position: relative;
+    }
+    .e-card-wrapper .product-title {
+        min-height: 50px;
+    }
+    .e-card-wrapper p {
+        min-height: 240px;
+    }
+    .e-card-wrapper a {
+        position: absolute;
+        bottom: 17px;
+        left: 0;
+        right: 0;
+    }
 
     /* .shop-nav-slider .swiper-button-next:after,
     .shop-nav-slider .swiper-button-prev:after {
@@ -804,7 +819,7 @@
                         <div class="row justify-content-center">
                             @forelse ($eCardCategories as $eCardCategory)
                                 <div class="col-lg-4 col-md-6 product-item visible">
-                                    <div class="gift-card-wrapper balloon-images">
+                                    <div class="gift-card-wrapper balloon-images e-card-wrapper">
                                         @if ($eCardCategory->image)
                                             <img src="{{ asset('/public/' . $eCardCategory->image) }}"
                                                 alt="{{ $eCardCategory->title }}">
