@@ -172,9 +172,10 @@ class WebController extends Controller
         }
 
         $page_title = 'Shop || Never Forget';
+        $shopProductsPerPage = 3;
         $products = Product::orderby('id', 'ASC')->where('status', 1)->get();
         $categories = Category::with(['products' => function ($query) {
-            $query->where('status', 1);  // Only get active products
+            $query->where('status', 1)->orderBy('id', 'asc');
         }])->where('status', 1)->get();
 
         $customer_favorites = Product::whereIn('id', function ($query) {
@@ -210,7 +211,7 @@ class WebController extends Controller
 
         $eCardCategories = ECardCategory::orderBy('sort_order')->orderBy('id')->get();
 
-        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds', 'greetingsCategories', 'addedGreetingsCategoryIds', 'eCardCategories'));
+        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds', 'greetingsCategories', 'addedGreetingsCategoryIds', 'eCardCategories', 'shopProductsPerPage'));
         
     }
 
