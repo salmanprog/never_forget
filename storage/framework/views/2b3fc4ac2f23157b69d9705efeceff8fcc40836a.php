@@ -1,18 +1,18 @@
-{{-- home page --}}
-@extends('layouts.website.master')
-@section('title', $page_title)
-@section('meta')
+
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('meta'); ?>
     <meta content="" name="description">
     <meta content="" name="keywords">
-@endsection
-@section('content')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
     <!-- Preload Slick fonts for better performance -->
-    <link rel="preload" href="{{ asset('public/assets/website/libs/fonts/slick.woff') }}" as="font" type="font/woff"
+    <link rel="preload" href="<?php echo e(asset('public/assets/website/libs/fonts/slick.woff')); ?>" as="font" type="font/woff"
         crossorigin>
-    <link rel="preload" href="{{ asset('public/assets/website/libs/fonts/slick.ttf') }}" as="font" type="font/ttf"
+    <link rel="preload" href="<?php echo e(asset('public/assets/website/libs/fonts/slick.ttf')); ?>" as="font" type="font/ttf"
         crossorigin>
 
-    <link href="{{ asset('public/assets/website/vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="<?php echo e(asset('public/assets/website/vendor/aos/aos.css')); ?>" rel="stylesheet">
 
 
     <style>
@@ -22,8 +22,8 @@
             font-weight: 400;
             font-style: normal;
             font-display: swap;
-            src: url('{{ asset('public/assets/website/libs/fonts/slick.woff') }}') format('woff'),
-                url('{{ asset('public/assets/website/libs/fonts/slick.ttf') }}') format('truetype');
+            src: url('<?php echo e(asset('public/assets/website/libs/fonts/slick.woff')); ?>') format('woff'),
+                url('<?php echo e(asset('public/assets/website/libs/fonts/slick.ttf')); ?>') format('truetype');
         }
 
         .about-img {
@@ -51,7 +51,7 @@
             transform: scale(1.03);
         }
 
-        @keyframes float {
+        @keyframes  float {
             0% {
                 transform: translateY(0px);
             }
@@ -222,7 +222,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-6" data-aos="fade-right" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
                     <div class="img-wrapper position-relative">
-                        <img src="{{ asset('public/assets/website/images') }}/about-us-sec-img.png" alt="About Us">
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/about-us-sec-img.png" alt="About Us">
                     </div>
                 </div>
                 <div class="col-lg-6" data-aos="fade-left" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
@@ -238,7 +238,7 @@
                         Founded with a passion for fostering meaningful relationships, our mission is to help businesses
                         like yours cultivate loyalty, trust, and lasting connections with your clients.
                     </p>
-                    <a href="{{ route('about-us') }}" class="btn primary-btn border-0"><span>More About Us</span></a>
+                    <a href="<?php echo e(route('about-us')); ?>" class="btn primary-btn border-0"><span>More About Us</span></a>
 
                 </div>
             </div>
@@ -260,7 +260,7 @@
                             <div class="slider slider-for">
                                 <div class="d-flex">
                                     <div class="solutions-main-img-wrapper">
-                                        <img src="{{ asset('public/assets/website/images') }}/solution-img-01.png"
+                                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/solution-img-01.png"
                                             alt="">
                                     </div>
                                     <div class="text-content">
@@ -273,7 +273,7 @@
                                 <!-- Repeat for other slides -->
                                 <div class="d-flex">
                                     <div class="solutions-main-img-wrapper">
-                                        <img src="{{ asset('public/assets/website/images') }}/solution-img-02.png"
+                                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/solution-img-02.png"
                                             alt="">
                                     </div>
                                     <div class="text-content">
@@ -298,7 +298,7 @@
                                 </div>
                                 <div class="d-flex">
                                     <div class="solutions-main-img-wrapper">
-                                        <img src="{{ asset('public/assets/website/images') }}/solution-img-03.png"
+                                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/solution-img-03.png"
                                             alt="">
                                     </div>
                                     <div class="text-content">
@@ -323,7 +323,7 @@
                                 </div>
                                 <div class="d-flex">
                                     <div class="solutions-main-img-wrapper">
-                                        <img src="{{ asset('public/assets/website/images') }}/solution-img-04.png"
+                                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/solution-img-04.png"
                                             alt="">
                                     </div>
                                     <div class="text-content">
@@ -352,19 +352,19 @@
                         <div class="col-lg-5">
                             <div class="slider slider-nav">
                                 <div class="solutions-right-img-wrapper">
-                                    <img src="{{ asset('public/assets/website/images') }}/solution-img-01.png"
+                                    <img src="<?php echo e(asset('public/assets/website/images')); ?>/solution-img-01.png"
                                         alt="">
                                 </div>
                                 <div class="solutions-right-img-wrapper">
-                                    <img src="{{ asset('public/assets/website/images') }}/solution-img-02.png"
+                                    <img src="<?php echo e(asset('public/assets/website/images')); ?>/solution-img-02.png"
                                         alt="">
                                 </div>
                                 <div class="solutions-right-img-wrapper">
-                                    <img src="{{ asset('public/assets/website/images') }}/solution-img-03.png"
+                                    <img src="<?php echo e(asset('public/assets/website/images')); ?>/solution-img-03.png"
                                         alt="">
                                 </div>
                                 <div class="solutions-right-img-wrapper">
-                                    <img src="{{ asset('public/assets/website/images') }}/solution-img-04.png"
+                                    <img src="<?php echo e(asset('public/assets/website/images')); ?>/solution-img-04.png"
                                         alt="">
                                 </div>
                             </div>
@@ -406,119 +406,120 @@
             </div>
             <div class="slider product-category-slider" data-aos="fade-down" data-aos-easing="ease-out-cubic"
                 data-aos-duration="1000">
-                @foreach ($categories as $category)
+                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="card-wrapper">
                         <div class="category-image mb-20">
-                            @if ($category->products->count() > 0)
-                                <img src="{{ asset('public/admin/assets/images/product') }}/{{ $category->products->first()->image }}"
-                                    alt="{{ $category->title }}" class="img-fluid">
-                            @else
-                                <!-- <img src="{{ asset('public/assets/website/images') }}/gift-img.png"
-                                                                        alt="{{ $category->title }}" class="img-fluid"> -->
-                                <img src="{{ asset('public/admin/assets/images/categories') }}/{{ $category->image }}"
-                                    alt="{{ $category->title }}" class="img-fluid">
-                            @endif
+                            <?php if($category->products->count() > 0): ?>
+                                <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($category->products->first()->image); ?>"
+                                    alt="<?php echo e($category->title); ?>" class="img-fluid">
+                            <?php else: ?>
+                                <!-- <img src="<?php echo e(asset('public/assets/website/images')); ?>/gift-img.png"
+                                                                        alt="<?php echo e($category->title); ?>" class="img-fluid"> -->
+                                <img src="<?php echo e(asset('public/admin/assets/images/categories')); ?>/<?php echo e($category->image); ?>"
+                                    alt="<?php echo e($category->title); ?>" class="img-fluid">
+                            <?php endif; ?>
                         </div>
                         <div class="card-bottom text-center">
                             <h5 class="heading light-black fs-24 fw-600 mb-20">
-                                {{ $category->title }}
+                                <?php echo e($category->title); ?>
+
                             </h5>
-                            <a href="{{ route('shop', ['category' => $category->id]) }}"
+                            <a href="<?php echo e(route('shop', ['category' => $category->id])); ?>"
                                 class="btn primary-btn border-0"><span>See More</span></a>
                         </div>
                     </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{ asset('public/assets/website/images/greeting_card') }}/business_card.jpg"
+                        <img src="<?php echo e(asset('public/assets/website/images/greeting_card')); ?>/business_card.jpg"
                             alt="Business Cards" class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Business Cards
                         </h5>
-                        <a href="{{ route('business-cards.create') }}" class="btn primary-btn border-0"><span>See
+                        <a href="<?php echo e(route('business-cards.create')); ?>" class="btn primary-btn border-0"><span>See
                                 More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{ asset('public/assets/website/images') }}/balloons/03.png" alt="Balloons"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/balloons/03.png" alt="Balloons"
                             class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Balloons
                         </h5>
-                        <a href="{{ route('shop', ['category' => 'balloons']) }}"
+                        <a href="<?php echo e(route('shop', ['category' => 'balloons'])); ?>"
                             class="btn primary-btn border-0"><span>See
                                 More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{ asset('public/assets/website/images') }}/perfect-gifts/01.png" alt="Perfect Gifts"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/perfect-gifts/01.png" alt="Perfect Gifts"
                             class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Perfect Gifts
                         </h5>
-                        <a href="{{ route('shop', ['category' => 'perfect-gift']) }}"
+                        <a href="<?php echo e(route('shop', ['category' => 'perfect-gift'])); ?>"
                             class="btn primary-btn border-0"><span>See
                                 More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{ asset('public/assets/website/images/e-card/03.jpeg') }}" alt="Perfect Gifts"
+                        <img src="<?php echo e(asset('public/assets/website/images/e-card/03.jpeg')); ?>" alt="Perfect Gifts"
                             class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                         E Card Samples
                         </h5>
-                        <a href="{{ route('shop', ['category' => 'e-cards']) }}"
+                        <a href="<?php echo e(route('shop', ['category' => 'e-cards'])); ?>"
                             class="btn primary-btn border-0"><span>See
                                 More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/trade-show-desktop.webp"
+                        <img src="<?php echo e(asset('public/assets/website/images/quality_logo_category')); ?>/trade-show-desktop.webp"
                             alt="Quality Logo" class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Quality Logo
                         </h5>
-                        <a href="{{ route('shop', ['category' => 'qualitylogo']) }}"
+                        <a href="<?php echo e(route('shop', ['category' => 'qualitylogo'])); ?>"
                             class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{ asset('public/assets/website/images/') }}/travel-experience.jpeg"
+                        <img src="<?php echo e(asset('public/assets/website/images/')); ?>/travel-experience.jpeg"
                             alt="Travel & Experience" class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Travel & Experience
                         </h5>
-                        <a href="{{ route('shop', ['category' => 'journey-expert']) }}"
+                        <a href="<?php echo e(route('shop', ['category' => 'journey-expert'])); ?>"
                             class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{ asset('public/assets/website/images/greeting_card') }}/happybirthday.png"
+                        <img src="<?php echo e(asset('public/assets/website/images/greeting_card')); ?>/happybirthday.png"
                             alt="Greeting and Appreciation" class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Greeting & Appreciation
                         </h5>
-                        <a href="{{ route('shop', ['category' => 'greetings-appreciation']) }}"
+                        <a href="<?php echo e(route('shop', ['category' => 'greetings-appreciation'])); ?>"
                             class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
@@ -551,7 +552,7 @@
                 data-aos-duration="1000">
                 <div class="card-wrapper">
                     <div class="mb-34 sm-circle lg-circle d-flex align-items-center justify-content-center">
-                        <img src="{{ asset('public/assets/website/images') }}/icons/benefit-card-icon-01.svg"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/icons/benefit-card-icon-01.svg"
                             alt="">
                     </div>
                     <div class="card-bottom">
@@ -574,7 +575,7 @@
                 </div>
                 <div class="card-wrapper">
                     <div class="mb-34 sm-circle lg-circle d-flex align-items-center justify-content-center">
-                        <img src="{{ asset('public/assets/website/images') }}/icons/benefit-card-icon-02.svg"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/icons/benefit-card-icon-02.svg"
                             alt="">
                     </div>
                     <div class="card-bottom">
@@ -597,7 +598,7 @@
                 </div>
                 <div class="card-wrapper">
                     <div class="mb-34 sm-circle lg-circle d-flex align-items-center justify-content-center">
-                        <img src="{{ asset('public/assets/website/images') }}/icons/benefit-card-icon-03.svg"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/icons/benefit-card-icon-03.svg"
                             alt="">
                     </div>
                     <div class="card-bottom">
@@ -620,7 +621,7 @@
                 </div>
                 <div class="card-wrapper">
                     <div class="mb-34 sm-circle lg-circle d-flex align-items-center justify-content-center">
-                        <img src="{{ asset('public/assets/website/images') }}/icons/benefit-card-icon-04.svg"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/icons/benefit-card-icon-04.svg"
                             alt="">
                     </div>
                     <div class="card-bottom">
@@ -643,7 +644,7 @@
                 </div>
                 <div class="card-wrapper">
                     <div class="mb-34 sm-circle lg-circle d-flex align-items-center justify-content-center">
-                        <img src="{{ asset('public/assets/website/images') }}/icons/benefit-card-icon-05.svg"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/icons/benefit-card-icon-05.svg"
                             alt="">
                     </div>
                     <div class="card-bottom">
@@ -666,7 +667,7 @@
                 </div>
                 <div class="card-wrapper">
                     <div class="mb-34 sm-circle lg-circle d-flex align-items-center justify-content-center">
-                        <img src="{{ asset('public/assets/website/images') }}/icons/benefit-card-icon-05.svg"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/icons/benefit-card-icon-05.svg"
                             alt="">
                     </div>
                     <div class="card-bottom">
@@ -686,7 +687,7 @@
                 </div>
                 <div class="card-wrapper">
                     <div class="mb-34 sm-circle lg-circle d-flex align-items-center justify-content-center">
-                        <img src="{{ asset('public/assets/website/images') }}/icons/benefit-card-icon-05.svg"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/icons/benefit-card-icon-05.svg"
                             alt="">
                     </div>
                     <div class="card-bottom">
@@ -706,7 +707,7 @@
                 </div>
                 <div class="card-wrapper">
                     <div class="mb-34 sm-circle lg-circle d-flex align-items-center justify-content-center">
-                        <img src="{{ asset('public/assets/website/images') }}/icons/benefit-card-icon-05.svg"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/icons/benefit-card-icon-05.svg"
                             alt="">
                     </div>
                     <div class="card-bottom">
@@ -726,7 +727,7 @@
                 </div>
                 <div class="card-wrapper">
                     <div class="mb-34 sm-circle lg-circle d-flex align-items-center justify-content-center">
-                        <img src="{{ asset('public/assets/website/images') }}/icons/benefit-card-icon-05.svg"
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/icons/benefit-card-icon-05.svg"
                             alt="">
                     </div>
                     <div class="card-bottom">
@@ -752,7 +753,7 @@
         </div>
     </section>
 
-    @include('website.include.trusted')
+    <?php echo $__env->make('website.include.trusted', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 
     <section class="about-section" data-aos="fade-up">
@@ -766,32 +767,33 @@
                 <div id="main" class="col-md-6 mt-5" data-aos="fade-right">
                     <div class="about-info mt-5">
                         <div class="accordion" id="faq">
-                            @php $count=1 @endphp
-                            @foreach ($questions as $question)
-                                <div class="card" data-aos="fade-up" data-aos-delay="{{ ($count - 1) * 100 }}">
-                                    <div class="card-header" id="faqhead{{ $question->id }}">
+                            <?php $count=1 ?>
+                            <?php $__currentLoopData = $questions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $question): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <div class="card" data-aos="fade-up" data-aos-delay="<?php echo e(($count - 1) * 100); ?>">
+                                    <div class="card-header" id="faqhead<?php echo e($question->id); ?>">
                                         <a href="#"
-                                            class="btn btn-header-link @if ($count != 1) {{ 'collapsed' }} @endif"
-                                            data-toggle="collapse" data-target="#faq{{ $question->id }}"
-                                            aria-expanded="@if ($count == 1) {{ 'true' }} @else{{ 'false' }} @endif"
-                                            aria-controls="faq{{ $question->id }}">{{ $question->question }}</a>
+                                            class="btn btn-header-link <?php if($count != 1): ?> <?php echo e('collapsed'); ?> <?php endif; ?>"
+                                            data-toggle="collapse" data-target="#faq<?php echo e($question->id); ?>"
+                                            aria-expanded="<?php if($count == 1): ?> <?php echo e('true'); ?> <?php else: ?><?php echo e('false'); ?> <?php endif; ?>"
+                                            aria-controls="faq<?php echo e($question->id); ?>"><?php echo e($question->question); ?></a>
                                     </div>
-                                    <div id="faq{{ $question->id }}"
-                                        class="collapse @if ($count == 1) {{ 'show' }} @endif"
-                                        aria-labelledby="faqhead{{ $question->id }}" data-parent="#faq">
+                                    <div id="faq<?php echo e($question->id); ?>"
+                                        class="collapse <?php if($count == 1): ?> <?php echo e('show'); ?> <?php endif; ?>"
+                                        aria-labelledby="faqhead<?php echo e($question->id); ?>" data-parent="#faq">
                                         <div class="card-body">
-                                            {{ $question->answer }}
+                                            <?php echo e($question->answer); ?>
+
                                         </div>
                                     </div>
                                 </div>
-                                @php $count++ @endphp
-                            @endforeach
+                                <?php $count++ ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 mt-5">
                     <div class="about-img" data-aos="fade-left">
-                        <img src="{{ asset('public/assets/website/images') }}/faqs.png" alt="">
+                        <img src="<?php echo e(asset('public/assets/website/images')); ?>/faqs.png" alt="">
                     </div>
                 </div>
             </div>
@@ -815,50 +817,51 @@
             <div class="row justify-content-center">
                 <div class="testimonials-slider">
 
-                    @foreach ($testimonials as $testimonial)
+                    <?php $__currentLoopData = $testimonials; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $testimonial): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="d-flex justify-content-center h-100">
                             <div class="card-wrapper test-card-wrapper position-relative">
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="test-card-img-wrapper test-card-video-wrapper">
-                                            @if ($testimonial->image)
-                                                <img src="{{ asset('public/admin/assets/images/testimonials') }}/{{ $testimonial->image }}"
+                                            <?php if($testimonial->image): ?>
+                                                <img src="<?php echo e(asset('public/admin/assets/images/testimonials')); ?>/<?php echo e($testimonial->image); ?>"
                                                     alt="" loading="lazy">
-                                            @elseif($testimonial->video)
+                                            <?php elseif($testimonial->video): ?>
                                                 <video
-                                                    src="{{ asset('public/admin/assets/images/testimonials') }}/{{ $testimonial->video }}"
+                                                    src="<?php echo e(asset('public/admin/assets/images/testimonials')); ?>/<?php echo e($testimonial->video); ?>"
                                                     controls autoplay muted loop loading="lazy">
                                                 </video>
-                                            @else
-                                                <img src="{{ asset('public/admin/assets/images/testimonials/no-photo1.jpg') }}"
+                                            <?php else: ?>
+                                                <img src="<?php echo e(asset('public/admin/assets/images/testimonials/no-photo1.jpg')); ?>"
                                                     alt="" loading="lazy">
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                     <div class="col-lg-8">
 
                                         <h3 class="fs-24 mb-20 fw-400 for-p">
-                                            {!! $testimonial->comment !!}
+                                            <?php echo $testimonial->comment; ?>
+
                                         </h3>
                                         <div class="d-flex align-items-center test-card-bottom mb-22">
                                             <div>
-                                                <h4 class="mb-5">{{ $testimonial->name }}</h4>
+                                                <h4 class="mb-5"><?php echo e($testimonial->name); ?></h4>
                                             </div>
                                         </div>
                                         <ul class="ratings d-flex align-items-center gap-10">
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                @if ($i <= $testimonial->rating)
+                                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                                <?php if($i <= $testimonial->rating): ?>
                                                     <li><i class="fa-solid fa-star"></i></li>
-                                                @else
+                                                <?php else: ?>
                                                     <li><i class="fa-regular fa-star"></i></li>
-                                                @endif
-                                            @endfor
+                                                <?php endif; ?>
+                                            <?php endfor; ?>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
                 <div class="testimonials-arrows  pt-40  d-flex align-items-center gap-30 justify-content-center">
                     <div class="arrow-left arrows" title="Click to Previous Slide">
@@ -881,14 +884,14 @@
             </div>
         </div>
     </section>
-    @include('layouts.website.get-a-quote')
-    @include('layouts.website.collaburate-modal')
-    @include('website.include.plans')
-    @include('website.include.gift-plan')
+    <?php echo $__env->make('layouts.website.get-a-quote', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('layouts.website.collaburate-modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('website.include.plans', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('website.include.gift-plan', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
 
-    <script src="{{ asset('public/assets/website/vendor/aos/aos.js') }}"></script>
+    <script src="<?php echo e(asset('public/assets/website/vendor/aos/aos.js')); ?>"></script>
     <script>
         AOS.init({
             duration: 1000,
@@ -897,4 +900,6 @@
             mirror: false
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.website.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xamp-new\htdocs\never-forget\resources\views/website/index.blade.php ENDPATH**/ ?>
