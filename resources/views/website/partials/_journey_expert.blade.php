@@ -148,7 +148,7 @@
                         <div class="col-lg-8">
                             <h2 class="heading fs-74 mb-30" data-aos="flip-left" data-aos-easing="ease-out-cubic"
                                 data-aos-duration="1000">
-                                Inquiry for <span>Travel & Experience</span>
+                                Travel <span>& Experience</span>
                             </h2>
                         </div>
                     </div>
