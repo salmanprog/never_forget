@@ -93,8 +93,8 @@
                 <thead>
                     <tr>
                         <th>Features</th>
-                        <th>Basic</th>
-                        <th>Standard</th>
+                        <th>Essential</th>
+                        <th>Growth</th>
                         <th>Enterprise</th>
                     </tr>
                 </thead>
