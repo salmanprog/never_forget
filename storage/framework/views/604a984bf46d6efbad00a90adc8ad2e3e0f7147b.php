@@ -1,4 +1,4 @@
-@php
+<?php
     if (Auth::user()->hasRole('Admin')) {
         $layout = 'layouts.admin.app';
     } elseif (Auth::user()->hasRole('Individual')) {
@@ -8,19 +8,19 @@
     } else {
         $layout = 'layouts.company.app';
     }
-@endphp
+?>
 
-@extends($layout)
-@section('title', $page_title)
-@section('content')
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('content'); ?>
 
     <section class="content-header">
         <div class="content-header-left">
             <h1>Show Order Details</h1>
         </div>
         <div class="content-header-right">
-            @include('includes.buttons.back')
-            <a href="{{ route('order.index') }}" class="btn btn-primary btn-sm">View All</a>
+            <?php echo $__env->make('includes.buttons.back', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+            <a href="<?php echo e(route('order.index')); ?>" class="btn btn-primary btn-sm">View All</a>
         </div>
     </section>
 
@@ -36,27 +36,28 @@
                         <table class="table table-bordered">
                             <tr>
                                 <th>Name</th>
-                                <td>{{ optional($model->hasCustomer)->first_name ?? '' }} {{ optional($model->hasCustomer)->last_name ?? 'Not Provided' }}</td>
+                                <td><?php echo e($model->hasCustomer->first_name ?? ''); ?> <?php echo e($model->hasCustomer->last_name ?? 'Not Provided'); ?></td>
                             </tr>
                             <tr>
                                 <th>Email</th>
-                                <td>{{ optional($model->hasCustomer)->email ?? 'Not Provided' }}</td>
+                                <td><?php echo e($model->hasCustomer->email ?? 'Not Provided'); ?></td>
                             </tr>
                             <tr>
                                 <th>Phone</th>
-                                <td>{{ optional($model->hasCustomer)->phone ?? 'Not Provided' }}</td>
+                                <td><?php echo e($model->hasCustomer->phone ?? 'Not Provided'); ?></td>
                             </tr>
                             <tr>
                                 <th>Address</th>
                                 <td>
-                                    @if($model->hasBillingAddress)
-                                        <strong>Street: </strong> {{ $model->hasBillingAddress->street }}<br>
-                                        <strong>City: </strong> {{ $model->hasBillingAddress->town }}<br>
-                                        <strong>Country: </strong> {{ $model->hasBillingAddress->country }}<br>
-                                        <strong>Postcode: </strong> {{ $model->hasBillingAddress->postcode }}
-                                    @else
+                                    <?php if($model->hasBillingAddress): ?>
+                                        <strong>Street: </strong> <?php echo e($model->hasBillingAddress->street); ?><br>
+                                        <strong>City: </strong> <?php echo e($model->hasBillingAddress->town); ?><br>
+                                        <strong>Country: </strong> <?php echo e($model->hasBillingAddress->country); ?><br>
+                                        <strong>Postcode: </strong> <?php echo e($model->hasBillingAddress->postcode); ?>
+
+                                    <?php else: ?>
                                         <span class="text-danger">Not Provided</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         </table>
@@ -80,38 +81,39 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php($counter = 0)
-                                @foreach ($model->hasOrderDetails as $product)
+                                <?php ($counter = 0); ?>
+                                <?php $__currentLoopData = $model->hasOrderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                                     <tr>
-                                        <td>{{ ++$counter }}.</td>
-                                        <td>{{ $product->product_slug }}</td>
+                                        <td><?php echo e(++$counter); ?>.</td>
+                                        <td><?php echo e($product->product_slug); ?></td>
                                         <td>
-                                            @if (!empty($product->productsItem) && !empty($product->productsItem->image))
-                                                <img src="{{ asset('public/admin/assets/images/product/' . $product->productsItem->image) }}"
+                                            <?php if(!empty($product->productsItem) && !empty($product->productsItem->image)): ?>
+                                                <img src="<?php echo e(asset('public/admin/assets/images/product/' . $product->productsItem->image)); ?>"
                                                     alt="Product Image" style="height:100px; width:150px;">
-                                            @else
-                                                <img src="{{ asset('public/admin/assets/images/product/no-photo1.jpg') }}"
+                                            <?php else: ?>
+                                                <img src="<?php echo e(asset('public/admin/assets/images/product/no-photo1.jpg')); ?>"
                                                     alt="No Image" style="height:100px; width:150px;">
-                                            @endif
+                                            <?php endif; ?>
                                         </td>
                                         <td>
-                                            @if ($product->variation_id)
+                                            <?php if($product->variation_id): ?>
                                                 <?php $variation = App\Models\Variations::where('id', $product->variation_id)->first(); ?>
-                                                @if ($variation)
-                                                    {{ $variation->name }}
-                                                @else
+                                                <?php if($variation): ?>
+                                                    <?php echo e($variation->name); ?>
+
+                                                <?php else: ?>
                                                     <span class="badge badge-danger">No Variation</span>
-                                                @endif
-                                            @else
+                                                <?php endif; ?>
+                                            <?php else: ?>
                                                 <span class="badge badge-danger">No Variation</span>
-                                            @endif
+                                            <?php endif; ?>
                                         </td>
-                                        <td>{{ number_format($product->price, 2) }}</td>
-                                        <td>{{ $product->quantity }}</td>
-                                        <td>{{ number_format($product->price * $product->quantity, 2) }}</td>
+                                        <td><?php echo e(number_format($product->price, 2)); ?></td>
+                                        <td><?php echo e($product->quantity); ?></td>
+                                        <td><?php echo e(number_format($product->price * $product->quantity, 2)); ?></td>
                                     </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                         <!-- Order Info Section -->
@@ -130,43 +132,24 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{{ $model->order_number }}</td>
-                                    <td>{{ $model->created_at->format('d-m-Y H:i A') }}</td>
+                                    <td><?php echo e($model->order_number); ?></td>
+                                    <td><?php echo e($model->created_at->format('d-m-Y H:i A')); ?></td>
                                     <td>
-                                        @if ($model->order_status == 'Pending')
+                                        <?php if($model->order_status == 'Pending'): ?>
                                             <span class="badge label-info">Pending</span>
-                                        @elseif($model->order_status == 'Delivered')
+                                        <?php elseif($model->order_status == 'Delivered'): ?>
                                             <span class="badge label-warning">Delivered</span>
-                                        @elseif($model->order_status == 'Completed')
+                                        <?php elseif($model->order_status == 'Completed'): ?>
                                             <span class="badge label-success">Completed</span>
-                                        @elseif($model->order_status == 'Canceled')
+                                        <?php elseif($model->order_status == 'Canceled'): ?>
                                             <span class="badge label-danger">Canceled</span>
-                                        @endif
+                                        <?php endif; ?>
                                     </td>
-                                    <td>{{ $model->payment_status }}</td>
-                                    <td>{{ number_format($model->total_amount, 2) }}</td>
+                                    <td><?php echo e($model->payment_status); ?></td>
+                                    <td><?php echo e(number_format($model->total_amount, 2)); ?></td>
                                 </tr>
                             </tbody>
-                            {{-- <tr>
-                                <th>Order No#</th>
-                                <td>{{ $model->order_number }}</td>
-                            </tr>
-                            <tr>
-                                <th>Order Date</th>
-                                <td>{{ $model->created_at->format('d-m-Y H:i A') }}</td>
-                            </tr>
-                            <tr>
-                                <th>Order Status</th>
-
-                            </tr>
-                            <tr>
-                                <th>Payment Status</th>
-                                <td>{{ $model->payment_status }}</td>
-                            </tr>
-                            <tr>
-                                <th>Total Amount</th>
-                                <td>{{ number_format($model->total_amount, 2) }}</td>
-                            </tr> --}}
+                            
                         </table>
                     </div>
                 </div>
@@ -181,4 +164,6 @@
             });
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make($layout, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xamp-new\htdocs\never-forget\resources\views/admin/order/show.blade.php ENDPATH**/ ?>
