@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 mb-4 mb-lg-0">
                     <h3 class="heading text-white fs-32 mb-30">
-                        Quick <span>Link</span>
+                        Quick <span>Links</span>
                     </h3>
                     <ul class="footer-links" style="list-style: none; padding: 0;">
                         <li class="mb-10"><a class="navs text-white text-decoration-none {{ Route::currentRouteName() == 'index' ? 'active' : '' }}" href="{{ route('index') }}">Home</a></li>
