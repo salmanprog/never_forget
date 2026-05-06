@@ -13,6 +13,7 @@ class CreatePerfectGiftCategoryTable extends Migration
             $table->string('title');
             $table->string('images')->nullable();
             $table->text('description')->nullable();
+            $table->unsignedSmallInteger('sort_order')->default(0);
             $table->timestamps();
         });
     }

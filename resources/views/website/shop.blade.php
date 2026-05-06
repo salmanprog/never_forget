@@ -780,7 +780,7 @@
                         tabindex="0">
                         <div class="row justify-content-center">
                             @foreach ($perfectGifts as $perfectGift)
-                                <div class="col-lg-8 product-item visible">
+                                <div class="col-lg-4 product-item visible">
                                     <div class="gift-card-wrapper balloon-images">
                                         <img src="{{ asset('/public/' . $perfectGift->images) }}" alt="Perfect Gift">
                                         <div class="product-info">
