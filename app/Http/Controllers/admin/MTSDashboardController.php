@@ -36,7 +36,7 @@ class MTSDashboardController extends Controller
         if($request->ajax()){
             $query = User::orderby('id', 'desc')->where('id', '>', 0)
                 ->whereNotNull('account_type')
-                ->whereIn('account_type', ['Company', 'Individual', 'Sales Person']);
+                ->whereIn('account_type', ['Company', 'Individual']);
             
             // Normalize account_type filter: "All", empty, null, or "undefined" (from JS) = show all relevant types
             $accountType = $request->get('account_type') ?? $request->get('type');
@@ -93,7 +93,7 @@ class MTSDashboardController extends Controller
         
         $query = User::orderBy('id','DESC')
             ->whereNotNull('account_type')
-            ->whereIn('account_type', ['Company', 'Individual', 'Sales Person']);
+            ->whereIn('account_type', ['Company', 'Individual']);
         
         // Normalize account_type filter: "All", empty, null, or "undefined" (from JS) = show all relevant types
         $accountType = $request->get('account_type') ?? $request->get('type');

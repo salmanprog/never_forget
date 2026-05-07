@@ -85,9 +85,9 @@
                                             <option value="Company"
                                                 {{ request('account_type') == 'Company' ? 'selected' : '' }}>Company
                                             </option>
-                                            <option value="Sales Person"
+                                            <!-- <option value="Sales Person"
                                                 {{ request('account_type') == 'Sales Person' ? 'selected' : '' }}>Sales
-                                                Person</option>
+                                                Person</option> -->
                                         </select>
                                     </div>
                                 @elseif(Auth::user()->hasRole('Sales Person'))
