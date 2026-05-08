@@ -21,6 +21,7 @@ class CreateBillingAddressesTable extends Migration
             $table->string('company')->nullable();
             $table->string('country')->nullable();
             $table->string('street')->nullable();
+            $table->string('state')->nullable();
             $table->string('town')->nullable();
             $table->string('postcode')->nullable();
             $table->string('phone')->nullable();

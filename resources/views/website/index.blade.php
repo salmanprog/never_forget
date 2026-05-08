@@ -1,3 +1,4 @@
+{{-- home page --}}
 @extends('layouts.website.master')
 @section('title', $page_title)
 @section('meta')
@@ -6,9 +7,11 @@
 @endsection
 @section('content')
     <!-- Preload Slick fonts for better performance -->
-    <link rel="preload" href="{{ asset('public/assets/website/libs/fonts/slick.woff') }}" as="font" type="font/woff" crossorigin>
-    <link rel="preload" href="{{ asset('public/assets/website/libs/fonts/slick.ttf') }}" as="font" type="font/ttf" crossorigin>
-    
+    <link rel="preload" href="{{ asset('public/assets/website/libs/fonts/slick.woff') }}" as="font" type="font/woff"
+        crossorigin>
+    <link rel="preload" href="{{ asset('public/assets/website/libs/fonts/slick.ttf') }}" as="font" type="font/ttf"
+        crossorigin>
+
     <link href="{{ asset('public/assets/website/vendor/aos/aos.css') }}" rel="stylesheet">
 
 
@@ -19,15 +22,14 @@
             font-weight: 400;
             font-style: normal;
             font-display: swap;
-            src: url('{{ asset("public/assets/website/libs/fonts/slick.woff") }}') format('woff'),
-                 url('{{ asset("public/assets/website/libs/fonts/slick.ttf") }}') format('truetype');
+            src: url('{{ asset('public/assets/website/libs/fonts/slick.woff') }}') format('woff'),
+                url('{{ asset('public/assets/website/libs/fonts/slick.ttf') }}') format('truetype');
         }
-        
+
         .about-img {
             margin-top: 70px;
             text-align: center;
             height: 450px;
-            /* Fixed height for the image container */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -83,8 +85,8 @@
         }
 
         /* .about-info {
-        padding-right: 40px;
-    } */
+                                            padding-right: 40px;
+                                        } */
 
         .about-info h1 {
             font-size: 5rem;
@@ -208,9 +210,9 @@
                         Strengthen relationships, boost morale, and retain top talent with personalized corporate gifting
                         and employee appreciation programs.
                     </p>
-                    <a href="#" class="btn primary-btn border-0"><span>Explore Corporate Gifting Plans</span></a>
-                    <a href="tel:{{ $home_page_data['header_phone'] }}" class="btn primary-btn border-0"><span>Call
-                            Now</span></a>
+                    <a href="#plans-sec" class="btn primary-btn border-0"><span>Explore Corporate Gifting Plans</span></a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal"
+                        class="btn primary-btn border-0"><span>Request a call Back</span></a>
                 </div>
             </div>
         </div>
@@ -367,7 +369,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="testimonials-arrows  solution-arrows  d-flex align-items-center gap-30 justify-content-center">
+                        <div
+                            class="testimonials-arrows  solution-arrows  d-flex align-items-center gap-30 justify-content-center">
                             <div class="arrow-left arrows" title="Click to Previous Slide">
                                 <i class="fa-solid fa-arrow-left-long"></i>
                             </div>
@@ -396,7 +399,7 @@
                         Shop <span>Our Products</span>
                     </h2>
                     <p class="mb-30">
-                        Explore our curated collection of high-quality, personalized corporate gifts. 
+                        Explore our curated collection of high-quality, personalized corporate gifts.
                         From branded apparel to office essentials, we have everything you need to show your appreciation.
                     </p>
                 </div>
@@ -410,7 +413,9 @@
                                 <img src="{{ asset('public/admin/assets/images/product') }}/{{ $category->products->first()->image }}"
                                     alt="{{ $category->title }}" class="img-fluid">
                             @else
-                                <img src="{{ asset('public/assets/website/images') }}/gift-img.png"
+                                <!-- <img src="{{ asset('public/assets/website/images') }}/gift-img.png"
+                                                                        alt="{{ $category->title }}" class="img-fluid"> -->
+                                <img src="{{ asset('public/admin/assets/images/categories') }}/{{ $category->image }}"
                                     alt="{{ $category->title }}" class="img-fluid">
                             @endif
                         </div>
@@ -418,58 +423,106 @@
                             <h5 class="heading light-black fs-24 fw-600 mb-20">
                                 {{ $category->title }}
                             </h5>
-                            <a href="{{ route('shop', ['category' => $category->id]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                            <a href="{{ route('shop', ['category' => $category->id]) }}"
+                                class="btn primary-btn border-0"><span>See More</span></a>
                         </div>
                     </div>
                 @endforeach
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{asset('public/assets/website/images/greeting_card')}}/business_card.jpg"
-                                alt="Business Cards" class="img-fluid">
+                        <img src="{{ asset('public/assets/website/images/greeting_card') }}/business_card.jpg"
+                            alt="Business Cards" class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Business Cards
                         </h5>
-                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="{{ route('business-cards.create') }}" class="btn primary-btn border-0"><span>See
+                                More</span></a>
+                    </div>
+                </div>
+                <div class="card-wrapper">
+                    <div class="category-image mb-20">
+                        <img src="{{ asset('public/assets/website/images') }}/balloons/03.png" alt="Balloons"
+                            class="img-fluid">
+                    </div>
+                    <div class="card-bottom text-center">
+                        <h5 class="heading light-black fs-24 fw-600 mb-20">
+                            Balloons
+                        </h5>
+                        <a href="{{ route('shop', ['category' => 'balloons']) }}"
+                            class="btn primary-btn border-0"><span>See
+                                More</span></a>
+                    </div>
+                </div>
+                <div class="card-wrapper">
+                    <div class="category-image mb-20">
+                        <img src="{{ asset('public/assets/website/images') }}/perfect-gifts/01.png" alt="Perfect Gifts"
+                            class="img-fluid">
+                    </div>
+                    <div class="card-bottom text-center">
+                        <h5 class="heading light-black fs-24 fw-600 mb-20">
+                            Perfect Gifts
+                        </h5>
+                        <a href="{{ route('shop', ['category' => 'perfect-gift']) }}"
+                            class="btn primary-btn border-0"><span>See
+                                More</span></a>
+                    </div>
+                </div>
+                <div class="card-wrapper">
+                    <div class="category-image mb-20">
+                        <img src="{{ asset('public/assets/website/images/e-card/03.jpeg') }}" alt="Perfect Gifts"
+                            class="img-fluid">
+                    </div>
+                    <div class="card-bottom text-center">
+                        <h5 class="heading light-black fs-24 fw-600 mb-20">
+                        E Card Samples
+                        </h5>
+                        <a href="{{ route('shop', ['category' => 'e-cards']) }}"
+                            class="btn primary-btn border-0"><span>See
+                                More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
                         <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/trade-show-desktop.webp"
-                                alt="Quality Logo" class="img-fluid">
+                            alt="Quality Logo" class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Quality Logo
                         </h5>
-                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="{{ route('shop', ['category' => 'qualitylogo']) }}"
+                            class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{asset('public/assets/website/images/')}}/travel-experience.jpeg"
-                                alt="Travel & Experience" class="img-fluid">
+                        <img src="{{ asset('public/assets/website/images/') }}/travel-experience.jpeg"
+                            alt="Travel & Experience" class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Travel & Experience
                         </h5>
-                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="{{ route('shop', ['category' => 'journey-expert']) }}"
+                            class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
                     <div class="category-image mb-20">
-                        <img src="{{asset('public/assets/website/images/greeting_card')}}/happybirthday.png"
-                                alt="Greeting and Appreciation" class="img-fluid">
+                        <img src="{{ asset('public/assets/website/images/greeting_card') }}/happybirthday.png"
+                            alt="Greeting and Appreciation" class="img-fluid">
                     </div>
                     <div class="card-bottom text-center">
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Greeting & Appreciation
                         </h5>
-                        <a href="{{ route('shop', ['category' => 0]) }}" class="btn primary-btn border-0"><span>See More</span></a>
+                        <a href="{{ route('shop', ['category' => 'greetings-appreciation']) }}"
+                            class="btn primary-btn border-0"><span>See More</span></a>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -493,7 +546,7 @@
                 </div>
             </div>
             <!-- <div class="d-flex flex-wrap flex-xl-nowrap row-gap-70 justify-content-center align-items-center gap-11 mb-30"
-                    data-aos="fade-down" data-aos-easing="ease-out-cubic" data-aos-duration="1000"> -->
+                                                        data-aos="fade-down" data-aos-easing="ease-out-cubic" data-aos-duration="1000"> -->
             <div class="slider benefit-slider" data-aos="fade-down" data-aos-easing="ease-out-cubic"
                 data-aos-duration="1000">
                 <div class="card-wrapper">
@@ -694,13 +747,13 @@
             </div>
         </div>
         <div class="d-flex justify-content-center mt-60">
-            <a href="tel:{{ $home_page_data['header_phone'] }}" class="btn primary-btn border-0 mx-auto">Talk to a
-                Corporate Gifting Specialist</a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#collaburateModal"
+                class="btn primary-btn border-0 mx-auto">Want to Collaborate? Let's Connect</a>
         </div>
     </section>
 
     @include('website.include.trusted')
-  
+
 
     <section class="about-section" data-aos="fade-up">
         <div class="container">
@@ -768,11 +821,12 @@
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="test-card-img-wrapper test-card-video-wrapper">
-                                            @if($testimonial->image)
+                                            @if ($testimonial->image)
                                                 <img src="{{ asset('public/admin/assets/images/testimonials') }}/{{ $testimonial->image }}"
                                                     alt="" loading="lazy">
                                             @elseif($testimonial->video)
-                                                <video src="{{ asset('public/admin/assets/images/testimonials') }}/{{ $testimonial->video }}"
+                                                <video
+                                                    src="{{ asset('public/admin/assets/images/testimonials') }}/{{ $testimonial->video }}"
                                                     controls autoplay muted loop loading="lazy">
                                                 </video>
                                             @else
@@ -808,7 +862,7 @@
                 </div>
                 <div class="testimonials-arrows  pt-40  d-flex align-items-center gap-30 justify-content-center">
                     <div class="arrow-left arrows" title="Click to Previous Slide">
-                        <svg width="50" height="24" viewBox="0 0 60 24" fill="none" 
+                        <svg width="50" height="24" viewBox="0 0 60 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <line x1="0" y1="12" x2="58" y2="12" stroke="black"
                                 stroke-width="2" />
@@ -828,6 +882,7 @@
         </div>
     </section>
     @include('layouts.website.get-a-quote')
+    @include('layouts.website.collaburate-modal')
     @include('website.include.plans')
     @include('website.include.gift-plan')
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>

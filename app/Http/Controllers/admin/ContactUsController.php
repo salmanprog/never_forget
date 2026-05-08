@@ -28,6 +28,9 @@ class ContactUsController extends Controller
                 }
             $query->where('status' , $request['status']);
             }
+            if($request['type'] != 'All'){
+                $query->where('type' , $request['type']);
+            }
             $models= $query->paginate(10);
             return (string) view('admin.contact_us.search' , compact('models'));
         }
@@ -67,6 +70,7 @@ class ContactUsController extends Controller
         ]);
 
         $model = new ContactUs();
+        $model->type = $request->filled('type') ? $request->type : 'request_a_quote';
         $model->first_name = $request->first_name;
         $model->last_name = $request->last_name;
         $model->email = $request->email;

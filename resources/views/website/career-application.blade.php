@@ -84,7 +84,7 @@
     }
 
     /* Custom SweetAlert Styling */
-    .swal2-popup {
+    /* .swal2-popup {
         border-radius: 20px !important;
         font-family: inherit !important;
     }
@@ -117,7 +117,7 @@
     .swal2-success-line-tip,
     .swal2-success-line-long {
         background-color: #0B1B48 !important;
-    }
+    } */
 </style>
 <!-- Inner Page Banner  -->
 <main class="inner-bg">
@@ -1369,7 +1369,98 @@
     <span class="text-danger">{{ $message }}</span>
 @enderror
                         </div> -->
+                        <h4 class="heading fs-20 mb-10 aos-init aos-animate">Applicant Certification & Legal Notices
+                        </h4>
+                        <h5 class="heading fs-20 mb-10 aos-init aos-animate"><span>By submitting this application, you
+                                acknowledge and agree to the following:</span></h5>
+                        <div class="d-flex gap-10 mb-20">
+                            {{-- add error message if the checkbox is not checked --}}
 
+                            <div>
+                                1.
+                            </div>
+                            <div>
+                                <label class="form-check-label text-start" for="consent1">I certify that all information provided is true, complete, and accurate to the best of my knowledge. I understand that false or misleading information may result in disqualification or termination.</label>
+                            </div>
+                            @error('consent1')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="d-flex gap-10 mb-20">
+
+                            <div>
+                                2.
+                            </div>
+                            <div>
+                                <label class="form-check-label text-start" for="consent2">I understand that this is an application for employment and does not guarantee a job offer.
+                                </label>
+                            </div>
+                            @error('consent2')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="d-flex gap-10 mb-20">
+                            <div>
+                                3.
+                            </div>
+                            <div>
+                                <label class="form-check-label text-start" for="consent3">I understand that employment with NEVER FORGET LLC is “at-will.” This means that either NEVER FORGET LLC or I may terminate employment at any time, with or without cause or notice, as permitted by law.
+                                </label>
+                            </div>
+                            @error('consent3')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="d-flex gap-10 mb-20">
+                            <div>
+                                4.
+                            </div>
+                            <div>
+                                <label class="form-check-label text-start" for="consent4">Equal Employment Opportunity Statement:
+                                    NEVER FORGET LLC is an Equal Opportunity Employer. We do not discriminate based on race, color, religion, sex (including pregnancy, gender identity, and sexual orientation), national origin, age, disability, genetic information, veteran status, or any other characteristic protected by law. Employment decisions are based on qualifications, merit, and business needs.
+                                </label>
+                            </div>
+                            @error('consent4')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="d-flex gap-10 mb-20">
+                            <div>
+                                5.
+                            </div>
+                            <div>
+                                <label class="form-check-label text-start" for="consent4">I authorize NEVER FORGET LLC to contact references, former employers, confirm work history, and verify any information provided, as permitted by law.
+                                </label>
+                            </div>
+                            @error('consent4')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="d-flex gap-10 mb-20">
+                            <div>
+                                6.
+                            </div>
+                            <div>
+                                <label class="form-check-label text-start" for="consent4">6.	I understand that NEVER FORGET LLC will provide reasonable accommodations to qualified applicants with disabilities upon request.
+                                </label>
+                            </div>
+                            @error('consent4')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="d-flex gap-10 mb-20">
+                            <div>
+                                <input type="checkbox" id="consent4" name="consent4" class="input-field mt-5" required
+                                    value="1">
+                            </div>
+                            <div>
+                                <label class="form-check-label text-start" for="consent4">I acknowledge that I have read and agree to all of the above terms.
+                                </label>
+                            </div>
+                            @error('consent4')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-primary btn-lg"> Submit Application <i
                                     class="fas fa-paper-plane ms-2"></i></button>

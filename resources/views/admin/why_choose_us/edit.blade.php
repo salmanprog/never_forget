@@ -7,6 +7,7 @@
 		<h1>Edit Why Choose Us</h1>
 	</div>
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('why_choose_us.index') }}" class="btn btn-primary btn-sm">View All</a>
 	</div>
 </section>

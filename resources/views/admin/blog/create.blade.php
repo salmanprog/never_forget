@@ -18,53 +18,34 @@
 				<div class="box box-info">
 					<div class="box-body">
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Category <span style='color:red'>*</span></label>
-							<div class="col-sm-9">
-								<select name="category_slug" id="" class="form-control">
-									<option value="" selected>Select category</option>
-									@foreach($categories as $category)
-										<option value="{{ $category->slug }}">{{ $category->name }}</option>
-									@endforeach
-								</select>
-								<span style="color: red">{{ $errors->first('category_id') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Title <span style='color:red'>*</span></label>
 							<div class="col-sm-9">
-								<input type="text" autocomplete="off" class="form-control" name="title" value="" placeholder="Enter title">
+								<input type="text" autocomplete="off" class="form-control" name="title" value="{{ old('title') }}" placeholder="Enter blog title">
 								<span style="color: red">{{ $errors->first('title') }}</span>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Description </label>
+							<label for="" class="col-sm-2 control-label">Description <span style='color:red'>*</span></label>
 							<div class="col-sm-9">
-								<textarea class="form-control texteditor" name="description" maxlength="200" style="height:140px;" placeholder="Describe post"></textarea>
+								<textarea class="form-control texteditor" name="description" style="height:200px;" placeholder="Enter blog description">{{ old('description') }}</textarea>
 								<span style="color: red">{{ $errors->first('description') }}</span>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Post </label>
+							<label for="" class="col-sm-2 control-label">Image </label>
 							<div class="col-sm-9" style="padding-top:5px">
-								<input type="file" name="post" class="form-control">
-								<span style="color: red">{{ $errors->first('post') }}</span>
+								<input type="file" name="image" class="form-control" accept="image/*">
+								<span style="color: red">{{ $errors->first('image') }}</span>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Paid/Free </label>
-							<div class="col-sm-9" style="padding-top:5px">
-							<div class="form-check">
-								<input class="form-check-input" type="radio" value="1" name="paid_free" id="paid" checked>
-								<label class="form-check-label" for="paid">
-								  Paid
-								</label>
-							</div>
-							<div class="form-check">
-								<input class="form-check-input" type="radio" value="0" name="paid_free" id="free">
-								<label class="form-check-label" for="free">
-								  Free
-								</label>
-							</div>
+							<label for="" class="col-sm-2 control-label">Status <span style='color:red'>*</span></label>
+							<div class="col-sm-9">
+								<select name="status" class="form-control" id="">
+									<option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Active</option>
+									<option value="0" {{ old('status') == '0' ? 'selected' : '' }}>In-Active</option>
+								</select>
+								<span style="color: red">{{ $errors->first('status') }}</span>
 							</div>
 						</div>
 						<div class="form-group">
@@ -87,21 +68,21 @@
 			tinymce.init({
 				selector: "textarea.texteditor",
 				theme: "modern",
-				height: 150,
+				height: 200,
 				plugins: [
 					"advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
 					"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
 					"save table contextmenu directionality emoticons template paste textcolor"
 				],
-				toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
-
+				toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons",
 			});
 		}
 
 		$("#regform").validate({
 			rules: {
-				category_id: "required",
-				title: "required"
+				title: "required",
+				description: "required",
+				status: "required"
 			}
 		});
 	});

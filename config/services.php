@@ -33,6 +33,7 @@ return [
     'google' => [
         'project_id' => env('GOOGLE_CLOUD_PROJECT_ID'),
         'key_file' => env('GOOGLE_CLOUD_KEY_FILE'),
+        'places_key' => env('GOOGLE_PLACES_KEY'),
     ],
     'stripe' => [
         'key' => env('STRIPE_KEY'),
@@ -44,6 +45,25 @@ return [
         'secret' => env('VONAGE_API_SECRET'),
         'brand_name' => env('VONAGE_BRAND_NAME', 'MyApp'),
     ],
+    'taxjar' => [
+        'api_key' => env('TAXJAR_API_KEY'),
+    ],
+
+    'twilio' => [
+        'account_sid' => trim((string) env('TWILIO_ACCOUNT_SID', '')),
+        'auth_token' => trim((string) env('TWILIO_AUTH_TOKEN', '')),
+        'from' => trim((string) env('TWILIO_FROM_NUMBER', '')), // E.164 e.g. +18667640235 (SMS + Voice)
+        'agent_phone' => trim((string) env('TWILIO_AGENT_PHONE', '')), // Optional: fallback when logged-in user has no phone (click-to-call).
+    ],
+
+    'authorize' => [
+        'api_login_id' => env('AUTHORIZE_API_LOGIN_ID'),
+        'transaction_key' => env('AUTHORIZE_TRANSACTION_KEY'),
+        'client_key' => env('AUTHORIZE_CLIENT_KEY'),
+        'mode' => env('AUTHORIZE_MODE', 'sandbox'),
+        'api_url' => env('AUTHORIZE_MODE', 'sandbox') === 'live'
+            ? 'https://api.authorize.net/xml/v1/request.api'
+            : 'https://apitest.authorize.net/xml/v1/request.api',
+    ],
 
 ];
-

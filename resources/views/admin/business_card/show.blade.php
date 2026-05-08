@@ -6,7 +6,7 @@
 		<h1>Show Service Details</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="{{ route('service.index') }}" class="btn btn-primary btn-sm">View All</a>
+		@include('includes.buttons.back')
 	</div>
 </section>
 

@@ -1,16 +1,32 @@
-@extends('layouts.admin.app')
+@php
+    if (Auth::user()->hasRole('Admin')) {
+        $layout = 'layouts.admin.app';
+    } elseif (Auth::user()->hasRole('Individual')) {
+        $layout = 'layouts.individual.app';
+    } elseif (Auth::user()->hasRole('Company')) {
+        $layout = 'layouts.company.app';
+    } else {
+        $layout = 'layouts.company.app';
+    }
+@endphp
+
+@extends($layout)
 @section('title', $page_title)
 @section('content')
 <input type="hidden" id="page_url" value="{{ route('user.index') }}">
+<input type="hidden" id="type" value="{{ request()->get('type', '') }}">
 <section class="content-header">
     <div class="content-header-left">
         <h1>{{ $page_title }}</h1>
     </div>
-    {{-- @can('user-create')
     <div class="content-header-right">
-        <a href="{{ route('user.create') }}" class="btn btn-primary btn-sm">Add New</a>
+        @include('includes.buttons.back')
+        @can('user-create')
+            @if(request()->get('type') == 'salesperson')
+            <a href="{{ route('user.create', ['type' => 'salesperson']) }}" class="btn btn-primary btn-sm">Add New Sales Person</a>
+            @endif
+        @endcan
     </div>
-    @endcan --}}
 </section>
 <style> 
     .badge-company {
@@ -31,6 +47,12 @@
         background-color: #6c757d !important;
         color: white !important;
     }
+    .badge-salesperson {
+        padding: 5px 10px;
+        border-radius: 4px;
+        background-color: #28a745 !important;
+        color: white !important;
+    }
 </style>
 
 <section class="content">
@@ -38,7 +60,12 @@
         <div class="col-md-12">
             @if (session('success'))
                 <div class="callout callout-success">
-                    {{ session('status') }}
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if (session('message'))
+                <div class="callout callout-success">
+                    {{ session('message') }}
                 </div>
             @endif
 
@@ -83,6 +110,11 @@
                                             <span class="badge badge-company">
                                                 Company
                                             </span>
+                                        @elseif($user->account_type == 'Sales Person')
+                                            <span class="badge badge-salesperson">
+                                                Sales Person
+                                            </span>
+                                            
                                         @else
                                             <span class="badge badge-individual">
                                                 Individual
@@ -100,6 +132,12 @@
                                         @can('user-edit')
                                             <a href="{{ route('user.edit', $user->id)}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
                                         @endcan
+                                        @if($user->account_type == 'Company' && $user->administeredCompany)
+                                            <a href="{{ route('user.resources', $user->id) }}" class="btn btn-info btn-xs"><i class="fa fa-list"></i> View Resources</a>
+                                        @endif
+                                        @if($user->account_type == 'Individual')
+                                            <a href="{{ route('user.friends_family', $user->id) }}" class="btn btn-info btn-xs"><i class="fa fa-list"></i> View Friends/Family</a>
+                                        @endif
                                         {{-- @can('user-delete')
                                             <button class="btn btn-danger btn-xs delete" data-slug="{{ $user->id }}" data-del-url="{{ url('user', $user->id) }}"><i class="fa fa-trash"></i> Delete</button>
                                         @endcan --}}

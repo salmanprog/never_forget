@@ -21,6 +21,7 @@ class CreateOrdersTable extends Migration
             $table->string('coupon_id')->nullable();
             $table->string('payment_id')->nullable();
             $table->string('payment_method')->nullable()->comment('Paytroit Payment');
+            $table->decimal('tax_amount', 10, 2)->default(0)->after('order_date');
             $table->bigInteger('total_amount');
             $table->string('discount_type')->nullable();
             $table->float('discount_amount')->nullable();

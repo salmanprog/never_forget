@@ -32,7 +32,7 @@ class SetLocale
             $locale = $request->getPreferredLanguage(config('app.available_locales', ['en'])) ?? config('app.locale');
         }
 
-        App::setLocale($locale);
+        App::setLocale('en');
         
         return $next($request);
     }

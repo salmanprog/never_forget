@@ -6,9 +6,9 @@
 	<div class="content-header-left">
 		<h1>All Blogs</h1>
 	</div>
-	@can('category-create')
+	@can('blog-create')
 	<div class="content-header-right">
-		<a href="{{ route('blog.create') }}" class="btn btn-primary btn-sm">Add blog</a>
+		<a href="{{ route('blog.create') }}" class="btn btn-primary btn-sm">Add Blog</a>
 	</div>
 	@endcan
 </section>
@@ -19,6 +19,11 @@
 			@if (session('status'))
 				<div class="callout callout-success">
 					{{ session('status') }}
+				</div>
+			@endif
+			@if (session('message'))
+				<div class="callout callout-success">
+					{{ session('message') }}
 				</div>
 			@endif
 
@@ -41,37 +46,26 @@
 						<thead>
 							<tr>
 								<th>SL</th>
-								<th>Post</th>
-								<th>Category</th>
+								<th>Image</th>
 								<th>Title</th>
 								<th>Description</th>
-								<th>Paid/Free</th>
 								<th>Status</th>
-								<th>Created at</th>
 								<th width="140">Action</th>
 							</tr>
 						</thead>
 						<tbody id="body">
 							@foreach($models as $key=>$model)
-								<tr id="id-{{ $model->slug }}">
+								<tr id="id-{{ $model->id }}">
 									<td>{{ $models->firstItem()+$key }}.</td>
 									<td>
-										@if($model->post)
-											<img src="{{ asset('public/admin/assets/posts/'.$model->post) }}" alt="" style="width:60px;">
+										@if($model->image)
+											<img src="{{ asset('public/admin/assets/posts/'.$model->image) }}" alt="" style="width:60px; height:60px; object-fit:cover;">
 										@else
-											<img src="{{ asset('public/admin/assets/posts/no-photo1.jpg') }}" style="width:60px;">
+											<img src="{{ asset('public/admin/assets/img/no-photo1.jpg') }}" style="width:60px;">
 										@endif
 									</td>
-									<td>{{ isset($model->hasCategory)?$model->hasCategory->name:'N/A' }}</td>
 									<td>{!! \Illuminate\Support\Str::limit($model->title,40) !!}</td>
-									<td>{!! \Illuminate\Support\Str::limit($model->description,60) !!}</td>
-									<td>
-										@if($model->paid_free)
-											<span class="badge badge-info">Paid</span>
-										@else
-											<span class="badge badge-primary">Free</span>
-										@endif
-									</td>
+									<td>{!! \Illuminate\Support\Str::limit(strip_tags($model->description),60) !!}</td>
 									<td>
 										@if($model->status)
 											<span class="badge badge-success">Active</span>
@@ -79,19 +73,18 @@
 											<span class="badge badge-danger">In-Active</span>
 										@endif
 									</td>
-									<td>{{ date('d, F-Y H:i:s A', strtotime($model->created_at)) }}</td>
 									<td width="250px">
 										@can('blog-edit')
-											<a href="{{route('blog.edit', $model->slug)}}" data-toggle="tooltip" data-placement="top" title="Edit post" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
+											<a href="{{route('blog.edit', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Edit blog" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
 										@endcan
 										@can('blog-delete')
-                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $model->slug }}" data-del-url="{{ url('blog', $model->slug) }}"><i class="fa fa-trash"></i> Delete</button>
+                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $model->id }}" data-del-url="{{ url('blog', $model->id) }}"><i class="fa fa-trash"></i> Delete</button>
 										@endcan
 									</td>
 								</tr>
 							@endforeach
                             <tr>
-                                <td colspan="9">
+                                <td colspan="7">
 									Displying {{$models->firstItem()}} to {{$models->lastItem()}} of {{$models->total()}} records
                                     <div class="d-flex justify-content-center">
                                         {!! $models->links('pagination::bootstrap-4') !!}
@@ -108,4 +101,61 @@
 @endsection
 
 @push('js')
+<script>
+	$(document).ready(function() {
+		$("#search").keyup(function() {
+			var value = $(this).val();
+			if(value.length > 2 || value.length == 0) {
+				$.ajax({
+					url: "{{ route('blog.index') }}",
+					type: "GET",
+					data: {
+						search: value,
+						status: $("#status").val()
+					},
+					success: function(data) {
+						$("#body").html(data);
+					}
+				});
+			}
+		});
+
+		$("#status").change(function() {
+			var value = $(this).val();
+			$.ajax({
+				url: "{{ route('blog.index') }}",
+				type: "GET",
+				data: {
+					search: $("#search").val(),
+					status: value
+				},
+				success: function(data) {
+					$("#body").html(data);
+				}
+			});
+		});
+
+		$(".delete").click(function() {
+			var slug = $(this).attr("data-slug");
+			var del_url = $(this).attr("data-del-url");
+			if (confirm("Are you sure you want to delete this blog?")) {
+				$.ajax({
+					url: del_url,
+					type: "DELETE",
+					data: {
+						_token: "{{ csrf_token() }}"
+					},
+					success: function(response) {
+						if(response) {
+							$("#id-"+slug).fadeOut();
+							alert("Blog deleted successfully");
+						} else {
+							alert("Failed to delete blog");
+						}
+					}
+				});
+			}
+		});
+	});
+</script>
 @endpush

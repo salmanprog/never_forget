@@ -318,7 +318,8 @@
         cursor: -webkit-grabbing;
         user-select: none;
     }
-    .swiper-container-wrapper .swiper-button-prev, 
+
+    .swiper-container-wrapper .swiper-button-prev,
     .swiper-container-wrapper .swiper-button-next {
         background-color: #cfa40c;
         color: white;
@@ -332,12 +333,41 @@
         height: 30px;
         top: 40%;
     }
+
     .swiper-container-wrapper .swiper-button-next {
         right: -50px;
     }
+
     .swiper-container-wrapper .swiper-button-prev {
         left: -50px;
     }
+
+    .gift-card-wrapper.balloon-images img {
+        width: 100%;
+        height: 326px;
+        object-fit: contain;
+        background-color: #0b1b48;
+    }
+
+    .balloon-btn {
+        max-width: max-content;
+    }
+    .e-card-wrapper .product-info {
+        position: relative;
+    }
+    .e-card-wrapper .product-title {
+        min-height: 50px;
+    }
+    .e-card-wrapper p {
+        min-height: 240px;
+    }
+    .e-card-wrapper a {
+        position: absolute;
+        bottom: 17px;
+        left: 0;
+        right: 0;
+    }
+
     /* .shop-nav-slider .swiper-button-next:after,
     .shop-nav-slider .swiper-button-prev:after {
         width: 20px;
@@ -391,23 +421,44 @@
                                 </li>
                             @endforeach
                             <li class="nav-item swiper-slide" role="presentation">
-                                <a href="{{ route('business-cards.create') }}" class="nav-link">Business Cards</a>
+                                <a href="{{ route('shop', ['category' => 'balloons']) }}"
+                                    class="nav-link {{ request('category') == 'balloons' ? 'active' : '' }}"
+                                    id="pills-balloons-tab" role="tab">Balloons</a>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link" id="pills-qualitylogo-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-qualitylogo" type="button" role="tab"
-                                    aria-controls="pills-qualitylogo" aria-selected="false">Quality Logo</button>
+                                <a href="{{ route('shop', ['category' => 'perfect-gift']) }}"
+                                    class="nav-link {{ request('category') == 'perfect-gift' ? 'active' : '' }}"
+                                    id="pills-perfect-gift-tab" role="tab">Perfect Gifts</a>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link" id="pills-journey-expert-tab" data-bs-toggle="pill"
+                                <a href="{{ route('shop', ['category' => 'e-cards']) }}"
+                                    class="nav-link {{ request('category') == 'e-cards' ? 'active' : '' }}"
+                                    id="pills-e-cards-tab" role="tab">E Cards</a>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
+                                <button class="nav-link {{ request('category') == 'qualitylogo' ? 'active' : '' }}"
+                                    id="pills-qualitylogo-tab" data-bs-toggle="pill" data-bs-target="#pills-qualitylogo"
+                                    type="button" role="tab" aria-controls="pills-qualitylogo"
+                                    aria-selected="{{ request('category') == 'qualitylogo' ? 'true' : 'false' }}">Quality
+                                    Logo</button>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
+                                <button class="nav-link {{ request('category') == 'journey-expert' ? 'active' : '' }}"
+                                    id="pills-journey-expert-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-journey-expert" type="button" role="tab"
-                                    aria-controls="pills-journey-expert" aria-selected="false">Travel &
+                                    aria-controls="pills-journey-expert"
+                                    aria-selected="{{ request('category') == 'journey-expert' ? 'true' : 'false' }}">Travel
+                                    &
                                     Experience</button>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
-                                <button class="nav-link" id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
+                                <button
+                                    class="nav-link {{ request('category') == 'greetings-appreciation' ? 'active' : '' }}"
+                                    id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-greetings-appreciation" type="button" role="tab"
-                                    aria-controls="pills-greetings-appreciation" aria-selected="false">Greetings and
+                                    aria-controls="pills-greetings-appreciation"
+                                    aria-selected="{{ request('category') == 'greetings-appreciation' ? 'true' : 'false' }}">Greetings
+                                    and
                                     Appreciation </button>
                             </li>
                         </ul>
@@ -420,8 +471,7 @@
                     <div class="tab-pane fade {{ !request('category') ? 'show active' : '' }}" id="pills-All"
                         role="tabpanel" aria-labelledby="pills-All-tab" tabindex="0">
                         <div class="row" id="all-products">
-                            @foreach ($categories as $category)
-                                @foreach ($category->products as $product)
+                            @foreach ($products->take($shopProductsPerPage) as $product)
                                     <div class="col-lg-4 col-md-6 product-item visible">
                                         <div class="gift-card-wrapper">
                                             <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
@@ -455,19 +505,26 @@
                                                         <span>4.8</span>
                                                     </div>
                                                 </div>
-                                                <a href="{{ route('single-product', $product->slug) }}"
-                                                    class="add-to-cart">
-                                                    @if ($product->product_type == 0)
-                                                        Add To Cart
-                                                    @else
-                                                        Select Options
-                                                    @endif
-                                                    <i class="fas fa-arrow-right ms-2"></i>
-                                                </a>
+                                                <div class="d-flex align-items-center product-action-wrapper">
+                                                    <a href="{{ route('single-product', $product->slug) }}"
+                                                        class="add-to-cart">
+                                                        @if ($product->product_type == 0)
+                                                            Add To Cart
+                                                        @else
+                                                            Select Options
+                                                        @endif
+                                                        <i class="fas fa-arrow-right ms-2"></i>
+                                                    </a>
+                                                    <button
+                                                        class="wishlist-btn {{ in_array($product->id, $wishlistProductIds) ? 'active' : '' }}"
+                                                        data-product-id="{{ $product->id }}">
+
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
                             @endforeach
                         </div>
                         <div class="text-center loading-spinner" id="loading-spinner">
@@ -545,15 +602,23 @@
                                                     <span>4.8</span>
                                                 </div>
                                             </div>
-                                            <a href="{{ route('single-product', $product->slug) }}"
-                                                class="add-to-cart">
-                                                @if ($product->product_type == 0)
-                                                    Add To Cart
-                                                @else
-                                                    Select Options
-                                                @endif
-                                                <i class="fas fa-arrow-right ms-2"></i>
-                                            </a>
+                                            <div class="d-flex align-items-center product-action-wrapper">
+                                                <a href="{{ route('single-product', $product->slug) }}"
+                                                    class="add-to-cart">
+                                                    @if ($product->product_type == 0)
+                                                        Add To Cart
+                                                    @else
+                                                        Select Options
+                                                    @endif
+                                                    <i class="fas fa-arrow-right ms-2"></i>
+                                                </a>
+                                                <button
+                                                    class="wishlist-btn {{ in_array($product->id, $wishlistProductIds) ? 'active' : '' }}"
+                                                    data-product-id="{{ $product->id }}">
+
+                                                    <i class="fas fa-heart"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -566,23 +631,26 @@
                     </div>
 
                     <!-- Quality Logo Tab -->
-                    <div class="tab-pane fade" id="pills-qualitylogo" role="tabpanel"
-                        aria-labelledby="pills-qualitylogo-tab" tabindex="0">
+                    <div class="tab-pane fade {{ request('category') == 'qualitylogo' ? 'show active' : '' }}"
+                        id="pills-qualitylogo" role="tabpanel" aria-labelledby="pills-qualitylogo-tab"
+                        tabindex="0">
                         <div class="row">
                             @include('website.partials._quality_logo_category')
                         </div>
                     </div>
 
                     <!-- Journey Expert Tab -->
-                    <div class="tab-pane fade" id="pills-journey-expert" role="tabpanel"
-                        aria-labelledby="pills-journey-expert-tab" tabindex="0">
+                    <div class="tab-pane fade {{ request('category') == 'journey-expert' ? 'show active' : '' }}"
+                        id="pills-journey-expert" role="tabpanel" aria-labelledby="pills-journey-expert-tab"
+                        tabindex="0">
                         <div class="row">
                             @include('website.partials._journey_expert')
                         </div>
                     </div>
 
                     <!-- Greeting and appreciation Tab -->
-                    <div class="tab-pane fade" id="pills-greetings-appreciation" role="tabpanel"
+                    <div class="tab-pane fade {{ request('category') == 'greetings-appreciation' ? 'show active' : '' }}"
+                        id="pills-greetings-appreciation" role="tabpanel"
                         aria-labelledby="pills-greetings-appreciation-tab" tabindex="0">
                         <div class="row">
                             @include('website.partials._greetings_appreciation')
@@ -596,7 +664,7 @@
                             id="pills-{{ $category->id }}" role="tabpanel"
                             aria-labelledby="pills-{{ $category->id }}-tab" tabindex="0">
                             <div class="row" id="category-products-{{ $category->id }}">
-                                @forelse($category->products as $product)
+                                @forelse($category->products->take($shopProductsPerPage) as $product)
                                     <div class="col-lg-4 col-md-6 product-item visible">
                                         <div class="gift-card-wrapper">
                                             <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
@@ -630,15 +698,23 @@
                                                         <span>4.8</span>
                                                     </div>
                                                 </div>
-                                                <a href="{{ route('single-product', $product->slug) }}"
-                                                    class="add-to-cart">
-                                                    @if ($product->product_type == 0)
-                                                        Add To Cart
-                                                    @else
-                                                        Select Options
-                                                    @endif
-                                                    <i class="fas fa-arrow-right ms-2"></i>
-                                                </a>
+                                                <div class="d-flex align-items-center product-action-wrapper">
+                                                    <a href="{{ route('single-product', $product->slug) }}"
+                                                        class="add-to-cart">
+                                                        @if ($product->product_type == 0)
+                                                            Add To Cart
+                                                        @else
+                                                            Select Options
+                                                        @endif
+                                                        <i class="fas fa-arrow-right ms-2"></i>
+                                                    </a>
+                                                    <button
+                                                        class="wishlist-btn {{ in_array($product->id, $wishlistProductIds) ? 'active' : '' }}"
+                                                        data-product-id="{{ $product->id }}">
+
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -655,6 +731,117 @@
                             </div>
                         </div>
                     @endforeach
+
+
+                    <!-- balloons category tab -->
+                    <div class="tab-pane fade {{ request('category') == 'balloons' ? 'active show' : '' }}"
+                        id="pills-balloons" role="tabpanel" aria-labelledby="pills-balloons-tab" tabindex="0">
+                        <div class="row">
+                            @foreach ($balloons as $balloon)
+                                <div class="col-lg-4 col-md-6 product-item visible">
+                                    <div class="gift-card-wrapper balloon-images">
+                                        <img src="{{ asset('/public/' . $balloon->images) }}" alt="Balloons">
+                                        <div class="product-info">
+                                            <h3 class="product-title">{{ $balloon->title }}</h3>
+
+                                            @if (in_array($balloon->id, $addedBalloonIds ?? []))
+                                                <a href="{{ route('balloon-items') }}"
+                                                    class="add-to-cart balloon-btn"
+                                                    style="width:100%; text-align:center;">
+                                                    View
+                                                </a>
+                                            @else
+                                                <form class="balloon-form" method="POST"
+                                                    action="{{ route('create-balloon-enquiry-item') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="balloon_id"
+                                                        value="{{ $balloon->id }}">
+                                                    <input type="hidden" name="enquiry_id"
+                                                        value="{{ $balloon->enquiry_id }}">
+                                                    <input type="hidden" name="quantity" value="1"
+                                                        min="1">
+                                                    <button type="submit" class="add-to-cart balloon-btn"
+                                                        data-id='btnid' style="width: 100%">
+                                                        Add
+                                                    </button>
+                                                </form>
+                                            @endif
+
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- perfect gift category tab -->
+                    <div class="tab-pane fade {{ request('category') == 'perfect-gift' ? 'active show' : '' }}"
+                        id="pills-perfect-gift" role="tabpanel" aria-labelledby="pills-perfect-gift-tab"
+                        tabindex="0">
+                        <div class="row justify-content-center">
+                            @foreach ($perfectGifts as $perfectGift)
+                                <div class="col-lg-4 product-item visible">
+                                    <div class="gift-card-wrapper balloon-images">
+                                        <img src="{{ asset('/public/' . $perfectGift->images) }}" alt="Perfect Gift">
+                                        <div class="product-info">
+                                            <h3 class="product-title">{{ $perfectGift->title }}</h3>
+
+                                            @if (in_array($perfectGift->id, $addedPerfectGiftIds ?? []))
+                                                <a href="{{ route('perfect-gift-items') }}"
+                                                    class="add-to-cart balloon-btn"
+                                                    style="width:100%; text-align:center;">
+                                                    Create A Card
+                                                </a>
+                                            @else
+                                                <form class="perfect-gift-form" method="POST"
+                                                    action="{{ route('create-perfect-gift-enquiry-item') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="perfect_gift_id"
+                                                        value="{{ $perfectGift->id }}">
+                                                    <input type="hidden" name="quantity" value="1"
+                                                        min="1">
+                                                    <button type="submit" class="add-to-cart balloon-btn"
+                                                        data-id='btnid' style="width: 100%">
+                                                        Create A Card
+                                                    </button>
+                                                </form>
+                                            @endif
+
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="tab-pane fade {{ request('category') == 'e-cards' ? 'active show' : '' }}"
+                        id="pills-e-cards" role="tabpanel" aria-labelledby="pills-e-cards-tab"
+                        tabindex="0">
+                        <div class="row justify-content-center">
+                            @forelse ($eCardCategories as $eCardCategory)
+                                <div class="col-lg-4 col-md-6 product-item visible">
+                                    <div class="gift-card-wrapper balloon-images e-card-wrapper">
+                                        @if ($eCardCategory->image)
+                                            <img src="{{ asset('/public/' . $eCardCategory->image) }}"
+                                                alt="{{ $eCardCategory->title }}">
+                                        @endif
+                                        <div class="product-info">
+                                            <h3 class="product-title" style="height: auto; margin-bottom: 20px;">
+                                                {{ $eCardCategory->title }}</h3>
+                                            <p class="px-30 mb-10">{{ $eCardCategory->description }}</p>
+                                            <a href="{{ route('create-e-card', ['e_card_category_id' => $eCardCategory->id]) }}"
+                                                class="add-to-cart balloon-btn" style="width:100%; text-align:center;">
+                                                Create E Card
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="col-12 text-center">
+                                    <p>No E-Card categories available.</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -707,14 +894,22 @@
                                     <span>4.8</span>
                                 </div>
                             </div>
-                            <a href="{{ route('single-product', $product->slug) }}" class="add-to-cart">
-                                @if ($product->product_type == 0)
-                                    Add To Cart
-                                @else
-                                    Select Options
-                                @endif
-                                <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
+                            <div class="d-flex align-items-center product-action-wrapper">
+                                <a href="{{ route('single-product', $product->slug) }}" class="add-to-cart">
+                                    @if ($product->product_type == 0)
+                                        Add To Cart
+                                    @else
+                                        Select Options
+                                    @endif
+                                    <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                                <button
+                                    class="wishlist-btn {{ in_array($product->id, $wishlistProductIds) ? 'active' : '' }}"
+                                    data-product-id="{{ $product->id }}">
+
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -727,12 +922,106 @@
     </div>
 </section>
 
-@push('scripts')
+@push('js')
     <script>
+        $(document).ready(function() {
+
+            $(document).on('submit', '.balloon-form', function(e) {
+                e.preventDefault();
+
+                const form = this;
+                const formData = new FormData(form);
+
+                $.ajax({
+                    url: $(form).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log(response);
+
+                        const cartUrl = "{{ route('balloon-items') }}";
+
+                        const link = `
+                                        <a href="${cartUrl}" class="add-to-cart balloon-btn">
+                                            View
+                                        </a>
+                                    `;
+
+                        $(form).find('button[type="submit"]').replaceWith(link);
+
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            $(document).on('submit', '.perfect-gift-form', function(e) {
+                e.preventDefault();
+
+                const form = this;
+                const formData = new FormData(form);
+
+                $.ajax({
+                    url: $(form).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        const cartUrl = "{{ route('perfect-gift-items') }}";
+                        const link = `
+                            <a href="${cartUrl}" class="add-to-cart balloon-btn">
+                                View
+                            </a>
+                        `;
+                        $(form).find('button[type="submit"]').replaceWith(link);
+                    },
+                    complete: function() {
+                        console.log('complete');
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            $(document).on('submit', '.greetings-appreciation-form', function(e) {
+                e.preventDefault();
+                const form = this;
+                const formData = new FormData(form);
+                $.ajax({
+                    url: $(form).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function() {
+                        const cartUrl = "{{ route('greetings-appreciation-items') }}";
+                        const link = `
+                            <a href="${cartUrl}" class="add-to-cart balloon-btn" style="width:100%; text-align:center;">
+                                View
+                            </a>
+                        `;
+                        $(form).find('button[type="submit"]').replaceWith(link);
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+        });
+
         let page = 1;
         let loading = false;
         let activeCategory = '{{ request('category') ? request('category') : 'all' }}';
         let hasMoreProducts = true;
+        const loadMoreProductsUrl = @json(route('load.more.products'));
+        const loadMoreCategoryProductsBase = @json(url('load-more-category-products'));
+        const singleProductBase = @json(url('single-product'));
 
         // Function to check if element is in viewport
         function isInViewport(element) {
@@ -761,28 +1050,31 @@
         // Function to load more products
         function loadMoreProducts() {
             if (loading || !hasMoreProducts) return;
+            if (activeCategory !== 'all' && !/^\d+$/.test(String(activeCategory))) return;
+
+            const container = activeCategory === 'all' ?
+                document.getElementById('all-products') :
+                document.getElementById(`category-products-${activeCategory}`);
+            const spinner = activeCategory === 'all' ?
+                document.getElementById('loading-spinner') :
+                document.getElementById(`loading-spinner-${activeCategory}`);
+            if (!container || !spinner) return;
 
             loading = true;
             page++;
 
-            const spinner = activeCategory === 'all' ?
-                document.getElementById('loading-spinner') :
-                document.getElementById(`loading-spinner-${activeCategory}`);
-            spinner.style.display = 'block';
-
             const url = activeCategory === 'all' ?
-                `/load-more-products?page=${page}` :
-                `/load-more-category-products/${activeCategory}?page=${page}`;
+                `${loadMoreProductsUrl}?page=${page}` :
+                `${loadMoreCategoryProductsBase}/${activeCategory}?page=${page}`;
+
+            spinner.style.display = 'block';
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    const container = activeCategory === 'all' ?
-                        document.getElementById('all-products') :
-                        document.getElementById(`category-products-${activeCategory}`);
-
                     if (!data.products || data.products.length === 0) {
                         hasMoreProducts = false;
+                        loading = false;
                         spinner.style.display = 'none';
                         return;
                     }
@@ -790,6 +1082,8 @@
                     data.products.forEach((product, index) => {
                         const productElement = document.createElement('div');
                         productElement.className = 'col-lg-4 col-md-6 product-item';
+
+                        const ctaLabel = product.product_type == 0 ? 'Add To Cart' : 'Select Options';
 
                         productElement.innerHTML = `
                     <div class="gift-card-wrapper">
@@ -803,12 +1097,8 @@
                                     <span>4.8</span>
                                 </div>
                             </div>
-                            <a href="{{ route('single-product', '') }}/${product.slug}" class="add-to-cart">
-                                @if ($product->product_type == 0)
-                                    Add To Cart
-                                @else
-                                    Select Options
-                                @endif
+                            <a href="${singleProductBase}/${product.slug}" class="add-to-cart">
+                                ${ctaLabel}
                                 <i class="fas fa-arrow-right ms-2"></i>
                             </a>
                         </div>
@@ -876,8 +1166,88 @@
 
             // Initial check for scroll position
             handleScroll();
+
+            // Scroll active category tab into view if category parameter exists
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('category');
+
+            if (categoryParam) {
+                // Find the active tab button by category ID (supports both numeric and string IDs)
+                let activeTab = null;
+
+                // First try to find by exact ID match
+                activeTab = document.querySelector(`#pills-${categoryParam}-tab.nav-link.active`);
+
+                // If not found, try to find any active tab that matches
+                if (!activeTab) {
+                    const allActiveTabs = document.querySelectorAll('.nav-link.active');
+                    if (allActiveTabs.length > 0) {
+                        // Find the one that matches the category
+                        allActiveTabs.forEach(tab => {
+                            if (tab.id && tab.id.includes(categoryParam)) {
+                                activeTab = tab;
+                            }
+                        });
+                    }
+                }
+
+                // If still not found, try to find by ID without active class (for initial load)
+                if (!activeTab) {
+                    activeTab = document.querySelector(`#pills-${categoryParam}-tab.nav-link`);
+                }
+
+                if (activeTab) {
+                    // Wait for Swiper to initialize and DOM to be ready
+                    setTimeout(() => {
+                        // Get the parent swiper-slide element
+                        const parentSlide = activeTab.closest('.swiper-slide');
+                        const swiperContainer = activeTab.closest('.shop-nav-slider');
+
+                        if (parentSlide && swiperContainer) {
+                            // Scroll the parent slide into view with center alignment
+                            parentSlide.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'nearest',
+                                inline: 'center'
+                            });
+
+                            // Also scroll the container itself to ensure visibility
+                            swiperContainer.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'nearest',
+                                inline: 'nearest'
+                            });
+                        } else {
+                            // Fallback: scroll the button itself
+                            activeTab.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'nearest',
+                                inline: 'center'
+                            });
+                        }
+                    }, 500);
+                }
+            } else {
+                // If no category, scroll to "All" tab
+                const allTab = document.querySelector('#pills-All-tab');
+                if (allTab) {
+                    setTimeout(() => {
+                        const parentSlide = allTab.closest('.swiper-slide');
+                        if (parentSlide) {
+                            parentSlide.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'nearest',
+                                inline: 'center'
+                            });
+                        }
+                    }, 500);
+                }
+            }
         });
     </script>
+@endpush
+@push('js')
+    @include('components.wishlist')
 @endpush
 
 @endsection

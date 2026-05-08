@@ -1,16 +1,4 @@
-@php
-    if (Auth::user()->hasRole('Admin')) {
-        $layout = 'layouts.admin.app';
-    } elseif (Auth::user()->hasRole('Company')) {
-        $layout = 'layouts.company.app';
-    } elseif (Auth::user()->hasRole('Individual')) {
-        $layout = 'layouts.individual.app';
-    } else {
-        $layout = 'layouts.individual.app';
-    }
-@endphp
-
-@extends($layout)
+@extends('layouts.company.app')
 @section('title', $page_title)
 @section('content')
 <section class="content-header">
@@ -18,6 +6,7 @@
 		<h1>Edit Profile</h1>
 	</div>
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('dashboard') }}" class="btn btn-primary btn-sm">Dashboard</a>
 	</div>
 </section>
@@ -28,30 +17,238 @@
 		right: 28px;
 		font-size: initial;
 	}
+	#regform .error { color: red; display: block; margin-top: 2px; }
 </style>
 
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
 			@if (session('success'))
-			<div class="callout callout-success">
-				{{ session('success') }}
-			</div>
+				<div class="callout callout-success">
+					{{ session('success') }}
+				</div>
+			@endif
+			@if (session('message'))
+				<div class="callout callout-success">
+					{{ session('message') }}
+				</div>
 			@endif
 			<form action="{{ route('user.profile.update') }}" id="regform" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 				@csrf
 
 				<div class="box box-info">
 					<div class="box-body">
+						
+
+						{{-- Basic Company Information --}}
+						<div class="col-sm-12"><h4 style="color: #cfa40c; margin-bottom: 15px;">Basic Company Information</h4></div>
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Profile Image</label>
-							<div class="col-sm-6" style="padding-top:5px">
-								<input type="file" class="form-control" accept="image*" name="image" id="image">
-							</div>
-							<div class="col-sm-4">
-								<img style="width: 80px " id="banner_preview" src="{{ asset('public/admin/assets/images/UserImage') }}/{{  $user->image }}" alt="">
+							<label for="company_name" class="col-sm-2 control-label">Company Name <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="company_name" id="company_name"
+									value="{{ old('company_name', $company->name ?? '') }}" placeholder="Enter Company Name">
+								<span style="color: red">{{ $errors->first('company_name') }}</span>
 							</div>
 						</div>
+						<div class="form-group">
+							<label for="registration_number" class="col-sm-2 control-label">Registration Number</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="registration_number"
+									value="{{ old('registration_number', $company->registration_number ?? '') }}" placeholder="Enter Registration Number">
+								<span style="color: red">{{ $errors->first('registration_number') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="industry" class="col-sm-2 control-label">Industry</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="industry"
+									value="{{ old('industry', $company->industry ?? '') }}" placeholder="Enter Industry">
+								<span style="color: red">{{ $errors->first('industry') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="company_website" class="col-sm-2 control-label">Company Website</label>
+							<div class="col-sm-9">
+								<input type="url" class="form-control" name="company_website"
+									value="{{ old('company_website', $company->website ?? '') }}" placeholder="https://example.com">
+								<span style="color: red">{{ $errors->first('company_website') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="year_established" class="col-sm-2 control-label">Year Established</label>
+							<div class="col-sm-9">
+								@php
+									$yearVal = old('year_established', $company->year_established ?? '');
+									if ($yearVal && strlen($yearVal) <= 4 && preg_match('/^\d{4}$/', $yearVal)) {
+										$yearVal = $yearVal . '-01-01';
+									}
+								@endphp
+								<input type="date" class="form-control" name="year_established" id="year_established"
+									value="{{ $yearVal }}" max="{{ date('Y-m-d') }}">
+								<span style="color: red">{{ $errors->first('year_established') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="number_of_employees" class="col-sm-2 control-label">Number of Employees <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" name="number_of_employees" id="number_of_employees"
+									value="{{ old('number_of_employees', $company->number_of_employees ?? '') }}" placeholder="Enter Number of Employees" maxlength="10">
+								<span style="color: red">{{ $errors->first('number_of_employees') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="company_logo" class="col-sm-2 control-label">Company Logo (upload) <span style="color: red">*</span></label>
+							<div class="col-sm-6" style="padding-top:5px">
+								<input type="file" class="form-control" accept="image/*" name="company_logo" id="company_logo">
+							</div>
+							@if($company && !empty($company->logo))
+							<div class="col-sm-4">
+								<img style="max-width: 80px; max-height: 80px;" id="company_logo_preview" src="{{ asset('public/admin/assets/images/company-logos/' . $company->logo) }}?v={{ $company->updated_at ? $company->updated_at->timestamp : time() }}" alt="Company Logo">
+							</div>
+							@endif
+							<span style="color: red">{{ $errors->first('company_logo') }}</span>
+						</div>
+						{{-- <div class="form-group">
+							<label for="image" class="col-sm-2 control-label">Your Profile Picture</label>
+							<div class="col-sm-6" style="padding-top:5px">
+								<input type="file" class="form-control" accept="image/jpeg,image/jpg,image/png" name="image" id="image">
+								<small class="text-muted">JPG, PNG or JPEG. Max 2 MB.</small>
+								<span style="color: red">{{ $errors->first('image') }}</span>
+							</div>
+							<div class="col-sm-4">
+								@if(!empty($user->image))
+									<img style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;" id="profile_picture_preview" src="{{ asset('public/admin/assets/images/UserImage') }}/{{ $user->image }}" alt="Profile">
+								@else
+									<img style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; background: #eee; display: none;" id="profile_picture_preview" src="" alt="Profile">
+									<span id="profile_picture_placeholder" class="text-muted"><i class="fa fa-user-circle fa-3x"></i><br>No photo</span>
+								@endif
+							</div>
+						</div> --}}
+
+						{{-- Primary Contact Information --}}
+						<hr class="col-sm-11" style="margin: 20px 0; border-color: #cfa40c;">
+						<div class="col-sm-12"><h4 style="color: #cfa40c; margin-bottom: 15px;">Primary Contact Information</h4></div>
+						<div class="form-group">
+							<label for="primary_contact_name" class="col-sm-2 control-label">Full Name</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="primary_contact_name"
+									value="{{ old('primary_contact_name', $company->primary_contact_name ?? '') }}" placeholder="Enter Full Name">
+								<span style="color: red">{{ $errors->first('primary_contact_name') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="job_title" class="col-sm-2 control-label">Job Title</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="job_title"
+									value="{{ old('job_title', $company->job_title ?? '') }}" placeholder="Enter Job Title">
+								<span style="color: red">{{ $errors->first('job_title') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="primary_billing_email" class="col-sm-2 control-label">Business Email <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="email" class="form-control" name="billing_email"
+									value="{{ old('billing_email', $company->billing_email ?? '') }}" placeholder="Enter Business Email">
+								<span style="color: red">{{ $errors->first('billing_email') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="primary_billing_phone" class="col-sm-2 control-label">Direct Phone Number <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="billing_phone"
+									value="{{ old('billing_phone', $company->billing_phone ?? '') }}" placeholder="Enter Direct Phone Number">
+								<span style="color: red">{{ $errors->first('billing_phone') }}</span>
+							</div>
+						</div>
+
+						{{-- Billing Information (same 10 fields as Create Billing Address form) --}}
+						@php
+							$billingNameParts = $company && trim($company->primary_contact_name ?? '') ? explode(' ', trim($company->primary_contact_name), 2) : ['', ''];
+						@endphp
+						<hr class="col-sm-11" style="margin: 20px 0; border-color: #cfa40c;">
+						{{-- <div class="col-sm-12"><h4 style="color: #cfa40c; margin-bottom: 15px;">Billing Information (Required)</h4></div>
+						<div class="form-group">
+							<label for="billing_first_name" class="col-sm-2 control-label">First Name <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" autocomplete="off" class="form-control" name="billing_first_name" id="billing_first_name"
+									value="{{ old('billing_first_name', $billingNameParts[0] ?? '') }}" placeholder="Enter first name">
+								<span style="color: red">{{ $errors->first('billing_first_name') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="billing_last_name" class="col-sm-2 control-label">Last Name <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" autocomplete="off" class="form-control" name="billing_last_name" id="billing_last_name"
+									value="{{ old('billing_last_name', $billingNameParts[1] ?? '') }}" placeholder="Enter last name">
+								<span style="color: red">{{ $errors->first('billing_last_name') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="billing_company" class="col-sm-2 control-label">Company <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" autocomplete="off" class="form-control" name="billing_company" id="billing_company"
+									value="{{ old('billing_company', $company->name ?? '') }}" placeholder="Enter company">
+								<span style="color: red">{{ $errors->first('billing_company') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="billing_country" class="col-sm-2 control-label">Country <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" autocomplete="off" class="form-control" name="billing_country" id="billing_country"
+									value="{{ old('billing_country', $company->billing_country ?? '') }}" placeholder="Enter country">
+								<span style="color: red">{{ $errors->first('billing_country') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="billing_street" class="col-sm-2 control-label">Street <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="billing_address_line_1" id="billing_street"
+									value="{{ old('billing_address_line_1', $company->billing_address_line_1 ?? '') }}" placeholder="Start typing address">
+								<span style="color: red">{{ $errors->first('billing_address_line_1') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="billing_state" class="col-sm-2 control-label">State <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="billing_state" id="billing_state"
+									value="{{ old('billing_state', $company->state ?? '') }}" placeholder="Enter State">
+								<span style="color: red">{{ $errors->first('billing_state') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="billing_town" class="col-sm-2 control-label">Town <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="billing_city" id="billing_town"
+									value="{{ old('billing_city', $company->city ?? '') }}" placeholder="Enter town">
+								<span style="color: red">{{ $errors->first('billing_city') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="billing_postcode" class="col-sm-2 control-label">Postal Code <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="billing_zip_code" id="billing_postcode"
+									value="{{ old('billing_zip_code', $company->zip_code ?? '') }}" placeholder="Enter postcode">
+								<span style="color: red">{{ $errors->first('billing_zip_code') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="billing_phone" class="col-sm-2 control-label">Phone <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="tel" autocomplete="off" class="form-control" name="billing_phone" id="billing_phone"
+									value="{{ old('billing_phone', $company->billing_phone ?? '') }}" placeholder="Enter phone">
+								<span style="color: red">{{ $errors->first('billing_phone') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="billing_email" class="col-sm-2 control-label">Email <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="email" autocomplete="off" class="form-control" name="billing_email" id="billing_email"
+									value="{{ old('billing_email', $company->billing_email ?? '') }}" placeholder="Enter email">
+								<span style="color: red">{{ $errors->first('billing_email') }}</span>
+							</div>
+						</div> --}}
+						<hr class="col-sm-11" style="margin: 20px 0; border-color: #cfa40c;">
+						<div class="col-sm-12"><h4 style="color: #cfa40c; margin-bottom: 15px;">Personal Information</h4></div>
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">First Name<span style="color: red">*</span></label>
 							<div class="col-sm-9">
@@ -59,7 +256,6 @@
 								<span style="color: red">{{ $errors->first('name') }}</span>
 							</div>
 						</div>
-						
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Last Name</label>
 							<div class="col-sm-9">
@@ -68,114 +264,18 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Date of Birth</label>
-							<div class="col-sm-9">
-								<input type="date" name="date_of_birth" class="form-control" value="{{ $user->date_of_birth }}" placeholder="Enter Date of Birth">
-								<span style="color: red">{{ $errors->first('date_of_birth') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Gender</label>
-							<div class="col-sm-9">
-								<select name="gender" id="gender" class="form-control">
-									<option value="" {{ !$user->gender ? 'selected' : '' }}>Select Gender</option>
-									<option value="Male" {{ $user->gender == 'Male' ? 'selected' : '' }}>Male</option>
-									<option value="Female" {{ $user->gender == 'Female' ? 'selected' : '' }}>Female</option>
-								</select>
-
-								<span style="color: red">{{ $errors->first('gender') }}</span>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Designation</label>
-							<div class="col-sm-9">
-								<input type="text" autocomplete="off" class="form-control" name="designation" value="{{ $user->designation }}" placeholder="Enter designation">
-								<span style="color: red">{{ $errors->first('designation') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Street Address</label>
-							<div class="col-sm-9">
-								<input type="text" autocomplete="off" class="form-control" name="address" value="{{ $user->address }}" placeholder="Enter Street Address">
-								<span style="color: red">{{ $errors->first('address') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">WhatsApp Number</label>
-							<div class="col-sm-9">
-								<input type="phone" autocomplete="off" class="form-control" name="whatsapp" value="{{ $user->whatsapp }}" placeholder="Enter whatsapp number">
-								<span style="color: red">{{ $errors->first('whatsapp') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Facebook Link</label>
-							<div class="col-sm-9">
-								<input type="text" autocomplete="off" class="form-control" name="facebook" value="{{ $user->facebook }}" placeholder="Enter facebook link">
-								<span style="color: red">{{ $errors->first('facebook') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Twitter Link</label>
-							<div class="col-sm-9">
-								<input type="text" autocomplete="off" class="form-control" name="twitter" value="{{ $user->twitter }}" placeholder="Enter twitter link">
-								<span style="color: red">{{ $errors->first('twitter') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">LinkedIn Link</label>
-							<div class="col-sm-9">
-								<input type="text" autocomplete="off" class="form-control" name="linkedin" value="{{ $user->linkedin }}" placeholder="Enter linkedin link">
-								<span style="color: red">{{ $errors->first('linkedin') }}</span>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">About Me</label>
-							<div class="col-sm-9">
-								<textarea class="form-control" name="about_me" style="height:140px;">{!! $user->about_me !!}</textarea>
-							</div>
-						</div>
-						{{-- <div class="form-group">
-							<label for="" class="col-sm-2 control-label">State<span style="color: red">*</span></label>
-							<div class="col-sm-9">
-								<select name="city_id" id="city_id" class="form-control">
-									<option value="">Select State</option>
-									@foreach ($cities as $city)
-									<option value="{{ $city->id }}" {{ $user->city_id==$city->id?'selected':'' }}>{{ $city->city }}</option>
-									@endforeach
-								</select>
-								<span style="color: red">{{ $errors->first('city_id') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">City<span style="color: red">*</span></label>
-							<div class="col-sm-9">
-								<select name="state_id" id="state_id" class="form-control">
-									<option value="{{ $user->state_id }}" selected>Select City</option>
-								</select>
-								<span style="color: red">{{ $errors->first('state_id') }}</span>
-							</div>
-						</div> --}}
-						{{-- <div class="form-group">
-							<label for="" class="col-sm-2 control-label">Zip Code</label>
-							<div class="col-sm-9">
-								<input type="number" min="1" autocomplete="off" class="form-control" name="zip_code" value="{{ $user->zip_code }}" placeholder="Enter Zip Code">
-								<span style="color: red">{{ $errors->first('zip_code') }}</span>
-							</div>
-						</div> --}}
-						{{--  <div class="form-group">
-							<label for="" class="col-sm-2 control-label">License Number</label>
-							<div class="col-sm-9">
-								<input type="number" min="1" autocomplete="off" class="form-control" name="license" value="{{ $user->license }}" placeholder="Enter License Number">
-								<span style="color: red">{{ $errors->first('license') }}</span>
-							</div>
-						</div>  --}}
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Email </label>
+							<label for="" class="col-sm-2 control-label">Email</label>
 							<div class="col-sm-9">
 								<input type="text" autocomplete="off" class="form-control" readonly value="{{ $user->email }}" placeholder="Enter Email">
 								<span style="color: red">{{ $errors->first('email') }}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">Phone Number</label>
+							<div class="col-sm-9">
+								<input type="text" autocomplete="off" class="form-control" name="phone"
+									value="{{ $user->phone }}" placeholder="Enter Phone Number">
+								<span style="color: red">{{ $errors->first('phone') }}</span>
 							</div>
 						</div>
 						<div class="form-group">
@@ -186,12 +286,11 @@
 								<span style="color: red">{{ $errors->first('password') }}</span>
 							</div>
 						</div>
-
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Confirm Password</label>
 							<div class="col-sm-9 password-group">
 								<input type="password" autocomplete="off" class="form-control password-box" name="confirm-password" placeholder="Confirm password">
-								<a href="#!" class="password-visibility"><i class="fa fa-eye"> </i></a>
+								<a href="#!" class="password-visibility"><i class="fa fa-eye"></i></a>
 								<span style="color: red">{{ $errors->first('confirm-password') }}</span>
 							</div>
 						</div>
@@ -208,8 +307,8 @@
 		</div>
 	</div>
 </section>
-
 @endsection
+
 @push('js')
 <script>
 	$(function() {
@@ -218,12 +317,10 @@
 			$input.parent().find('.password-visibility').click(function() {
 				var change = "";
 				if ($(this).find('i').hasClass('fa-eye')) {
-					$(this).find('i').removeClass('fa-eye')
-					$(this).find('i').addClass('fa-eye-slash')
+					$(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
 					change = "text";
 				} else {
-					$(this).find('i').removeClass('fa-eye-slash')
-					$(this).find('i').addClass('fa-eye')
+					$(this).find('i').removeClass('fa-eye-slash').addClass('fa-eye');
 					change = "password";
 				}
 				var rep = $("<input type='" + change + "' />")
@@ -233,84 +330,77 @@
 					.val($input.val())
 					.insertBefore($input);
 				$input.remove();
-				$input = rep;
-			}).insertAfter($input);
-		});
-	});
-</script>
-<script>
-	/* City on load call */
-	$(document).ready(function() {
-		var city_id = $('#city_id').val();
-
-		$.ajax({
-			url: "{{ route('get_states') }}",
-			data: {
-				'city_id': city_id
-			},
-			type: 'GET',
-			success: function(response) {
-				var html = '';
-				$.each(response, function(item, val) {
-					html += '<option value="' + val.id + '">' + val.state + '</option>';
-				});
-				$('#state_id').html(html);
-
-			}
-		});
-
-	});
-	/* Cite on Chnage call */
-	$(document).on('change', '#city_id', function() {
-		var city_id = $(this).val();
-		$.ajax({
-			url: "{{ route('get_states') }}",
-			data: {
-				'city_id': city_id
-			},
-			type: 'GET',
-			success: function(response) {
-				var html = '';
-				$.each(response, function(item, val) {
-					html += '<option value="' + val.id + '">' + val.state + '</option>';
-				});
-				$('#state_id').html(html);
-
-			}
-		});
-	});
-
-
-
-
-
-	$(document).ready(function() {
-		if ($(".texteditor").length > 0) {
-			tinymce.init({
-				selector: "textarea.texteditor",
-				theme: "modern",
-				height: 150,
-				plugins: [
-					"advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-					"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-					"save table contextmenu directionality emoticons template paste textcolor"
-				],
-				toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
-
 			});
-		}
-
+		});
+	});
+	$(document).ready(function() {
+		var hasExistingLogo = $('#company_logo_preview').length > 0;
 		$("#regform").validate({
 			rules: {
-				name: "required", 
-			}
+				name: "required",
+				company_name: "required",
+				number_of_employees: { required: true, number: true, min: 0 },
+				billing_first_name: "required",
+				billing_last_name: "required",
+				billing_company: "required",
+				billing_country: "required",
+				billing_address_line_1: "required",
+				billing_state: "required",
+				billing_city: "required",
+				billing_zip_code: "required",
+				billing_email: { required: true, email: true },
+				billing_phone: "required",
+				company_logo: { required: !hasExistingLogo }
+			},
+			messages: {
+				name: "First Name is required.",
+				company_name: "Company Name is required.",
+				number_of_employees: {
+					required: "Number of Employees is required.",
+					number: "Please enter a valid number.",
+					min: "Number of Employees must be 0 or more."
+				},
+				billing_first_name: "First Name is required.",
+				billing_last_name: "Last Name is required.",
+				billing_company: "Company is required.",
+				billing_country: "Country is required.",
+				billing_address_line_1: "Street is required.",
+				billing_state: "State is required.",
+				billing_city: "Town is required.",
+				billing_zip_code: "Postal Code is required.",
+				billing_email: {
+					required: "Email is required.",
+					email: "Please enter a valid email address."
+				},
+				billing_phone: "Phone is required.",
+				company_logo: "Company Logo is required."
+			},
+			errorClass: "error",
+			validClass: "valid",
+			errorElement: "span"
 		});
-
-		image.onchange = evt => {
-			const [file] = image.files
-			if (file) {
-				banner_preview.src = URL.createObjectURL(file)
-			}
+		var companyLogo = document.getElementById('company_logo');
+		if (companyLogo) {
+			companyLogo.onchange = function(evt) {
+				var file = evt.target.files[0];
+				if (file) {
+					var preview = document.getElementById('company_logo_preview');
+					if (preview) preview.src = URL.createObjectURL(file);
+				}
+			};
+		}
+		var imageInput = document.getElementById('image');
+		var preview = document.getElementById('profile_picture_preview');
+		var placeholder = document.getElementById('profile_picture_placeholder');
+		if (imageInput && preview) {
+			imageInput.onchange = function(evt) {
+				var file = evt.target.files && evt.target.files[0];
+				if (file) {
+					preview.src = URL.createObjectURL(file);
+					preview.style.display = 'block';
+					if (placeholder) placeholder.style.display = 'none';
+				}
+			};
 		}
 	});
 </script>

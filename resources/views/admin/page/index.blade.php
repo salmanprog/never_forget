@@ -8,6 +8,7 @@
     </div>
     @can('page-create')
 		<div class="content-header-right">
+			@include('includes.buttons.back')
 			<a href="{{ route('page.create') }}" class="btn btn-primary btn-sm">Add Page</a>
 		</div>
 	@endcan

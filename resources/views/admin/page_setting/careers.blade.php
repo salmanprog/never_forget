@@ -5,6 +5,7 @@
 		<h1>@if(!empty($model)) Edit @else Add @endif Page Setting of <strong>{{ $model->title }}</strong></h1>
 	</div>
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('page.index') }}" class="btn btn-primary btn-sm">View All</a>
 	</div>
 </section>

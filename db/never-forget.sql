@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 29, 2025 at 03:27 AM
+-- Generation Time: Dec 31, 2025 at 11:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,6 +48,87 @@ CREATE TABLE `about_us` (
 
 INSERT INTO `about_us` (`id`, `created_by`, `first_title`, `second_title`, `heading`, `description`, `first_image`, `second_image`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Best Restaurant', 'Rajani’s Kitchen', 'Great taste for satisfaction!', '<p>In half a decade&rsquo;s history, Rajani&rsquo;s Kitchen has consistently strived to be more than just another Indian restaurant.<br /><br />Rajani&rsquo;s Kitchen is established in 2017 by Mrs. Rajani Bondugula&rsquo;s family, Rajani&rsquo;s Kitchen started out as a &ldquo;Best Kept Secret&rdquo; restaurant that has turned into a regionally celebrated foodie destination for Indian / Telugu community for homemade food in Chantilly, Fairfax County, Virginia &amp; Washington DC metropolitan area. People consider Rajani&rsquo;s Kitchen as their second kitchen at home far away from their home in India.</p>', '20240205183048.jpg', '20240205183048.png', '1', NULL, '2024-02-05 13:22:29', '2024-02-05 13:32:41');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `balloons_category`
+--
+
+CREATE TABLE `balloons_category` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `images` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `balloons_category`
+--
+
+INSERT INTO `balloons_category` (`id`, `title`, `images`, `description`, `created_at`, `updated_at`) VALUES
+(10, 'Organic Balloons Garland Grab and Go (6ft min)', 'assets/website/images/balloons/08.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(11, 'Circle Arch', 'assets/website/images/balloons/04.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(12, 'Organic Balloon Tunnel', 'assets/website/images/balloons/09.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(13, 'Marquee Balloon Styling', 'assets/website/images/balloons/01.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(14, 'Balloon Arch', 'assets/website/images/balloons/02.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(15, 'Organic Balloon Wall', 'assets/website/images/balloons/10.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(16, 'Party Focal Point Organic balloon garland with Shimmer wall', 'assets/website/images/balloons/07.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(17, 'Square Frame', 'assets/website/images/balloons/06.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40'),
+(18, 'Balloon Columns', 'assets/website/images/balloons/05.png', NULL, '2025-12-25 18:36:40', '2025-12-25 18:36:40');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `balloons_enquiry`
+--
+
+CREATE TABLE `balloons_enquiry` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `message` text DEFAULT NULL,
+  `is_submitted` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `user_name` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `phone` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `balloons_enquiry`
+--
+
+INSERT INTO `balloons_enquiry` (`id`, `message`, `is_submitted`, `created_at`, `updated_at`, `user_name`, `email`, `phone`) VALUES
+(64, 'asasdasdsasadasasadasdasd', 1, '2025-12-31 16:37:16', '2025-12-31 16:37:16', 'webdev', 'webdev@yopmail.com', '7284587308'),
+(65, 'asdasdasdasdasdasdasd', 1, '2025-12-31 16:38:04', '2025-12-31 16:38:04', 'asdasdasdsad', 'mokosu@mailinator.com', '1234567894'),
+(66, 'asdasdasdasdasdsasadsadsadsadsad', 1, '2025-12-31 16:57:38', '2025-12-31 16:57:38', 'webdev', 'webdev@yopmail.com', '7284587308');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `balloon_enquiry_items`
+--
+
+CREATE TABLE `balloon_enquiry_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `balloon_id` bigint(20) UNSIGNED NOT NULL,
+  `enquiry_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `balloon_enquiry_items`
+--
+
+INSERT INTO `balloon_enquiry_items` (`id`, `user_id`, `balloon_id`, `enquiry_id`, `quantity`, `created_at`, `updated_at`) VALUES
+(65, 175, 11, 64, 8, '2025-12-31 16:37:08', '2025-12-31 16:37:16'),
+(66, NULL, 12, 65, 1, '2025-12-31 16:37:50', '2025-12-31 16:38:04'),
+(68, 175, 14, 66, 5, '2025-12-31 16:54:20', '2025-12-31 16:57:38');
 
 -- --------------------------------------------------------
 
@@ -135,7 +216,27 @@ INSERT INTO `billing_addresses` (`id`, `customer_id`, `first_name`, `last_name`,
 (66, '132', 'Arden', 'Sloan', 'Cole Monroe LLC', 'Maiores vel aliqua', 'Expedita molestiae n', 'Distinctio Omnis au', 'Quia vitae expedita', '+1 (644) 905-5269', 'melokit@mailinator.com', '1', '2025-10-21 11:46:47', '2025-10-21 11:46:47'),
 (67, '133', 'Duncan', 'Mcfadden', 'Hendricks and Pruitt Traders', 'Perspiciatis veniam', 'Et rerum iste quia d', 'Possimus id dolore', 'Unde aliquip non vol', '+1 (464) 168-2166', 'ficazeni@mailinator.com', '1', '2025-10-21 11:49:50', '2025-10-21 11:49:50'),
 (68, '134', 'Josephine', 'Mendez', 'Nielsen Alvarez Traders', 'Aut iste quis consec', 'Aliquid id fugit vo', 'Lorem ex in iusto te', 'Veritatis quibusdam', '+1 (178) 486-7893', 'production8421@gmail.com', '1', '2025-10-21 13:45:02', '2025-10-21 13:45:02'),
-(69, '134', 'Herrod', 'Barnes', 'Haley Francis Trading', 'Nisi laudantium omn', 'Quos debitis amet p', 'Voluptas consequatur', 'Aut facere magna omn', '+1 (143) 279-9083', 'production8421@gmail.com', '1', '2025-10-21 14:33:20', '2025-10-21 14:33:20');
+(69, '134', 'Herrod', 'Barnes', 'Haley Francis Trading', 'Nisi laudantium omn', 'Quos debitis amet p', 'Voluptas consequatur', 'Aut facere magna omn', '+1 (143) 279-9083', 'production8421@gmail.com', '1', '2025-10-21 14:33:20', '2025-10-21 14:33:20'),
+(70, '152', 'Minerva', 'Destiny', 'Cassandra', 'asdasd', 'sdasd', 'Dylan', '91', '+1 (747) 729-9191', 'qogex@yopmail.com', '1', '2025-12-15 17:31:55', '2025-12-15 17:31:55'),
+(71, '155', 'Stuart', 'Meredith', 'Kessie', 'Ezekiel', 'Castor', 'Oprah', '36', '+1 (678) 506-8754', 'fupizeno@mailinator.com', '1', '2025-12-16 15:25:48', '2025-12-16 15:25:48');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `blogs`
+--
+
+CREATE TABLE `blogs` (
+  `id` int(11) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `status` enum('0','1') NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -684,7 +785,10 @@ CREATE TABLE `career_applications` (
 INSERT INTO `career_applications` (`id`, `career_id`, `name`, `email`, `phone`, `resume`, `cover_letter`, `status`, `created_at`, `updated_at`, `employer`, `position_for_applying`, `city`, `state`, `zip`, `street_or_email_address`, `home_phone_number`, `business_phone_number`, `cell_number`, `start_work_date`, `salary_desired`, `high_school_diploma`, `hours`, `shift_status`, `authorized_work`, `convicted`, `essential_function`, `accommodation`, `school_1`, `degree_1`, `address_1`, `school_2`, `degree_2`, `address_2`, `other_school`, `other_degree`, `other_address`, `special_skills`, `name_1`, `phone_1`, `relation_1`, `name_2`, `phone_2`, `relation_2`, `name_3`, `address_3`, `phone_3`, `relation_3`, `shift`, `job1_start_date`, `job1_end_date`, `company_name_1`, `supervisor_name1`, `phone_number1`, `city_1`, `state1`, `zip1`, `duties1`, `reason_for_leaving_1`, `starting_salary1`, `ending_salary1`, `contact_present_employer`, `job2_start_date`, `job2_end_date`, `company_name_2`, `supervisor_name2`, `phone_number2`, `city_2`, `state2`, `zip2`, `duties2`, `reason_for_leaving_2`, `starting_salary2`, `ending_salary2`, `job3_start_date`, `job3_end_date`, `company_name_3`, `supervisor_name3`, `phone_number3`, `city_3`, `state3`, `zip3`, `duties3`, `reason_for_leaving_3`, `starting_salary3`, `ending_salary3`, `job4_start_date`, `job4_end_date`, `company_name_4`, `supervisor_name4`, `phone_number4`, `city_4`, `state4`, `zip4`, `duties4`, `reason_for_leaving_4`, `starting_salary4`, `ending_salary4`) VALUES
 (4, 1, 'Dawson Roberts Associates', NULL, NULL, NULL, NULL, NULL, '2025-10-28 15:54:15', '2025-10-28 15:54:15', 'Quis ullamco ab non', 'Dolor quidem volupta', 'Ipsam incidunt volu', 'Laborum illum minim', '26674', 'kedydode@mailinator.com', '+1 (896) 479-1392', '+1 (232) 522-1787', '318', '02-Jul-1990', 'Et non assumenda ut', 'yes', 'full_time', 'temporary', 'yes', 'yes', 'no', 'no', 'Voluptatem in autem', 'Quis nulla alias ear', '54 East Rocky Hague Avenue', 'Corporis autem delec', 'Consectetur nisi ven', 'Omnis labore est es', 'Sed iste velit quia', 'In debitis minim eli', 'Quis fugit consequa', 'Adipisicing adipisic', 'Blair Larsen', '+1 (758) 538-3668', 'Et quis delectus qu', 'Karen Gomez', '+1 (391) 667-3239', 'Atque in laboriosam', 'Keefe Bryant', 'Labore voluptate vol', '+1 (967) 121-5632', 'Eius quo culpa solut', 'weekends', '12-Feb-1996', '09-Jun-2000', 'Jimenez Jennings Associates', 'Montana Leach', '+1 (538) 559-7297', 'Dolorem corporis iur', 'Placeat aliquip tem', '12111', 'Nisi unde totam veni', 'Nemo dolore anim a o', 'Nulla necessitatibus', 'Natus cillum ipsam o', 'n/a', '11-Apr-1996', '04-Sep-1972', 'Jordan and Merritt Co', 'Aphrodite Clayton', '+1 (249) 163-2227', 'Ea illum est adipis', 'Enim autem quibusdam', '57963', 'Totam ut ut illo aut', 'Consequat Dolorem a', 'Alias similique nemo', 'Et explicabo Volupt', '13-Sep-2005', '20-Jun-1979', 'Stevenson and Mcdonald LLC', 'Sylvia Ochoa', '+1 (699) 901-8021', 'Velit ea aut omnis d', 'Tempora commodi dolo', '66010', 'Harum quas elit nes', 'Et voluptate facilis', 'Commodo duis quas qu', 'Molestiae aut enim d', '11-Jun-1986', '19-Dec-1974', 'Franco and Atkinson Inc', 'Ignatius Harding', '+1 (172) 881-5436', 'Eum quia autem at vo', 'Vel consequat Debit', '84998', 'Aliquip fugiat solu', 'Voluptatem iste bla', 'Consequat Veniam n', 'Rem sint in tenetur'),
 (5, 1, 'Lester and Washington Trading', NULL, NULL, NULL, NULL, NULL, '2025-10-28 16:00:34', '2025-10-28 16:00:34', 'Quia exercitationem', 'Maiores inventore si', 'Soluta mollitia blan', 'Qui aliquam quasi pr', '28919', 'badof@mailinator.com', '+1 (336) 891-6371', '+1 (894) 754-1677', '602', '18-Jul-2001', 'Rerum autem quia at', 'yes', 'part_time', 'temporary', 'yes', 'yes', 'no', 'no', 'Quis voluptatem err', 'Vero et ducimus et', '269 South Cowley Drive', 'Consequat Anim moll', 'Rerum nisi et et et', 'Sequi illum quidem', 'Consectetur dolore', 'Sequi sint sint corp', 'Ipsa mollitia place', 'Ut corporis aut tene', 'Zephr Heath', '+1 (929) 172-2744', 'Sit praesentium sun', 'Holly Conner', '+1 (316) 918-9385', 'Tenetur repudiandae', 'Clementine Patterson', 'Reprehenderit volupt', '+1 (714) 333-1843', 'Suscipit reprehender', 'evenings', '23-Jan-1977', '25-Feb-1993', 'Lewis Henry Traders', 'Tanya Hancock', '+1 (598) 865-8176', 'Aut sint eu vitae qu', 'Ut dolores ullam non', '77587', 'Non est in mollitia', 'Aliquid provident c', 'Vel sed amet laudan', 'Aut doloremque et po', 'no', '14-Nov-1994', '03-Jun-1984', 'Lindsey Bean Plc', 'Iris Baker', '+1 (622) 414-2513', 'Voluptas veniam lau', 'Tempora molestiae mo', '22124', 'Ut dolorum alias lab', 'Rerum voluptatem Ar', 'Ducimus sed beatae', 'Sit voluptate volup', '07-Jul-1981', '30-Nov-2004', 'Contreras Wiggins Traders', 'Evelyn Strong', '+1 (627) 399-6387', 'Et accusantium beata', 'Consectetur esse e', '68838', 'Qui amet cupidatat', 'Et eaque dolor ab ve', 'Voluptatibus volupta', 'Dolor iure quam quam', '30-Jul-2006', '06-Jun-2025', 'Wilson and Mclaughlin Associates', 'Magee Molina', '+1 (298) 585-9891', 'Cupiditate voluptate', 'Ratione libero verit', '42445', 'Veritatis saepe est', 'Officiis vitae anim', 'Quis ullamco lorem d', 'Qui et duis voluptat'),
-(6, 1, 'Garrison and Mendez Co', NULL, NULL, NULL, NULL, NULL, '2025-10-28 16:39:51', '2025-10-28 16:39:51', 'Sunt officia dolor q', 'Ut recusandae Culpa', 'Dolor nesciunt nesc', 'Nesciunt at corpori', '99685', 'popysadep@mailinator.com', '+1 (225) 669-7767', '+1 (344) 932-2381', '547', '04-Dec-2018', 'Assumenda qui qui la', 'no', 'part_time', 'temporary', 'yes', 'no', 'no', 'no', 'Et libero pariatur', 'Cupidatat culpa non', '318 New Lane', 'Perspiciatis vel qu', 'Sunt magni aspernatu', 'Distinctio Animi e', 'Id perspiciatis et', 'Accusamus ullam at l', 'Illo in odio quo ess', 'Qui aliquip pariatur', 'Alec Holloway', '+1 (189) 244-9289', 'Consequatur suscipi', 'Ivana Holder', '+1 (677) 317-5542', 'Laboris earum praese', 'Samuel Norris', 'Provident quas solu', '+1 (954) 523-9526', 'In doloremque offici', 'weekends', '06-Jul-2010', '20-Nov-2023', 'Woods and Petersen Co', 'Minerva Horne', '+1 (672) 979-2205', 'Sed ex deserunt cumq', 'Nam veniam dicta ne', '81834', 'Quia est minus rerum', 'Atque sapiente sit', 'Commodo ullamco lore', 'Ex quo pariatur Acc', 'no', '12-Aug-2012', '26-Dec-2017', 'Rich and Schroeder Co', 'Dylan Byers', '+1 (527) 882-1767', 'Quibusdam commodo ul', 'Possimus vero est a', '23699', 'Cupidatat nihil nobi', 'Atque consectetur v', 'Cupiditate aute ex b', 'Iste sint veniam di', '04-Feb-1993', '17-Jun-1995', 'Gross Rowe Co', 'Christine Battle', '+1 (564) 913-1171', 'Id perferendis dolo', 'Debitis veniam offi', '23935', 'Eaque ipsum qui et e', 'Voluptatum cupidatat', 'Saepe maiores omnis', 'Commodo beatae sed s', '18-Oct-1998', '16-Feb-2014', 'Whitfield Johns Plc', 'Garrison Bolton', '+1 (199) 919-2261', 'Quis eveniet beatae', 'Adipisci ipsam incid', '65882', 'Nostrum voluptate co', 'Provident in ut et', 'Quas tenetur velit a', 'Nobis commodo consec');
+(6, 1, 'Garrison and Mendez Co', NULL, NULL, NULL, NULL, NULL, '2025-10-28 16:39:51', '2025-10-28 16:39:51', 'Sunt officia dolor q', 'Ut recusandae Culpa', 'Dolor nesciunt nesc', 'Nesciunt at corpori', '99685', 'popysadep@mailinator.com', '+1 (225) 669-7767', '+1 (344) 932-2381', '547', '04-Dec-2018', 'Assumenda qui qui la', 'no', 'part_time', 'temporary', 'yes', 'no', 'no', 'no', 'Et libero pariatur', 'Cupidatat culpa non', '318 New Lane', 'Perspiciatis vel qu', 'Sunt magni aspernatu', 'Distinctio Animi e', 'Id perspiciatis et', 'Accusamus ullam at l', 'Illo in odio quo ess', 'Qui aliquip pariatur', 'Alec Holloway', '+1 (189) 244-9289', 'Consequatur suscipi', 'Ivana Holder', '+1 (677) 317-5542', 'Laboris earum praese', 'Samuel Norris', 'Provident quas solu', '+1 (954) 523-9526', 'In doloremque offici', 'weekends', '06-Jul-2010', '20-Nov-2023', 'Woods and Petersen Co', 'Minerva Horne', '+1 (672) 979-2205', 'Sed ex deserunt cumq', 'Nam veniam dicta ne', '81834', 'Quia est minus rerum', 'Atque sapiente sit', 'Commodo ullamco lore', 'Ex quo pariatur Acc', 'no', '12-Aug-2012', '26-Dec-2017', 'Rich and Schroeder Co', 'Dylan Byers', '+1 (527) 882-1767', 'Quibusdam commodo ul', 'Possimus vero est a', '23699', 'Cupidatat nihil nobi', 'Atque consectetur v', 'Cupiditate aute ex b', 'Iste sint veniam di', '04-Feb-1993', '17-Jun-1995', 'Gross Rowe Co', 'Christine Battle', '+1 (564) 913-1171', 'Id perferendis dolo', 'Debitis veniam offi', '23935', 'Eaque ipsum qui et e', 'Voluptatum cupidatat', 'Saepe maiores omnis', 'Commodo beatae sed s', '18-Oct-1998', '16-Feb-2014', 'Whitfield Johns Plc', 'Garrison Bolton', '+1 (199) 919-2261', 'Quis eveniet beatae', 'Adipisci ipsam incid', '65882', 'Nostrum voluptate co', 'Provident in ut et', 'Quas tenetur velit a', 'Nobis commodo consec'),
+(7, 1, 'Harrington and Howell Trading', NULL, NULL, NULL, NULL, NULL, '2025-10-29 08:48:59', '2025-10-29 08:48:59', 'A aliquam doloremque', 'In qui temporibus do', 'Aliquid duis exercit', 'Fuga Dolor quia cup', '72522', 'sepepiqaki@mailinator.com', '+1 (918) 597-4945', '+1 (124) 933-3854', '974', '13-Aug-2018', 'Nemo qui quia fugiat', 'no', 'full_time', 'temporary', 'yes', 'yes', 'yes', 'yes', 'Aute at labore quae', 'Recusandae Voluptas', '85 Cowley Lane', 'Qui qui illum illum', 'Cupidatat delectus', 'Est adipisci est mol', 'Minus adipisci in ad', 'Dolor obcaecati null', 'Est et explicabo Mo', 'Qui harum dolor earu', 'Burke May', '+1 (572) 678-7415', 'Sint adipisci repreh', 'Morgan Wiley', '+1 (642) 889-6257', 'Consequatur rerum e', 'Melinda Nelson', 'Consequat Ipsa fug', '+1 (334) 782-3683', 'Fugit exercitatione', 'evenings', '16-Dec-1992', '14-Nov-2017', 'Horn Barrett Co', 'Emmanuel Stone', '+1 (504) 139-3378', 'Cupiditate sed aut l', 'Dicta proident susc', '90030', 'Exercitationem volup', 'Id aut dolore qui nu', 'Mollitia consectetur', 'Quibusdam distinctio', 'yes', '19-Dec-2023', '27-Dec-1990', 'Harris Colon Inc', 'Linda Reynolds', '+1 (916) 888-4283', 'Explicabo Obcaecati', 'Suscipit ratione id', '12036', 'Tempor sed sit ut te', 'Magni tempora ad tem', 'Lorem sint ut maior', 'Expedita mollitia ea', '24-Apr-2022', '03-May-1997', 'Chaney Blair Associates', 'Madeline Potter', '+1 (912) 648-3162', 'Recusandae Quae sit', 'Ut eiusmod libero qu', '44217', 'Anim exercitation co', 'Officia minima in ex', 'Ipsam saepe totam ve', 'Sed corporis alias d', '08-Apr-1976', '06-Jan-2001', 'Yates and Dunlap Traders', 'Fay Cooke', '+1 (518) 888-8694', 'Quia consequatur au', 'Perferendis reprehen', '70894', 'Iste in tenetur quos', 'Consequuntur delenit', 'Dolore ut esse tempo', 'Sunt consequatur co'),
+(8, 1, 'Clayton Bowman Trading', NULL, NULL, NULL, NULL, NULL, '2025-10-29 08:50:05', '2025-10-29 08:50:05', 'Voluptatem dolorum d', 'Aspernatur perspicia', 'Vel omnis ea debitis', 'Laboris excepteur co', '32369', 'levidin@mailinator.com', '+1 (787) 255-4225', '+1 (753) 553-5677', '533', '03-Sep-2016', 'Voluptatem optio e', 'no', 'full_time', 'regular', 'yes', 'yes', 'yes', 'yes', 'Ut voluptatem est f', 'Temporibus quis solu', '72 Hague Avenue', 'Elit officia qui an', 'Fugit cillum ea acc', 'Ea pariatur Velit', 'Eveniet itaque comm', 'Minus dolorem Nam Na', 'Labore consequatur a', 'Fugit ut dolor adip', 'Dara Osborne', '+1 (572) 846-3809', 'Et iste laborum Sae', 'Harriet Hyde', '+1 (416) 343-8958', 'Aut sed tempor porro', 'Claudia Stafford', 'Corrupti assumenda', '+1 (507) 133-9708', 'Quo rem maiores elig', 'evenings', '26-Jan-1984', '14-Aug-2014', 'Cruz and Ross Associates', 'Cruz Miller', '+1 (868) 602-5582', 'Sunt rerum cum eos', 'Velit in consequatur', '96801', 'Veniam placeat ull', 'Minus minima fugiat', 'Ea dolore veritatis', 'Ea incidunt non in', 'no', '15-Aug-1999', '16-Aug-1988', 'Reeves and Peck Trading', 'Cathleen Finley', '+1 (904) 488-3587', 'Sunt quam non corpor', 'Cupiditate quia est', '52097', 'Aut qui optio occae', 'Obcaecati enim provi', 'Saepe laboriosam ve', 'Praesentium eiusmod', '12-Apr-1981', '09-Jul-2002', 'Fields Blair Traders', 'Ori Hinton', '+1 (837) 523-9286', 'Voluptas consectetur', 'Tempora ullam et qui', '30777', 'Voluptatem blanditi', 'Dolores ipsum sint', 'Sed molestias labori', 'Iusto quia atque lab', '10-Jan-2010', '06-Aug-2001', 'Joyce and Hess Trading', 'Madeline Donovan', '+1 (122) 466-1223', 'Totam laboriosam po', 'Sunt minim tempora v', '98710', 'Rem est harum pariat', 'Nisi et voluptate mo', 'Molestias cillum qui', 'Eiusmod veritatis te'),
+(9, 1, 'Daniels Brennan Co', NULL, NULL, NULL, NULL, NULL, '2025-11-28 17:08:20', '2025-11-28 17:08:20', 'Cumque commodo ex de', 'Voluptatem aut ratio', 'Quisquam sit Nam mi', 'Temporibus incidunt', '63464', 'duher@mailinator.com', '+1 (709) 732-5713', '+1 (777) 831-2293', '958', '08-Sep-2016', 'Sunt dolor quidem o', 'no', 'part_time', 'regular', 'no', 'yes', 'no', 'no', 'Sequi elit sapiente', 'Et voluptatem velit', '62 Milton Road', 'Doloremque odio aspe', 'Aliqua Molestiae be', 'Aperiam voluptatibus', 'Excepteur mollitia d', 'Fugiat provident c', 'Sed esse cupiditate', 'Suscipit voluptate d', 'Kermit Walker', '+1 (817) 716-8708', 'Sunt velit enim cupi', 'Farrah Sawyer', '+1 (328) 913-6328', 'At dolor commodi rei', 'Giselle Bailey', 'Et laudantium qui u', '+1 (539) 983-8758', 'Iste ut reiciendis t', 'swing', '27-Sep-1999', '17-Mar-1978', 'Calhoun Conway LLC', 'Nolan Rojas', '+1 (984) 721-1618', 'Rem esse et reiciend', 'Nam harum animi sin', '78170', 'Totam illum magna s', 'Aliquam incididunt d', 'Dolorem possimus co', 'Amet aut ipsa hic', 'n/a', '10-Jun-1975', '05-May-1974', 'Carter Phelps Plc', 'Julian Jacobs', '+1 (255) 717-5554', 'Quae enim vitae quis', 'Odit excepteur tempo', '49195', 'Modi similique ducim', 'Dolores commodo poss', 'Accusantium officiis', 'Illum veritatis des', '12-Mar-2000', '16-May-1983', 'Ramsey Patrick Associates', 'Kyra Kemp', '+1 (702) 889-5631', 'Alias eos qui minim', 'Commodo in occaecat', '95777', 'Inventore voluptate', 'Cillum quia iusto do', 'Velit accusamus sus', 'Praesentium omnis vo', '03-Jul-1981', '11-Apr-1970', 'Sharpe and Conley Associates', 'Lucy Watson', '+1 (356) 647-9787', 'Esse similique ad qu', 'Eos molestias ipsum', '68693', 'Qui eu eiusmod conse', 'Deserunt qui lorem a', 'Elit possimus hic', 'Quidem est est et s');
 
 -- --------------------------------------------------------
 
@@ -742,7 +846,8 @@ INSERT INTO `categories` (`id`, `created_by`, `parent_id`, `title`, `slug`, `ima
 (3, 1, '0', 'Fruit Bouquets', 'fruit-bouquets', '20250416221514.webp', '1', NULL, '2025-04-16 17:15:14', '2025-04-16 17:15:14'),
 (4, 1, '0', 'Gift Baskets', 'gift-baskets', '20250416221558.webp', '1', NULL, '2025-04-16 17:15:58', '2025-04-16 17:15:58'),
 (5, 1, '0', 'Plants', 'plants', '20250416221650.webp', '1', NULL, '2025-04-16 17:16:50', '2025-04-22 11:36:41'),
-(6, 1, '0', 'Personalized Business Gifts', 'personalized-business-gifts', '20250416221754.webp', '1', NULL, '2025-04-16 17:17:54', '2025-04-22 11:36:45');
+(6, 1, '0', 'Personalized Business Gifts', 'personalized-business-gifts', '20250416221754.webp', '1', NULL, '2025-04-16 17:17:54', '2025-04-22 11:36:45'),
+(7, 1, NULL, 'Balloons', 'balloons', '20251219224746.png', '1', '2025-12-25 22:03:17', '2025-12-19 17:47:46', '2025-12-25 17:03:17');
 
 -- --------------------------------------------------------
 
@@ -871,6 +976,7 @@ INSERT INTO `collaborators` (`id`, `created_by`, `title`, `image`, `status`, `de
 
 CREATE TABLE `companies` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `website` varchar(255) DEFAULT NULL,
   `address` text DEFAULT NULL,
@@ -885,6 +991,35 @@ CREATE TABLE `companies` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `companies`
+--
+
+INSERT INTO `companies` (`id`, `user_id`, `name`, `website`, `address`, `industry`, `billing_email`, `billing_phone`, `plan`, `options`, `description`, `admin_user_id`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'Campbell and Wooten Co', 'https://www.qefuno.co', 'Est consequuntur vel', 'Rerum esse consequun', 'bidapewim@mailinator.com', '+1 (229) 342-1993', 'Enterprise', 'Employees', 'Reprehenderit lorem', 135, '2025-11-10 11:59:30', '2025-11-10 11:59:30'),
+(2, NULL, 'Melissa Puckett', 'www.google.com', 'Street 123', 'ABC Company', 'kedavu@mailinator.com', '+1 (924) 739-4678', 'Basic', 'Both', NULL, 138, '2025-11-10 13:48:36', '2025-11-10 13:48:36'),
+(8, NULL, 'web dev', 'www.google.com', 'Street 123', 'ABC Company', 'arsalanahmeddev1@gmail.com', '7284587308', 'Basic', 'Both', NULL, 148, '2025-11-13 13:25:30', '2025-11-13 13:25:30'),
+(9, NULL, 'Conway and Hamilton Plc', 'https://www.mimuzege.org', 'Exercitationem id do', 'Voluptate in dolorum', 'nipog@mailinator.com', '+1 (553) 804-3701', 'Enterprise', 'Clientele', 'Eligendi ducimus ha', 95, '2025-11-28 17:28:30', '2025-11-28 17:28:30'),
+(10, NULL, 'Kay Molina', 'www.google.com', 'Street 123', 'ABC Company', 'vixi@mailinator.com', '+1 (991) 724-3492', 'Basic', 'Both', NULL, 153, '2025-12-15 16:49:47', '2025-12-15 16:49:47'),
+(11, NULL, 'Kay Molina', 'www.google.com', 'Street 123', 'ABC Company', 'vixi@yopmail.com', '+1 (991) 724-3492', 'Basic', 'Both', NULL, 154, '2025-12-15 16:50:29', '2025-12-15 16:50:29'),
+(12, NULL, 'testing adasdasd', 'www.google.com', 'Street 123', 'ABC Company', 'abc2@yopmail.com', '1234567894', 'Basic', 'Both', NULL, 156, '2025-12-17 14:22:44', '2025-12-17 14:22:44'),
+(13, NULL, 'Magee Faulkner', 'www.google.com', 'Street 123', 'ABC Company', 'beby@mailinator.com', '+1 (593) 353-6173', 'Basic', 'Both', NULL, 157, '2025-12-17 15:00:59', '2025-12-17 15:00:59'),
+(14, NULL, 'Risa Calhoun', 'www.google.com', 'Street 123', 'ABC Company', 'jufyl@mailinator.com', '+1 (967) 555-8824', 'Basic', 'Both', NULL, 158, '2025-12-17 15:01:25', '2025-12-17 15:01:25'),
+(15, NULL, 'Rigel Guerrero', 'www.google.com', 'Street 123', 'ABC Company', 'vapahuz@mailinator.com', '+1 (702) 152-7278', 'Basic', 'Both', NULL, 159, '2025-12-17 15:01:57', '2025-12-17 15:01:57'),
+(16, NULL, 'Medge Dodson', 'www.google.com', 'Street 123', 'ABC Company', 'fefy@mailinator.com', '+1 (303) 434-9178', 'Basic', 'Both', NULL, 160, '2025-12-17 15:02:36', '2025-12-17 15:02:36'),
+(17, NULL, 'Cameron Blanchard', 'www.google.com', 'Street 123', 'ABC Company', 'gesaron@mailinator.com', '+1 (223) 826-3145', 'Basic', 'Both', NULL, 161, '2025-12-17 15:05:46', '2025-12-17 15:05:46'),
+(18, NULL, 'Violet Becker', 'www.google.com', 'Street 123', 'ABC Company', 'cobobel@mailinator.com', '+1 (244) 937-5959', 'Basic', 'Both', NULL, 162, '2025-12-17 15:10:56', '2025-12-17 15:10:56'),
+(19, NULL, 'Judith Dejesus', 'www.google.com', 'Street 123', 'ABC Company', 'cajynidy@mailinator.com', '+1 (302) 373-1164', 'Basic', 'Both', NULL, 163, '2025-12-17 15:15:01', '2025-12-17 15:15:01'),
+(20, NULL, 'testting company', 'www.google.com', 'Street 123', 'ABC Company', 'testingcompany@yopmail.com', '1234567894', 'Basic', 'Both', NULL, 164, '2025-12-17 15:19:04', '2025-12-17 15:19:04'),
+(21, NULL, 'newcompanytestingagain', 'www.google.com', 'Street 123', 'ABC Company', 'alex@yopmail.com', '7284587308', 'Basic', 'Both', NULL, 165, '2025-12-17 15:28:54', '2025-12-17 15:28:54'),
+(22, NULL, 'devcompany', 'www.google.com', 'Street 123', 'ABC Company', 'dev2@yopmail.com', '1234567894', 'Basic', 'Both', NULL, 166, '2025-12-18 11:59:25', '2025-12-18 11:59:25'),
+(23, NULL, 'dev3company', 'www.google.com', 'Street 123', 'ABC Company', 'dev3@gmail.com', '1234567894', 'Basic', 'Both', NULL, 167, '2025-12-18 12:04:54', '2025-12-18 12:04:54'),
+(24, NULL, 'dev4company', 'www.google.com', 'Street 123', 'ABC Company', 'dev4@gmail.com', '1234567894', 'Basic', 'Both', NULL, 168, '2025-12-18 12:06:33', '2025-12-18 12:06:33'),
+(25, NULL, 'dev5company', 'www.google.com', 'Street 123', 'ABC Company', 'dev5@yopmail.com', '1234567894', 'Basic', 'Both', NULL, 169, '2025-12-18 12:16:48', '2025-12-18 12:16:48'),
+(26, NULL, 'Callahan and Schroeder Inc', 'www.google.com', 'Street 123', 'ABC Company', 'jepuciza@mailinator.com', '+1 (647) 838-9803', 'Basic', 'Both', NULL, 171, '2025-12-18 12:23:52', '2025-12-18 12:23:52'),
+(27, NULL, 'legacytech', 'www.google.com', 'Street 123', 'ABC Company', 'markjohson@yopmail.com', '7284587308', 'Basic', 'Both', NULL, 172, '2025-12-18 13:22:07', '2025-12-18 13:22:07'),
+(28, NULL, 'Robertson and Aguirre LLC', 'www.google.com', 'Street 123', 'ABC Company', 'waniko@mailinator.com', '+1 (335) 774-8706', 'Basic', 'Both', NULL, 174, '2025-12-31 14:52:05', '2025-12-31 14:52:05');
+
 -- --------------------------------------------------------
 
 --
@@ -898,14 +1033,32 @@ CREATE TABLE `company_employees` (
   `last_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `phone` varchar(255) DEFAULT NULL,
+  `date_of_birth` varchar(255) DEFAULT NULL,
   `type` enum('employee','client') NOT NULL DEFAULT 'employee',
   `invite_token` varchar(255) DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `invited_at` timestamp NULL DEFAULT NULL,
   `joined_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `company_employees`
+--
+
+INSERT INTO `company_employees` (`id`, `company_id`, `first_name`, `last_name`, `email`, `phone`, `date_of_birth`, `type`, `invite_token`, `is_active`, `invited_at`, `joined_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Zeph', 'Frye', 'abc@yopmail.com', '+1 (627) 471-5188', NULL, 'client', 'cSP6PCthueUezb6g13R91ytev2KICqGX', 1, '2025-11-10 12:01:06', '2025-11-10 12:02:16', '2025-11-10 12:00:30', '2025-11-10 12:02:16'),
+(2, 1, 'John', 'Doe', 'john.doe@example.com', '1234567890', NULL, 'employee', '53DYqQ2Vv0b6iKFn8A7XgZK3uDpzyi1t', 0, '2025-11-10 12:06:27', NULL, '2025-11-10 12:06:27', '2025-11-10 12:06:27'),
+(3, 1, 'Jane', 'Smith', 'jane.smith@example.com', '1234567891', NULL, 'client', '4oBoQk4LWtvDdEJkGOoKXbyMJHTf7Kz0', 0, '2025-11-10 12:06:45', NULL, '2025-11-10 12:06:45', '2025-11-10 12:06:45'),
+(4, 1, 'salman', 'rais', 'salman@gmail.com', '1231231234', NULL, 'employee', 'UHSQYoVFqlKQ8iZuxuFnSmY8hqYexJwv', 0, '2025-11-10 12:06:48', NULL, '2025-11-10 12:06:48', '2025-11-10 12:06:48'),
+(5, 1, 'Fleur', 'Martinez', 'fleur@yopmail.com', '+1 (933) 576-1767', NULL, 'employee', 'Rh9EF3rSNiX3bsKZCNnAgTX5Oe7eXXzd', 0, '2025-11-10 12:09:59', NULL, '2025-11-10 12:09:59', '2025-11-10 12:09:59'),
+(6, 1, 'Pascale', 'William', 'sezizutefu@mailinator.com', '+1 (639) 388-6814', NULL, 'employee', 'A61cCqEHKPGY4KzONGAxkLLUR0ixeT78', 1, '2025-11-10 12:33:58', NULL, '2025-11-10 12:33:58', '2025-11-10 12:33:58'),
+(10, 1, 'Kevin', 'Doe', 'kevin@yopmail.com', '1234567890', NULL, 'employee', 'ofGrC6wa9sz29xXU7n8B4Nu9ueag0suy', 1, '2025-11-10 13:16:31', NULL, '2025-11-10 13:16:31', '2025-11-10 13:16:31'),
+(11, 1, 'Katch', 'Smith', 'kath@yopmail.com', '1234567891', NULL, 'employee', 'LoPRsnpuSDaGppcHA9Xa8hHn8tjrijgY', 1, '2025-11-10 13:16:31', NULL, '2025-11-10 13:16:31', '2025-11-10 13:16:31'),
+(25, 9, 'Hadley', 'Huffman', 'tyditob@mailinator.com', '+1 (722) 956-4806', '2005-10-13 00:00:00', 'employee', 'CmojsoFdu5OnYcu47q7AoAIE2FnAKzYt', 1, '2025-11-28 17:33:44', NULL, '2025-11-28 17:33:44', '2025-11-28 17:33:44'),
+(26, 9, 'Xandra', 'Sosa', 'pocyneluh@mailinator.com', '+1 (852) 824-5799', '2011-11-30 00:00:00', 'client', 'eL0D5zzf7a2uJEB0OwSOC1Je8Kn5QQ16', 1, '2025-11-28 17:35:41', NULL, '2025-11-28 17:35:41', '2025-11-28 17:35:41'),
+(27, 20, 'Veronica', 'Stone', 'qididizej@mailinator.com', '+1 (121) 688-7965', '2000-08-04 00:00:00', 'employee', 'RF1WlSSWqN4Vxre0xFvud8sPv1vgknpu', 1, '2025-12-17 15:20:48', NULL, '2025-12-17 15:20:48', '2025-12-17 15:20:48');
 
 -- --------------------------------------------------------
 
@@ -915,6 +1068,7 @@ CREATE TABLE `company_employees` (
 
 CREATE TABLE `contact_us` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `type` enum('custom_quote','request_a_quote') NOT NULL DEFAULT 'custom_quote',
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
@@ -933,10 +1087,10 @@ CREATE TABLE `contact_us` (
 -- Dumping data for table `contact_us`
 --
 
-INSERT INTO `contact_us` (`id`, `first_name`, `last_name`, `email`, `phone`, `company`, `plans`, `quantity`, `message`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'Burke', 'Hopper', 'nevenijud@mailinator.com', '+1 (398) 974-4266', 'Langley and Butler Plc', 'Enterprise Plan', '150', 'Molestiae excepteur', '1', NULL, '2025-04-16 12:25:39', '2025-04-16 12:25:39'),
-(2, 'Hilel', 'Riddle', 'dj@sam.com', '5574475582', 'Strickland Ortiz Co', 'Enterprise Plan', '1', 'Duis voluptatem Arc', '1', '2025-07-22 20:20:34', '2025-07-22 15:20:12', '2025-07-22 15:20:34'),
-(3, 'Zoe', 'Gibbs', 'hasuryk@mailinator.com', '+1 (705) 465-7443', 'Dean Haney Co', 'Enterprise Plan', 'Employees', 'Reprehenderit asper', '1', NULL, '2025-09-11 16:38:07', '2025-09-11 16:38:07');
+INSERT INTO `contact_us` (`id`, `type`, `first_name`, `last_name`, `email`, `phone`, `company`, `plans`, `quantity`, `message`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'custom_quote', 'Burke', 'Hopper', 'nevenijud@mailinator.com', '+1 (398) 974-4266', 'Langley and Butler Plc', 'Enterprise Plan', '150', 'Molestiae excepteur', '1', NULL, '2025-04-16 12:25:39', '2025-04-16 12:25:39'),
+(2, 'custom_quote', 'Hilel', 'Riddle', 'dj@sam.com', '5574475582', 'Strickland Ortiz Co', 'Enterprise Plan', '1', 'Duis voluptatem Arc', '1', '2025-07-22 20:20:34', '2025-07-22 15:20:12', '2025-07-22 15:20:34'),
+(3, 'custom_quote', 'Zoe', 'Gibbs', 'hasuryk@mailinator.com', '+1 (705) 465-7443', 'Dean Haney Co', 'Enterprise Plan', 'Employees', 'Reprehenderit asper', '1', NULL, '2025-09-11 16:38:07', '2025-09-11 16:38:07');
 
 -- --------------------------------------------------------
 
@@ -1133,7 +1287,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (108, '2025_10_06_204142_add_text_color_and_background_color_to_business_cards_table', 71),
 (109, '2025_10_06_205519_add_color_columns_to_business_card_orders_table', 72),
 (110, '2025_10_14_002111_add_front_back_design_fields_to_business_cards_table', 73),
-(111, '2025_10_23_201433_create_travel_type_table', 74);
+(111, '2025_10_23_201433_create_travel_type_table', 74),
+(112, '2025_12_15_232504_create_wishlists_table', 75),
+(113, '2025_12_25_225428_create_balloons_category_table', 76),
+(116, '2025_12_25_225512_create_balloons_enquiry_table', 77),
+(118, '2025_12_26_180915_create_balloon_enquiry_items', 78);
 
 -- --------------------------------------------------------
 
@@ -1250,13 +1408,53 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (2, 'App\\Models\\User', 94),
 (2, 'App\\Models\\User', 96),
 (2, 'App\\Models\\User', 98),
+(2, 'App\\Models\\User', 140),
+(2, 'App\\Models\\User', 142),
+(2, 'App\\Models\\User', 144),
+(2, 'App\\Models\\User', 145),
+(2, 'App\\Models\\User', 149),
+(2, 'App\\Models\\User', 150),
+(2, 'App\\Models\\User', 151),
+(2, 'App\\Models\\User', 152),
+(2, 'App\\Models\\User', 155),
+(2, 'App\\Models\\User', 173),
+(2, 'App\\Models\\User', 175),
 (5, 'App\\Models\\User', 83),
 (5, 'App\\Models\\User', 86),
 (5, 'App\\Models\\User', 89),
 (5, 'App\\Models\\User', 91),
 (5, 'App\\Models\\User', 93),
 (5, 'App\\Models\\User', 95),
-(5, 'App\\Models\\User', 97);
+(5, 'App\\Models\\User', 97),
+(5, 'App\\Models\\User', 135),
+(5, 'App\\Models\\User', 137),
+(5, 'App\\Models\\User', 138),
+(5, 'App\\Models\\User', 139),
+(5, 'App\\Models\\User', 141),
+(5, 'App\\Models\\User', 143),
+(5, 'App\\Models\\User', 146),
+(5, 'App\\Models\\User', 147),
+(5, 'App\\Models\\User', 148),
+(5, 'App\\Models\\User', 153),
+(5, 'App\\Models\\User', 154),
+(5, 'App\\Models\\User', 156),
+(5, 'App\\Models\\User', 157),
+(5, 'App\\Models\\User', 158),
+(5, 'App\\Models\\User', 159),
+(5, 'App\\Models\\User', 160),
+(5, 'App\\Models\\User', 161),
+(5, 'App\\Models\\User', 162),
+(5, 'App\\Models\\User', 163),
+(5, 'App\\Models\\User', 164),
+(5, 'App\\Models\\User', 165),
+(5, 'App\\Models\\User', 166),
+(5, 'App\\Models\\User', 167),
+(5, 'App\\Models\\User', 168),
+(5, 'App\\Models\\User', 169),
+(5, 'App\\Models\\User', 170),
+(5, 'App\\Models\\User', 171),
+(5, 'App\\Models\\User', 172),
+(5, 'App\\Models\\User', 174);
 
 -- --------------------------------------------------------
 
@@ -1306,6 +1504,36 @@ INSERT INTO `newsletters` (`id`, `name`, `email`, `status`, `deleted_at`, `creat
 (25, NULL, 'cole@gamil.com', '1', NULL, '2025-04-07 16:55:34', '2025-04-07 16:55:34'),
 (26, NULL, 'cole@gamil.com', '1', NULL, '2025-04-07 16:56:47', '2025-04-07 16:56:47'),
 (27, NULL, 'newuser@gmail.com', '1', NULL, '2025-04-14 14:49:11', '2025-04-14 14:49:11');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `module` varchar(191) NOT NULL,
+  `module_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `module_slug` varchar(191) NOT NULL,
+  `reference_module` varchar(191) NOT NULL,
+  `reference_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `reference_slug` varchar(191) NOT NULL,
+  `title` varchar(191) NOT NULL,
+  `description` longtext NOT NULL,
+  `is_read` tinyint(1) NOT NULL DEFAULT 0,
+  `is_view` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `user_id`, `module`, `module_id`, `module_slug`, `reference_module`, `reference_id`, `reference_slug`, `title`, `description`, `is_read`, `is_view`, `created_at`, `updated_at`) VALUES
+(1, 95, 'company_employee', 26, 'company_employee', 'birthday', 26, 'birthday', 'Upcoming Birthday: Xandra Sosa', 'Xandra Sosa birthday is on (Nov 30).', 0, 0, '2025-11-28 17:35:42', '2025-11-28 17:35:42');
 
 -- --------------------------------------------------------
 
@@ -1409,7 +1637,13 @@ INSERT INTO `orders` (`id`, `customer_id`, `guest_email`, `guest_first_name`, `g
 (44, 132, 'melokit@mailinator.com', 'Arden', 'Sloan', '+1 (644) 905-5269', 66, 611665, NULL, 'pi_3SKO5GLXqt7gmBJh0TYeBSap', NULL, 56, NULL, NULL, NULL, '2025-10-21', NULL, 'Pending', 'paid', 1, NULL, '2025-10-21 11:46:47', '2025-10-21 11:46:47'),
 (45, 133, 'ficazeni@mailinator.com', 'Duncan', 'Mcfadden', '+1 (464) 168-2166', 67, 769744, NULL, 'pi_3SKO8CLXqt7gmBJh1u6Lw7cx', NULL, 1272, NULL, NULL, NULL, '2025-10-21', NULL, 'Pending', 'paid', 1, NULL, '2025-10-21 11:49:50', '2025-10-21 11:49:50'),
 (46, 134, 'production8421@gmail.com', 'Josephine', 'Mendez', '+1 (178) 486-7893', 68, 855200, NULL, 'pi_3SKPvgLXqt7gmBJh1AInD2mg', NULL, 1325, NULL, NULL, NULL, '2025-10-21', NULL, 'Pending', 'paid', 1, NULL, '2025-10-21 13:45:02', '2025-10-21 13:45:02'),
-(47, 134, 'production8421@gmail.com', 'Herrod', 'Barnes', '+1 (143) 279-9083', 69, 604091, NULL, 'pi_3SKQgRLXqt7gmBJh1EVLzwhk', NULL, 88, NULL, NULL, NULL, '2025-10-21', NULL, 'Pending', 'paid', 1, NULL, '2025-10-21 14:33:20', '2025-10-21 14:33:20');
+(47, 151, 'production8421@gmail.com', 'Herrod', 'Barnes', '+1 (143) 279-9083', 69, 604091, NULL, 'pi_3SKQgRLXqt7gmBJh1EVLzwhk', NULL, 88, NULL, NULL, NULL, '2025-10-21', NULL, 'Pending', 'paid', 1, NULL, '2025-10-21 14:33:20', '2025-10-21 14:33:20'),
+(48, 155, NULL, NULL, NULL, NULL, 71, 864004, NULL, 'pi_3Sf518LXqt7gmBJh1qY9fCwj', NULL, 42, NULL, NULL, NULL, '2025-12-16', NULL, 'Pending', 'paid', 1, NULL, '2025-12-16 15:38:46', '2025-12-16 15:38:46'),
+(49, 155, NULL, NULL, NULL, NULL, 71, 598751, NULL, 'pi_3Sf7osLXqt7gmBJh1fVnzCwc', NULL, 42, NULL, NULL, NULL, '2025-12-16', NULL, 'Pending', 'paid', 1, NULL, '2025-12-16 18:38:18', '2025-12-16 18:38:18'),
+(50, 155, NULL, NULL, NULL, NULL, 71, 833975, NULL, 'pi_3SfMvfLXqt7gmBJh1omteBhL', NULL, 78, NULL, NULL, NULL, '2025-12-17', NULL, 'Pending', 'paid', 1, NULL, '2025-12-17 10:46:18', '2025-12-17 10:46:18'),
+(51, 155, NULL, NULL, NULL, NULL, 71, 597975, NULL, 'pi_3SfOMzLXqt7gmBJh1IzhIpWr', NULL, 104, NULL, NULL, NULL, '2025-12-17', NULL, 'Pending', 'paid', 1, NULL, '2025-12-17 12:18:37', '2025-12-17 12:18:37'),
+(52, 155, NULL, NULL, NULL, NULL, 71, 609647, NULL, 'pi_3SfOzFLXqt7gmBJh0SgQnX1S', NULL, 29, NULL, NULL, NULL, '2025-12-17', NULL, 'Pending', 'paid', 1, NULL, '2025-12-17 12:58:09', '2025-12-17 12:58:09'),
+(53, 155, NULL, NULL, NULL, NULL, 71, 453650, NULL, 'pi_3SfP6zLXqt7gmBJh0Ad90Xon', NULL, 42, NULL, NULL, NULL, '2025-12-17', NULL, 'Pending', 'paid', 1, NULL, '2025-12-17 13:06:08', '2025-12-17 13:06:08');
 
 -- --------------------------------------------------------
 
@@ -1531,7 +1765,14 @@ INSERT INTO `order_details` (`id`, `order_id`, `category_id`, `sub_category_id`,
 (83, 44, NULL, NULL, NULL, 'business_card', 80, 'Business Card Order - kraft (200 cards)', 56, 1, NULL, NULL, NULL, NULL, 56.00, 'Succeeded', 1, '2025-10-21', NULL, '2025-10-21 11:46:47', '2025-10-21 11:46:47'),
 (84, 45, NULL, NULL, NULL, 'business_card', 81, 'Business Card Order - glossy (2000 cards)', 636, 2, NULL, NULL, NULL, NULL, 1272.00, 'Succeeded', 1, '2025-10-21', NULL, '2025-10-21 11:49:50', '2025-10-21 11:49:50'),
 (85, 46, NULL, NULL, NULL, 'business_card', 82, 'Business Card Order - plastic (5000 cards)', 1325, 1, NULL, NULL, NULL, NULL, 1325.00, 'Succeeded', 1, '2025-10-21', NULL, '2025-10-21 13:45:02', '2025-10-21 13:45:02'),
-(86, 47, NULL, NULL, NULL, 'business_card', 83, 'Business Card Order - matte (200 cards)', 44, 2, NULL, NULL, NULL, NULL, 88.00, 'Succeeded', 1, '2025-10-21', NULL, '2025-10-21 14:33:20', '2025-10-21 14:33:20');
+(86, 47, NULL, NULL, NULL, 'business_card', 83, 'Business Card Order - matte (200 cards)', 44, 2, NULL, NULL, NULL, NULL, 88.00, 'Succeeded', 1, '2025-10-21', NULL, '2025-10-21 14:33:20', '2025-10-21 14:33:20'),
+(87, 48, NULL, NULL, NULL, '0', 4, 'Birthday Cake Pops & Cookies', 42, 1, NULL, NULL, NULL, NULL, 41.99, 'Succeeded', 1, '2025-12-16', NULL, '2025-12-16 15:38:46', '2025-12-16 15:38:46'),
+(88, 49, NULL, NULL, NULL, '0', 0, 'Buttercream-Frosted Assorted Cupcakes – 6 cupcakes', 42, 1, NULL, NULL, NULL, NULL, 41.99, 'Succeeded', 1, '2025-12-16', NULL, '2025-12-16 18:38:18', '2025-12-16 18:38:18'),
+(89, 50, NULL, NULL, NULL, '0', 15, 'Mix & Match Bakery Gift – Pick 12', 78, 1, NULL, NULL, NULL, NULL, 77.99, 'Succeeded', 1, '2025-12-17', NULL, '2025-12-17 10:46:18', '2025-12-17 10:46:18'),
+(90, 51, NULL, NULL, NULL, '0', 8, 'Cheesecake Party Wheel', 62, 1, NULL, NULL, NULL, NULL, 61.99, 'Succeeded', 1, '2025-12-17', NULL, '2025-12-17 12:18:37', '2025-12-17 12:18:37'),
+(91, 51, NULL, NULL, NULL, '0', 4, 'Birthday Cake Pops & Cookies', 42, 1, NULL, NULL, NULL, NULL, 41.99, 'Succeeded', 1, '2025-12-17', NULL, '2025-12-17 12:18:37', '2025-12-17 12:18:37'),
+(92, 52, NULL, NULL, NULL, '0', 0, 'Classic Chocolate Chip Cookie Flavor Box', 29, 1, NULL, NULL, NULL, NULL, 28.99, 'Succeeded', 1, '2025-12-17', NULL, '2025-12-17 12:58:09', '2025-12-17 12:58:09'),
+(93, 53, '2', NULL, 23, '1', 27, 'Thank You Assorted Roses', 42, 1, NULL, NULL, NULL, NULL, 41.99, 'Succeeded', 1, '2025-12-17', NULL, '2025-12-17 13:06:08', '2025-12-17 13:06:08');
 
 -- --------------------------------------------------------
 
@@ -1604,10 +1845,10 @@ INSERT INTO `page_settings` (`id`, `parent_slug`, `key`, `value`, `deleted_at`, 
 (13, 'header', 'form_blog', NULL, NULL, '2022-04-18 19:49:12', '2022-04-18 19:49:12'),
 (14, 'header', 'header_logo', '26082025173616.webp', NULL, '2022-04-18 19:49:12', '2025-08-26 12:36:16'),
 (15, 'header', 'header_favicon', '10042025161538.png', NULL, '2022-04-18 19:51:50', '2025-04-10 11:15:38'),
-(16, 'footer', '_token', 'Gsb8jKUgx7CMaBocqXS1ewR6Z4vSYaFAhkfvb4PE', NULL, '2022-04-18 20:15:08', '2025-09-08 11:53:03'),
+(16, 'footer', '_token', 'cg4uF8nP7ezKvXTcNisU0bnpJyaTzxrnvvjkGqc1', NULL, '2022-04-18 20:15:08', '2025-11-18 17:28:34'),
 (17, 'footer', 'parent_slug', 'footer', NULL, '2022-04-18 20:15:08', '2022-04-18 20:15:08'),
 (18, 'footer', 'footer_description', '<p>Welcome to customer, employee, and individual connections &amp; appreciation, where we believe that business is built on more than just transactions &ndash; it&rsquo;s built on genuine connections and heartfelt appreciation.</p>', NULL, '2022-04-18 20:15:08', '2025-04-07 16:11:48'),
-(19, 'footer', 'footer_email', 'raymond@neverforgetappreciation.com', NULL, '2022-04-18 20:15:08', '2025-04-14 14:47:36'),
+(19, 'footer', 'footer_email', 'info@neverforgetappreciation.com', NULL, '2022-04-18 20:15:08', '2025-11-18 17:28:34'),
 (21, 'footer', 'footer_facebook', 'https://www.facebook.com/neverforgetappreciations', NULL, '2022-04-18 20:15:08', '2025-09-08 11:53:03'),
 (22, 'footer', 'footer_instagram', 'https://www.instagram.com/neverforgetappreciation/', NULL, '2022-04-18 20:15:08', '2025-09-08 11:53:03'),
 (23, 'footer', 'form_blog', NULL, NULL, '2022-04-18 20:15:08', '2022-04-18 20:15:08'),
@@ -1619,11 +1860,11 @@ INSERT INTO `page_settings` (`id`, `parent_slug`, `key`, `value`, `deleted_at`, 
 (29, 'home', 'banner_heading', NULL, NULL, '2022-04-20 00:42:18', '2024-02-05 17:48:08'),
 (30, 'home', 'form_home_blog', NULL, NULL, '2022-04-20 00:42:18', '2022-04-20 00:42:18'),
 (31, 'footer', 'footer_phone', '(843) 900-3876 | (843) 998-9900', NULL, '2024-02-05 16:51:31', '2025-09-02 16:57:27'),
-(32, 'contact', '_token', '9G9YEqFUlzukrG101SlwV3LWVs1WRwSZR4RDJs3q', NULL, '2024-02-05 19:26:34', '2025-09-11 15:03:09'),
+(32, 'contact', '_token', 'cg4uF8nP7ezKvXTcNisU0bnpJyaTzxrnvvjkGqc1', NULL, '2024-02-05 19:26:34', '2025-11-18 18:08:15'),
 (33, 'contact', 'parent_slug', 'contact', NULL, '2024-02-05 19:26:34', '2024-02-05 19:26:34'),
 (34, 'contact', 'contact_heading', 'Fill out the form below, and we’ll get back to you as soon as possible.', NULL, '2024-02-05 19:26:34', '2025-04-10 11:53:56'),
 (35, 'contact', 'contact_address', NULL, NULL, '2024-02-05 19:26:34', '2025-04-07 18:49:04'),
-(36, 'contact', 'contact_email', 'raymond@neverforgetappreciation.com', NULL, '2024-02-05 19:26:34', '2025-04-14 14:47:22'),
+(36, 'contact', 'contact_email', 'info@neverforgetappreciation.com', NULL, '2024-02-05 19:26:34', '2025-11-18 18:08:15'),
 (37, 'contact', 'contact_phone', '(843) 900-3876 | (843) 998-9900', NULL, '2024-02-05 19:26:34', '2025-09-11 15:03:09'),
 (38, 'contact', 'contact_map', NULL, NULL, '2024-02-05 19:26:34', '2025-04-07 18:49:04'),
 (39, 'contact', 'form_contact', NULL, NULL, '2024-02-05 19:26:34', '2024-02-05 19:26:34'),
@@ -1886,7 +2127,15 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `permission`, `deleted_at
 (278, 'company-list', 'web', 'list', NULL, '2025-10-08 17:53:40', '2025-10-08 17:53:40'),
 (279, 'company-create', 'web', 'create', NULL, '2025-10-08 17:53:40', '2025-10-08 17:53:40'),
 (280, 'company-edit', 'web', 'edit', NULL, '2025-10-08 17:53:40', '2025-10-08 17:53:40'),
-(281, 'company-delete', 'web', 'delete', NULL, '2025-10-08 17:53:40', '2025-10-08 17:53:40');
+(281, 'company-delete', 'web', 'delete', NULL, '2025-10-08 17:53:40', '2025-10-08 17:53:40'),
+(282, 'company_employee-list', 'web', 'list', NULL, '2025-11-10 11:45:36', '2025-11-10 11:45:36'),
+(283, 'company_employee-create', 'web', 'create', NULL, '2025-11-10 11:45:36', '2025-11-10 11:45:36'),
+(284, 'company_employee-edit', 'web', 'edit', NULL, '2025-11-10 11:45:36', '2025-11-10 11:45:36'),
+(285, 'company_employee-delete', 'web', 'delete', NULL, '2025-11-10 11:45:36', '2025-11-10 11:45:36'),
+(296, 'balloon_enquiry-list', 'web', 'list', NULL, '2025-12-30 14:37:05', '2025-12-30 14:37:05'),
+(297, 'balloon_enquiry-create', 'web', 'create', NULL, '2025-12-30 14:37:05', '2025-12-30 14:37:05'),
+(298, 'balloon_enquiry-edit', 'web', 'edit', NULL, '2025-12-30 14:37:05', '2025-12-30 14:37:05'),
+(299, 'balloon_enquiry-delete', 'web', 'delete', NULL, '2025-12-30 14:37:05', '2025-12-30 14:37:05');
 
 -- --------------------------------------------------------
 
@@ -1981,7 +2230,7 @@ INSERT INTO `products` (`id`, `created_by`, `category_id`, `variations`, `name`,
 (40, 1, '4', NULL, 'With Many Thanks 3 1/2 Gallon 3 Flavor Popcorn Tin', 'with-many-thanks-3-12-gallon-3-flavor-popcorn-tin', '0', '46.99', NULL, '<ul>\r\n<li>Butter Popcorn &ndash; The popcorn classic with freshly popped kernels and buttery deliciousness.</li>\r\n<li>Cheese Popcorn &ndash; A must for any popcorn fan. When you think of cheese popcorn, this is it!</li>\r\n<li>Caramel Popcorn &ndash; Super crunchy and super delicious, one of our most popular popcorn recipes.</li>\r\n</ul>', '<p>Comes filled with your choice of Butter, Cheese, &amp; Caramel Popcorn or Butter, Cheese &amp; Caramel Popcorn. 2 Gallon 32 Cups 3.5 Gallon 56 Cups 6.5 Gallon 104 Cups</p>', '0', '20250423195347_6809454bbd028.webp', '[\"20250423195406_6809455e41a9d.webp\",\"20250423195406_6809455e41ef9.webp\"]', NULL, '1', NULL, '2025-04-23 14:53:47', '2025-04-23 14:54:06'),
 (41, 1, '5', '[{\"variation_id\":\"44\",\"price\":\"41.99\",\"image\":\"20250516182130_var_6827822a0c550.webp\"},{\"variation_id\":\"45\",\"price\":\"51.99\",\"image\":\"20250516182130_var_6827822a0c76d.webp\"},{\"variation_id\":\"46\",\"price\":\"61.99\",\"image\":\"20250516182130_var_6827822a0c875.webp\"},{\"variation_id\":\"47\",\"price\":\"71.99\",\"image\":\"20250516182130_var_6827822a0c9bd.webp\"}]', 'Charming Rose Garden', 'charming-rose-garden', '1', NULL, '{\"from\":\"41.99\",\"to\":\"71.99\"}', '<ul>\r\n<li>Pink and yellow rose plants arrive budding and ready to bloom</li>\r\n<li>Designed in a white picket fence planter with floral-print grosgrain bow</li>\r\n<li>Single planter only includes pink rose plant</li>\r\n<li>Measures overall approximately 8&Prime;-10&Prime;H</li>\r\n<li>Once the blooms expire, you can plant your perennial outdoors; with continued care, it will flourish every year</li>\r\n</ul>\r\n<p>Add to their gift:</p>\r\n<ul>\r\n<li>Glass suncatcher with floral design and &ldquo;Live Life in Full Bloom&rdquo; sentiment; metal frame and hanging chain; measures 5&Prime; square; includes suction cup for hanging</li>\r\n</ul>', '<div class=\"mbp48228\">About Charming Rose Garden</div>\r\n<div class=\"mbp48231\">When it comes to roses, two is twice as nice. Our beautiful pair of blooming plants, in pink and yellow is designed in a charming white picket fence planter with a floral-print grosgrain bow. Also available in a single planter with a pink rose, it&rsquo;s perfect for birthdays, anniversaries or simply to celebrate spring. Add to your gift with a keepsake sentiment suncatcher.</div>', '0', '20250516182129_68278229c8495.webp', '[\"20250516183357_682785155c542.webp\",\"20250516183357_682785155c75c.webp\",\"20250516183357_682785155c86d.webp\",\"20250516183357_682785155c97b.webp\",\"20250516183357_682785155ca86.webp\"]', NULL, '1', NULL, '2025-05-16 13:21:30', '2025-05-16 13:33:57'),
 (42, 1, '5', '[{\"variation_id\":\"44\",\"price\":\"46.99\",\"image\":\"20250516210430_var_6827a85e214cd.webp\"},{\"variation_id\":\"48\",\"price\":\"58.99\",\"image\":\"20250516210430_var_6827a85e2179e.webp\"},{\"variation_id\":\"49\",\"price\":\"56.99\",\"image\":\"20250516210430_var_6827a85e21911.webp\"},{\"variation_id\":\"50\",\"price\":\"68.99\",\"image\":\"20250516210430_var_6827a85e21a72.webp\"},{\"variation_id\":\"46\",\"price\":\"85.99\",\"image\":\"20250516210430_var_6827a85e21e6a.webp\"},{\"variation_id\":\"51\",\"price\":\"97.99\",\"image\":\"20250516210430_var_6827a85e21fe6.webp\"}]', 'Grand Gardenia™', 'grand-gardenia', '1', NULL, '{\"from\":\"46.99\",\"to\":\"97.99\"}', '<ul>\r\n<li>Fresh gardenia plant arrives budding and ready to bloom with white flower heads</li>\r\n<li>Designed in an antique-inspired, white-washed planter</li>\r\n<li>Large measures overall approximately 14-16&Prime;H</li>\r\n<li>Medium measures overall approximately 12-14&Prime;H</li>\r\n<li>Small measures overall approximately 10-12&Prime;H</li>\r\n<li>Gardenias typically bloom between May and September</li>\r\n</ul>\r\n<p>Add to their gift:</p>\r\n<ul>\r\n<li>Yankee Candle<sup>&reg;</sup>&nbsp;white gardenia-scented candle; premium soy-wax blend; burn time: 20-30 hours; 4.3 oz.</li>\r\n</ul>\r\n<p><strong>About Yankee Candle</strong><sup>&reg;</sup><br />From reliving favorite memories to setting a mood, Yankee Candle shares a passion for fragrance. It&rsquo;s what drives them to search the world for fresh inspiration in creating evocative, long-lasting scents that will help make your house feel like home.</p>', '<p>With its graceful, fragrant blooms and glossy green leaves, our gardenia is a favorite among plant lovers. It arrives budding in our antique-inspired planter. Complement your gift by adding our Yankee Candle&reg; in a fresh gardenia scent.</p>', '0', '20250516210429_6827a85d9a031.webp', '[\"20250516210538_6827a8a2ddc00.webp\",\"20250516210538_6827a8a2ddf81.webp\"]', NULL, '1', NULL, '2025-05-16 16:04:30', '2025-05-16 16:05:38'),
-(43, 1, '5', '[{\"variation_id\":\"44\",\"price\":\"51.99\",\"image\":\"20250516211321_var_6827aa71c4f53.webp\"},{\"variation_id\":\"49\",\"price\":\"87.99\",\"image\":\"20250516211321_var_6827aa71c5213.webp\"},{\"variation_id\":\"46\",\"price\":\"117.99\",\"image\":\"20250516211321_var_6827aa71c5389.webp\"}]', 'Money Tree', 'money-tree', '1', NULL, '{\"from\":\"51.99\",\"to\":\"117.99\"}', '<ul>\r\n<li>Money Tree bonsai features five to seven plume-like leaves and an expertly braided trunk</li>\r\n<li>Designed in beige and ivory seagrass woven, basket-style planter with sewn-in liner and additional plastic liner to prevents leaks</li>\r\n<li>Large measures overall approximately 40-45&Prime;H</li>\r\n<li>Medium measures overall approximately 28-30&Prime;H</li>\r\n<li>Small measures overall approximately 10-14&Prime;H</li>\r\n</ul>\r\n<p>Also Available:</p>\r\n<ul>\r\n<li>Terra cotta candle holder with bronzed metal lid and tea light candle; sentiment reads, &ldquo;The Best Things in Life are the people we love, the places we&rsquo;ve been, and the memories we&rsquo;ve made along the way&rdquo;</li>\r\n<li>Packaged inside a beautiful gift box; measures 3&Prime;D</li>\r\n</ul>', '<p>Send good luck and prosperity with our popular Money Tree bonsai. Featuring lush, glossy leaves and a unique, braided trunk, this natural beauty is designed in a woven basket-style planter, adding to its charm. A favorite among feng shui enthusiasts, it&rsquo;s as easy to care for as it is to enjoy. Available in three sizes. Adding a neutral-toned candle holder with a sentimental quote and tea light candle makes this gift even more thoughtful.</p>', '0', '20250516211321_6827aa71c3626.webp', '[\"20250516211637_6827ab356a8c8.webp\",\"20250516211637_6827ab356acb2.webp\",\"20250516211637_6827ab356ae02.webp\"]', NULL, '1', NULL, '2025-05-16 16:13:21', '2025-05-16 16:16:37'),
+(43, 1, '5', '[{\"variation_id\":\"44\",\"price\":\"51.99\",\"image\":\"20250516211321_var_6827aa71c4f53.webp\"},{\"variation_id\":\"49\",\"price\":\"87.99\",\"image\":\"20250516211321_var_6827aa71c5213.webp\"},{\"variation_id\":\"46\",\"price\":\"117.99\",\"image\":\"20250516211321_var_6827aa71c5389.webp\"}]', 'Money Tree', 'money-tree', '1', NULL, '{\"from\":\"51.99\",\"to\":\"117.99\"}', '<ul>\r\n<li>Money Tree bonsai features five to seven plume-like leaves and an expertly braided trunk</li>\r\n<li>Designed in beige and ivory seagrass woven, basket-style planter with sewn-in liner and additional plastic liner to prevents leaks</li>\r\n<li>Large measures overall approximately 40-45&Prime;H</li>\r\n<li>Medium measures overall approximately 28-30&Prime;H</li>\r\n<li>Small measures overall approximately 10-14&Prime;H</li>\r\n</ul>\r\n<p>Also Available:</p>\r\n<ul>\r\n<li>Terra cotta candle holder with bronzed metal lid and tea light candle; sentiment reads, &ldquo;The Best Things in Life are the people we love, the places we&rsquo;ve been, and the memories we&rsquo;ve made along the way&rdquo;</li>\r\n<li>Packaged inside a beautiful gift box; measures 3&Prime;D</li>\r\n</ul>', '<p>Send good luck and prosperity with our popular Money Tree bonsai. Featuring lush, glossy leaves and a unique, braided trunk, this natural beauty is designed in a woven basket-style planter, adding to its charm. A favorite among feng shui enthusiasts, it&rsquo;s as easy to care for as it is to enjoy. Available in three sizes. Adding a neutral-toned candle holder with a sentimental quote and tea light candle makes this gift even more thoughtful.</p>', '0', '20250516211321_6827aa71c3626.webp', '[\"20250516211637_6827ab356a8c8.webp\",\"20250516211637_6827ab356acb2.webp\",\"20250516211637_6827ab356ae02.webp\"]', NULL, '1', NULL, '2025-05-16 16:13:21', '2025-11-05 15:30:29'),
 (44, 1, '5', '[{\"variation_id\":\"52\",\"price\":\"38.99\",\"image\":\"20250516212242_var_6827aca21b237.webp\"},{\"variation_id\":\"53\",\"price\":\"48.99\",\"image\":\"20250516212242_var_6827aca21b58d.webp\"},{\"variation_id\":\"54\",\"price\":\"48.99\",\"image\":\"20250516212242_var_6827aca21b75d.webp\"},{\"variation_id\":\"55\",\"price\":\"58.99\",\"image\":\"20250516212242_var_6827aca21b92c.webp\"}]', 'Thank You Rose Plant', 'thank-you-rose-plant', '1', NULL, '{\"from\":\"38.99\",\"to\":\"58.99\"}', '<ul>\r\n<li>Yellow rose plant arrives budding and blooming</li>\r\n<li>Designed in a colorful, round, striped metal planter with metallic gold foil accents</li>\r\n<li>Large measures overall approximately 10-12&Prime;H</li>\r\n<li>Small measures overall approximately 8-10&Prime;H</li>\r\n<li>&ldquo;Thank you&rdquo; pre-inflated balloon; measures 4&Prime;D on 12&Prime;H stick</li>\r\n</ul>\r\n<p>Add to their gift:</p>\r\n<ul>\r\n<li>Mini chocolate chip cookies in pint-sized Mason jar with decorative label</li>\r\n</ul>', '<div class=\"mbp109615\">About Thank You Rose Plant</div>\r\n<div class=\"mbp109618\">Maybe they helped you out when you needed it most. Maybe they did something to make your day a little brighter. Whatever the reason, our sunny yellow rose plant is the perfect gift to show your gratitude. Designed in a colorful striped container, it&rsquo;s paired with a &ldquo;Thank you&rdquo; balloon and available in two sizes. Add our Mason jar full of mini chocolate chip cookies for a sweet surprise.</div>', '0', '20250516212242_6827aca21977b.webp', '[\"20250516212256_6827acb067554.webp\",\"20250516212256_6827acb067723.webp\"]', NULL, '1', NULL, '2025-05-16 16:22:42', '2025-05-16 16:22:56'),
 (45, 1, '6', '[{\"variation_id\":\"57\",\"price\":\"31.99\",\"image\":\"20250516213759_var_6827b037bdd6c.webp\"},{\"variation_id\":\"56\",\"price\":\"31.99\",\"image\":\"20250516213759_var_6827b037be089.webp\"}]', 'Bold Style Personalized Writing Journal', 'bold-style-personalized-writing-journal', '1', NULL, '{\"from\":\"31.99\",\"to\":\"31.99\"}', '<ul>\r\n<li>Choose from 2 journal color</li>\r\n<li>Engraved with any name and any line of personalization</li>\r\n</ul>\r\n<ul>\r\n<li>Quality constructed from bi-cast split leather</li>\r\n<li>Journal measures 5 1/4&Prime;W x 8 1/4&Prime;L x 3/4&Prime;H</li>\r\n<li>Includes 80 lined pages and a coordinating ribbon marker</li>\r\n<li><strong>Please note:&nbsp;</strong>Pen is not included</li>\r\n<li>Imported</li>\r\n</ul>', NULL, '0', '20250516213759_6827b037bc561.webp', '[\"20250516214027_6827b0cb509e7.webp\",\"20250516214027_6827b0cb50d68.webp\",\"20250516214027_6827b0cb50f35.webp\",\"20250516214027_6827b0cb510f8.webp\",\"20250516214027_6827b0cb5129c.webp\",\"20250516214027_6827b0cb51435.webp\"]', NULL, '1', NULL, '2025-05-16 16:37:59', '2025-05-16 16:40:27'),
 (46, 1, '6', NULL, 'Executive Personalized Acrylic Name Plate', 'executive-personalized-acrylic-name-plate', '0', '30.99', NULL, '<ul>\r\n<li>Printed with choice of color and font</li>\r\n<li>Personalized with two lines of text</li>\r\n</ul>\r\n<ul>\r\n<li>Constructed of 100% acrylic</li>\r\n<li>Freestanding</li>\r\n<li>Measures 9&Prime; W x 2&Prime; H x .75&Prime; D</li>\r\n<li>Wipe clean</li>\r\n<li>Imported</li>\r\n</ul>', NULL, '0', '20250516214216_6827b1386b96b.webp', NULL, NULL, '1', NULL, '2025-05-16 16:42:16', '2025-05-16 16:42:16'),
@@ -2262,10 +2511,26 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (276, 5),
 (277, 1),
 (277, 5),
+(278, 1),
 (278, 5),
+(279, 1),
 (279, 5),
+(280, 1),
 (280, 5),
-(281, 5);
+(281, 1),
+(281, 5),
+(282, 1),
+(282, 5),
+(283, 1),
+(283, 5),
+(284, 1),
+(284, 5),
+(285, 1),
+(285, 5),
+(296, 1),
+(297, 1),
+(298, 1),
+(299, 1);
 
 -- --------------------------------------------------------
 
@@ -3547,7 +3812,39 @@ INSERT INTO `users` (`id`, `user_id`, `account_type`, `company_id`, `name`, `fir
 (131, '7368', 'app_user', NULL, NULL, 'Amber', 'Dyer', 'synysoj@mailinator.com', '+1 (312) 437-3526', NULL, '$2y$10$0Aw8DWiS2JEuSdG/tFBWeOZ2FdiLAlo3VlkoLB0OIgmm/WrcqtJge', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-10-21 11:41:17', '2025-10-21 11:41:17'),
 (132, '9058', 'app_user', NULL, NULL, 'Arden', 'Sloan', 'melokit@mailinator.com', '+1 (644) 905-5269', NULL, '$2y$10$oc1CKH7J3ILKaeqCn0qrFOT3tgUFmNSN9A2icfmN5vqyBG/FbH0V2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-10-21 11:46:46', '2025-10-21 11:46:46'),
 (133, '5829', 'app_user', NULL, NULL, 'Duncan', 'Mcfadden', 'ficazeni@mailinator.com', '+1 (464) 168-2166', NULL, '$2y$10$vYe.MKzSRmdYiQ93g1TKJelfTPUkmFDj9v33IRWjrIYA6/94NMvuO', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-10-21 11:49:26', '2025-10-21 11:49:26'),
-(134, '3494', 'app_user', NULL, NULL, 'Josephine', 'Mendez', 'production8421@gmail.com', '+1 (178) 486-7893', NULL, '$2y$10$XNgos15P9xm2E75H6WBkWevDh1gt/DHlYmwH/r0J8V7YUCZYcmhNq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-10-21 13:45:00', '2025-10-21 13:45:00');
+(134, '3494', 'app_user', NULL, NULL, 'Josephine', 'Mendez', 'production8421@gmail.com', '+1 (178) 486-7893', NULL, '$2y$10$XNgos15P9xm2E75H6WBkWevDh1gt/DHlYmwH/r0J8V7YUCZYcmhNq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-10-21 13:45:00', '2025-10-21 13:45:00'),
+(135, '5530', 'Company', NULL, 'Company', 'Company', 'One', 'c@yopmail.com', '1231231234', NULL, '$2y$10$tb2weNY/DmU89LSyZnnuG..dbb.KaPpknRsZftpyZwHijHIPw9pgy', NULL, '6912053bcab65', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-11-10 10:31:07', '2025-11-10 10:31:07'),
+(136, NULL, 'company', '1', 'Zeph', NULL, 'Frye', 'abc@yopmail.com', '+1 (627) 471-5188', NULL, '$2y$10$Pi/hE5iJUDb1J/B4ylHVpO6xVS7INiV.ChXpQ6GsqoXX/UTp./2Ja', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-11-10 12:02:16', '2025-11-10 12:02:16'),
+(137, '5375', 'Company', NULL, 'Damian', 'Damian', 'Reeves', 'tikupu@mailinator.com', '+1 (832) 945-6788', NULL, '$2y$10$FZQGOeGLOZAruipEvHi50e2lET63N5e.RnzBTx8/BtflZf9XdRw4W', NULL, '69122f4cd9cb1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-11-10 13:30:36', '2025-11-10 13:30:36'),
+(138, '7359', 'Company', NULL, 'Melissa', 'Melissa', 'Puckett', 'kedavu@mailinator.com', '+1 (924) 739-4678', NULL, '$2y$10$aG9NyIevK2yXVMzHySg1Fu8B2srnLCs4VfLejTzfKVFnSUd0MTIRG', NULL, '691233842169c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-11-10 13:48:36', '2025-11-10 13:48:36'),
+(148, '8641', 'Company', NULL, 'web', 'web', 'dev', 'arsalanahmeddev1@gmail.com', '7284587308', '2025-11-13 13:25:43', '$2y$10$451j/xvACq0nVgUHY8JHteCkmYmiwLj8EYPR1THSCqCgbHbucQCVu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-11-13 13:25:30', '2025-11-13 13:25:43'),
+(149, '6418', 'Individual', NULL, 'testin', 'testin', 'testin', 'testin@gmail.com', '7284587308', NULL, '$2y$10$GSyCytNYzJSDhhKH6XPcs.ek42bnZuu5dKkBAWsmm1ai8WUcskHPS', NULL, '691b4f1c2c350', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-11-17 11:36:44', '2025-11-17 11:36:44'),
+(150, '9590', 'Individual', NULL, 'test', 'test', 'Individual', 'testing@yopmail.com', '5551234567', NULL, '$2y$10$Y35cwcwMSQHHRqn3u2ZsMOO8hsmyJu2qn0nmY4jmr6tTMM9DNhfAa', NULL, '692492aa527aa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-11-24 12:15:22', '2025-11-24 12:15:22'),
+(151, '3313', 'Individual', NULL, 'test', 'test', 'Individual1', 'Individual1@yopmail.com', '5551234567', NULL, '$2y$10$FeF4DzGkwFg1BuTUpIluDuontkpYg11/V3A3ftjAKJb7bUwZQgVSW', NULL, '692493bd7d3ce', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-11-24 12:19:57', '2025-11-24 12:19:57'),
+(152, '5027', 'Individual', NULL, 'testing', 'Clarke', 'only', 'qogex@yopmail.com', '+1 (736) 285-2198', '2025-12-15 17:24:27', '$2y$10$jQmITGeS/TnNpUPhvhsFH.O7E0AaCSBlyBITCnhwXeGZeNhgGcQgi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-15 13:50:11', '2025-12-15 17:25:52'),
+(153, '3967', 'Company', NULL, 'Kay', 'Kay', 'Molina', 'vixi@mailinator.com', '+1 (991) 724-3492', NULL, '$2y$10$2QDAB0Ia0.S/2tt6yCv8.OruIu7sVtEyueg12AmUt4RF5cTRC9lIO', NULL, '6940827b822d4', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-15 16:49:47', '2025-12-15 16:49:47'),
+(154, '1233', 'Company', NULL, 'Kay', 'Kay', 'Molina', 'vixi@yopmail.com', '+1 (991) 724-3492', '2025-12-15 16:50:45', '$2y$10$1.VujlhVOMFZpGLO866BmO7iSX1zOiuaXE6htbeLoRyOLGDJ0LZYW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-15 16:50:29', '2025-12-15 16:50:45'),
+(155, '4145', 'Individual', NULL, 'testing1', 'testing1', 'only', 'dev@yopmail.com', '1234567894', NULL, '$2y$10$1GjTQIa.nnbvC.HKv5MQEe./P8NwwVIKf8pTtlhxallnMHS16YBei', NULL, '69418632a5e11', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-16 11:17:54', '2025-12-16 11:17:54'),
+(156, '2498', 'Company', NULL, 'testing', 'testing', 'adasdasd', 'abc2@yopmail.com', '1234567894', NULL, '$2y$10$yFmaPcETPUzeYWzKtH/1..dY2GxmO8K14NoDu7FizTRyoJ4OFMhxC', NULL, '6943030482070', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-17 14:22:44', '2025-12-17 14:22:44'),
+(157, '1097', 'Company', NULL, 'Magee', 'Magee', 'Faulkner', 'beby@mailinator.com', '+1 (593) 353-6173', NULL, '$2y$10$GNZztjtSnZPa7iJfiCoFvu0tZvqKrNjCejvFZhzL7giUiUnoggNF.', NULL, '69430bfb5e8d3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-17 15:00:59', '2025-12-17 15:00:59'),
+(158, '8458', 'Company', NULL, 'Risa', 'Risa', 'Calhoun', 'jufyl@mailinator.com', '+1 (967) 555-8824', NULL, '$2y$10$ZXwoZO9C7eRzNC5rd6Xf6OXD8OB4AytjxY0pLqR5cr8oqwWYr6nlO', NULL, '69430c1574fb6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-17 15:01:25', '2025-12-17 15:01:25'),
+(159, '9460', 'Company', NULL, 'Rigel', 'Rigel', 'Guerrero', 'vapahuz@mailinator.com', '+1 (702) 152-7278', NULL, '$2y$10$UC./gHWo53lXEWoxZZG.Aec0DJdeNN86pzvkY7ru3cyWMmn1P8Pwm', NULL, '69430c34e0611', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-17 15:01:57', '2025-12-17 15:01:57'),
+(160, '5251', 'Company', NULL, 'Medge', 'Medge', 'Dodson', 'fefy@mailinator.com', '+1 (303) 434-9178', NULL, '$2y$10$70KRwzXaVHRwKLQtui2Mwu3ec.Ms6rs5sxMgMjrRMBN4KCYGgecre', NULL, '69430c5bf1c80', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-17 15:02:36', '2025-12-17 15:02:36'),
+(161, '4449', 'Company', NULL, 'Cameron', 'Cameron', 'Blanchard', 'gesaron@mailinator.com', '+1 (223) 826-3145', NULL, '$2y$10$vvtZKbRj5mnPMoQV1Mn2a.zwgXwuYnKJNwUxyQOlmsFsnq0clIpXe', NULL, '69430d19ddfd8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-17 15:05:46', '2025-12-17 15:05:46'),
+(162, '3198', 'Company', NULL, 'Violet', 'Violet', 'Becker', 'cobobel@mailinator.com', '+1 (244) 937-5959', NULL, '$2y$10$rjOLmZoyRWt831LGMzfe8eZEnZ4SRs5dkI.ow4WypVeBMPMXDuyn2', NULL, '69430e4fe4c6f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-17 15:10:56', '2025-12-17 15:10:56'),
+(163, '1803', 'Company', NULL, 'Judith', 'Judith', 'Dejesus', 'cajynidy@mailinator.com', '+1 (302) 373-1164', NULL, '$2y$10$kSPRWNwcaWTJOoYiXJExL.S.EOOwY8CM4k9Mc.kRkc8mGmzqsmUCm', NULL, '69430f4576038', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-17 15:15:01', '2025-12-17 15:15:01'),
+(164, '3123', 'Company', NULL, 'testting', 'testting', 'company', 'testingcompany@yopmail.com', '1234567894', '2025-12-17 15:19:54', '$2y$10$fa0kKIH89PlMY.yBCRD0TeWEc9ZaI/wKA8WPM7mbYiT/HKy48RJW6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-17 15:19:04', '2025-12-17 15:19:54'),
+(165, '3181', 'Company', NULL, 'alex', 'alex', 'alex', 'alex@yopmail.com', '7284587308', NULL, '$2y$10$wX9WX5whQ1K4Bj0VyLJfpO9kwQzUYpkDO0P9CFY7BqZHCONx5Xqq6', NULL, '694312860ad90', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-17 15:28:54', '2025-12-17 15:28:54'),
+(166, '9023', 'Company', NULL, 'web', 'web', 'dev', 'dev2@yopmail.com', '1234567894', NULL, '$2y$10$WqgNrRG/BhnuOOJjCvL8mO/EgSicGMbhhLUCtufb3iZjZ2FljfFBe', NULL, '694432ed13943', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-18 11:59:25', '2025-12-18 11:59:25'),
+(167, '7230', 'Company', NULL, 'web', 'web', 'dev', 'dev3@gmail.com', '1234567894', NULL, '$2y$10$i5iP1R9cqRJhBGpN60fWYO1VM/Om5mfab1eP8meSMHeu2Y3nfXQM6', NULL, '69443436a59de', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-18 12:04:54', '2025-12-18 12:04:54'),
+(168, '8088', 'Company', NULL, 'web', 'web', 'dev', 'dev4@gmail.com', '1234567894', NULL, '$2y$10$O7Q8dKJI3U8Vy/GQB9A7XOX1eeH6in51vEw85.J7PYRMDPJPPxSfq', NULL, '694434998e6e9', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-18 12:06:33', '2025-12-18 12:06:33'),
+(169, '4630', 'Company', NULL, 'dev', 'dev', 'dev', 'dev5@yopmail.com', '1234567894', NULL, '$2y$10$6eYYvCwygyrlgMTeEgOiDOT7CvjPesphC2mei.K4x7vylyWlZ0EHe', NULL, '6944370045251', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-18 12:16:48', '2025-12-18 12:16:48'),
+(170, NULL, 'Company', NULL, 'Faith', 'Faith', 'Winters', 'tinene@mailinator.com', '+1 (138) 398-3627', NULL, '$2y$10$hl5xuynLRmwbQWya2zVlO.yXdj.4ScVwDglLg2p6xUpTC2WT7RaFK', NULL, '69443889513f8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-18 12:23:21', '2025-12-18 12:23:21'),
+(171, NULL, 'Company', NULL, 'Phelan', 'Phelan', 'Berry', 'jepuciza@mailinator.com', '+1 (647) 838-9803', NULL, '$2y$10$.2h.rOR9LUqeHya2BwOX6eyF0SxK7GJ9.mfTopgQHZ.1rpfAXuO7u', NULL, '694438a7d0ca0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-18 12:23:51', '2025-12-18 12:23:51'),
+(172, '6113', 'Company', NULL, 'mark', 'mark', 'johnson', 'markjohson@yopmail.com', '7284587308', '2025-12-18 13:23:16', '$2y$10$BMSb0hnTmcKXUtlw8zVOzuzt2txL9ZJtsc3RFzqO7n64RoIvDP802', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-18 13:22:07', '2025-12-18 13:23:16'),
+(173, '7331', 'Individual', NULL, 'Declan', 'Declan', 'Mack', 'xeqebybel@yopmail.com', '+1 (108) 295-7492', NULL, '$2y$10$C8.Z45Q1b9H1Agnk7YpsDeMbBo9GIKb4qA2BkeusasIipYeTqjqPa', NULL, '694494ec0a747', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-18 18:57:32', '2025-12-18 18:57:32'),
+(174, '9647', 'Company', NULL, 'Christian', 'Christian', 'Cardenas', 'waniko@mailinator.com', '+1 (335) 774-8706', NULL, '$2y$10$rF8gkwCTaP42q09eyKa.rOtewtPfMWSX4S9GYSzV79gu.Wkhy6w5m', NULL, '69557ee51cb8c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-31 14:52:05', '2025-12-31 14:52:05'),
+(175, '9834', 'Individual', NULL, 'webdev', 'webdev', 'test', 'webdev@yopmail.com', '7284587308', NULL, '$2y$10$8JidvJpwdfxboddDESmKOebtRVytvwHKFiSzw/A7byxq5LM/.05Wq', NULL, '69557f13dd979', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, '2025-12-31 14:52:51', '2025-12-31 14:52:51');
 
 -- --------------------------------------------------------
 
@@ -3673,10 +3970,38 @@ CREATE TABLE `why_choose_us` (
 
 INSERT INTO `why_choose_us` (`id`, `created_by`, `title`, `description`, `image`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
 (1, 1, 'We Make It Personal', 'Every gift, card, and message is tailored to your recipients — no generic boxes or bulk messaging here.', '20250605235145.png', '1', NULL, '2025-06-05 18:51:45', '2025-06-05 18:51:45'),
-(2, 1, 'We Save You Time', 'You provide the names and dates — we handle the cards, reminders, packaging, and delivery. Set it and forget it.', '20250605235242.png', '1', NULL, '2025-06-05 18:52:42', '2025-06-05 18:52:42'),
+(2, 1, 'We Save You Time', 'You provide the names and dates — we handle the cards, reminders, packaging, and delivery.', '20250605235242.png', '1', NULL, '2025-06-05 18:52:42', '2025-12-15 15:14:08'),
 (3, 1, 'We Scale With You', 'Whether you’re a team of 5 or 5,000, our flexible plans and CRM tools grow with your business.', '20250606152947.jpg', '1', NULL, '2025-06-05 18:54:04', '2025-06-06 10:29:47'),
-(4, 1, 'We Work With the Best', 'Our exclusive partnerships with brands like 1-800-Flowers, Hallmark, Amazon, Booking.com, and more ensure quality and dependability.', '20250606153210.png', '1', NULL, '2025-06-05 18:56:09', '2025-06-06 10:32:10'),
+(4, 1, 'We Work With the Best', 'Our exclusive partnerships with brands like 1-800-Flowers, Amazon Associate, and more ensure quality and dependability.', '20250606153210.png', '1', NULL, '2025-06-05 18:56:09', '2025-12-15 15:15:40'),
 (5, 1, 'We Help You Stand Out', 'Showing appreciation isn’t just kind — it’s smart. Our clients report higher employee retention, increased referrals, and happier work cultures.', '20250606153324.png', '1', NULL, '2025-06-05 18:59:36', '2025-06-06 10:33:24');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wishlists`
+--
+
+CREATE TABLE `wishlists` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `wishlists`
+--
+
+INSERT INTO `wishlists` (`id`, `user_id`, `product_id`, `created_at`, `updated_at`) VALUES
+(25, 155, 22, '2025-12-16 14:33:54', '2025-12-16 14:33:54'),
+(26, 155, 45, '2025-12-16 14:37:28', '2025-12-16 14:37:28'),
+(27, 155, 3, '2025-12-16 14:39:58', '2025-12-16 14:39:58'),
+(28, 155, 6, '2025-12-16 14:39:59', '2025-12-16 14:39:59'),
+(29, 155, 7, '2025-12-16 14:40:00', '2025-12-16 14:40:00'),
+(30, 155, 8, '2025-12-16 14:40:01', '2025-12-16 14:40:01'),
+(31, 155, 11, '2025-12-16 14:40:02', '2025-12-16 14:40:02'),
+(32, 155, 10, '2025-12-16 14:40:03', '2025-12-16 14:40:03');
 
 --
 -- Indexes for dumped tables
@@ -3689,10 +4014,38 @@ ALTER TABLE `about_us`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `balloons_category`
+--
+ALTER TABLE `balloons_category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `balloons_enquiry`
+--
+ALTER TABLE `balloons_enquiry`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `balloon_enquiry_items`
+--
+ALTER TABLE `balloon_enquiry_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `balloon_enquiry_items_user_id_foreign` (`user_id`),
+  ADD KEY `balloon_enquiry_items_balloon_id_foreign` (`balloon_id`),
+  ADD KEY `balloon_enquiry_items_enquiry_id_foreign` (`enquiry_id`);
+
+--
 -- Indexes for table `billing_addresses`
 --
 ALTER TABLE `billing_addresses`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `blogs`
+--
+ALTER TABLE `blogs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `slug` (`slug`);
 
 --
 -- Indexes for table `business_cards`
@@ -3844,6 +4197,12 @@ ALTER TABLE `newsletters`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `occasions`
 --
 ALTER TABLE `occasions`
@@ -3992,6 +4351,14 @@ ALTER TABLE `why_choose_us`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `wishlists`
+--
+ALTER TABLE `wishlists`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `wishlists_user_id_product_id_unique` (`user_id`,`product_id`),
+  ADD KEY `wishlists_product_id_foreign` (`product_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -4002,10 +4369,34 @@ ALTER TABLE `about_us`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `balloons_category`
+--
+ALTER TABLE `balloons_category`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `balloons_enquiry`
+--
+ALTER TABLE `balloons_enquiry`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+
+--
+-- AUTO_INCREMENT for table `balloon_enquiry_items`
+--
+ALTER TABLE `balloon_enquiry_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+
+--
 -- AUTO_INCREMENT for table `billing_addresses`
 --
 ALTER TABLE `billing_addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+
+--
+-- AUTO_INCREMENT for table `blogs`
+--
+ALTER TABLE `blogs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `business_cards`
@@ -4053,7 +4444,7 @@ ALTER TABLE `careers`
 -- AUTO_INCREMENT for table `career_applications`
 --
 ALTER TABLE `career_applications`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `career_categories`
@@ -4065,7 +4456,7 @@ ALTER TABLE `career_categories`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -4083,13 +4474,13 @@ ALTER TABLE `collaborators`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `company_employees`
 --
 ALTER TABLE `company_employees`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `contact_us`
@@ -4125,13 +4516,19 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
 -- AUTO_INCREMENT for table `newsletters`
 --
 ALTER TABLE `newsletters`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `occasions`
@@ -4143,13 +4540,13 @@ ALTER TABLE `occasions`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `pages`
@@ -4173,7 +4570,7 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=282;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=300;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -4239,7 +4636,7 @@ ALTER TABLE `travel_types`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=135;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
 
 --
 -- AUTO_INCREMENT for table `user_business_card_designs`
@@ -4260,8 +4657,22 @@ ALTER TABLE `why_choose_us`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `wishlists`
+--
+ALTER TABLE `wishlists`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `balloon_enquiry_items`
+--
+ALTER TABLE `balloon_enquiry_items`
+  ADD CONSTRAINT `balloon_enquiry_items_balloon_id_foreign` FOREIGN KEY (`balloon_id`) REFERENCES `balloons_category` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `balloon_enquiry_items_enquiry_id_foreign` FOREIGN KEY (`enquiry_id`) REFERENCES `balloons_enquiry` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `balloon_enquiry_items_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `business_cards`
@@ -4324,6 +4735,13 @@ ALTER TABLE `product_images`
 --
 ALTER TABLE `user_business_card_designs`
   ADD CONSTRAINT `user_business_card_designs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `wishlists`
+--
+ALTER TABLE `wishlists`
+  ADD CONSTRAINT `wishlists_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `wishlists_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

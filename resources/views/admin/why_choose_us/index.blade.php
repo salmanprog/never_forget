@@ -8,6 +8,7 @@
 	</div>
 	@can('why_choose_us-create')
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('why_choose_us.create') }}" class="btn btn-primary btn-sm">Add Why Choose Us</a>
 	</div>
 	@endcan

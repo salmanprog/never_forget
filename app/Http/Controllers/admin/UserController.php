@@ -13,9 +13,30 @@ use DB;
 use Hash;
 use Illuminate\Support\Arr;
 use Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
+use App\Models\Company;
+use App\Models\CompanyEmployee;
+use App\Models\FriendFamily;
+use App\Models\BillingAddress;
+use Illuminate\Support\Facades\Schema;
 
 class UserController extends Controller
 {
+    /**
+     * Map URL type param to database account_type value (case-sensitive).
+     */
+    private static function mapRequestTypeToAccountType($type)
+    {
+        $map = [
+            'salesperson' => 'Sales Person',
+            'company'     => 'Company',
+            'individual'  => 'Individual',
+        ];
+        return $map[strtolower((string) $type)] ?? ucfirst($type);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -41,9 +62,10 @@ class UserController extends Controller
                 $company = $user->administeredCompany;
                 $query->where('company_id', $company->id);
             } else {
-                // Admin can see all users, filter by type if specified
+                // Admin can see all users, filter by type if specified (tab-specific)
                 if($request['type'] && $request['type'] != "All"){
-                    $query->where('account_type', $request['type']);
+                    $accountType = self::mapRequestTypeToAccountType($request['type']);
+                    $query->where('account_type', $accountType);
                 }
             }
             
@@ -73,10 +95,11 @@ class UserController extends Controller
             $query->where('company_id', $company->id);
             $page_title = $company->name . ' - Company Users';
         } else {
-            // Admin can see all users, filter by type if specified
+            // Admin can see all users, filter by type if specified (tab-specific)
             if($request->get('type')){
-                $query->where('account_type', $request->get('type'));
-                $page_title = ucfirst($request->get('type')) . ' Users';
+                $accountType = self::mapRequestTypeToAccountType($request->get('type'));
+                $query->where('account_type', $accountType);
+                $page_title = $accountType == 'Sales Person' ? 'Sales Person Users' : $accountType . ' Users';
             } else {
                 $page_title = 'All Users';
             }
@@ -87,15 +110,74 @@ class UserController extends Controller
     }
 
     /**
+     * Show uploaded resources (employees & clients) for a company user (admin only).
+     */
+    public function viewResources($id)
+    {
+        $companyUser = User::findOrFail($id);
+        $company = $companyUser->administeredCompany;
+        if (!$company) {
+            return redirect()->route('user.index', ['type' => 'company'])->with('error', 'This user has no company or resources.');
+        }
+        $employeesCount = $company->employees()->where('type', 'employee')->count();
+        $clientsCount = $company->employees()->where('type', 'client')->count();
+        $employees = $company->employees()->orderBy('id', 'DESC')->paginate(10);
+        $page_title = $company->name . ' - Resources';
+        return view('admin.user.resources', compact('companyUser', 'company', 'employees', 'employeesCount', 'clientsCount', 'page_title'));
+    }
+
+    /**
+     * Update delivery status for a resource (admin only). Company view will show the updated value.
+     */
+    public function updateDeliveryStatus(Request $request, $userId, $employeeId)
+    {
+        $companyUser = User::findOrFail($userId);
+        $company = $companyUser->administeredCompany;
+        if (!$company) {
+            return response()->json(['success' => false, 'message' => 'Company not found.'], 404);
+        }
+        $employee = $company->employees()->findOrFail($employeeId);
+        $status = $request->input('delivery_status', 'pending');
+        $employee->update(['delivery_status' => $status]);
+        return response()->json(['success' => true, 'delivery_status' => $status]);
+    }
+
+    /**
+     * Show friends/family list for an individual user (admin only). Same UI as company resources.
+     * Route parameter is {user} so argument must be $user to receive the id.
+     */
+    public function viewFriendsFamily($user)
+    {
+        $user = User::findOrFail($user);
+        $records = FriendFamily::where('user_id', $user->id)->orderBy('id', 'DESC')->paginate(10);
+        $page_title = ($user->name ?? 'User') . ' - Friends/Family';
+        return view('admin.user.friends_family', compact('user', 'records', 'page_title'));
+    }
+
+    /**
+     * Update delivery status for a friend/family record (admin only). Individual dashboard will show updated value.
+     * Route: user/{user}/friends-family/{id}/delivery-status - params: $user (id), $id (friend_family id).
+     */
+    public function updateFriendFamilyDeliveryStatus(Request $request, $user, $id)
+    {
+        $userModel = User::findOrFail($user);
+        $record = FriendFamily::where('user_id', $userModel->id)->where('id', $id)->firstOrFail();
+        $status = $request->input('delivery_status', 'pending');
+        $record->update(['delivery_status' => $status]);
+        return response()->json(['success' => true, 'delivery_status' => $status]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        $page_title = 'Add Customer';
+        $page_title = 'Add Sales Person';
+        $salesperson_roles = Role::orderby('id', 'desc')->where('name', 'Sales Person')->get(['name', 'id']);
         $roles = Role::orderby('id', 'desc')->get(['name', 'id']);
-        return view('admin.user.create',compact('roles','page_title'));
+        return view('admin.user.create',compact('roles','page_title','salesperson_roles'));
     }
 
     /**
@@ -107,20 +189,75 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'phone' => 'required',
+            'address' => 'required', 
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+            'account_type' => 'required', 
         ]);
 
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
+        // Generate unique verify_token
+        do{
+            $verify_token = uniqid();
+        }while(User::where('verify_token', $verify_token)->first());
+        
+        // Generate unique user_id
+        do{
+            $user_id = rand(1000, 9999);
+        }while(User::where('user_id', $user_id)->first());
 
-        $user = User::create($input);
-        $user->assignRole($request->input('roles'));
+        $user = User::create([
+            'name' => $request->first_name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'account_type' => $request->account_type,
+            'password' => Hash::make($request->password),
+            'status' => 1, // Activate account
+            'verify_token' => $verify_token,
+            'user_id' => $user_id,
+        ]);
 
-        return redirect()->route('user.index')
-                        ->with('message','Customer created successfully');
+        try {
+            $user->assignRole($request->input('account_type'));
+        } catch (\Exception $e) {
+            Log::warning('Sales Person created but role assign failed: ' . $e->getMessage());
+        }
+
+        // Generate verification link
+        $verification_link = route('email-verification', $verify_token);
+
+        // Send email to salesperson
+        $details = [
+            'from' => 'verify',
+            'title' => "Hi ".$request->first_name.' '.$request->last_name.',',
+            'body' => "Your Sales Person account has been created successfully on NEVER FORGET Showing Appreciation. Please verify your email address by clicking on the verification link below to activate your account.",
+            'regard' => 'We look forward to seeing you soon.',
+            'account_type' => 'Sales Person',
+            'verify_token' => $verify_token,
+            'email' => $request->email,
+            'password' => $request->password,
+            'login_url' => route('login'),
+        ];
+
+        try {
+            \Mail::to($user->email)->send(new \App\Mail\Email($details));
+            $message = 'Sales person with email ' . $request->email . ' has been added successfully. An email has been sent with login credentials and verification link.';
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Failed to send email to salesperson: ' . $e->getMessage());
+            $message = 'Sales person with email ' . $request->email . ' has been added successfully. Email could not be sent (check logs).';
+        }
+
+        $routeParams = $request->input('account_type') === 'Sales Person'
+            ? ['type' => 'salesperson']
+            : [];
+        return redirect()->route('user.index', $routeParams)
+                        ->with('success', $message);
     }
 
     /**
@@ -147,7 +284,8 @@ class UserController extends Controller
         $user = User::with('roles')->find($id);
         $roles = Role::orderby('id', 'desc')->get(['name', 'id']);
         $userRole = $user->roles->pluck('name','name')->all();
-        return view('admin.user.edit',compact('user','roles','userRole', 'page_title'));
+        $company = ($user->account_type == 'Company') ? ($user->administeredCompany ?? $user->company) : null;
+        return view('admin.user.edit', compact('user', 'roles', 'userRole', 'page_title', 'company'));
     }
 
     /**
@@ -166,54 +304,128 @@ class UserController extends Controller
 
         $user = User::find($id);
 
-        if(!empty($input['password'])){
+        if(!empty($request->input('password'))){
             $user->password = Hash::make($request->input('password'));
         }
         $user->name = $request->input('name');
         $user->last_name = $request->input('last_name');
         $user->email = $request->input('email');
+        $user->status = $request->input('status', 1);
+        if ($user->account_type == 'Company' && $request->has('user_employees_limit')) {
+            $user->employees = (int) $request->input('user_employees_limit', 10);
+            $user->clients = (int) $request->input('user_clients_limit', 5);
+        }
         $user->update();
-        
-        return redirect()->route('user.index')->with('message','Customer updated successfully');
+
+        if ($user->account_type == 'Company') {
+            $company = $user->administeredCompany ?? $user->company;
+            if (!$company) {
+                $company = new Company();
+                $company->admin_user_id = $user->id;
+                $companyName = trim((string) ($request->input('billing_company') ?: $request->input('company_name') ?: $user->name ?? ''));
+                $company->name = $companyName !== '' ? $companyName : ('Company ' . $user->id);
+                $company->plan = 'Basic';
+                $company->options = 'Both';
+                $company->save();
+            }
+            $companyName = trim((string) ($request->input('billing_company') ?: $request->input('company_name') ?: $company->name ?? ''));
+            $company->name = $companyName !== '' ? $companyName : ($company->name ?: 'Company ' . $user->id);
+            $company->registration_number = $request->input('registration_number', $company->registration_number);
+            $company->industry = $request->input('industry', $company->industry);
+            $company->website = $request->input('company_website', $company->website);
+            $company->year_established = $request->input('year_established', $company->year_established);
+            $company->number_of_employees = $request->filled('number_of_employees') ? (int) $request->number_of_employees : $company->number_of_employees;
+            $company->primary_contact_name = $request->filled('billing_first_name') ? trim($request->billing_first_name . ' ' . $request->input('billing_last_name', '')) : $request->input('primary_contact_name', $company->primary_contact_name);
+            $company->job_title = $request->input('job_title', $company->job_title);
+            $company->billing_email = $request->input('billing_email', $company->billing_email);
+            $company->billing_phone = $request->input('billing_phone', $company->billing_phone);
+            $company->billing_address_line_1 = $request->input('billing_address_line_1', $company->billing_address_line_1);
+            $company->billing_address_line_2 = null; // Single Street field used (same as Create Billing Address form)
+            $company->city = $request->input('billing_city', $company->city);
+            $company->state = $request->input('billing_state', $company->state);
+            $company->zip_code = $request->input('billing_zip_code', $company->zip_code);
+            $company->billing_country = $request->input('billing_country', $company->billing_country);
+            if ($request->hasFile('company_logo')) {
+                $logoDir = public_path('admin/assets/images/company-logos');
+                File::ensureDirectoryExists($logoDir, 0755, true);
+                $logoName = 'company_logo_' . $company->id . '_' . time() . '.' . $request->file('company_logo')->getClientOriginalExtension();
+                $request->file('company_logo')->move($logoDir, $logoName);
+                $company->logo = $logoName;
+            }
+            $company->is_profile_completed = $this->isCompanyProfileComplete($company) ? 1 : 0;
+            $company->save();
+        }
+
+        if($request->input('user_role') == 'Sales Person'){
+            return redirect()->to(route('user.index') . '?type=salesperson')->with('message','Sales Person updated successfully');
+        }else{
+            return redirect()->route('user.index')->with('message','Customer updated successfully');
+        }
+    }
+
+    /**
+     * Individual read-only profile (My Profile).
+     */
+    public function IndividualProfileShow()
+    {
+        if (Auth::user()->account_type == 'Company') {
+            return redirect()->route('company.profile');
+        }
+        $page_title = 'My Profile';
+        $user = User::where('id', Auth::user()->id)->first();
+        return view('website.individual-dashboard.profile', compact('user', 'page_title'));
     }
 
     public function IndividualEditProfile()
     {
+        if (Auth::user()->account_type == 'Company') {
+            return redirect()->route('company.profile.edit');
+        }
         $page_title = 'Edit Profile';
         $cities = City::where('status', 1)->get();
         $states = State::where('city_id')->get();
-        $user =  User::where('id', Auth::user()->id)->first();
+        $user = User::where('id', Auth::user()->id)->first();
         return view('website.individual-dashboard.edit', compact('cities', 'states', 'user', 'page_title'));
+    }
+
+    /**
+     * Read-only company profile view (sidebar "Company Profile" link).
+     */
+    public function CompanyProfileShow()
+    {
+        if (Auth::user()->account_type != 'Company') {
+            return redirect()->route('member.profile.edit');
+        }
+        $page_title = 'Company Profile';
+        $user = User::where('id', Auth::user()->id)->first();
+        $company = $user->administeredCompany;
+        return view('website.company-dashboard.profile', compact('user', 'company', 'page_title'));
+    }
+
+    /**
+     * Edit company profile form (header "Edit Profile" button).
+     */
+    public function CompanyEditProfile()
+    {
+        if (Auth::user()->account_type != 'Company') {
+            return redirect()->route('member.profile.edit');
+        }
+        $page_title = 'Edit Profile';
+        $user = User::where('id', Auth::user()->id)->first();
+        $company = $user->administeredCompany;
+        return view('website.company-dashboard.edit', compact('user', 'company', 'page_title'));
+    }
+
+    public function SalesPersonEditProfile()
+    {
+        $page_title = 'Edit Profile'; 
+        $user =  User::where('id', Auth::user()->id)->first();
+        return view('website.sales-person-dashboard.edit', compact('user', 'page_title'));
     }
 
     public function individualUpdateProfile(Request $request)
     {
         $user = User::where('id', Auth::user()->id)->first();
-        $user->name = $request->name;
-        /*  $user->middle_name = $request->middle_name; */
-        $user->last_name = $request->last_name;
-        $user->address = $request->address;
-        $user->designation = $request->designation;
-       /*  $user->team = $request->team; */
-        $user->about_me = $request->about_me;
-        $user->date_of_birth = $request->date_of_birth;
-        $user->gender = $request->gender;
-        $user->whatsapp = $request->whatsapp;
-        $user->facebook = $request->facebook;
-        $user->twitter = $request->twitter;
-        $user->linkedin = $request->linkedin;
-        // $user->instagram = $request->instagram;
-        // $user->skype = $request->skype;
-        // $user->youtube = $request->youtube;
-        $user->city_id = $request->city_id;
-        $user->state_id = $request->state_id;
-        $user->zip_code = $request->zip_code;
-        // $user->license = $request->license;
-        if (isset($request->image)) {
-            $photo = date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension();
-            $request->image->move(public_path('/admin/assets/images/UserImage'), $photo);
-            $user->image = $photo;
-        }
 
         if (empty($request->name)) {
             $this->validate($request, [
@@ -226,6 +438,155 @@ class UserController extends Controller
         if (isset($request->password)) {
             $this->validate($request, [
                 'name' => 'required',
+                'password' => 'required|same:confirm-password',
+            ]);
+        }
+
+        $request->validate([
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('profile_pictures', 'public');
+    
+            $user = auth()->user();
+            $user->image = $path;
+            $user->update();
+        }
+
+        // Company account type: validate required company fields before saving (billing fields nullable - form section commented out)
+        if (strtolower((string) ($user->account_type ?? '')) === 'company') {
+            $companyForValidation = $user->administeredCompany;
+            $logoRequired = !$companyForValidation || empty(trim($companyForValidation->logo ?? ''));
+            $companyRules = [
+                'billing_first_name' => 'nullable|max:255',
+                'billing_last_name'  => 'nullable|max:255',
+                'billing_company'    => 'nullable|max:255',
+                'billing_country'   => 'nullable|max:255',
+                'number_of_employees' => 'required|integer|min:0',
+                'billing_email'     => 'required|email',
+                'billing_phone'     => 'required|max:50',
+            ];
+            if ($logoRequired) {
+                $companyRules['company_logo'] = 'required';
+            }
+            $this->validate($request, $companyRules, [
+                'number_of_employees.required' => 'Number of Employees is required.',
+                'number_of_employees.integer'  => 'Number of Employees must be a number.',
+                'number_of_employees.min'      => 'Number of Employees must be 0 or more.',
+                'billing_email.required' => 'Email is required.',
+                'billing_email.email'    => 'Email must be a valid email address.',
+                'billing_phone.required' => 'Phone is required.',
+                'company_logo.required'  => 'Company Logo is required.',
+            ]);
+        }
+
+        $updateData = [
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone ?? $user->phone,
+            'address' => $request->address ?? $user->address,
+            'designation' => $request->designation ?? $user->designation,
+            'about_me' => $request->about_me ?? $user->about_me,
+            'date_of_birth' => $request->date_of_birth ?? $user->date_of_birth,
+            'gender' => $request->gender ?? $user->gender,
+            'whatsapp' => $request->whatsapp ?? $user->whatsapp,
+            'facebook' => $request->facebook ?? $user->facebook,
+            'twitter' => $request->twitter ?? $user->twitter,
+            'linkedin' => $request->linkedin ?? $user->linkedin,
+            'city_id' => $request->city_id ?? $user->city_id,
+            'state_id' => $request->state_id ?? $user->state_id,
+            'zip_code' => $request->zip_code ?? $user->zip_code,
+        ];
+        if (isset($request->password) && $request->password) {
+            $updateData['password'] = Hash::make($request->password);
+        }
+        $user->update($updateData);
+
+        // Company account type: save/update company profile fields
+        if (strtolower((string) ($user->account_type ?? '')) === 'company') {
+            $company = $user->administeredCompany;
+            if (!$company) {
+                $company = new Company();
+                $company->admin_user_id = $user->id;
+                $company->name = $request->billing_company ?? $request->company_name ?? $user->name;
+                $company->plan = 'Basic';
+                $company->options = 'Both';
+                $company->save();
+            }
+            $company->name = $request->billing_company ?? $request->company_name ?? $company->name;
+            $company->registration_number = $request->registration_number ?? $company->registration_number;
+            $company->industry = $request->industry ?? $company->industry;
+            $company->website = $request->company_website ?? $company->website;
+            $company->year_established = $request->year_established ?? $company->year_established;
+            $company->number_of_employees = $request->filled('number_of_employees') ? (int) $request->number_of_employees : $company->number_of_employees;
+            $company->primary_contact_name = $request->filled('billing_first_name') ? trim($request->billing_first_name . ' ' . ($request->billing_last_name ?? '')) : ($request->primary_contact_name ?? $company->primary_contact_name);
+            $company->job_title = $request->job_title ?? $company->job_title;
+            $company->billing_email = $request->billing_email ?? $company->billing_email;
+            $company->billing_phone = $request->billing_phone ?? $company->billing_phone;
+            $company->billing_address_line_1 = $request->billing_address_line_1 ?? $company->billing_address_line_1;
+            $company->billing_address_line_2 = null; // Single Street field (same as Create Billing Address form)
+            $company->city = $request->billing_city ?? $company->city;
+            $company->state = $request->billing_state ?? $company->state;
+            $company->zip_code = $request->billing_zip_code ?? $company->zip_code;
+            $company->billing_country = $request->billing_country ?? $company->billing_country;
+            if ($request->hasFile('company_logo')) {
+                $logoDir = public_path('admin/assets/images/company-logos');
+                File::ensureDirectoryExists($logoDir, 0755, true);
+                $logoName = 'company_logo_' . $company->id . '_' . time() . '.' . $request->file('company_logo')->getClientOriginalExtension();
+                $request->file('company_logo')->move($logoDir, $logoName);
+                $company->logo = $logoName;
+            }
+            $company->is_profile_completed = $this->isCompanyProfileComplete($company) ? 1 : 0;
+            $company->save();
+
+            // Keep billing_addresses (company-profile row) in sync so checkout and /billing_address show same data
+            if (Schema::hasColumn('billing_addresses', 'is_company_profile')) {
+                $firstName = trim((string) ($request->billing_first_name ?? ''));
+                $lastName = trim((string) ($request->billing_last_name ?? ''));
+                $street = trim((string) ($request->billing_address_line_1 ?? ''));
+                $billingData = [
+                    'first_name' => $firstName !== '' ? $firstName : 'Company',
+                    'last_name' => $lastName !== '' ? $lastName : 'Account',
+                    'company' => $request->billing_company ?? $company->name,
+                    'country' => $request->billing_country ?? $company->billing_country,
+                    'street' => $street !== '' ? $street : null,
+                    'state' => $request->billing_state ?? $company->state,
+                    'town' => $request->billing_city ?? $company->city,
+                    'postcode' => $request->billing_zip_code ?? $company->zip_code,
+                    'phone' => $request->billing_phone ?? $company->billing_phone,
+                    'email' => $request->billing_email ?? $company->billing_email,
+                    'status' => 1,
+                    'is_company_profile' => true,
+                ];
+                BillingAddress::updateOrCreate(
+                    ['customer_id' => (string) $user->id, 'is_company_profile' => true],
+                    $billingData
+                );
+            }
+        }
+
+        return redirect()->back()->with('message', 'Profile updated successfully');
+    }
+
+    /**
+     * Check if company has all required profile fields filled.
+     */
+    private function isCompanyProfileComplete(Company $company)
+    {
+        return !empty(trim($company->name ?? ''))
+            && !empty(trim($company->billing_email ?? ''))
+            && !empty(trim($company->billing_phone ?? ''));
+    }
+    public function SalesPersonUpdateProfile(Request $request)
+    {
+        $user = User::where('id', Auth::user()->id)->first();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->phone = $request->phone;
+        $user->address = $request->address; 
+        if (isset($request->password)) {
+            $this->validate($request, [ 
                 'password' => 'required|same:confirm-password',
             ]);
 

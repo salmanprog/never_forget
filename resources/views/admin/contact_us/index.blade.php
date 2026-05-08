@@ -6,6 +6,9 @@
 	<div class="content-header-left">
 		<h1>{{$page_title}}</h1>
 	</div>
+	<div class="content-header-right">
+		@include('includes.buttons.back')
+	</div>
 
 </section>
 <section class="content">
@@ -20,8 +23,15 @@
 			<div class="box box-info">
 				<div class="box-body">
                     <div class="row">
-                        <div class="d-flex col-sm-8">
+                        <div class="d-flex col-sm-4">
                             <input type="text" id="search" class="form-control" placeholder="Search">
+                        </div>
+                        <div class="d-flex col-sm-4">
+                            <select name="" id="type" class="form-control type" style="margin-bottom:5px">
+                                <option value="All" selected>Search by type</option>
+                                <option value="custom_quote">Custom Quote</option>
+                                <option value="request_a_quote">Request a Quote</option>
+                            </select>
                         </div>
                         <div class="d-flex col-sm-4">
                             <select name="" id="status" class="form-control status" style="margin-bottom:5px">
@@ -31,6 +41,7 @@
                             </select>
                         </div>
                     </div>
+					<div class="table-responsive">
 					<table id="" class="table table-bordered table-striped">
 						<thead>
 							<tr>
@@ -81,6 +92,7 @@
                             </tr>
 						</tbody>
 					</table>
+					</div>
 				</div>
 			</div>
 		</div>

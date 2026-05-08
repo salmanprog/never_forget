@@ -3,9 +3,10 @@
 @section('content')
 <section class="content-header">
     <div class="content-header-left">
-        <h1>Bulk Upload Employees</h1>
+        <h1>Bulk Upload Resources</h1>
     </div>
     <div class="content-header-right">
+        @include('includes.buttons.back')
         <a href="{{ route('admin.company_employee.index') }}" class="btn btn-primary btn-sm">View All</a>
     </div>
 </section>
@@ -13,6 +14,7 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12">
+            @include('includes.upgrade_alert')
             @if ($errors->any())
                 <div class="callout callout-danger">
                     <ul style="margin-bottom: 0;">
@@ -44,9 +46,7 @@
                             </a>
                         </div>
                     </div>
-
                     <hr>
-
                     <form action="{{ route('admin.company_employee.process-bulk-upload') }}" id="bulk-upload-form" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
                         @csrf
 
@@ -58,12 +58,11 @@
                                 <small class="help-block">Select a CSV file with employee data (max 2MB)</small>
                             </div>
                         </div>
-                        
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label"></label>
                             <div class="col-sm-6">
                                 <button type="submit" class="btn btn-success pull-left" name="form1">
-                                    <i class="fa fa-upload"></i> Upload Employees
+                                    <i class="fa fa-upload"></i> Upload
                                 </button>
                             </div>
                         </div>
@@ -71,7 +70,7 @@
                 </div>
             </div>
 
-            <!-- Sample CSV Format -->
+            <!-- Sample CSV Format (same columns as index) -->
             <div class="box box-default">
                 <div class="box-header">
                     <h3 class="box-title">Sample CSV Format</h3>
@@ -81,24 +80,99 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
+                                    <th>Contact Type</th>
+                                    <th>Client Status</th>
+                                    <th>Client Since</th>
+                                    <th>Department</th>
+                                    <th>Employee ID</th>
+                                    <th>Job Title</th>
+                                    <th>Hire Date</th>
+                                    <th>Employment Status</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Email</th>
-                                    <th>Phone</th>
+                                    <th>Shipping Address</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>Zip</th>
+                                    <th>DOB</th>
+                                    <th>Work Anniversary Date</th>
+                                    <th>Favorite Color</th>
+                                    <th>Hobbies</th>
+                                    <th>Dietry Restriction</th>
+                                    <th>Budget Range</th>
+                                    <th>Gift Preferences</th>
+                                    <th>Occasion</th>
+                                    <th>Gift Sent Date</th>
+                                    <th>Payment Method</th>
+                                    <th>Tracking Number</th>
+                                    <th>Delivery Note</th>
+                                    <th>Delivery Status</th>
+                                    <th>Notes</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>employee</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>Sales</td>
+                                    <td>E001</td>
+                                    <td>Manager</td>
+                                    <td>2020-01-15</td>
+                                    <td>Active</td>
                                     <td>John</td>
                                     <td>Doe</td>
                                     <td>john.doe@example.com</td>
-                                    <td>+1234567890</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
                                 </tr>
                                 <tr>
+                                    <td>client</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
                                     <td>Jane</td>
                                     <td>Smith</td>
                                     <td>jane.smith@example.com</td>
-                                    <td>+1234567891</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>—</td>
                                 </tr>
                             </tbody>
                         </table>

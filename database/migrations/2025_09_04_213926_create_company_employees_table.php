@@ -25,6 +25,7 @@ class CreateCompanyEmployeesTable extends Migration
             $table->boolean('is_active')->default(false);
             $table->timestamp('invited_at')->nullable();
             $table->timestamp('joined_at')->nullable();
+            $table->string('date_of_birth')->nullable();
             $table->timestamps();
             
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');

@@ -34,6 +34,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <!-- Template Main CSS File -->
     <link href="{{ asset('public/assets/website/libs/libs.css') }}" rel="stylesheet">
     <link href="{{ asset('public/assets/website/css/utilities.css') }}" rel="stylesheet">
@@ -64,6 +65,9 @@
 
     <!-- Template Main JS File -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.places_key') }}&libraries=places"
+    async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -71,6 +75,9 @@
     <script src="{{ asset('public/assets/website/js/main.js') }}"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('public/assets/website/vendor/aos/aos.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
 
     <script>
@@ -83,6 +90,7 @@
     </script>
     @stack('js')
     <script>
+
         var swiper = new Swiper(".logo-swapper", {
             slidesPerView: 6,
             spaceBetween: 30,
@@ -218,9 +226,15 @@
                 document.querySelector('.dropdown-menu.flag').classList.remove('show');
             });
         });
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
-    </script>
-</body>
 
+        $(function() {
+            $('.date_range').daterangepicker({
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
 </html>

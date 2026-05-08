@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        '/twilio/sms',
+        '/twilio/voice/dial', // GET; Twilio fetches TwiML when call is answered
     ];
 }

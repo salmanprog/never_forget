@@ -6,6 +6,7 @@
 		<h1>Edit Testimonial</h1>
 	</div>
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('testimonial.index') }}" class="btn btn-primary btn-sm">View All</a>
 	</div>
 </section>

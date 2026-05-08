@@ -182,6 +182,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         App\Providers\TranslationServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
+        App\Providers\ViewServiceProvider::class,
         //\Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
 
     ],

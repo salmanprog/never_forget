@@ -8,6 +8,7 @@
 	</div>
 	@can('category-create')
         <div class="content-header-right">
+			@include('includes.buttons.back')
             <a href="{{ route('category.create') }}" class="btn btn-primary btn-sm">Add category</a>
         </div>
 	@endcan

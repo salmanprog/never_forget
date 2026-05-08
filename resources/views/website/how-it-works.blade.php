@@ -88,7 +88,7 @@
         <div class="col-lg-3" data-aos="fade-down" data-aos-easing="ease-out-cubic"
           data-aos-duration="1000">
           <div class="card-wrapper">
-            <h3 class="fs-35 fw-600 mb-10 light-black">Basic Plan</h3>
+            <h3 class="fs-35 fw-600 mb-10 light-black">Essential Plan</h3>
             <p class="text-black opacity-50 mb-30 fs-16">Birthday & Anniversary Gifts</p>
             <ul class="plans-list check-list position-relative">
               <li>Personalized occasion-based gifts</li>
@@ -100,7 +100,7 @@
         <div class="col-lg-3" data-aos="fade-down" data-aos-easing="ease-out-cubic"
           data-aos-duration="1000">
           <div class="card-wrapper">
-            <h3 class="fs-35 fw-600 mb-10 light-black">Standard Plan</h3>
+            <h3 class="fs-35 fw-600 mb-10 light-black">Growth Plan</h3>
             <p class="text-black opacity-50 mb-30 fs-16">Custom Gifts for Employees & Clients</p>
             <ul class="plans-list check-list position-relative">
               <li>Custom-branded corporate gifts</li>

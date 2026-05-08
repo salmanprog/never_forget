@@ -227,6 +227,9 @@
 
 	<!-- Script -->
 	<script src="{{asset('public/admin/assets/js/jquery-2.2.4.min.js')}}"></script>
+	<script
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.places_key') }}&libraries=places"
+    async defer></script>
 	<script src="{{asset('public/admin/assets/js/bootstrap.min.js')}}"></script>
 	<script src="{{asset('public/admin/assets/js/jquery.dataTables.min.js')}}"></script>
 	<script src="{{asset('public/admin/assets/js/dataTables.bootstrap.min.js')}}"></script>

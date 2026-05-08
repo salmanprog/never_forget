@@ -111,7 +111,7 @@
         </div>
         <div class="footer-bottom"> 
             <div class="d-flex justify-content-between align-items-center container">
-                <h6 class="text-white mb-0">{!! $home_page_data['footer_copy_right'] !!}</h6>
+                <h6 class="text-white mb-0">Copyright © {{ date('Y') }} Never Forget Showing Appreciation</h6>
                 <h6 class="text-white mb-0">{!! $home_page_data['footer_copy_left'] !!}</h6>
             </div>
         </div> 

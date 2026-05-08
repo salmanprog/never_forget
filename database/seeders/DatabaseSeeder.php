@@ -13,7 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(AdminUserSeeder::class);
         $this->call(RoleSeeder::class);
+        $this->call(balloons::class);
+        $this->call(PerfectGiftSeeder::class);
+        $this->call(GreetingsAppreciationCategorySeeder::class);
+        $this->call(ECardCategorySeeder::class);
     }
 }

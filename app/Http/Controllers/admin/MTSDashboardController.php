@@ -5,16 +5,25 @@ namespace App\Http\Controllers\admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\SmsReply;
 use Illuminate\Support\Facades\Auth;
-use Vonage\Client;
-use Vonage\Client\Credentials\Basic;
-use Vonage\SMS\Message\SMS;
+use Illuminate\Support\Facades\Mail;
 
 class MTSDashboardController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:user-list', ['only' => ['index']]);
+        $this->middleware(function ($request, $next) {
+            $user = $request->user();
+            if (!$user) {
+                return redirect()->route('login');
+            }
+            // Allow if user has user-list permission OR is Sales Person (role or account_type)
+            if ($user->can('user-list') || $user->hasRole('Sales Person') || $user->account_type === 'Sales Person') {
+                return $next($request);
+            }
+            abort(403, 'USER DOES NOT HAVE THE RIGHT PERMISSIONS.');
+        })->only(['index', 'smsReplies']);
     }
 
     /**
@@ -29,11 +38,25 @@ class MTSDashboardController extends Controller
                 ->whereNotNull('account_type')
                 ->whereIn('account_type', ['Company', 'Individual']);
             
+            // Normalize account_type filter: "All", empty, null, or "undefined" (from JS) = show all relevant types
+            $accountType = $request->get('account_type') ?? $request->get('type');
+            $accountTypeNorm = $accountType !== null && $accountType !== '' ? strtolower(trim((string) $accountType)) : 'all';
+            $filterByType = !in_array($accountTypeNorm, ['all', 'undefined'], true);
+
             // Check user role and permissions
             if($user->isAdmin()) {
                 // Admin role: can see all users and filter by type
-                if($request['account_type'] && $request['account_type'] != "All"){
-                    $query->where('account_type', $request['account_type']);
+                if($filterByType){
+                    $query->where('account_type', $request['account_type'] ?? $request['type']);
+                }
+            } elseif($user->hasRole('Sales Person') || $user->account_type === 'Sales Person') {
+                // Sales Person: can see companies and individuals assigned to them
+                $query->where('assigned_to_user_id', $user->id);
+                if($filterByType){
+                    $query->where('account_type', $request['account_type'] ?? $request['type']);
+                } else {
+                    // All Types: show all assigned (Company + Individual)
+                    $query->whereIn('account_type', ['Company', 'Individual']);
                 }
             } elseif($user->isCompany() && $user->isCompanyAdmin()) {
                 // Company role + administers company: can only see users from their company
@@ -52,28 +75,50 @@ class MTSDashboardController extends Controller
                       ->orWhere('phone', 'like', '%'. $request['search'].'%');
                 });
             }
-            if($request['status']!="All"){
-                if($request['status']==2){
-                    $request['status'] = 0;
-                }
-                $query->where('status', $request['status']);
+            // Only apply status filter when explicitly set (not on initial load when param is missing)
+            if($request->has('status') && $request['status'] !== '' && $request['status'] !== "All"){
+                $status = $request['status'] == 2 ? 0 : $request['status'];
+                $query->where('status', $status);
             }
             $users = $query->paginate(10);
-            return (string) view('admin.mts-dashboard.search', compact('users'));
+            
+            // Get all salespersons for the dropdown
+            $salespersons = User::where('account_type', 'Sales Person')
+                ->where('status', 1)
+                ->orderBy('name', 'asc')
+                ->get(['id', 'name', 'last_name', 'email']);
+            
+            return (string) view('admin.mts-dashboard.search', compact('users', 'salespersons'));
         }
         
         $query = User::orderBy('id','DESC')
             ->whereNotNull('account_type')
             ->whereIn('account_type', ['Company', 'Individual']);
         
+        // Normalize account_type filter: "All", empty, null, or "undefined" (from JS) = show all relevant types
+        $accountType = $request->get('account_type') ?? $request->get('type');
+        $accountTypeNorm = $accountType !== null && $accountType !== '' ? strtolower(trim((string) $accountType)) : 'all';
+        $filterByType = !in_array($accountTypeNorm, ['all', 'undefined'], true);
+
         // Check user role and permissions
         if($user->isAdmin()) {
             // Admin role: can see all users and filter by type
-            if($request->get('account_type') && $request->get('account_type') != "All"){
-                $query->where('account_type', $request->get('account_type'));
-                $page_title = ucfirst($request->get('account_type')) . ' Users - MTS Dashboard';
+            if($filterByType){
+                $query->where('account_type', $request->get('account_type') ?? $request->get('type'));
+                $page_title = ucfirst($request->get('account_type') ?? $request->get('type')) . ' Users - MTS Dashboard';
             } else {
                 $page_title = 'MTS Dashboard';
+            }
+        } elseif($user->hasRole('Sales Person') || $user->account_type === 'Sales Person') {
+            // Sales Person: can see companies and individuals assigned to them
+            $query->where('assigned_to_user_id', $user->id);
+            if($filterByType){
+                $query->where('account_type', $request->get('account_type') ?? $request->get('type'));
+                $page_title = 'My Assigned ' . ucfirst($request->get('account_type') ?? $request->get('type')) . 's - MTS Dashboard';
+            } else {
+                // All Types: show all assigned (Company + Individual)
+                $query->whereIn('account_type', ['Company', 'Individual']);
+                $page_title = 'My Assigned Accounts - MTS Dashboard';
             }
         } elseif($user->isCompany() && $user->isCompanyAdmin()) {
             // Company role + administers company: can only see users from their company
@@ -96,60 +141,83 @@ class MTSDashboardController extends Controller
             });
         }
         
-        // Apply status filter
-        if($request->get('status') != "All"){
-            $status = $request->get('status');
-            if($status == 2){
-                $status = 0;
-            }
+        // Apply status filter only when explicitly set (initial load with no params = show all statuses)
+        if($request->filled('status') && $request->get('status') !== "All"){
+            $status = $request->get('status') == 2 ? 0 : $request->get('status');
             $query->where('status', $status);
         }
         
         $users = $query->paginate(10);
-        return view('admin.mts-dashboard.index', compact('users','page_title'));
+        
+        // Get all salespersons for the dropdown
+        $salespersons = User::where('account_type', 'Sales Person')
+            ->where('status', 1)
+            ->orderBy('name', 'asc')
+            ->get(['id', 'name', 'last_name', 'email']);
+        
+        return view('admin.mts-dashboard.index', compact('users','page_title', 'salespersons'));
     }
 
-    public function sendText(Request $request)
+    /**
+     * Update assigned salesperson for a user
+     */
+    public function updateAssignedSalesperson(Request $request, $id)
     {
         $request->validate([
-            'phone' => 'required',
-            'message' => 'required|string|max:500',
+            'assigned_to_user_id' => 'nullable|exists:users,id'
         ]);
 
-        try {
-            // Initialize Vonage Client
-            $basic  = new Basic(
-                config('services.vonage.key'),
-                config('services.vonage.secret')
-            );
-            $client = new Client($basic);
+        $user = User::findOrFail($id);
+        $user->assigned_to_user_id = $request->assigned_to_user_id;
+        $user->save();
 
-            // Send SMS
-            $response = $client->sms()->send(
-                new SMS('+18435551234', '15753057928', $request->message)
-            );
-
-            $message = $response->current();
-            print_r($message);
-            die();
-            if ($message->getStatus() == 0) {
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Message sent successfully!',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Failed to send message. Status: ' . $message->getStatus(),
-                ]);
-            }
-        } catch (\Exception $e) {
-            \Log::error('Vonage SMS Error: ' . $e->getMessage());
-            return response()->json([
-                'status' => false,
-                'message' => 'SMS send failed: ' . $e->getMessage(),
-            ], 500);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Salesperson assigned successfully'
+        ]);
     }
 
+    /**
+     * Display incoming SMS replies from users.
+     */
+    public function smsReplies(Request $request)
+    {
+        $replies = SmsReply::orderBy('created_at', 'desc')->paginate(20);
+        $page_title = 'SMS Replies';
+        return view('admin.mts-dashboard.sms-replies', compact('replies', 'page_title'));
+    }
+
+    /**
+     * Send email from MTS Dashboard compose modal (no redirect to Gmail).
+     */
+    public function sendEmail(Request $request)
+    {
+        $request->validate([
+            'to_email' => 'required|email',
+            'subject' => 'required|string|max:255',
+            'body' => 'required|string|max:10000',
+            'to_name' => 'nullable|string|max:255',
+        ]);
+
+        $details = [
+            'from' => 'mts-dashboard-email',
+            'subject' => $request->subject,
+            'body' => $request->body,
+            'recipient_name' => $request->to_name ?? '',
+        ];
+
+        try {
+            Mail::to($request->to_email)->send(new \App\Mail\Email($details));
+            return response()->json([
+                'success' => true,
+                'message' => 'Email sent successfully.',
+            ]);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('MTS Dashboard send email failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send email. Please try again or check mail configuration.',
+            ], 422);
+        }
+    }
 }

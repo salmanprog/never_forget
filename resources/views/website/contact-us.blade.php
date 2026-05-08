@@ -82,8 +82,8 @@
                                         <label for="plans" class="label-field">Choose Your Gifting Plan</label>
                                         <select name="plans" id="plans" class="input-field form-select" required>
                                             <option value="" selected disabled>Choose Your Plan</option>
-                                            <option value="Basic Plan">Basic Plan</option>
-                                            <option value="Standard Plan">Standard Plan</option>
+                                            <option value="Essential Plan">Essential Plan</option>
+                                            <option value="Growth Plan">Growth Plan</option>
                                             <option value="Enterprise Plan">Enterprise Plan</option>
                                         </select> 
                                     </div>

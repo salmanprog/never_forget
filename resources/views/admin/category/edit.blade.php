@@ -7,6 +7,7 @@
 		<h1>Edit Category</h1>
 	</div>
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('category.index') }}" class="btn btn-primary btn-sm">View All</a>
 	</div>
 </section>

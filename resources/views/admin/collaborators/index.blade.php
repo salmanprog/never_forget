@@ -8,6 +8,7 @@
 	</div>
 	@can('collaborator-create')
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('collaborator.create') }}" class="btn btn-primary btn-sm">{{ $page_title }}</a>
 	</div>
 	@endcan

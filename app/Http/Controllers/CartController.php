@@ -5,8 +5,10 @@ use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\Product;
 use App\Models\BillingAddress;
+use App\Models\Company;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 
 class CartController extends Controller
@@ -42,11 +44,15 @@ class CartController extends Controller
             'name' => $product->name,
             'price' => $request->product_price,
             'quantity' => $request->quantity,
+            'product_id' => $product->id,
             'attributes' => [
                 'product_image' => $variationImage ?: $product->image,
                 'product_type' => $product->product_type,
                 'variation_id' => $request->variation_id,
                 'variation_name' => $variationName,
+                'business_card_id' => $product->id,
+                'category_id' => $product->category_id,
+                'sub_category_id' => $product->sub_category_id ?? null,
             ]
         ]);
 
@@ -186,12 +192,29 @@ class CartController extends Controller
             return redirect()->route('cart.list')->with('error', 'Your cart is empty. Please add products before checking out.');
         }
         
-        // Get billing addresses for logged-in users
-        $billing_addresses = collect();
-        if(Auth::check()) {
-            $billing_addresses = BillingAddress::where('customer_id', Auth::user()->id)->where('status', 1)->get();
+        // When coming from dashboard (e.g. package upgrade), redirect back to dashboard after order success
+        if (request()->has('from_dashboard') && request()->get('from_dashboard') == '1') {
+            session(['order_success_redirect' => route('admin.company_employee.index')]);
         }
         
+        // Get billing addresses for logged-in users
+        $billing_addresses = collect();
+        if (Auth::check()) {
+            $user = Auth::user();
+            // For Company users: sync company profile billing (company/profile/edit) into billing_addresses so it shows in Select Billing Address as default
+            if (strtolower((string) ($user->account_type ?? '')) === 'company') {
+                $company = $user->administeredCompany ?? $user->company;
+                if ($company && $this->companyHasBillingInfo($company)) {
+                    $this->syncCompanyBillingToAddress($user, $company);
+                }
+            }
+            $query = BillingAddress::where('customer_id', (string) $user->id)->where('status', 1);
+            if (Schema::hasColumn('billing_addresses', 'is_company_profile')) {
+                $query->orderByRaw('COALESCE(is_company_profile, 0) DESC');
+            }
+            $billing_addresses = $query->get();
+        }
+
         return view('website.check-out', compact('Items', 'billing_addresses'));
     }
 
@@ -210,5 +233,58 @@ class CartController extends Controller
 
     public function testAttempt(Request $request){
         return $request;
+    }
+
+    /**
+     * Check if company has any billing info (companies table fields).
+     */
+    protected function companyHasBillingInfo(Company $company): bool
+    {
+        return !empty(trim($company->billing_address_line_1 ?? ''))
+            || !empty(trim($company->city ?? ''))
+            || !empty(trim($company->billing_email ?? ''));
+    }
+
+    /**
+     * Sync company billing (companies table) to one BillingAddress so it appears on checkout.
+     */
+    protected function syncCompanyBillingToAddress($user, Company $company): void
+    {
+        $name = trim($company->primary_contact_name ?? $user->name ?? '');
+        $parts = $name !== '' ? explode(' ', $name, 2) : ['', ''];
+        $firstName = $parts[0] ?? '';
+        $lastName = $parts[1] ?? '';
+
+        $street = trim($company->billing_address_line_1 ?? '');
+        if (!empty(trim($company->billing_address_line_2 ?? ''))) {
+            $street .= ', ' . trim($company->billing_address_line_2);
+        }
+
+        $data = [
+            'first_name' => $firstName ?: 'Company',
+            'last_name' => $lastName ?: 'Account',
+            'company' => $company->name ?? null,
+            'country' => $company->billing_country ?? null,
+            'street' => $street ?: null,
+            'state' => $company->state ?? null,
+            'town' => $company->city ?? null,
+            'postcode' => $company->zip_code ?? null,
+            'phone' => $company->billing_phone ?? null,
+            'email' => $company->billing_email ?? $user->email ?? '',
+            'status' => 1,
+        ];
+        if (Schema::hasColumn('billing_addresses', 'is_company_profile')) {
+            $data['is_company_profile'] = true;
+        }
+
+        // Only create company-profile row when it does not exist — never overwrite (edits from company/profile/edit or billing_address must persist)
+        if (!Schema::hasColumn('billing_addresses', 'is_company_profile')) {
+            return;
+        }
+        $uniqueKey = [
+            'customer_id' => (string) $user->id,
+            'is_company_profile' => true,
+        ];
+        BillingAddress::firstOrCreate($uniqueKey, $data);
     }
 }

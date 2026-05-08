@@ -8,6 +8,7 @@
 	</div>
 	@can('coupon-create')
 	<div class="content-header-right">
+		@include('includes.buttons.back')
 		<a href="{{ route('coupon.create') }}" class="btn btn-primary btn-sm">Add Coupon</a>
 	</div>
 	@endcan
