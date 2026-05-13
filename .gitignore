@@ -14,4 +14,6 @@ yarn-error.log
 /.idea
 /.vscode
 *.mp4
-/public/*
+/public/admin/assets/images/**
+!/public/admin/assets/images/**/
+!/public/admin/assets/images/**/.gitkeep
