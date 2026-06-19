@@ -145,32 +145,47 @@
         </div>
         <div class="row row-gap-40" data-aos="fade-up" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
             <div class="col-md-6 col-lg-4">
-                <div class="services-card-wrapper h-100">
-                    <h3 class="heading fs-28 mb-10">The <span>Elephant</span></h3>
+                <div class="services-card-wrapper logo-meaning-card h-100">
+                    <div class="logo-meaning-head d-flex align-items-center gap-10 mb-10">
+                        <span class="logo-meaning-icon" aria-hidden="true"><img src="{{ asset('public/assets/website/images/elephant.png') }}" alt=""></span>
+                        <h3 class="heading fs-28 mb-0">The <span>Elephant</span></h3>
+                    </div>
                     <p>Symbolizes memory, wisdom, and loyalty — a reminder that people should never be forgotten once their moment has passed.</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
-                <div class="services-card-wrapper h-100">
-                    <h3 class="heading fs-28 mb-10">The <span>Infinity</span> Symbol</h3>
+                <div class="services-card-wrapper logo-meaning-card h-100">
+                    <div class="logo-meaning-head d-flex align-items-center gap-10 mb-10">
+                        <span class="logo-meaning-icon" aria-hidden="true"><i class="fa-solid fa-infinity"></i></span>
+                        <h3 class="heading fs-28 mb-0">The <span>Infinity</span> Symbol</h3>
+                    </div>
                     <p>Represents continuity — appreciation is not a one-time gesture, but an ongoing commitment.</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
-                <div class="services-card-wrapper h-100">
-                    <h3 class="heading fs-28 mb-10">The <span>Rainbow</span></h3>
+                <div class="services-card-wrapper logo-meaning-card h-100">
+                    <div class="logo-meaning-head d-flex align-items-center gap-10 mb-10">
+                        <span class="logo-meaning-icon" aria-hidden="true"><i class="fa-solid fa-rainbow"></i></span>
+                        <h3 class="heading fs-28 mb-0">The <span>Rainbow</span></h3>
+                    </div>
                     <p>Reflects inclusivity — honoring individuals of every background, role, and walk of life. Appreciation belongs to everyone.</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-6">
-                <div class="services-card-wrapper h-100">
-                    <h3 class="heading fs-28 mb-10">The <span>Yin-Yang</span></h3>
+                <div class="services-card-wrapper logo-meaning-card h-100">
+                    <div class="logo-meaning-head d-flex align-items-center gap-10 mb-10">
+                        <span class="logo-meaning-icon" aria-hidden="true"><i class="fa-solid fa-yin-yang"></i></span>
+                        <h3 class="heading fs-28 mb-0">The <span>Yin-Yang</span></h3>
+                    </div>
                     <p>Represents balance and connection — giving and receiving, effort and recognition, strength and compassion working together.</p>
                 </div>
             </div>
             <div class="col-md-12 col-lg-6">
-                <div class="services-card-wrapper h-100">
-                    <h3 class="heading fs-28 mb-10">The Encompassing <span>Circle</span></h3>
+                <div class="services-card-wrapper logo-meaning-card h-100">
+                    <div class="logo-meaning-head d-flex align-items-center gap-10 mb-10">
+                        <span class="logo-meaning-icon" aria-hidden="true"><i class="fa-solid fa-circle"></i></span>
+                        <h3 class="heading fs-28 mb-0">The Encompassing <span>Circle</span></h3>
+                    </div>
                     <p>Represents the world as one — all people, all contributions, connected and valued together. At the center of it all is one guiding principle: recognize the whole person — not just what they do, but who they are.</p>
                 </div>
             </div>
