@@ -1513,6 +1513,69 @@ ul.footer-links {
 .nav-dropdown-menu-wrapper.open .nav-dropdown-menu {
   visibility: visible;
 }
+.show-arrow {
+  -webkit-appearance: auto;
+}
+.display-none {
+  display: none;
+}
+.team-members-wrapper li .rounded-circle,
+.team-members-wrapper li .heading {
+  transition: all .6s ease-in-out;
+}
+.team-members-wrapper li .rounded-circle {
+  border-radius: 100%;
+  border: 3px solid var(--secondry-theme);
+}
+.team-members-wrapper li:hover .rounded-circle {
+  border-color: var(--primary-theme);
+}
+.team-members-wrapper li:hover .heading {
+  color: var(--secondry-theme);
+}
+
+.about-sec-4 .logo-meaning-icon {
+  width: var(--text-56);
+  height: var(--text-56);
+  min-width: var(--text-56);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--primary-theme-light);
+  color: var(--primary-theme-light);
+  background-color: var(--default-color);
+  font-size: var(--text-22);
+  transition: all 0.4s ease-in-out;
+}
+
+.about-sec-4 .logo-meaning-icon img {
+  width: auto;
+  height: var(--text-22);
+  max-width: var(--text-32);
+  object-fit: contain;
+  display: block;
+  transition: filter 0.4s ease-in-out;
+}
+
+.about-sec-4 .logo-meaning-card:hover .logo-meaning-icon,
+.about-sec-4 .logo-meaning-icon:hover {
+  background-color: var(--secondry-theme);
+  border-color: var(--secondry-theme);
+  color: var(--default-color);
+}
+
+.about-sec-4 .logo-meaning-card:hover .logo-meaning-icon img,
+.about-sec-4 .logo-meaning-icon:hover img {
+  filter: brightness(0) invert(1);
+}
+
+.pricing-hd-tagline {
+  color: var(--primary-theme) !important;
+}
+.plans-sec .card-wrapper:hover .pricing-hd-tagline {
+  color: var(--default-color) !important;
+}
 
 /* responsive */
 @media(max-width: 1700px) {
