@@ -59,7 +59,15 @@ class ProductController extends Controller
         $page_title = 'Add Product';
         $relateds = Product::orderby('id', 'desc')->where('status', 1)->get(); 
         $variations = Variations::orderby('id', 'ASC')->where('status', 1)->get();
-        $categories = Category::orderby('id', 'ASC')->where('parent_id', '0')->where('status', 1)->get();
+        $categories = Category::orderby('id', 'ASC')
+            ->where('status', 1)
+            ->where(function ($query) {
+                $query->where('parent_id', '0')
+                    ->orWhere('parent_id', 0)
+                    ->orWhereNull('parent_id');
+            })
+            ->get();
+        // dd($categories->count());
         return view('admin.product.create', compact('page_title','categories','relateds' , 'variations'));
     }
 

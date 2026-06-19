@@ -173,10 +173,16 @@ class WebController extends Controller
 
         $page_title = 'Shop || Never Forget';
         $shopProductsPerPage = 3;
+        $shopOccasionSlugs = ['anniversary', 'birthday', 'thank-you'];
         $products = Product::orderby('id', 'ASC')->where('status', 1)->get();
         $categories = Category::with(['products' => function ($query) {
             $query->where('status', 1)->orderBy('id', 'asc');
-        }])->where('status', 1)->get();
+        }])->where('status', 1)->whereNotIn('slug', $shopOccasionSlugs)->get();
+        $occasionCategories = Category::with(['products' => function ($query) {
+            $query->where('status', 1)->orderBy('id', 'asc');
+        }])->where('status', 1)->whereIn('slug', $shopOccasionSlugs)
+            ->orderByRaw("FIELD(slug, 'anniversary', 'birthday', 'thank-you')")
+            ->get();
 
         $customer_favorites = Product::whereIn('id', function ($query) {
             $query->select('product_id')
@@ -211,7 +217,7 @@ class WebController extends Controller
 
         $eCardCategories = ECardCategory::orderBy('sort_order')->orderBy('id')->get();
 
-        return view('website.shop', compact('page_title', 'categories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds', 'greetingsCategories', 'addedGreetingsCategoryIds', 'eCardCategories', 'shopProductsPerPage'));
+        return view('website.shop', compact('page_title', 'categories', 'occasionCategories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds', 'greetingsCategories', 'addedGreetingsCategoryIds', 'eCardCategories', 'shopProductsPerPage'));
         
     }
 

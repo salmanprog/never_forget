@@ -81,7 +81,8 @@ class CategoryController extends Controller
 
         $model->created_by = Auth::user()->id;
         $model->title = $request->title;
-        /* $model->parent_id = $parent_id; */
+        $model->parent_id = '0';
+        $model->status = '1';
         $model->slug = \Str::slug($request->title);
         $model->save();
 

@@ -461,6 +461,16 @@
                                     and
                                     Appreciation </button>
                             </li>
+                            @foreach ($occasionCategories as $category)
+                                <li class="nav-item swiper-slide" role="presentation">
+                                    <button
+                                        class="nav-link {{ request('category') == $category->slug || request('category') == $category->id ? 'active' : '' }}"
+                                        id="pills-{{ $category->id }}-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-{{ $category->id }}" type="button" role="tab"
+                                        aria-controls="pills-{{ $category->id }}"
+                                        aria-selected="{{ request('category') == $category->slug || request('category') == $category->id ? 'true' : 'false' }}">{{ $category->title }}</button>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                     <div class="swiper-button-next" title="Click to See Next Slide"></div>
@@ -657,6 +667,78 @@
                         </div>
                     </div>
 
+                    @foreach ($occasionCategories as $category)
+                        <div class="tab-pane fade {{ request('category') == $category->slug || request('category') == $category->id ? 'show active' : '' }}"
+                            id="pills-{{ $category->id }}" role="tabpanel"
+                            aria-labelledby="pills-{{ $category->id }}-tab" tabindex="0">
+                            <div class="row" id="category-products-{{ $category->id }}">
+                                @forelse($category->products->take($shopProductsPerPage) as $product)
+                                    <div class="col-lg-4 col-md-6 product-item visible">
+                                        <div class="gift-card-wrapper">
+                                            <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
+                                                alt="{{ $product->name }}">
+                                            <div class="product-info">
+                                                <h3 class="product-title">{{ $product->name }}</h3>
+                                                <div class="price-rating">
+                                                    @if ($product->product_type == 0)
+                                                        <span
+                                                            class="price">${{ number_format($product->product_price, 2) }}</span>
+                                                    @else
+                                                        <span class="price range">
+                                                            @php
+                                                                $variations = json_decode($product->variations, true);
+                                                                if ($variations && count($variations) > 0) {
+                                                                    $prices = array_column($variations, 'price');
+                                                                    $minPrice = min($prices);
+                                                                    $maxPrice = max($prices);
+                                                                    echo '$' .
+                                                                        number_format($minPrice, 2) .
+                                                                        ' – $' .
+                                                                        number_format($maxPrice, 2);
+                                                                } else {
+                                                                    echo 'N/A';
+                                                                }
+                                                            @endphp
+                                                        </span>
+                                                    @endif
+                                                    <div class="rating">
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <span>4.8</span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center product-action-wrapper">
+                                                    <a href="{{ route('single-product', $product->slug) }}"
+                                                        class="add-to-cart">
+                                                        @if ($product->product_type == 0)
+                                                            Add To Cart
+                                                        @else
+                                                            Select Options
+                                                        @endif
+                                                        <i class="fas fa-arrow-right ms-2"></i>
+                                                    </a>
+                                                    <button
+                                                        class="wishlist-btn {{ in_array($product->id, $wishlistProductIds) ? 'active' : '' }}"
+                                                        data-product-id="{{ $product->id }}">
+
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="col-12">
+                                        <p class="text-center">No products found in this category.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+                            <div class="text-center loading-spinner" id="loading-spinner-{{ $category->id }}">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
 
                     <!-- Individual Category Tabs -->
                     @foreach ($categories as $category)

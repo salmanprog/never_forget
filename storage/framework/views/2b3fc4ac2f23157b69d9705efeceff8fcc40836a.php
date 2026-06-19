@@ -425,7 +425,7 @@
 
                             </h5>
                             <a href="<?php echo e(route('shop', ['category' => $category->id])); ?>"
-                                class="btn primary-btn border-0"><span>See More</span></a>
+                                class="btn primary-btn border-0"><span>GET STARTED</span></a>
                         </div>
                     </div>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -438,8 +438,7 @@
                         <h5 class="heading light-black fs-24 fw-600 mb-20">
                             Business Cards
                         </h5>
-                        <a href="<?php echo e(route('business-cards.create')); ?>" class="btn primary-btn border-0"><span>See
-                                More</span></a>
+                        <a href="<?php echo e(route('business-cards.create')); ?>" class="btn primary-btn border-0"><span>GET STARTED</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -452,8 +451,7 @@
                             Balloons
                         </h5>
                         <a href="<?php echo e(route('shop', ['category' => 'balloons'])); ?>"
-                            class="btn primary-btn border-0"><span>See
-                                More</span></a>
+                            class="btn primary-btn border-0"><span>GET STARTED</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -466,8 +464,7 @@
                             Perfect Gifts
                         </h5>
                         <a href="<?php echo e(route('shop', ['category' => 'perfect-gift'])); ?>"
-                            class="btn primary-btn border-0"><span>See
-                                More</span></a>
+                            class="btn primary-btn border-0"><span>GET STARTED</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -480,8 +477,7 @@
                         E Card Samples
                         </h5>
                         <a href="<?php echo e(route('shop', ['category' => 'e-cards'])); ?>"
-                            class="btn primary-btn border-0"><span>See
-                                More</span></a>
+                            class="btn primary-btn border-0"><span>GET STARTED</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -494,7 +490,7 @@
                             Quality Logo
                         </h5>
                         <a href="<?php echo e(route('shop', ['category' => 'qualitylogo'])); ?>"
-                            class="btn primary-btn border-0"><span>See More</span></a>
+                            class="btn primary-btn border-0"><span>GET STARTED</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -507,7 +503,7 @@
                             Travel & Experience
                         </h5>
                         <a href="<?php echo e(route('shop', ['category' => 'journey-expert'])); ?>"
-                            class="btn primary-btn border-0"><span>See More</span></a>
+                            class="btn primary-btn border-0"><span>GET STARTED</span></a>
                     </div>
                 </div>
                 <div class="card-wrapper">
@@ -520,10 +516,9 @@
                             Greeting & Appreciation
                         </h5>
                         <a href="<?php echo e(route('shop', ['category' => 'greetings-appreciation'])); ?>"
-                            class="btn primary-btn border-0"><span>See More</span></a>
+                            class="btn primary-btn border-0"><span>GET STARTED</span></a>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>

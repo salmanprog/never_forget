@@ -1519,6 +1519,26 @@ ul.footer-links {
 .display-none {
   display: none;
 }
+.team-members-wrapper li .rounded-circle,
+.team-members-wrapper li .heading {
+  transition: all .6s ease-in-out;
+}
+.team-members-wrapper li .rounded-circle {
+  border-radius: 100%;
+  border: 3px solid var(--secondry-theme);
+}
+.team-members-wrapper li:hover .rounded-circle {
+  border-color: var(--primary-theme);
+}
+.team-members-wrapper li:hover .heading {
+  color: var(--secondry-theme);
+}
+.pricing-hd-tagline {
+  color: var(--primary-theme) !important;
+}
+.plans-sec .card-wrapper:hover .pricing-hd-tagline {
+  color: var(--default-color) !important;
+}
 
 /* responsive */
 @media(max-width: 1700px) {

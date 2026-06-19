@@ -18,7 +18,9 @@
                     <div class="sm-circle circle-md d-flex align-items-center justify-content-center mx-auto mb-10">
                         <img src="{{asset('public/assets/website/images')}}/icons/plans-icon-01.svg" alt="">
                     </div>
-                    <h4 class="heading light-black fs-48 text-center mb-10 pt-60">Essential Plan</h4>
+                    <h4 class="heading light-black fs-48 text-center mb-10 pt-60 pricing-hd">Essential Plan
+                        <span class="fs-20 pricing-hd-tagline d-block">Starting at <span class="fs-30">$97 <span class="pricing-hd-tagline">-</span> $297</span></span>
+                    </h4>
                     <p class="sm-text text-center mb-40">Perfect for small teams or startups just getting started with appreciation.</p>
                     <ul class="plans-list">
                         <li>Birthday & work anniversary cards</li>
@@ -39,7 +41,9 @@
                     <div class="sm-circle circle-md d-flex align-items-center justify-content-center mx-auto mb-10">
                         <img src="{{asset('public/assets/website/images')}}/icons/plans-icon-02.svg" alt="">
                     </div>
-                    <h4 class="heading light-black fs-48 text-center mb-10 pt-60">Growth Plan</h4>
+                    <h4 class="heading light-black fs-48 text-center mb-10 pt-60">Growth Plan
+                    <span class="fs-20 pricing-hd-tagline d-block">Starting at <span class="fs-30">$247 <span class="pricing-hd-tagline">-</span> $597</span></span>
+                    </h4>
                     <p class="sm-text text-center mb-40">Great for mid-sized teams or businesses wanting more control and variety.</p>
                     <ul class="plans-list">
                         <li>Custom-branded corporate gifts (logos, personalized messages)</li>
@@ -60,7 +64,9 @@
                     <div class="sm-circle circle-md d-flex align-items-center justify-content-center mx-auto mb-10">
                         <img src="{{asset('public/assets/website/images')}}/icons/plans-icon-03.svg" alt="">
                     </div>
-                    <h4 class="heading light-black fs-48 text-center mb-10 pt-60">Enterprise Plan</h4>
+                    <h4 class="heading light-black fs-48 text-center mb-10 pt-60">Enterprise Plan
+                    <span class="fs-20 pricing-hd-tagline d-block">Starting at <span class="fs-30">$500 <span class="pricing-hd-tagline">-</span> $1500</span></span>
+                    </h4>
                     <p class="sm-text text-center mb-40">Best for large organizations needing premium, high-touch gifting solutions.</p>
                     <ul class="plans-list">
                         <li>Fully customized gift curation per recipient segment</li>

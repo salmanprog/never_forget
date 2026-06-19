@@ -461,6 +461,16 @@
                                     and
                                     Appreciation </button>
                             </li>
+                            <?php $__currentLoopData = $occasionCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li class="nav-item swiper-slide" role="presentation">
+                                    <button
+                                        class="nav-link <?php echo e(request('category') == $category->slug || request('category') == $category->id ? 'active' : ''); ?>"
+                                        id="pills-<?php echo e($category->id); ?>-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-<?php echo e($category->id); ?>" type="button" role="tab"
+                                        aria-controls="pills-<?php echo e($category->id); ?>"
+                                        aria-selected="<?php echo e(request('category') == $category->slug || request('category') == $category->id ? 'true' : 'false'); ?>"><?php echo e($category->title); ?></button>
+                                </li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
                     </div>
                     <div class="swiper-button-next" title="Click to See Next Slide"></div>
@@ -657,6 +667,78 @@
                         </div>
                     </div>
 
+                    <?php $__currentLoopData = $occasionCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="tab-pane fade <?php echo e(request('category') == $category->slug || request('category') == $category->id ? 'show active' : ''); ?>"
+                            id="pills-<?php echo e($category->id); ?>" role="tabpanel"
+                            aria-labelledby="pills-<?php echo e($category->id); ?>-tab" tabindex="0">
+                            <div class="row" id="category-products-<?php echo e($category->id); ?>">
+                                <?php $__empty_1 = true; $__currentLoopData = $category->products->take($shopProductsPerPage); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                    <div class="col-lg-4 col-md-6 product-item visible">
+                                        <div class="gift-card-wrapper">
+                                            <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($product->image); ?>"
+                                                alt="<?php echo e($product->name); ?>">
+                                            <div class="product-info">
+                                                <h3 class="product-title"><?php echo e($product->name); ?></h3>
+                                                <div class="price-rating">
+                                                    <?php if($product->product_type == 0): ?>
+                                                        <span
+                                                            class="price">$<?php echo e(number_format($product->product_price, 2)); ?></span>
+                                                    <?php else: ?>
+                                                        <span class="price range">
+                                                            <?php
+                                                                $variations = json_decode($product->variations, true);
+                                                                if ($variations && count($variations) > 0) {
+                                                                    $prices = array_column($variations, 'price');
+                                                                    $minPrice = min($prices);
+                                                                    $maxPrice = max($prices);
+                                                                    echo '$' .
+                                                                        number_format($minPrice, 2) .
+                                                                        ' – $' .
+                                                                        number_format($maxPrice, 2);
+                                                                } else {
+                                                                    echo 'N/A';
+                                                                }
+                                                            ?>
+                                                        </span>
+                                                    <?php endif; ?>
+                                                    <div class="rating">
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <span>4.8</span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center product-action-wrapper">
+                                                    <a href="<?php echo e(route('single-product', $product->slug)); ?>"
+                                                        class="add-to-cart">
+                                                        <?php if($product->product_type == 0): ?>
+                                                            Add To Cart
+                                                        <?php else: ?>
+                                                            Select Options
+                                                        <?php endif; ?>
+                                                        <i class="fas fa-arrow-right ms-2"></i>
+                                                    </a>
+                                                    <button
+                                                        class="wishlist-btn <?php echo e(in_array($product->id, $wishlistProductIds) ? 'active' : ''); ?>"
+                                                        data-product-id="<?php echo e($product->id); ?>">
+
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                    <div class="col-12">
+                                        <p class="text-center">No products found in this category.</p>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="text-center loading-spinner" id="loading-spinner-<?php echo e($category->id); ?>">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                     <!-- Individual Category Tabs -->
                     <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
