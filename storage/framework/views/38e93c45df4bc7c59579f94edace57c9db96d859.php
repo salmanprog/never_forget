@@ -436,6 +436,11 @@
                                     id="pills-e-cards-tab" role="tab">E Cards</a>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
+                                <a href="<?php echo e(route('shop', ['category' => 'tango'])); ?>"
+                                    class="nav-link <?php echo e(request('category') == 'tango' ? 'active' : ''); ?>"
+                                    id="pills-tango-tab" role="tab">Tango</a>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
                                 <button class="nav-link <?php echo e(request('category') == 'qualitylogo' ? 'active' : ''); ?>"
                                     id="pills-qualitylogo-tab" data-bs-toggle="pill" data-bs-target="#pills-qualitylogo"
                                     type="button" role="tab" aria-controls="pills-qualitylogo"
@@ -484,7 +489,7 @@
                             <?php $__currentLoopData = $products->take($shopProductsPerPage); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="col-lg-4 col-md-6 product-item visible">
                                         <div class="gift-card-wrapper">
-                                            <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($product->image); ?>"
+                                            <img src="<?php echo e($product->listingImageUrl()); ?>"
                                                 alt="<?php echo e($product->name); ?>">
                                             <div class="product-info">
                                                 <h3 class="product-title"><?php echo e($product->name); ?></h3>
@@ -581,7 +586,7 @@
                             <?php $__empty_1 = true; $__currentLoopData = $under30_products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div class="col-lg-4 col-md-6 product-item visible">
                                     <div class="gift-card-wrapper">
-                                        <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($product->image); ?>"
+                                        <img src="<?php echo e($product->listingImageUrl()); ?>"
                                             alt="<?php echo e($product->name); ?>">
                                         <div class="product-info">
                                             <h3 class="product-title"><?php echo e($product->name); ?></h3>
@@ -675,7 +680,7 @@
                                 <?php $__empty_1 = true; $__currentLoopData = $category->products->take($shopProductsPerPage); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <div class="col-lg-4 col-md-6 product-item visible">
                                         <div class="gift-card-wrapper">
-                                            <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($product->image); ?>"
+                                            <img src="<?php echo e($product->listingImageUrl()); ?>"
                                                 alt="<?php echo e($product->name); ?>">
                                             <div class="product-info">
                                                 <h3 class="product-title"><?php echo e($product->name); ?></h3>
@@ -749,7 +754,7 @@
                                 <?php $__empty_1 = true; $__currentLoopData = $category->products->take($shopProductsPerPage); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <div class="col-lg-4 col-md-6 product-item visible">
                                         <div class="gift-card-wrapper">
-                                            <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($product->image); ?>"
+                                            <img src="<?php echo e($product->listingImageUrl()); ?>"
                                                 alt="<?php echo e($product->name); ?>">
                                             <div class="product-info">
                                                 <h3 class="product-title"><?php echo e($product->name); ?></h3>
@@ -912,7 +917,8 @@
                                             <p class="px-30 mb-10"><?php echo e($eCardCategory->description); ?></p>
                                             <a href="<?php echo e(route('create-e-card', ['e_card_category_id' => $eCardCategory->id])); ?>"
                                                 class="add-to-cart balloon-btn" style="width:100%; text-align:center;">
-                                                Create E Card
+                                                <?php echo e($eCardCategory->button_text ?: 'Create E Card'); ?>
+
                                             </a>
                                         </div>
                                     </div>
@@ -920,6 +926,36 @@
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="col-12 text-center">
                                     <p>No E-Card categories available.</p>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade <?php echo e(request('category') == 'tango' ? 'active show' : ''); ?>"
+                        id="pills-tango" role="tabpanel" aria-labelledby="pills-tango-tab"
+                        tabindex="0">
+                        <div class="row justify-content-center">
+                            <?php $__empty_1 = true; $__currentLoopData = $tangoCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tangoCategory): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <div class="col-lg-4 col-md-6 product-item visible">
+                                    <div class="gift-card-wrapper balloon-images e-card-wrapper">
+                                        <?php if($tangoCategory->image): ?>
+                                            <img src="<?php echo e(asset('/public/' . $tangoCategory->image)); ?>"
+                                                alt="<?php echo e($tangoCategory->title); ?>">
+                                        <?php endif; ?>
+                                        <div class="product-info">
+                                            <h3 class="product-title" style="height: auto; margin-bottom: 20px;">
+                                                <?php echo e($tangoCategory->title); ?></h3>
+                                            <p class="px-30 mb-10"><?php echo e($tangoCategory->description); ?></p>
+                                            <a href="<?php echo e(route('create-tango', ['tango_category_id' => $tangoCategory->id])); ?>"
+                                                class="add-to-cart balloon-btn" style="width:100%; text-align:center;">
+                                                <?php echo e($tangoCategory->button_text ?: 'Create Tango'); ?>
+
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                <div class="col-12 text-center">
+                                    <p>No Tango categories available.</p>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -946,7 +982,7 @@
             <?php $__empty_1 = true; $__currentLoopData = $customer_favorites; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <div class="col-lg-4 col-md-6 product-item visible">
                     <div class="gift-card-wrapper">
-                        <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/<?php echo e($product->image); ?>"
+                        <img src="<?php echo e($product->listingImageUrl()); ?>"
                             alt="<?php echo e($product->name); ?>">
                         <div class="product-info">
                             <h3 class="product-title"><?php echo e($product->name); ?></h3>
@@ -1169,7 +1205,7 @@
 
                         productElement.innerHTML = `
                     <div class="gift-card-wrapper">
-                        <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/${product.image}" alt="${product.name}">
+                        <img src="<?php echo e(asset('public/admin/assets/images/product')); ?>/${product.listing_image || product.image}" alt="${product.name}">
                         <div class="product-info">
                             <h3 class="product-title">${product.name}</h3>
                             <div class="price-rating">

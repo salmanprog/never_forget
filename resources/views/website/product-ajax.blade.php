@@ -3,7 +3,7 @@
 
     <div class="col-lg-6 menu-item filter-{{ $product->category_id }}" style="position: absolute; left: 0px; top: 0px;">
         <a href="{{ route ('single-product', $product->slug) }}">
-            <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}" class="menu-img" alt="">
+            <img src="{{ $product->listingImageUrl() }}" class="menu-img" alt="">
         </a>
         <div class="menu-content">
             <a href="{{ route ('single-product', $product->slug) }}">{{ $product->name }}</a>

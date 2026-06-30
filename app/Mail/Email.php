@@ -67,6 +67,19 @@ class Email extends Mailable
                             'cardStyle' => $this->details['card_style'] ?? '',
                             'ecardCategoryTitle' => $this->details['ecard_category_title'] ?? '',
                         ]);
+        } elseif ($this->details['from'] == 'tango-confirmation') {
+            $email = $this->subject('Tango Request Received - NEVER FORGET')
+                        ->view('emails.tango-confirmation')
+                        ->with([
+                            'senderName' => $this->details['sender_name'] ?? '',
+                            'occasion' => $this->details['occasion'] ?? '',
+                            'recipientName' => $this->details['recipient_name'] ?? '',
+                            'recipientEmailPhone' => $this->details['recipient_email_phone'] ?? '',
+                            'sendDate' => $this->details['send_date'] ?? '',
+                            'sendTime' => $this->details['send_time'] ?? '',
+                            'cardStyle' => $this->details['card_style'] ?? '',
+                            'tangoCategoryTitle' => $this->details['tango_category_title'] ?? '',
+                        ]);
         } elseif ($this->details['from'] == 'travel-experience-confirmation') {
             $email = $this->subject('Travel & Experience Inquiry Received - NEVER FORGET')
                         ->view('emails.travel-experience-confirmation')

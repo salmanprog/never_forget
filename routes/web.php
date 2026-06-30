@@ -217,6 +217,8 @@ Route::post('/greetings-appreciation-items/{id}', [WebController::class, 'destro
 
 Route::get('/create-e-card', [WebController::class, 'createEcard'])->name('create-e-card');
 Route::post('/store-e-card', [WebController::class, 'storeEcard'])->name('store-e-card');
+Route::get('/create-tango', [WebController::class, 'createTango'])->name('create-tango');
+Route::post('/store-tango', [WebController::class, 'storeTango'])->name('store-tango');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
@@ -329,6 +331,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('e_card_enquiry', [\App\Http\Controllers\admin\ECardEnquiryController::class, 'index'])->name('e_card_enquiry.index');
     Route::get('e_card_enquiry/{id}', [\App\Http\Controllers\admin\ECardEnquiryController::class, 'show'])->name('e_card_enquiry.show');
     Route::post('e_card_enquiry/{id}/update-status', [\App\Http\Controllers\admin\ECardEnquiryController::class, 'updateStatus'])->name('e_card_enquiry.update-status');
+    Route::get('tango_enquiry', [\App\Http\Controllers\admin\TangoEnquiryController::class, 'index'])->name('tango_enquiry.index');
+    Route::get('tango_enquiry/{id}', [\App\Http\Controllers\admin\TangoEnquiryController::class, 'show'])->name('tango_enquiry.show');
+    Route::post('tango_enquiry/{id}/update-status', [\App\Http\Controllers\admin\TangoEnquiryController::class, 'updateStatus'])->name('tango_enquiry.update-status');
+    Route::resource('tango_category', 'admin\TangoCategoryController');
+    Route::resource('balloons_category', 'admin\BalloonsCategoryController');
+    Route::resource('perfect_gift_category', 'admin\PerfectGiftCategoryController');
+    Route::resource('e_card_category', 'admin\ECardCategoryController');
 
     //Enquires
     Route::resource('enquires-detail', 'admin\EnquiresController')->except(['index', 'create', 'edit', 'delete']);

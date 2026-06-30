@@ -30,7 +30,7 @@
                     <div class="col-lg-4 col-md-6 product-item visible mb-4">
                         <div class="gift-card-wrapper">
                             <a href="{{ route('single-product', $product->slug) }}">
-                                <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
+                                <img src="{{ $product->listingImageUrl() }}"
                                     alt="{{ $product->name }}" class="img-fluid">
                             </a>
                             <div class="product-info">

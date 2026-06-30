@@ -436,6 +436,11 @@
                                     id="pills-e-cards-tab" role="tab">E Cards</a>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
+                                <a href="{{ route('shop', ['category' => 'tango']) }}"
+                                    class="nav-link {{ request('category') == 'tango' ? 'active' : '' }}"
+                                    id="pills-tango-tab" role="tab">Tango</a>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
                                 <button class="nav-link {{ request('category') == 'qualitylogo' ? 'active' : '' }}"
                                     id="pills-qualitylogo-tab" data-bs-toggle="pill" data-bs-target="#pills-qualitylogo"
                                     type="button" role="tab" aria-controls="pills-qualitylogo"
@@ -484,7 +489,7 @@
                             @foreach ($products->take($shopProductsPerPage) as $product)
                                     <div class="col-lg-4 col-md-6 product-item visible">
                                         <div class="gift-card-wrapper">
-                                            <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
+                                            <img src="{{ $product->listingImageUrl() }}"
                                                 alt="{{ $product->name }}">
                                             <div class="product-info">
                                                 <h3 class="product-title">{{ $product->name }}</h3>
@@ -581,7 +586,7 @@
                             @forelse($under30_products as $product)
                                 <div class="col-lg-4 col-md-6 product-item visible">
                                     <div class="gift-card-wrapper">
-                                        <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
+                                        <img src="{{ $product->listingImageUrl() }}"
                                             alt="{{ $product->name }}">
                                         <div class="product-info">
                                             <h3 class="product-title">{{ $product->name }}</h3>
@@ -675,7 +680,7 @@
                                 @forelse($category->products->take($shopProductsPerPage) as $product)
                                     <div class="col-lg-4 col-md-6 product-item visible">
                                         <div class="gift-card-wrapper">
-                                            <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
+                                            <img src="{{ $product->listingImageUrl() }}"
                                                 alt="{{ $product->name }}">
                                             <div class="product-info">
                                                 <h3 class="product-title">{{ $product->name }}</h3>
@@ -749,7 +754,7 @@
                                 @forelse($category->products->take($shopProductsPerPage) as $product)
                                     <div class="col-lg-4 col-md-6 product-item visible">
                                         <div class="gift-card-wrapper">
-                                            <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
+                                            <img src="{{ $product->listingImageUrl() }}"
                                                 alt="{{ $product->name }}">
                                             <div class="product-info">
                                                 <h3 class="product-title">{{ $product->name }}</h3>
@@ -912,7 +917,7 @@
                                             <p class="px-30 mb-10">{{ $eCardCategory->description }}</p>
                                             <a href="{{ route('create-e-card', ['e_card_category_id' => $eCardCategory->id]) }}"
                                                 class="add-to-cart balloon-btn" style="width:100%; text-align:center;">
-                                                Create E Card
+                                                {{ $eCardCategory->button_text ?: 'Create E Card' }}
                                             </a>
                                         </div>
                                     </div>
@@ -920,6 +925,35 @@
                             @empty
                                 <div class="col-12 text-center">
                                     <p>No E-Card categories available.</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                    <div class="tab-pane fade {{ request('category') == 'tango' ? 'active show' : '' }}"
+                        id="pills-tango" role="tabpanel" aria-labelledby="pills-tango-tab"
+                        tabindex="0">
+                        <div class="row justify-content-center">
+                            @forelse ($tangoCategories as $tangoCategory)
+                                <div class="col-lg-4 col-md-6 product-item visible">
+                                    <div class="gift-card-wrapper balloon-images e-card-wrapper">
+                                        @if ($tangoCategory->image)
+                                            <img src="{{ asset('/public/' . $tangoCategory->image) }}"
+                                                alt="{{ $tangoCategory->title }}">
+                                        @endif
+                                        <div class="product-info">
+                                            <h3 class="product-title" style="height: auto; margin-bottom: 20px;">
+                                                {{ $tangoCategory->title }}</h3>
+                                            <p class="px-30 mb-10">{{ $tangoCategory->description }}</p>
+                                            <a href="{{ route('create-tango', ['tango_category_id' => $tangoCategory->id]) }}"
+                                                class="add-to-cart balloon-btn" style="width:100%; text-align:center;">
+                                                {{ $tangoCategory->button_text ?: 'Create Tango' }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="col-12 text-center">
+                                    <p>No Tango categories available.</p>
                                 </div>
                             @endforelse
                         </div>
@@ -946,7 +980,7 @@
             @forelse($customer_favorites as $product)
                 <div class="col-lg-4 col-md-6 product-item visible">
                     <div class="gift-card-wrapper">
-                        <img src="{{ asset('public/admin/assets/images/product') }}/{{ $product->image }}"
+                        <img src="{{ $product->listingImageUrl() }}"
                             alt="{{ $product->name }}">
                         <div class="product-info">
                             <h3 class="product-title">{{ $product->name }}</h3>
@@ -1169,7 +1203,7 @@
 
                         productElement.innerHTML = `
                     <div class="gift-card-wrapper">
-                        <img src="{{ asset('public/admin/assets/images/product') }}/${product.image}" alt="${product.name}">
+                        <img src="{{ asset('public/admin/assets/images/product') }}/${product.listing_image || product.image}" alt="${product.name}">
                         <div class="product-info">
                             <h3 class="product-title">${product.name}</h3>
                             <div class="price-rating">

@@ -35,6 +35,8 @@ use App\Models\PerfectGiftEnquiry;
 use App\Models\PerfectGiftEnquiryItem;
 use App\Models\ECardEnquiry;
 use App\Models\ECardCategory;
+use App\Models\TangoCategory;
+use App\Models\TangoEnquiry;
 use App\Models\GreetingsAppreciation;
 use App\Models\GreetingsAppreciationCategory;
 use App\Models\GreetingsAppreciationEnquiryItem;
@@ -190,8 +192,8 @@ class WebController extends Controller
                 ->where('status', 1);
         })->where('status', 1)->get();
 
-        $balloons = BalloonsCategory::all();
-        $perfectGifts = PerfectGiftCategory::all();
+        $balloons = BalloonsCategory::where('status', 1)->orderBy('sort_order')->orderBy('id')->get();
+        $perfectGifts = PerfectGiftCategory::where('status', 1)->orderBy('sort_order')->orderBy('id')->get();
 
         $addedBalloonIds = [];
         if (auth()->check()) {
@@ -215,9 +217,10 @@ class WebController extends Controller
             $addedGreetingsCategoryIds = GreetingsAppreciationEnquiryItem::where('guest_token', session('guest_token'))->whereNull('enquiry_id')->pluck('greetings_appreciation_category_id')->toArray();
         }
 
-        $eCardCategories = ECardCategory::orderBy('sort_order')->orderBy('id')->get();
+        $eCardCategories = ECardCategory::where('status', 1)->orderBy('sort_order')->orderBy('id')->get();
+        $tangoCategories = TangoCategory::where('status', 1)->orderBy('sort_order')->orderBy('id')->get();
 
-        return view('website.shop', compact('page_title', 'categories', 'occasionCategories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds', 'greetingsCategories', 'addedGreetingsCategoryIds', 'eCardCategories', 'shopProductsPerPage'));
+        return view('website.shop', compact('page_title', 'categories', 'occasionCategories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds', 'greetingsCategories', 'addedGreetingsCategoryIds', 'eCardCategories', 'tangoCategories', 'shopProductsPerPage'));
         
     }
 
@@ -226,7 +229,7 @@ class WebController extends Controller
         if (!$request->filled('e_card_category_id')) {
             return redirect()->route('shop', ['category' => 'e-cards']);
         }
-        $eCardCategory = ECardCategory::findOrFail($request->e_card_category_id);
+        $eCardCategory = ECardCategory::where('status', 1)->findOrFail($request->e_card_category_id);
         $page_title = 'Create E-Card || Never Forget';
 
         return view('website.create-e-card', compact('page_title', 'eCardCategory'));
@@ -311,6 +314,109 @@ class WebController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Your E-Card enquiry has been submitted successfully.',
+        ]);
+    }
+
+    public function createTango(Request $request)
+    {
+        if (!$request->filled('tango_category_id')) {
+            return redirect()->route('shop', ['category' => 'tango']);
+        }
+
+        $tangoCategory = TangoCategory::where('status', 1)->findOrFail($request->tango_category_id);
+        $page_title = 'Create Tango || Never Forget';
+
+        return view('website.create-tango', compact('page_title', 'tangoCategory'));
+    }
+
+    public function storeTango(Request $request)
+    {
+        $rules = [
+            'tango_category_id' => 'required|exists:tango_categories,id',
+            'occasion' => 'required|string|max:100',
+            'recipient_name' => 'required|string|max:255',
+            'recipient_email_phone' => 'required|string|max:255',
+            'send_date' => 'required|date|after_or_equal:today',
+            'send_time' => 'required',
+            'physical_gift' => 'required|in:Yes,No',
+            'upload_logo_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+        ];
+
+        if (!auth()->check()) {
+            $rules['sender_name'] = 'required|string|max:255';
+            $rules['sender_email'] = 'required|email';
+        }
+
+        $request->validate($rules);
+
+        $uploadPath = null;
+        if ($request->hasFile('upload_logo_photo')) {
+            $uploadDir = public_path('tango_uploads');
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            $file = $request->file('upload_logo_photo');
+            $name = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
+            $file->move($uploadDir, $name);
+            $uploadPath = 'tango_uploads/' . $name;
+        }
+
+        $user = auth()->user();
+        $data = [
+            'tango_category_id' => $request->tango_category_id,
+            'occasion' => $request->occasion,
+            'recipient_name' => $request->recipient_name,
+            'recipient_email_phone' => $request->recipient_email_phone,
+            'message' => $request->message,
+            'card_style' => $request->card_style,
+            'upload_logo_photo' => $uploadPath,
+            'send_date' => $request->send_date,
+            'send_time' => $request->send_time,
+            'physical_gift' => $request->physical_gift,
+            'physical_gift_type' => $request->physical_gift === 'Yes' ? $request->physical_gift_type : null,
+            'user_id' => $user ? $user->id : null,
+        ];
+
+        if ($user) {
+            $data['sender_name'] = trim($user->name . ' ' . ($user->last_name ?? ''));
+            $data['sender_email'] = $user->email;
+            $data['sender_phone'] = $user->phone;
+            $data['company_name'] = optional($user->company)->name;
+        } else {
+            $data['sender_name'] = $request->sender_name;
+            $data['sender_email'] = $request->sender_email;
+            $data['sender_phone'] = $request->sender_phone;
+            $data['company_name'] = $request->company_name;
+        }
+
+        TangoEnquiry::create($data);
+
+        $senderEmail = $data['sender_email'];
+        $tangoCategoryTitle = optional(TangoCategory::find($request->tango_category_id))->title;
+
+        if ($senderEmail) {
+            try {
+                $details = [
+                    'from' => 'tango-confirmation',
+                    'sender_name' => $data['sender_name'],
+                    'occasion' => $data['occasion'],
+                    'recipient_name' => $data['recipient_name'],
+                    'recipient_email_phone' => $data['recipient_email_phone'],
+                    'send_date' => \Carbon\Carbon::parse($data['send_date'])->format('d M Y'),
+                    'send_time' => \Carbon\Carbon::parse($data['send_time'])->format('h:i A'),
+                    'card_style' => $data['card_style'],
+                    'tango_category_title' => $tangoCategoryTitle,
+                ];
+                \Mail::to($senderEmail)->send(new \App\Mail\Email($details));
+            } catch (\Exception $e) {
+                \Log::error('Tango confirmation email failed: ' . $e->getMessage());
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Your Tango enquiry has been submitted successfully.',
         ]);
     }
 
@@ -1744,6 +1850,7 @@ class WebController extends Controller
                         $product->formatted_price = 'N/A';
                     }
                 }
+                $product->listing_image = $product->listing_image;
                 return $product;
             });
 
@@ -1781,6 +1888,7 @@ class WebController extends Controller
                         $product->formatted_price = 'N/A';
                     }
                 }
+                $product->listing_image = $product->listing_image;
                 return $product;
             });
 

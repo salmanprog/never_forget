@@ -46,6 +46,31 @@ class Product extends Model
         return $this->hasOne(Category::class, 'id', 'category_id');
     }
 
+    public function getListingImageAttribute(): ?string
+    {
+        if (!empty($this->image)) {
+            return $this->image;
+        }
+
+        if ($this->related_images) {
+            $relatedImages = json_decode($this->related_images, true);
+            if (is_array($relatedImages) && !empty($relatedImages[0])) {
+                return $relatedImages[0];
+            }
+        }
+
+        return null;
+    }
+
+    public function listingImageUrl(): string
+    {
+        if ($this->listing_image) {
+            return asset('public/admin/assets/images/product/' . $this->listing_image);
+        }
+
+        return asset('public/assets/images/placeholder.jpg');
+    }
+
     public function images()
     {
         return $this->hasMany(ProductImage::class, 'product_id');

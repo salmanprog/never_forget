@@ -59,15 +59,7 @@ class ProductController extends Controller
         $page_title = 'Add Product';
         $relateds = Product::orderby('id', 'desc')->where('status', 1)->get(); 
         $variations = Variations::orderby('id', 'ASC')->where('status', 1)->get();
-        $categories = Category::orderby('id', 'ASC')
-            ->where('status', 1)
-            ->where(function ($query) {
-                $query->where('parent_id', '0')
-                    ->orWhere('parent_id', 0)
-                    ->orWhereNull('parent_id');
-            })
-            ->get();
-        // dd($categories->count());
+        $categories = Category::orderby('id', 'ASC')->where('status', 1)->get();
         return view('admin.product.create', compact('page_title','categories','relateds' , 'variations'));
     }
 
@@ -253,38 +245,51 @@ class ProductController extends Controller
                 }
             }
         }
+
+        if ($update->image && !file_exists(public_path('/admin/assets/images/product/' . $update->image))) {
+            $update->image = null;
+        }
         
         // Handle new product images
         if (isset($request->images) && count($request->file('images')) > 0) {
-            // Store the first image as the main image if no main image exists
-            if (!$update->image) {
+            $hasMainImage = !empty($update->image);
+
+            if (!$hasMainImage) {
                 $mainImage = $request->file('images')[0];
                 $photo = date('YmdHis') . '_' . uniqid() . '.' . $mainImage->getClientOriginalExtension();
                 $mainImage->move(public_path('/admin/assets/images/product'), $photo);
                 $update->image = $photo;
                 
-                // Store additional images as related_images if there are more than one
                 if (count($request->file('images')) > 1) {
-                    $relatedImages = [];
+                    $relatedImages = $update->related_images ? json_decode($update->related_images, true) : [];
+                    if (!is_array($relatedImages)) {
+                        $relatedImages = [];
+                    }
+
                     for ($i = 1; $i < count($request->file('images')); $i++) {
                         $image = $request->file('images')[$i];
                         $relatedPhoto = date('YmdHis') . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                         $image->move(public_path('/admin/assets/images/product'), $relatedPhoto);
                         $relatedImages[] = $relatedPhoto;
                     }
-                    $update->related_images = json_encode($relatedImages);
+                    $update->related_images = json_encode(array_values($relatedImages));
                 }
             } else {
-                // If main image exists, add all new images to related_images
                 $relatedImages = $update->related_images ? json_decode($update->related_images, true) : [];
+                if (!is_array($relatedImages)) {
+                    $relatedImages = [];
+                }
+
                 foreach ($request->file('images') as $image) {
                     $relatedPhoto = date('YmdHis') . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('/admin/assets/images/product'), $relatedPhoto);
                     $relatedImages[] = $relatedPhoto;
                 }
-                $update->related_images = json_encode($relatedImages);
+                $update->related_images = json_encode(array_values($relatedImages));
             }
         }
+
+        $this->syncMainImageFromRelated($update);
 
         $related_product = json_encode($request->related_product);
         if ($related_product == 'null') {
@@ -356,6 +361,27 @@ class ProductController extends Controller
 
         $update->save();
         return redirect()->route('product.index')->with('message', 'Product Updated Successfully !');
+    }
+
+    private function syncMainImageFromRelated(Product $product): void
+    {
+        if (!empty($product->image)) {
+            return;
+        }
+
+        if (empty($product->related_images)) {
+            return;
+        }
+
+        $relatedImages = json_decode($product->related_images, true);
+        if (!is_array($relatedImages) || empty($relatedImages)) {
+            return;
+        }
+
+        $product->image = array_shift($relatedImages);
+        $product->related_images = !empty($relatedImages)
+            ? json_encode(array_values($relatedImages))
+            : null;
     }
 
     /**
