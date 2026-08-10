@@ -71,10 +71,10 @@
                     <i class="fa fa-shopping-cart"></i> <span>Gift History</span>
                 </a>
             </li> --}}
-            <li class="treeview {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('member/balloon-enquiries') || request()->is('member/perfect-gift-enquiries') || request()->is('member/business-card-orders') || request()->is('member/quality-logo-enquiries') || request()->is('member/journey-expert-enquiries') ? 'active' : '' }}"
+            <li class="treeview {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('member/balloon-enquiries') || request()->is('member/perfect-gift-enquiries') || request()->is('member/business-card-orders') || request()->is('member/quality-logo-enquiries') || request()->is('member/journey-expert-enquiries') || request()->is('member/gusto-enquiries') ? 'active' : '' }}"
                 style="height: auto;">
                 <a href="#"
-                    class="{{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('member/balloon-enquiries') || request()->is('member/perfect-gift-enquiries') || request()->is('member/business-card-orders') || request()->is('member/quality-logo-enquiries') || request()->is('member/journey-expert-enquiries') ? 'active' : '' }}">
+                    class="{{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('member/balloon-enquiries') || request()->is('member/perfect-gift-enquiries') || request()->is('member/business-card-orders') || request()->is('member/quality-logo-enquiries') || request()->is('member/journey-expert-enquiries') || request()->is('member/gusto-enquiries') ? 'active' : '' }}">
                     <i class="fa fa-envelope"></i>
                     <span>All Enquiries</span>
                     <span class="pull-right-container">
@@ -82,7 +82,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu"
-                    style="display: {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('member/balloon-enquiries') || request()->is('member/perfect-gift-enquiries') || request()->is('member/business-card-orders') || request()->is('member/quality-logo-enquiries') || request()->is('member/journey-expert-enquiries') ? 'block' : 'none' }};">
+                    style="display: {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('member/balloon-enquiries') || request()->is('member/perfect-gift-enquiries') || request()->is('member/business-card-orders') || request()->is('member/quality-logo-enquiries') || request()->is('member/journey-expert-enquiries') || request()->is('member/gusto-enquiries') ? 'block' : 'none' }};">
                     <li class="treeview">
                         <a href="{{ route('my-e-card-enquiries') }}"
                             class="{{ request()->is('my-e-card-enquiries') && !request()->is('my-e-card-enquiries/*') ? 'active' : '' }}">
@@ -117,6 +117,12 @@
                         <a href="{{ route('member.journey-expert-enquiries') }}"
                             class="{{ request()->is('member/journey-expert-enquiries') ? 'active' : '' }}">
                             <i class="fa fa-circle-o"></i> <span>Journey Expert</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="{{ route('member.gusto-enquiries') }}"
+                            class="{{ request()->is('member/gusto-enquiries') ? 'active' : '' }}">
+                            <i class="fa fa-circle-o"></i> <span>Gusto</span>
                         </a>
                     </li>
                 </ul>

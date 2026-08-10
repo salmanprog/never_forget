@@ -457,6 +457,13 @@
                                     Experience</button>
                             </li>
                             <li class="nav-item swiper-slide" role="presentation">
+                                <button class="nav-link {{ request('category') == 'gusto' ? 'active' : '' }}"
+                                    id="pills-gusto-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-gusto" type="button" role="tab"
+                                    aria-controls="pills-gusto"
+                                    aria-selected="{{ request('category') == 'gusto' ? 'true' : 'false' }}">Gusto</button>
+                            </li>
+                            <li class="nav-item swiper-slide" role="presentation">
                                 <button
                                     class="nav-link {{ request('category') == 'greetings-appreciation' ? 'active' : '' }}"
                                     id="pills-greetings-appreciation-tab" data-bs-toggle="pill"
@@ -485,9 +492,13 @@
                     <!-- All Products Tab -->
                     <div class="tab-pane fade {{ !request('category') ? 'show active' : '' }}" id="pills-All"
                         role="tabpanel" aria-labelledby="pills-All-tab" tabindex="0">
+                        <div class="shop-total-products">
+                            <span class="shop-total-products__label">Total Products</span>
+                            <span class="shop-total-products__count">{{ $products->count() }}</span>
+                        </div>
                         <div class="row" id="all-products">
                             @foreach ($products->take($shopProductsPerPage) as $product)
-                                    <div class="col-lg-4 col-md-6 product-item visible">
+                                    <div class="col-lg-4 col-md-6 product-item visible" data-product-id="{{ $product->id }}">
                                         <div class="gift-card-wrapper">
                                             <img src="{{ $product->listingImageUrl() }}"
                                                 alt="{{ $product->name }}">
@@ -663,6 +674,15 @@
                         </div>
                     </div>
 
+                    <!-- Gusto Tab -->
+                    <div class="tab-pane fade {{ request('category') == 'gusto' ? 'show active' : '' }}"
+                        id="pills-gusto" role="tabpanel" aria-labelledby="pills-gusto-tab"
+                        tabindex="0">
+                        <div class="row">
+                            @include('website.partials._gusto')
+                        </div>
+                    </div>
+
                     <!-- Greeting and appreciation Tab -->
                     <div class="tab-pane fade {{ request('category') == 'greetings-appreciation' ? 'show active' : '' }}"
                         id="pills-greetings-appreciation" role="tabpanel"
@@ -678,7 +698,7 @@
                             aria-labelledby="pills-{{ $category->id }}-tab" tabindex="0">
                             <div class="row" id="category-products-{{ $category->id }}">
                                 @forelse($category->products->take($shopProductsPerPage) as $product)
-                                    <div class="col-lg-4 col-md-6 product-item visible">
+                                    <div class="col-lg-4 col-md-6 product-item visible" data-product-id="{{ $product->id }}">
                                         <div class="gift-card-wrapper">
                                             <img src="{{ $product->listingImageUrl() }}"
                                                 alt="{{ $product->name }}">
@@ -752,7 +772,7 @@
                             aria-labelledby="pills-{{ $category->id }}-tab" tabindex="0">
                             <div class="row" id="category-products-{{ $category->id }}">
                                 @forelse($category->products->take($shopProductsPerPage) as $product)
-                                    <div class="col-lg-4 col-md-6 product-item visible">
+                                    <div class="col-lg-4 col-md-6 product-item visible" data-product-id="{{ $product->id }}">
                                         <div class="gift-card-wrapper">
                                             <img src="{{ $product->listingImageUrl() }}"
                                                 alt="{{ $product->name }}">
@@ -1131,136 +1151,239 @@
 
         });
 
-        let page = 1;
         let loading = false;
-        let activeCategory = '{{ request('category') ? request('category') : 'all' }}';
-        let hasMoreProducts = true;
+        const productsPerPage = {{ (int) $shopProductsPerPage }};
+        let totalAllProducts = {{ $products->count() }};
         const loadMoreProductsUrl = @json(route('load.more.products'));
         const loadMoreCategoryProductsBase = @json(url('load-more-category-products'));
         const singleProductBase = @json(url('single-product'));
+        const productImageBase = @json(asset('public/admin/assets/images/product'));
+        const categoryMetaById = @json($shopCategoryMeta ?? []);
+        const slugToCategoryId = {};
+        const categoryTotals = {};
 
-        // Function to check if element is in viewport
+        Object.keys(categoryMetaById).forEach(function(id) {
+            const meta = categoryMetaById[id];
+            categoryTotals[String(id)] = Number(meta.total || 0);
+            if (meta.slug) {
+                slugToCategoryId[String(meta.slug)] = String(id);
+            }
+        });
+
+        function normalizeCategoryKey(raw) {
+            if (!raw || raw === 'all') return 'all';
+            if (raw === 'under30' || raw === 'Under30') return 'under30';
+            const value = String(raw);
+            if (/^\d+$/.test(value)) return value;
+            if (slugToCategoryId[value]) return slugToCategoryId[value];
+            return value;
+        }
+
+        let activeCategory = normalizeCategoryKey(@json(request('category') ?: 'all'));
+        let hasMoreProducts = true;
+        const loadedProductIds = new Set();
+
+        function getActiveContainer() {
+            return activeCategory === 'all' ?
+                document.getElementById('all-products') :
+                document.getElementById('category-products-' + activeCategory);
+        }
+
+        function getActiveSpinner() {
+            return activeCategory === 'all' ?
+                document.getElementById('loading-spinner') :
+                document.getElementById('loading-spinner-' + activeCategory);
+        }
+
+        function getActiveTotal() {
+            if (activeCategory === 'all') return totalAllProducts;
+            if (categoryTotals[activeCategory] != null) return categoryTotals[activeCategory];
+            return null;
+        }
+
+        function syncLoadedIds(container) {
+            loadedProductIds.clear();
+            container.querySelectorAll('.product-item[data-product-id]').forEach(function(el) {
+                loadedProductIds.add(String(el.getAttribute('data-product-id')));
+            });
+        }
+
+        function removeDuplicateProducts(container) {
+            const seen = new Set();
+            container.querySelectorAll('.product-item[data-product-id]').forEach(function(el) {
+                const id = String(el.getAttribute('data-product-id'));
+                if (seen.has(id)) {
+                    el.remove();
+                } else {
+                    seen.add(id);
+                }
+            });
+            syncLoadedIds(container);
+            return seen.size;
+        }
+
+        function updateAllProductsCountBadge() {
+            const badge = document.querySelector('#pills-All .shop-total-products__count');
+            if (badge) badge.textContent = String(totalAllProducts);
+        }
+
         function isInViewport(element) {
             if (!element) return false;
             const rect = element.getBoundingClientRect();
             const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-            return rect.top <= windowHeight + 200; // Increased buffer to 200px for earlier loading
+            return rect.top <= windowHeight + 200;
         }
 
-        // Function to format price
         function formatPrice(product) {
-            if (product.product_type == 0) {
+            if (product.formatted_price) return product.formatted_price;
+            if (Number(product.product_type) === 0) {
                 return '$' + parseFloat(product.product_price).toFixed(2);
-            } else {
-                const variations = JSON.parse(product.variations);
+            }
+            try {
+                const variations = typeof product.variations === 'string' ?
+                    JSON.parse(product.variations) :
+                    product.variations;
                 if (variations && variations.length > 0) {
-                    const prices = variations.map(v => parseFloat(v.price));
-                    const minPrice = Math.min(...prices);
-                    const maxPrice = Math.max(...prices);
+                    const prices = variations.map(function(v) { return parseFloat(v.price); });
+                    const minPrice = Math.min.apply(null, prices);
+                    const maxPrice = Math.max.apply(null, prices);
                     return '$' + minPrice.toFixed(2) + ' – $' + maxPrice.toFixed(2);
                 }
-                return 'N/A';
-            }
+            } catch (e) {}
+            return 'N/A';
         }
 
-        // Function to load more products
         function loadMoreProducts() {
             if (loading || !hasMoreProducts) return;
             if (activeCategory !== 'all' && !/^\d+$/.test(String(activeCategory))) return;
 
-            const container = activeCategory === 'all' ?
-                document.getElementById('all-products') :
-                document.getElementById(`category-products-${activeCategory}`);
-            const spinner = activeCategory === 'all' ?
-                document.getElementById('loading-spinner') :
-                document.getElementById(`loading-spinner-${activeCategory}`);
+            const container = getActiveContainer();
+            const spinner = getActiveSpinner();
             if (!container || !spinner) return;
 
+            const uniqueOnPage = removeDuplicateProducts(container);
+            const activeTotal = getActiveTotal();
+            if (activeTotal != null && uniqueOnPage >= activeTotal) {
+                hasMoreProducts = false;
+                return;
+            }
+
+            const skip = uniqueOnPage;
             loading = true;
-            page++;
 
             const url = activeCategory === 'all' ?
-                `${loadMoreProductsUrl}?page=${page}` :
-                `${loadMoreCategoryProductsBase}/${activeCategory}?page=${page}`;
+                loadMoreProductsUrl + '?skip=' + skip :
+                loadMoreCategoryProductsBase + '/' + activeCategory + '?skip=' + skip;
 
             spinner.style.display = 'block';
 
             fetch(url)
-                .then(response => response.json())
-                .then(data => {
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (typeof data.total === 'number') {
+                        if (activeCategory === 'all') {
+                            totalAllProducts = data.total;
+                            updateAllProductsCountBadge();
+                        } else {
+                            categoryTotals[activeCategory] = data.total;
+                        }
+                    }
+
                     if (!data.products || data.products.length === 0) {
                         hasMoreProducts = false;
                         loading = false;
                         spinner.style.display = 'none';
+                        removeDuplicateProducts(container);
                         return;
                     }
 
-                    data.products.forEach((product, index) => {
+                    data.products.forEach(function(product, index) {
+                        const productId = String(product.id);
+                        if (loadedProductIds.has(productId) || container.querySelector('[data-product-id="' + productId + '"]')) {
+                            return;
+                        }
+                        loadedProductIds.add(productId);
+
                         const productElement = document.createElement('div');
                         productElement.className = 'col-lg-4 col-md-6 product-item';
+                        productElement.setAttribute('data-product-id', productId);
 
-                        const ctaLabel = product.product_type == 0 ? 'Add To Cart' : 'Select Options';
+                        const ctaLabel = Number(product.product_type) === 0 ? 'Add To Cart' : 'Select Options';
+                        const imageName = product.listing_image || product.image || '';
 
-                        productElement.innerHTML = `
-                    <div class="gift-card-wrapper">
-                        <img src="{{ asset('public/admin/assets/images/product') }}/${product.listing_image || product.image}" alt="${product.name}">
-                        <div class="product-info">
-                            <h3 class="product-title">${product.name}</h3>
-                            <div class="price-rating">
-                                <span class="price">${formatPrice(product)}</span>
-                                <div class="rating">
-                                    <i class="fa-solid fa-star"></i>
-                                    <span>4.8</span>
-                                </div>
-                            </div>
-                            <a href="${singleProductBase}/${product.slug}" class="add-to-cart">
-                                ${ctaLabel}
-                                <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                `;
+                        productElement.innerHTML =
+                            '<div class="gift-card-wrapper">' +
+                                '<img src="' + productImageBase + '/' + imageName + '" alt="' + (product.name || '') + '">' +
+                                '<div class="product-info">' +
+                                    '<h3 class="product-title">' + (product.name || '') + '</h3>' +
+                                    '<div class="price-rating">' +
+                                        '<span class="price">' + formatPrice(product) + '</span>' +
+                                        '<div class="rating"><i class="fa-solid fa-star"></i><span>4.8</span></div>' +
+                                    '</div>' +
+                                    '<a href="' + singleProductBase + '/' + product.slug + '" class="add-to-cart">' +
+                                        ctaLabel +
+                                        '<i class="fas fa-arrow-right ms-2"></i>' +
+                                    '</a>' +
+                                '</div>' +
+                            '</div>';
 
                         container.appendChild(productElement);
-
-                        // Trigger animation with delay
-                        setTimeout(() => {
+                        setTimeout(function() {
                             productElement.classList.add('visible');
                         }, index * 100);
                     });
 
+                    const uniqueCount = removeDuplicateProducts(container);
+                    const totalNow = getActiveTotal();
+                    if (typeof data.has_more === 'boolean') {
+                        hasMoreProducts = data.has_more && (totalNow == null || uniqueCount < totalNow);
+                    } else if (totalNow != null) {
+                        hasMoreProducts = uniqueCount < totalNow;
+                    } else {
+                        hasMoreProducts = data.products.length >= productsPerPage;
+                    }
+
                     loading = false;
                     spinner.style.display = 'none';
+
+                    // Keep loading while the list still fits in the viewport
+                    requestAnimationFrame(handleScroll);
                 })
-                .catch(error => {
+                .catch(function(error) {
                     console.error('Error:', error);
                     loading = false;
                     spinner.style.display = 'none';
                 });
         }
 
-        // Handle tab changes
-        document.querySelectorAll('[data-bs-toggle="pill"]').forEach(tab => {
+        document.querySelectorAll('[data-bs-toggle="pill"]').forEach(function(tab) {
             tab.addEventListener('shown.bs.tab', function(e) {
                 const targetId = e.target.getAttribute('data-bs-target');
-                activeCategory = targetId === '#pills-All' ? 'all' : targetId === '#pills-Under30' ?
-                    'under30' : targetId.replace('#pills-', '');
-                page = 1;
-                hasMoreProducts = true;
-                loading = false; // Reset loading state on tab change
+                const rawKey = targetId === '#pills-All' ? 'all' :
+                    (targetId === '#pills-Under30' ? 'under30' : targetId.replace('#pills-', ''));
+                activeCategory = normalizeCategoryKey(rawKey);
+
+                const container = getActiveContainer();
+                if (container) {
+                    const uniqueCount = removeDuplicateProducts(container);
+                    const totalNow = getActiveTotal();
+                    hasMoreProducts = totalNow == null ? true : uniqueCount < totalNow;
+                } else {
+                    hasMoreProducts = false;
+                }
+                loading = false;
+                requestAnimationFrame(handleScroll);
             });
         });
 
-        // Improved scroll detection with debounce
         let scrollTimeout;
 
         function handleScroll() {
-            const activePane = document.querySelector('.tab-pane.active');
-            if (activePane) {
-                const lastProduct = activePane.querySelector('.product-item:last-child');
-                if (lastProduct && isInViewport(lastProduct)) {
-                    loadMoreProducts();
-                }
+            const activePane = document.querySelector('.tab-pane.active.show, .tab-pane.show.active, .tab-pane.active');
+            if (!activePane) return;
+            const lastProduct = activePane.querySelector('.product-item:last-child');
+            if (lastProduct && isInViewport(lastProduct)) {
+                loadMoreProducts();
             }
         }
 
@@ -1271,70 +1394,62 @@
             scrollTimeout = window.requestAnimationFrame(handleScroll);
         });
 
-        // Initial animation for existing products
         document.addEventListener('DOMContentLoaded', function() {
-            const products = document.querySelectorAll('.product-item');
-            products.forEach((product, index) => {
-                setTimeout(() => {
+            const allContainer = document.getElementById('all-products');
+            if (allContainer) removeDuplicateProducts(allContainer);
+
+            const activeContainer = getActiveContainer();
+            if (activeContainer) {
+                const uniqueCount = removeDuplicateProducts(activeContainer);
+                const totalNow = getActiveTotal();
+                hasMoreProducts = totalNow == null ? true : uniqueCount < totalNow;
+            }
+
+            document.querySelectorAll('.product-item').forEach(function(product, index) {
+                setTimeout(function() {
                     product.classList.add('visible');
                 }, index * 100);
             });
 
-            // Initial check for scroll position
             handleScroll();
 
-            // Scroll active category tab into view if category parameter exists
             const urlParams = new URLSearchParams(window.location.search);
             const categoryParam = urlParams.get('category');
 
             if (categoryParam) {
-                // Find the active tab button by category ID (supports both numeric and string IDs)
-                let activeTab = null;
+                let activeTab = document.querySelector('#pills-' + categoryParam + '-tab.nav-link.active');
 
-                // First try to find by exact ID match
-                activeTab = document.querySelector(`#pills-${categoryParam}-tab.nav-link.active`);
-
-                // If not found, try to find any active tab that matches
                 if (!activeTab) {
-                    const allActiveTabs = document.querySelectorAll('.nav-link.active');
-                    if (allActiveTabs.length > 0) {
-                        // Find the one that matches the category
-                        allActiveTabs.forEach(tab => {
-                            if (tab.id && tab.id.includes(categoryParam)) {
-                                activeTab = tab;
-                            }
-                        });
-                    }
+                    document.querySelectorAll('.nav-link.active').forEach(function(tab) {
+                        if (tab.id && tab.id.indexOf(categoryParam) !== -1) {
+                            activeTab = tab;
+                        }
+                    });
                 }
 
-                // If still not found, try to find by ID without active class (for initial load)
                 if (!activeTab) {
-                    activeTab = document.querySelector(`#pills-${categoryParam}-tab.nav-link`);
+                    const resolvedId = normalizeCategoryKey(categoryParam);
+                    activeTab = document.querySelector('#pills-' + resolvedId + '-tab.nav-link') ||
+                        document.querySelector('#pills-' + categoryParam + '-tab.nav-link');
                 }
 
                 if (activeTab) {
-                    // Wait for Swiper to initialize and DOM to be ready
-                    setTimeout(() => {
-                        // Get the parent swiper-slide element
+                    setTimeout(function() {
                         const parentSlide = activeTab.closest('.swiper-slide');
                         const swiperContainer = activeTab.closest('.shop-nav-slider');
 
                         if (parentSlide && swiperContainer) {
-                            // Scroll the parent slide into view with center alignment
                             parentSlide.scrollIntoView({
                                 behavior: 'smooth',
                                 block: 'nearest',
                                 inline: 'center'
                             });
-
-                            // Also scroll the container itself to ensure visibility
                             swiperContainer.scrollIntoView({
                                 behavior: 'smooth',
                                 block: 'nearest',
                                 inline: 'nearest'
                             });
                         } else {
-                            // Fallback: scroll the button itself
                             activeTab.scrollIntoView({
                                 behavior: 'smooth',
                                 block: 'nearest',
@@ -1344,10 +1459,9 @@
                     }, 500);
                 }
             } else {
-                // If no category, scroll to "All" tab
                 const allTab = document.querySelector('#pills-All-tab');
                 if (allTab) {
-                    setTimeout(() => {
+                    setTimeout(function() {
                         const parentSlide = allTab.closest('.swiper-slide');
                         if (parentSlide) {
                             parentSlide.scrollIntoView({

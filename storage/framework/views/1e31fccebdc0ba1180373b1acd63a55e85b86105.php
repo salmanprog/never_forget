@@ -1,1 +1,0 @@
-SAdasdasd<?php /**PATH D:\xamp-new\htdocs\never-forget\resources\views\layouts\website\login-modal.blade.php ENDPATH**/ ?>

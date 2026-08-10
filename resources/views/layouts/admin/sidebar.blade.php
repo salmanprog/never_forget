@@ -185,10 +185,10 @@
                         </ul>
                     </li>
                     @can('product-list')
-                    <li class="treeview {{ request()->is('balloons_category*') || request()->is('perfect_gift_category*') || request()->is('e_card_category*') || request()->is('tango_category*') ? 'active' : '' }}"
+                    <li class="treeview {{ request()->is('balloons_category*') || request()->is('perfect_gift_category*') || request()->is('e_card_category*') || request()->is('tango_category*') || request()->is('custom_solution_service*') || request()->is('gusto_service*') ? 'active' : '' }}"
                         style="height: auto;">
                         <a href="#"
-                            class="{{ request()->is('balloons_category*') || request()->is('perfect_gift_category*') || request()->is('e_card_category*') || request()->is('tango_category*') ? 'active' : '' }}">
+                            class="{{ request()->is('balloons_category*') || request()->is('perfect_gift_category*') || request()->is('e_card_category*') || request()->is('tango_category*') || request()->is('custom_solution_service*') || request()->is('gusto_service*') ? 'active' : '' }}">
                             <i class="fa fa-external-link"></i>
                             <span>Outsource Products</span>
                             <span class="pull-right-container">
@@ -196,7 +196,7 @@
                             </span>
                         </a>
                         <ul class="treeview-menu"
-                            style="display: {{ request()->is('balloons_category*') || request()->is('perfect_gift_category*') || request()->is('e_card_category*') || request()->is('tango_category*') ? 'block' : 'none' }};">
+                            style="display: {{ request()->is('balloons_category*') || request()->is('perfect_gift_category*') || request()->is('e_card_category*') || request()->is('tango_category*') || request()->is('custom_solution_service*') || request()->is('gusto_service*') ? 'block' : 'none' }};">
                             <li class="treeview">
                                 <a href="{{ route('balloons_category.index') }}"
                                     class="{{ request()->is('balloons_category*') ? 'active' : '' }}">
@@ -219,6 +219,18 @@
                                 <a href="{{ route('tango_category.index') }}"
                                     class="{{ request()->is('tango_category*') ? 'active' : '' }}">
                                     <i class="fa fa-circle-o"></i> <span>Tango</span>
+                                </a>
+                            </li>
+                            <li class="treeview">
+                                <a href="{{ route('custom_solution_service.index') }}"
+                                    class="{{ request()->is('custom_solution_service*') ? 'active' : '' }}">
+                                    <i class="fa fa-circle-o"></i> <span>Custom Solution Services</span>
+                                </a>
+                            </li>
+                            <li class="treeview">
+                                <a href="{{ route('gusto_service.index') }}"
+                                    class="{{ request()->is('gusto_service*') ? 'active' : '' }}">
+                                    <i class="fa fa-circle-o"></i> <span>Gusto</span>
                                 </a>
                             </li>
                         </ul>
@@ -269,15 +281,15 @@
                 </ul>
             </li>
 
-            <li class="treeview {{  request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('templates') || request()->is('templates/*') || request()->is('email-templates') || request()->is('email-templates/*') || request()->is('text-message-templates') || request()->is('text-message-templates/*') || request()->is('phone-script-templates') || request()->is('phone-script-templates/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('perfect_gift_enquiry') || request()->is('perfect_gift_enquiry/*') || request()->is('e_card_enquiry') || request()->is('e_card_enquiry/*') || request()->is('greetings_appreciation_enquiry') || request()->is('greetings_appreciation_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') || request()->is('business-card-orders') ? 'active': ''}}">
-                <a href="" class="{{  request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('templates') || request()->is('templates/*') || request()->is('email-templates') || request()->is('email-templates/*') || request()->is('text-message-templates') || request()->is('text-message-templates/*') || request()->is('phone-script-templates') || request()->is('phone-script-templates/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('perfect_gift_enquiry') || request()->is('perfect_gift_enquiry/*') || request()->is('e_card_enquiry') || request()->is('e_card_enquiry/*') || request()->is('greetings_appreciation_enquiry') || request()->is('greetings_appreciation_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') || request()->is('business-card-orders') ? 'active': '' }}">
+            <li class="treeview {{  request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('templates') || request()->is('templates/*') || request()->is('email-templates') || request()->is('email-templates/*') || request()->is('text-message-templates') || request()->is('text-message-templates/*') || request()->is('phone-script-templates') || request()->is('phone-script-templates/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('perfect_gift_enquiry') || request()->is('perfect_gift_enquiry/*') || request()->is('e_card_enquiry') || request()->is('e_card_enquiry/*') || request()->is('greetings_appreciation_enquiry') || request()->is('greetings_appreciation_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') || request()->is('enquires/gusto') || request()->is('enquires/gusto/*') || request()->is('business-card-orders') ? 'active': ''}}">
+                <a href="" class="{{  request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('mts-dashboard*') || request()->is('templates') || request()->is('templates/*') || request()->is('email-templates') || request()->is('email-templates/*') || request()->is('text-message-templates') || request()->is('text-message-templates/*') || request()->is('phone-script-templates') || request()->is('phone-script-templates/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/show') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*') || request()->is('perfect_gift_enquiry') || request()->is('perfect_gift_enquiry/*') || request()->is('e_card_enquiry') || request()->is('e_card_enquiry/*') || request()->is('greetings_appreciation_enquiry') || request()->is('greetings_appreciation_enquiry/*') || request()->is('enquires/journey_expert/*') || request()->is('enquires/quality_logo') || request()->is('enquires/gusto') || request()->is('enquires/gusto/*') || request()->is('business-card-orders') ? 'active': '' }}">
                     <i class="fa fa-gift"></i> <span>MTS Dashboard</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
 
-                <ul class="treeview-menu" style="display: {{ request()->is('mts-dashboard*') || request()->is('templates') || request()->is('templates/*') || request()->is('email-templates') || request()->is('email-templates/*') || request()->is('text-message-templates') || request()->is('text-message-templates/*') || request()->is('phone-script-templates') || request()->is('phone-script-templates/*') || request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*/show') || request()->is('perfect_gift_enquiry') || request()->is('perfect_gift_enquiry/*') || request()->is('e_card_enquiry') || request()->is('e_card_enquiry/*') || request()->is('greetings_appreciation_enquiry') || request()->is('greetings_appreciation_enquiry/*') || request()->is('enquires/journey_expert') || request()->is('enquires/quality_logo') || request()->is('business-card-orders')  ? 'block' : 'none' }};">
+                <ul class="treeview-menu" style="display: {{ request()->is('mts-dashboard*') || request()->is('templates') || request()->is('templates/*') || request()->is('email-templates') || request()->is('email-templates/*') || request()->is('text-message-templates') || request()->is('text-message-templates/*') || request()->is('phone-script-templates') || request()->is('phone-script-templates/*') || request()->is('contactus') || request()->is('contactus/create') || request()->is('contactus/*/show') || request()->is('contactus/*/edit') || request()->is('contactus/*') ||request()->is('user') ||request()->is('user/*') || request()->is('balloon_enquiry') || request()->is('balloon_enquiry/create') || request()->is('balloon_enquiry/*/edit') || request()->is('balloon_enquiry/*/show') || request()->is('perfect_gift_enquiry') || request()->is('perfect_gift_enquiry/*') || request()->is('e_card_enquiry') || request()->is('e_card_enquiry/*') || request()->is('greetings_appreciation_enquiry') || request()->is('greetings_appreciation_enquiry/*') || request()->is('enquires/journey_expert') || request()->is('enquires/quality_logo') || request()->is('enquires/gusto') || request()->is('enquires/gusto/*') || request()->is('business-card-orders')  ? 'block' : 'none' }};">
                      <li class="treeview {{ request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') || request()->is('user/*/show')  ||request()->is('user') ||request()->is('user/*')  ? 'active' : '' }}"
                         style="height: auto;">
                         <a href="#"
@@ -402,6 +414,15 @@
                         class="{{ request()->is('enquires/journey_expert') || request()->is('enquires/journey_expert/*') ? 'active' : '' }}">
                             <i class="fa fa-envelope"></i>
                             <span>Journey-Expert Enquiry</span>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('enquiry-list')
+                    <li class="treeview">
+                        <a href="{{ route('enquires.show','gusto') }}"
+                        class="{{ request()->is('enquires/gusto') || request()->is('enquires/gusto/*') ? 'active' : '' }}">
+                            <i class="fa fa-envelope"></i>
+                            <span>Gusto Enquiry</span>
                         </a>
                     </li>
                     @endcan

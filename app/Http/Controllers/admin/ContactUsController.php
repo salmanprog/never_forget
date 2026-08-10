@@ -20,23 +20,31 @@ class ContactUsController extends Controller
         if($request->ajax()){
             $query = ContactUs::orderby('id' , 'desc')->where('id' , '>' , 0);
 			if($request['search'] != ""){
-                $query->where('name' , 'like' , '%' . $request['search'] .'%');
+                $search = $request['search'];
+                $query->where(function ($q) use ($search) {
+                    $q->where('first_name', 'like', '%' . $search . '%')
+                        ->orWhere('last_name', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%')
+                        ->orWhere('company', 'like', '%' . $search . '%')
+                        ->orWhere('phone', 'like', '%' . $search . '%');
+                });
             }
             if($request['status'] != 'All'){
-                if($request['status']==2){
-                    $request['status']== 0;
+                $status = $request['status'];
+                if($status == 2 || $status === '2'){
+                    $status = 0;
                 }
-            $query->where('status' , $request['status']);
+                $query->where('status', $status);
             }
-            if($request['type'] != 'All'){
+            if($request['type'] != 'All' && $request['type'] != ''){
                 $query->where('type' , $request['type']);
             }
             $models= $query->paginate(10);
             return (string) view('admin.contact_us.search' , compact('models'));
         }
 
-            $page_title= 'All Contact Us';
-            $models=ContactUs::where('status' , 1)->paginate(10);
+            $page_title= 'All Contact Us / MTS Leads';
+            $models=ContactUs::orderby('id', 'desc')->paginate(10);
             return view('admin.contact_us.index' , compact('page_title' , 'models'));
     }
 

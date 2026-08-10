@@ -688,6 +688,48 @@ p {
 
 }
 
+.shop-total-products {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 8px 0 28px;
+  text-align: end;
+
+}
+
+.shop-total-products__label {
+  font-family: var(--secondry-font);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(8, 30, 55, 0.55);
+}
+
+.shop-total-products__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #c9a227 0%, #b08920 100%);
+  color: #fff;
+  font-family: var(--secondry-font);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow: 0 6px 16px rgba(192, 154, 39, 0.28);
+}
+
+@media (max-width: 575px) {
+  .shop-total-products {
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+}
+
 .hiw-sec-3 .card-wrapper {
   padding: var(--text-40) var(--text-20);
 }
@@ -1519,6 +1561,7 @@ ul.footer-links {
 .display-none {
   display: none;
 }
+
 .team-members-wrapper li .rounded-circle,
 .team-members-wrapper li .heading {
   transition: all .6s ease-in-out;
@@ -2137,13 +2180,12 @@ ul .giftss {
 .plans-sec .card-wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   height: 100%;
   padding: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-
 }
 
 .plans-sec .card-wrapper:hover {
@@ -2155,6 +2197,91 @@ ul .giftss {
   min-height: 400px;
 }
 
+/* Plans slider */
+.plans-sec .container {
+  position: relative;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.plans-slider {
+  margin: 0;
+}
+
+.plans-slider .slick-list {
+  overflow: hidden;
+  overflow-y: visible;
+  padding: 40px 0 20px 0;
+  margin: 0 -10px;
+}
+
+.plans-slider .slick-slide {
+  padding: 0 15px;
+  height: auto !important;
+  float: none;
+  display: flex !important;
+}
+
+.plans-slider .slick-track {
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+.plans-slider .slick-slide > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.plans-slider .plans-card-wrapper {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100% !important;
+  margin-top: 40px;
+}
+
+.plans-slider .plans-list {
+  flex: 1 1 auto;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.plans-slider .plans-card-cta {
+  margin-top: auto !important;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+}
+
+/* Hide default side slick arrows */
+.plans-sec .slick-prev,
+.plans-sec .slick-next,
+.plans-slider .slick-arrow {
+  display: none !important;
+}
+
+/* Bottom arrows — same as testimonials */
+.plans-arrows .arrows {
+  cursor: pointer;
+  line-height: 0;
+}
+
+.plans-arrows .arrows svg line,
+.plans-arrows .arrows svg polyline {
+  stroke: #CFA40C;
+  cursor: pointer;
+  transition: stroke 0.3s ease;
+}
+
+.plans-arrows .arrows:hover svg line,
+.plans-arrows .arrows:hover svg polyline {
+  stroke: var(--primary-theme);
+}
+
 .plans-sec .plans-list {
   list-style-type: none;
   padding: 20px;
@@ -2164,6 +2291,53 @@ ul .giftss {
 
 .plans-sec .plans-list li {
   margin-bottom: 10px;
+}
+
+@media (max-width: 1399.98px) {
+  .plans-slider .slick-slide {
+    padding: 0 12px;
+  }
+
+  .plans-sec .plans-card-wrapper .heading.fs-48 {
+    font-size: 24px !important;
+  }
+
+  .plans-sec .card-wrapper {
+    padding: 28px 20px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .plans-slider .slick-slide {
+    padding: 0 10px;
+  }
+
+  .plans-sec .card-wrapper {
+    padding: 24px 18px;
+  }
+
+  .plans-sec .plans-card-wrapper .heading.fs-48 {
+    font-size: 22px !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .plans-slider .slick-slide {
+    padding: 0 8px;
+  }
+
+  .plans-sec .plans-card-wrapper .heading.fs-48 {
+    font-size: 22px !important;
+  }
+
+  .plans-sec .card-wrapper {
+    margin-bottom: 0;
+    padding: 22px 16px;
+  }
+
+  .plans-arrows {
+    gap: 20px !important;
+  }
 }
 
 @media (max-width: 768px) {

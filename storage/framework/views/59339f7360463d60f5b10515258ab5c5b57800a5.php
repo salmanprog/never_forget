@@ -1,2 +1,0 @@
-<h1><?php echo e($product->translate('name')); ?></h1>
-<p><?php echo e($product->translate('description')); ?></p><?php /**PATH D:\xamp-new\htdocs\never-forget\resources\views\products\show.blade.php ENDPATH**/ ?>

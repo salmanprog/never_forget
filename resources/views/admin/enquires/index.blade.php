@@ -22,6 +22,9 @@
                     $hasProductName = $enquiries->contains(function ($item) {
                         return !empty($item->product_name);
                     });
+                    $isGustoList = $enquiries->contains(function ($item) {
+                        return ($item->identifier ?? '') === 'gusto';
+                    }) || request()->is('enquires/gusto');
                 @endphp
                 <div class="box box-info">
                     <div class="box-body">
@@ -54,9 +57,13 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Phone</th>
-                                        <th>Travel Type</th>
-                                        <th>Any cruise line</th>
-                                        <th>Date</th>
+                                        @if ($isGustoList)
+                                            <th>Selected Services</th>
+                                        @else
+                                            <th>Travel Type</th>
+                                            <th>Any cruise line</th>
+                                            <th>Date</th>
+                                        @endif
                                         <th>Message</th>
                                         <th width="140">Action</th>
                                         <th>Contacts</th>
@@ -64,6 +71,21 @@
                                 </thead>
                                 <tbody id="body">
                                     @foreach ($enquiries as $enquiry)
+                                        @php
+                                            $rowSelected = $enquiry->selected_services;
+                                            if (is_string($rowSelected)) {
+                                                $decodedRow = json_decode($rowSelected, true);
+                                                $rowSelected = is_array($decodedRow) ? $decodedRow : [];
+                                            }
+                                            $rowSelected = is_array($rowSelected) ? $rowSelected : [];
+
+                                            $rowGrouped = [];
+                                            foreach ($rowSelected as $item) {
+                                                $parts = explode('::', (string) $item, 2);
+                                                $category = trim($parts[0] ?? 'Other') ?: 'Other';
+                                                $rowGrouped[$category] = ($rowGrouped[$category] ?? 0) + 1;
+                                            }
+                                        @endphp
                                         <tr>
                                             @if ($hasProductName)
                                                 <td>
@@ -78,11 +100,23 @@
                                                 @endif
                                                 {{ $enquiry->phone }}
                                             </td>
-                                            <td>
-                                                {{ $enquiry->travel_type }}
-                                            </td>
-                                            <td>{{ $enquiry->any_cruise_line ?: '—' }}</td>
-                                            <td>{{ $enquiry->date }}</td>
+                                            @if ($isGustoList)
+                                                <td>
+                                                    @if(count($rowGrouped))
+                                                        @foreach($rowGrouped as $category => $count)
+                                                            <div><strong>{{ $category }}</strong> ({{ $count }})</div>
+                                                        @endforeach
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
+                                            @else
+                                                <td>
+                                                    {{ $enquiry->travel_type }}
+                                                </td>
+                                                <td>{{ $enquiry->any_cruise_line ?: '—' }}</td>
+                                                <td>{{ $enquiry->date }}</td>
+                                            @endif
                                             <td>
                                                 @if (!$enquiry->message)
                                                     <span>No message</span>

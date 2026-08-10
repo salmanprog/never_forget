@@ -9,7 +9,6 @@
 	<div class="content-header-right">
 		@include('includes.buttons.back')
 	</div>
-
 </section>
 <section class="content">
 	<div class="row">
@@ -24,13 +23,14 @@
 				<div class="box-body">
                     <div class="row">
                         <div class="d-flex col-sm-4">
-                            <input type="text" id="search" class="form-control" placeholder="Search">
+                            <input type="text" id="search" class="form-control" placeholder="Search name, email, company, phone">
                         </div>
                         <div class="d-flex col-sm-4">
                             <select name="" id="type" class="form-control type" style="margin-bottom:5px">
                                 <option value="All" selected>Search by type</option>
                                 <option value="custom_quote">Custom Quote</option>
                                 <option value="request_a_quote">Request a Quote</option>
+                                <option value="customize_solution">Customize Your Solution</option>
                             </select>
                         </div>
                         <div class="d-flex col-sm-4">
@@ -42,54 +42,24 @@
                         </div>
                     </div>
 					<div class="table-responsive">
-					<table id="" class="table table-bordered table-striped">
+					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th>SL</th>
-								<th>First Name</th>
-								<th>Last Name</th>
+								<th>Type</th>
+								<th>Name</th>
 								<th>Email</th>
 								<th>Phone</th>
 								<th>Company</th>
 								<th>Plans</th>
-								<th>Quantity</th>
-								<th>Message</th>
+								<th>Details</th>
 								<th>Status</th>
-								<th width="140">Action</th>
+								<th>Contacts</th>
+								<th width="100">Action</th>
 							</tr>
 						</thead>
 						<tbody id="body">
-							@foreach($models as $key=>$model)
-								<tr id="id-{{ $model->id }}">
-									<td>{{ $models->firstItem()+$key }}.</td>
-									<td>{{$model->first_name}}</td>
-									<td>{{$model->last_name}}</td>
-									<td>{{$model->email}}</td>
-									<td>{{$model->phone}}</td>
-									<td>{{$model->company}}</td>
-									<td>{{$model->plans}}</td>
-									<td>{{$model->quantity}}</td>
-									<td>{{$model->message}}</td>
-									<td>
-										@if($model->status)
-											<span class="badge label-success">Active</span>
-										@else
-											<span class="badge label-danger">In-Active</span>
-										@endif
-									</td>
-									<td width="250px">
-                                        <button class="btn btn-danger btn-xs delete" data-slug="{{ $model->id }}" data-del-url="{{ url('contactus', $model->id) }}"><i class="fa fa-trash"></i> Delete</button>
-									</td>
-								</tr>
-							@endforeach
-                            <tr>
-                                <td colspan="11">
-									Displying {{$models->firstItem()}} to {{$models->lastItem()}} of {{$models->total()}} records
-                                    <div class="d-flex justify-content-center">
-                                        {!! $models->links('pagination::bootstrap-4') !!}
-                                    </div>
-                                </td>
-                            </tr>
+							@include('admin.contact_us.search')
 						</tbody>
 					</table>
 					</div>
@@ -98,7 +68,33 @@
 		</div>
 	</div>
 </section>
+
+<div class="modal fade" id="contactDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Contact / Custom Solution Details</h4>
+			</div>
+			<div class="modal-body" id="contactDetailBody"></div>
+		</div>
+	</div>
+</div>
+
+@include('includes.admin.mts-modals')
 @endsection
 
 @push('js')
+@include('includes.admin.mts-functions')
+<script>
+	$(document).on('click', '.view-contact-detail', function () {
+		var b64 = $(this).attr('data-detail-b64') || '';
+		try {
+			$('#contactDetailBody').html(decodeURIComponent(escape(atob(b64))));
+		} catch (e) {
+			$('#contactDetailBody').html(atob(b64));
+		}
+		$('#contactDetailModal').modal('show');
+	});
+</script>
 @endpush

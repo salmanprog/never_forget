@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PerfectGiftSeeder::class);
         $this->call(GreetingsAppreciationCategorySeeder::class);
         $this->call(ECardCategorySeeder::class);
+        $this->call(GustoServiceSeeder::class);
     }
 }

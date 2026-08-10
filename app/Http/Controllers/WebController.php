@@ -41,8 +41,10 @@ use App\Models\GreetingsAppreciation;
 use App\Models\GreetingsAppreciationCategory;
 use App\Models\GreetingsAppreciationEnquiryItem;
 use App\Models\Enquires;
+use App\Models\GustoService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Schema;
 
 
 use DB;
@@ -186,14 +188,25 @@ class WebController extends Controller
             ->orderByRaw("FIELD(slug, 'anniversary', 'birthday', 'thank-you')")
             ->get();
 
+        // Numeric id + slug map so infinite-scroll works for ?category=anniversary etc.
+        $shopCategoryMeta = $occasionCategories->concat($categories)->mapWithKeys(function ($category) {
+            return [
+                (string) $category->id => [
+                    'id' => (int) $category->id,
+                    'slug' => $category->slug,
+                    'total' => $category->products->count(),
+                ],
+            ];
+        });
+
         $customer_favorites = Product::whereIn('id', function ($query) {
             $query->select('product_id')
                 ->from('favorites')
                 ->where('status', 1);
         })->where('status', 1)->get();
 
-        $balloons = BalloonsCategory::where('status', 1)->orderBy('sort_order')->orderBy('id')->get();
-        $perfectGifts = PerfectGiftCategory::where('status', 1)->orderBy('sort_order')->orderBy('id')->get();
+        $balloons = $this->getOutsourceCategories(BalloonsCategory::class);
+        $perfectGifts = $this->getOutsourceCategories(PerfectGiftCategory::class);
 
         $addedBalloonIds = [];
         if (auth()->check()) {
@@ -217,11 +230,33 @@ class WebController extends Controller
             $addedGreetingsCategoryIds = GreetingsAppreciationEnquiryItem::where('guest_token', session('guest_token'))->whereNull('enquiry_id')->pluck('greetings_appreciation_category_id')->toArray();
         }
 
-        $eCardCategories = ECardCategory::where('status', 1)->orderBy('sort_order')->orderBy('id')->get();
-        $tangoCategories = TangoCategory::where('status', 1)->orderBy('sort_order')->orderBy('id')->get();
+        $eCardCategories = $this->getOutsourceCategories(ECardCategory::class);
+        $tangoCategories = $this->getOutsourceCategories(TangoCategory::class);
+        $gustoServices = GustoService::with('activeOptions')
+            ->where('status', '1')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
 
-        return view('website.shop', compact('page_title', 'categories', 'occasionCategories', 'products', 'customer_favorites', 'wishlistProductIds', 'balloons', 'addedBalloonIds', 'perfectGifts', 'addedPerfectGiftIds', 'greetingsCategories', 'addedGreetingsCategoryIds', 'eCardCategories', 'tangoCategories', 'shopProductsPerPage'));
-        
+        return view('website.shop', compact(
+            'page_title',
+            'categories',
+            'occasionCategories',
+            'products',
+            'customer_favorites',
+            'wishlistProductIds',
+            'balloons',
+            'addedBalloonIds',
+            'perfectGifts',
+            'addedPerfectGiftIds',
+            'greetingsCategories',
+            'addedGreetingsCategoryIds',
+            'eCardCategories',
+            'tangoCategories',
+            'gustoServices',
+            'shopProductsPerPage',
+            'shopCategoryMeta'
+        ));
     }
 
     public function createEcard(Request $request)
@@ -229,7 +264,7 @@ class WebController extends Controller
         if (!$request->filled('e_card_category_id')) {
             return redirect()->route('shop', ['category' => 'e-cards']);
         }
-        $eCardCategory = ECardCategory::where('status', 1)->findOrFail($request->e_card_category_id);
+        $eCardCategory = $this->findOutsourceCategory(ECardCategory::class, $request->e_card_category_id);
         $page_title = 'Create E-Card || Never Forget';
 
         return view('website.create-e-card', compact('page_title', 'eCardCategory'));
@@ -323,7 +358,7 @@ class WebController extends Controller
             return redirect()->route('shop', ['category' => 'tango']);
         }
 
-        $tangoCategory = TangoCategory::where('status', 1)->findOrFail($request->tango_category_id);
+        $tangoCategory = $this->findOutsourceCategory(TangoCategory::class, $request->tango_category_id);
         $page_title = 'Create Tango || Never Forget';
 
         return view('website.create-tango', compact('page_title', 'tangoCategory'));
@@ -585,6 +620,32 @@ class WebController extends Controller
     }
 
     /**
+     * Individual's own Gusto enquiries.
+     */
+    public function myGustoEnquiries(Request $request)
+    {
+        $page_title = 'Gusto Enquiry';
+        $user = auth()->user();
+        $query = Enquires::where('identifier', 'gusto')
+            ->where(function ($q) use ($user) {
+                if ($user && $user->email) {
+                    $q->where('user_id', $user->id)->orWhere('email', $user->email);
+                } else {
+                    $q->where('user_id', auth()->id());
+                }
+            })
+            ->latest();
+
+        $enquiries = $query->paginate(10);
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.gusto-enquiries-partials.table', compact('enquiries'))->render();
+        }
+
+        return view('website.individual-dashboard.gusto-enquiries', compact('page_title', 'enquiries'));
+    }
+
+    /**
      * Get user IDs that belong to the current user's company (admin + users with company_id).
      * Used for Company role to filter enquiries to only those submitted by someone in the company.
      */
@@ -778,6 +839,36 @@ class WebController extends Controller
 
         $page_url = route('company.journey-expert-enquiries');
         return view('website.individual-dashboard.journey-expert-enquiries', compact('page_title', 'enquiries', 'page_url'));
+    }
+
+    /**
+     * Company's own Gusto enquiries (same UI as Individual, filtered by company user ids).
+     */
+    public function companyGustoEnquiries(Request $request)
+    {
+        $page_title = 'Gusto Enquiry';
+        $companyUserIds = $this->getCompanyUserIds();
+        if (empty($companyUserIds)) {
+            $enquiries = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            if ($request->ajax()) {
+                return view('website.individual-dashboard.gusto-enquiries-partials.table', compact('enquiries'))->render();
+            }
+            $page_url = route('company.gusto-enquiries');
+            return view('website.individual-dashboard.gusto-enquiries', compact('page_title', 'enquiries', 'page_url'));
+        }
+
+        $query = Enquires::where('identifier', 'gusto')
+            ->whereIn('user_id', $companyUserIds)
+            ->latest();
+
+        $enquiries = $query->paginate(10)->withPath(route('company.gusto-enquiries'));
+
+        if ($request->ajax()) {
+            return view('website.individual-dashboard.gusto-enquiries-partials.table', compact('enquiries'))->render();
+        }
+
+        $page_url = route('company.gusto-enquiries');
+        return view('website.individual-dashboard.gusto-enquiries', compact('page_title', 'enquiries', 'page_url'));
     }
 
     public function createBalloonEnquiryItem(Request $request)
@@ -1318,6 +1409,160 @@ class WebController extends Controller
         return view('website.contact-us', compact('page_title', 'contactus'));
     }
 
+    public function customizeYourSolution()
+    {
+        $page_title = 'Customize Your Solution || Never Forget';
+        $services = \App\Models\CustomSolutionService::where('status', '1')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        return view('website.customize-your-solution', compact('page_title', 'services'));
+    }
+
+    public function customizeYourSolutionForm(string $service)
+    {
+        $selectedService = \App\Models\CustomSolutionService::where('slug', $service)
+            ->where('status', '1')
+            ->with(['activeOptions'])
+            ->firstOrFail();
+
+        $selectedServiceKey = $selectedService->slug;
+        $page_title = $selectedService->title . ' || Never Forget';
+
+        return view('website.customize-your-solution-form', compact(
+            'page_title',
+            'selectedService',
+            'selectedServiceKey'
+        ));
+    }
+
+    public function storeCustomizeSolution(Request $request)
+    {
+        $selectedService = \App\Models\CustomSolutionService::where('slug', $request->input('service_key'))
+            ->where('status', '1')
+            ->with('activeOptions')
+            ->first();
+
+        if (!$selectedService) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid service selected.',
+                ], 422);
+            }
+            return back()->withErrors(['service_key' => 'Invalid service selected.'])->withInput();
+        }
+
+        $allowedOptions = $selectedService->activeOptions->pluck('title')->all();
+
+        $data = $request->validate([
+            'service_key' => 'required|string',
+            'company' => 'required|string|max:150',
+            'contact_name' => 'required|string|max:150',
+            'job_title' => 'required|string|max:150',
+            'email' => 'required|email|max:150',
+            'phone' => 'required|string|max:50',
+            'website' => 'required|string|max:255',
+            'industry' => 'required|string|max:150',
+            'number_of_employees' => 'required|string|max:100',
+            'approximate_customers' => 'required|string|max:100',
+            'business_goals' => 'required|string|max:5000',
+            'estimated_budget' => 'nullable|string|max:150',
+            'message' => 'nullable|string|max:5000',
+            'services' => 'required|array|min:1',
+            'services.*' => ['string', 'max:150', \Illuminate\Validation\Rule::in($allowedOptions)],
+            'other_services_text' => 'nullable|string|max:5000',
+        ]);
+
+        if ($selectedService->has_other_text && in_array('Other Services', $data['services'], true) && empty($data['other_services_text'])) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please describe the other services you need.',
+                    'errors' => [
+                        'other_services_text' => ['Please describe the other services you need.'],
+                    ],
+                ], 422);
+            }
+
+            return back()
+                ->withErrors(['other_services_text' => 'Please describe the other services you need.'])
+                ->withInput();
+        }
+
+        $nameParts = preg_split('/\s+/', trim($data['contact_name']), 2);
+        $firstName = $nameParts[0] ?? $data['contact_name'];
+        $lastName = $nameParts[1] ?? '';
+
+        $selectedLabels = array_map(function ($option) use ($selectedService) {
+            return $selectedService->title . ': ' . $option;
+        }, array_values($data['services']));
+
+        $model = new ContactUs();
+        $model->type = 'customize_solution';
+        $model->plans = 'Customize Your Solution - ' . $selectedService->title;
+        $model->first_name = $firstName;
+        $model->last_name = $lastName;
+        $model->email = $data['email'];
+        $model->phone = $data['phone'];
+        $model->company = $data['company'];
+        $model->job_title = $data['job_title'];
+        $model->website = $data['website'];
+        $model->industry = $data['industry'];
+        $model->number_of_employees = $data['number_of_employees'];
+        $model->approximate_customers = $data['approximate_customers'];
+        $model->business_goals = $data['business_goals'];
+        $model->estimated_budget = $data['estimated_budget'] ?? null;
+        $model->selected_services = $selectedLabels;
+        $model->other_services_text = $data['other_services_text'] ?? null;
+        $model->quantity = $data['number_of_employees'];
+        $model->message = $data['message'] ?? null;
+        $model->status = 1;
+        $model->save();
+
+        $emailBody = [
+            'company' => $data['company'],
+            'contact_name' => $data['contact_name'],
+            'job_title' => $data['job_title'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'website' => $data['website'],
+            'industry' => $data['industry'],
+            'number_of_employees' => $data['number_of_employees'],
+            'approximate_customers' => $data['approximate_customers'],
+            'business_goals' => $data['business_goals'],
+            'estimated_budget' => $data['estimated_budget'] ?? 'N/A',
+            'message' => $data['message'] ?? '',
+            'services' => $selectedLabels,
+            'other_services_text' => $data['other_services_text'] ?? '',
+            'service_label' => $selectedService->title,
+        ];
+
+        try {
+            \Mail::to('carreer@neverforgetappreciation.com')->send(new \App\Mail\Email([
+                'from' => 'customize-solution',
+                'title' => 'New Customize Your Solution Request',
+                'body' => $emailBody,
+            ]));
+        } catch (\Throwable $e) {
+            \Log::error('Failed to send customize solution email: ' . $e->getMessage());
+        }
+
+        $successMessage = 'Your custom solution request has been submitted successfully! Our team will contact you soon.';
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $successMessage,
+            ]);
+        }
+
+        return redirect()
+            ->route('customize-your-solution.form', $selectedService->slug)
+            ->with('customize_solution_message', $successMessage);
+    }
+
     public function specialOffers()
     {
         $page_title = 'Special Offers || Never Forget';
@@ -1824,77 +2069,71 @@ class WebController extends Controller
 
     public function loadMoreProducts(Request $request)
     {
-        $page = $request->get('page', 1);
-        $perPage = 3; // Load 3 products at a time
-        $skip = ($page - 1) * $perPage;
+        $perPage = 3;
+        $query = Product::where('status', 1);
+        $total = (clone $query)->count();
+        $skip = $this->resolveShopProductsSkip($request, $perPage);
 
-        $products = Product::where('status', 1)
-            ->orderBy('id', 'ASC')
-            ->skip($skip)
-            ->take($perPage)
-            ->get()
-            ->map(function ($product) {
-                // Format price based on product type
-                if ($product->product_type == 0) {
-                    // Simple product
-                    $product->formatted_price = '$' . number_format($product->product_price, 2);
-                } else {
-                    // Variable product - get prices from variations
-                    $variations = json_decode($product->variations, true);
-                    if ($variations && count($variations) > 0) {
-                        $prices = array_column($variations, 'price');
-                        $minPrice = min($prices);
-                        $maxPrice = max($prices);
-                        $product->formatted_price = '$' . number_format($minPrice, 2) . ' – $' . number_format($maxPrice, 2);
-                    } else {
-                        $product->formatted_price = 'N/A';
-                    }
-                }
-                $product->listing_image = $product->listing_image;
-                return $product;
-            });
+        $products = $this->mapShopProductsForJson(
+            (clone $query)->orderBy('id', 'ASC')->skip($skip)->take($perPage)->get()
+        );
 
         return response()->json([
-            'products' => $products
+            'products' => $products,
+            'total' => $total,
+            'has_more' => ($skip + $products->count()) < $total,
         ]);
     }
 
     public function loadMoreCategoryProducts(Request $request, $categoryId)
     {
-        $page = $request->get('page', 1);
-        $perPage = 3; // Load 3 products at a time
-        $skip = ($page - 1) * $perPage;
+        $perPage = 3;
+        $categoryId = (int) $categoryId;
+        $query = Product::where('status', 1)->where('category_id', $categoryId);
+        $total = (clone $query)->count();
+        $skip = $this->resolveShopProductsSkip($request, $perPage);
 
-        $products = Product::where('status', 1)
-            ->where('category_id', $categoryId)
-            ->orderBy('id', 'ASC')
-            ->skip($skip)
-            ->take($perPage)
-            ->get()
-            ->map(function ($product) {
-                // Format price based on product type
-                if ($product->product_type == 0) {
-                    // Simple product
-                    $product->formatted_price = '$' . number_format($product->product_price, 2);
-                } else {
-                    // Variable product - get prices from variations
-                    $variations = json_decode($product->variations, true);
-                    if ($variations && count($variations) > 0) {
-                        $prices = array_column($variations, 'price');
-                        $minPrice = min($prices);
-                        $maxPrice = max($prices);
-                        $product->formatted_price = '$' . number_format($minPrice, 2) . ' – $' . number_format($maxPrice, 2);
-                    } else {
-                        $product->formatted_price = 'N/A';
-                    }
-                }
-                $product->listing_image = $product->listing_image;
-                return $product;
-            });
+        $products = $this->mapShopProductsForJson(
+            (clone $query)->orderBy('id', 'ASC')->skip($skip)->take($perPage)->get()
+        );
 
         return response()->json([
-            'products' => $products
+            'products' => $products,
+            'total' => $total,
+            'has_more' => ($skip + $products->count()) < $total,
         ]);
+    }
+
+    private function resolveShopProductsSkip(Request $request, int $perPage): int
+    {
+        if ($request->filled('skip')) {
+            return max(0, (int) $request->get('skip'));
+        }
+
+        $page = max(1, (int) $request->get('page', 1));
+
+        return ($page - 1) * $perPage;
+    }
+
+    private function mapShopProductsForJson($products)
+    {
+        return $products->map(function ($product) {
+            if ((int) $product->product_type === 0) {
+                $product->formatted_price = '$' . number_format((float) $product->product_price, 2);
+            } else {
+                $variations = json_decode($product->variations, true);
+                if ($variations && count($variations) > 0) {
+                    $prices = array_column($variations, 'price');
+                    $minPrice = min($prices);
+                    $maxPrice = max($prices);
+                    $product->formatted_price = '$' . number_format((float) $minPrice, 2) . ' – $' . number_format((float) $maxPrice, 2);
+                } else {
+                    $product->formatted_price = 'N/A';
+                }
+            }
+
+            return $product;
+        });
     }
 
     public function send_inquiry(Request $request)
@@ -1917,6 +2156,16 @@ class WebController extends Controller
                 'phone' => (auth()->check() ? 'nullable|' : 'required|') . 'string|max:20',
                 'message' => 'required|string|max:500',
                 'product' => 'nullable|string|max:255',
+            ];
+        } elseif ($identifier === 'gusto') {
+            $rules = [
+                'title' => 'required|string|max:100',
+                'name' => 'required|string|max:100',
+                'email' => 'required|email',
+                'phone' => (auth()->check() ? 'nullable|' : 'required|') . 'string|max:20',
+                'message' => 'required|string|max:1000',
+                'services' => 'required|array|min:1',
+                'services.*' => 'required|string|max:255',
             ];
         } elseif ($identifier === 'journey_expert') {
             // Form shows either (cruise/tour: duration + destination) OR (all_inclusive: country + amenity + budget)
@@ -1969,6 +2218,12 @@ class WebController extends Controller
         $data = $request->validate($rules);
 
         $params = $request->all();
+        $selectedServices = [];
+        if ($identifier === 'gusto') {
+            $selectedServices = array_values(array_filter(array_map('trim', $request->input('services', []))));
+            $data['selected_services'] = $selectedServices;
+            $data['selected_services_text'] = implode(', ', $selectedServices);
+        }
 
         // Send email
         $details = [
@@ -1984,6 +2239,7 @@ class WebController extends Controller
             'email' => $params['email'],
             'phone' => $params['phone'] ?? '',
             'message' => $params['message'],
+            'selected_services' => $identifier === 'gusto' ? json_encode($selectedServices) : null,
             'status' => 1,
             'travel_type' => $params['travel_type'] ?? '',
             'any_cruise_line' => $params['any_cruise_line'] ?? null,
@@ -2035,6 +2291,23 @@ class WebController extends Controller
                 \Mail::to($data['email'])->send(new \App\Mail\Email($confirmationDetails));
             } catch (\Throwable $e) {
                 \Log::error('Quality Logo confirmation email failed: ' . $e->getMessage(), [
+                    'exception' => $e->getTraceAsString(),
+                    'recipient' => $data['email'],
+                ]);
+            }
+        } elseif ($identifier === 'gusto') {
+            try {
+                $confirmationDetails = [
+                    'from' => 'gusto-confirmation',
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'phone' => $data['phone'] ?? '',
+                    'message' => $data['message'],
+                    'selected_services' => $data['selected_services_text'] ?? '',
+                ];
+                \Mail::to($data['email'])->send(new \App\Mail\Email($confirmationDetails));
+            } catch (\Throwable $e) {
+                \Log::error('Gusto confirmation email failed: ' . $e->getMessage(), [
                     'exception' => $e->getTraceAsString(),
                     'recipient' => $data['email'],
                 ]);
@@ -2100,5 +2373,45 @@ class WebController extends Controller
         $page_title = 'Founder’s Vision || Never Forget';
         $collaborators = Collaborator::where('status', 1)->get();
         return view('website.founder', compact('page_title', 'collaborators'));
+    }
+
+    private function getOutsourceCategories(string $modelClass)
+    {
+        $model = new $modelClass();
+        $table = $model->getTable();
+
+        if (!Schema::hasTable($table)) {
+            return collect();
+        }
+
+        $query = $modelClass::query();
+
+        if (Schema::hasColumn($table, 'status')) {
+            $query->where('status', 1);
+        }
+
+        if (Schema::hasColumn($table, 'sort_order')) {
+            $query->orderBy('sort_order');
+        }
+
+        return $query->orderBy('id')->get();
+    }
+
+    private function findOutsourceCategory(string $modelClass, $id)
+    {
+        $model = new $modelClass();
+        $table = $model->getTable();
+
+        if (!Schema::hasTable($table)) {
+            abort(404);
+        }
+
+        $query = $modelClass::query()->where('id', $id);
+
+        if (Schema::hasColumn($table, 'status')) {
+            $query->where('status', 1);
+        }
+
+        return $query->firstOrFail();
     }
 }

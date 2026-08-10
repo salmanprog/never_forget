@@ -52,15 +52,15 @@
                     <i class="fa fa-gift"></i> <span>Resource Gifting</span>
                 </a>
             </li>
-            <li class="treeview {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') ? 'active' : '' }}" style="height: auto;">
-                <a href="#" class="{{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') ? 'active' : '' }}">
+            <li class="treeview {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') || request()->is('company/gusto-enquiries') ? 'active' : '' }}" style="height: auto;">
+                <a href="#" class="{{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') || request()->is('company/gusto-enquiries') ? 'active' : '' }}">
                     <i class="fa fa-envelope"></i>
                     <span>All Enquiries</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
-                <ul class="treeview-menu" style="display: {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') ? 'block' : 'none' }};">
+                <ul class="treeview-menu" style="display: {{ request()->is('my-e-card-enquiries') || request()->is('my-e-card-enquiries/*') || request()->is('company/balloon-enquiries') || request()->is('company/perfect-gift-enquiries') || request()->is('company/business-card-orders') || request()->is('company/quality-logo-enquiries') || request()->is('company/journey-expert-enquiries') || request()->is('company/gusto-enquiries') ? 'block' : 'none' }};">
                     <li class="treeview">
                         <a href="{{ route('my-e-card-enquiries') }}" class="{{ request()->is('my-e-card-enquiries') && !request()->is('my-e-card-enquiries/*') ? 'active' : '' }}">
                             <i class="fa fa-circle-o"></i> <span>E Card</span>
@@ -89,6 +89,11 @@
                     <li class="treeview">
                         <a href="{{ route('company.journey-expert-enquiries') }}" class="{{ request()->is('company/journey-expert-enquiries') ? 'active' : '' }}">
                             <i class="fa fa-circle-o"></i> <span>Journey Expert</span>
+                        </a>
+                    </li>
+                    <li class="treeview">
+                        <a href="{{ route('company.gusto-enquiries') }}" class="{{ request()->is('company/gusto-enquiries') ? 'active' : '' }}">
+                            <i class="fa fa-circle-o"></i> <span>Gusto</span>
                         </a>
                     </li>
                 </ul>

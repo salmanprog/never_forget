@@ -129,6 +129,9 @@ Route::get('blogs', [WebController::class, 'blogs'])->name('blogs');
 Route::get('/load-more-blogs', [WebController::class, 'loadMoreBlogs'])->name('load.more.blogs');
 Route::get('view-blog/{slug}', [WebController::class, 'blogDetail'])->name('blog-detail');
 Route::get('contact-us', [WebController::class, 'contactus'])->name('contact-us');
+Route::get('customize-your-solution', [WebController::class, 'customizeYourSolution'])->name('customize-your-solution');
+Route::get('customize-your-solution/{service}', [WebController::class, 'customizeYourSolutionForm'])->name('customize-your-solution.form');
+Route::post('customize-your-solution', [WebController::class, 'storeCustomizeSolution'])->name('customize-your-solution.store');
 Route::get('faqs', [WebController::class, 'faqs'])->name('faqs');
 Route::get('why-choose-us', [WebController::class, 'whyChooseUs'])->name('why-choose-us');
 Route::get('career', [WebController::class, 'Career'])->name('career');
@@ -338,6 +341,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('balloons_category', 'admin\BalloonsCategoryController');
     Route::resource('perfect_gift_category', 'admin\PerfectGiftCategoryController');
     Route::resource('e_card_category', 'admin\ECardCategoryController');
+    Route::resource('custom_solution_service', 'admin\CustomSolutionServiceController');
+    Route::resource('gusto_service', 'admin\GustoServiceController');
 
     //Enquires
     Route::resource('enquires-detail', 'admin\EnquiresController')->except(['index', 'create', 'edit', 'delete']);
@@ -390,6 +395,7 @@ Route::get('member/perfect-gift-enquiries', [WebController::class, 'myPerfectGif
 Route::get('member/business-card-orders', [WebController::class, 'myBusinessCardOrders'])->name('member.business-card-orders')->middleware('auth');
 Route::get('member/quality-logo-enquiries', [WebController::class, 'myQualityLogoEnquiries'])->name('member.quality-logo-enquiries')->middleware('auth');
 Route::get('member/journey-expert-enquiries', [WebController::class, 'myJourneyExpertEnquiries'])->name('member.journey-expert-enquiries')->middleware('auth');
+Route::get('member/gusto-enquiries', [WebController::class, 'myGustoEnquiries'])->name('member.gusto-enquiries')->middleware('auth');
 
 // Individual: Friends/Family Management
 Route::get('member/friends-family', [App\Http\Controllers\FriendsFamilyController::class, 'index'])->name('member.friends_family.index')->middleware('auth');
@@ -420,6 +426,7 @@ Route::get('company/perfect-gift-enquiries', [WebController::class, 'companyPerf
 Route::get('company/business-card-orders', [WebController::class, 'companyBusinessCardOrders'])->name('company.business-card-orders')->middleware('auth');
 Route::get('company/quality-logo-enquiries', [WebController::class, 'companyQualityLogoEnquiries'])->name('company.quality-logo-enquiries')->middleware('auth');
 Route::get('company/journey-expert-enquiries', [WebController::class, 'companyJourneyExpertEnquiries'])->name('company.journey-expert-enquiries')->middleware('auth');
+Route::get('company/gusto-enquiries', [WebController::class, 'companyGustoEnquiries'])->name('company.gusto-enquiries')->middleware('auth');
 
 //order
 Route::resource('order', 'OrderController');

@@ -50,6 +50,10 @@ class Email extends Mailable
             $email = $this->subject($this->details['title'])
                         ->view('emails.collaborate-quote')
                         ->with(['details' => $this->details]);
+        } elseif ($this->details['from'] == 'customize-solution') {
+            $email = $this->subject($this->details['title'] ?? 'New Customize Your Solution Request')
+                        ->view('emails.customize-solution')
+                        ->with(['details' => $this->details]);
         } elseif ($this->details['from'] == 'mts-dashboard-email') {
             $email = $this->subject($this->details['subject'])
                         ->view('emails.mts-dashboard-email')
@@ -98,6 +102,16 @@ class Email extends Mailable
                             'email' => $this->details['email'] ?? '',
                             'phone' => $this->details['phone'] ?? '',
                             'inquiry_message' => $this->details['message'] ?? '',
+                        ]);
+        } elseif ($this->details['from'] == 'gusto-confirmation') {
+            $email = $this->subject('Gusto Enquiry Received - NEVER FORGET')
+                        ->view('emails.gusto-confirmation')
+                        ->with([
+                            'senderName' => $this->details['name'] ?? '',
+                            'email' => $this->details['email'] ?? '',
+                            'phone' => $this->details['phone'] ?? '',
+                            'inquiry_message' => $this->details['message'] ?? '',
+                            'selected_services' => $this->details['selected_services'] ?? '',
                         ]);
         } elseif ($this->details['from'] == 'balloon-confirmation') {
             $email = $this->subject('Balloon Enquiry Received - NEVER FORGET')

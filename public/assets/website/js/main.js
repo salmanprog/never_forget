@@ -183,7 +183,44 @@ $(document).ready(function () {
             },
         ],
     });
-    AOS.refresh();
+
+    $(".plans-slider").each(function () {
+        var $slider = $(this);
+        if ($slider.hasClass("slick-initialized") || typeof $.fn.slick !== "function") {
+            return;
+        }
+        $slider.slick({
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            autoplay: false,
+            speed: 300,
+            autoplaySpeed: 3000,
+            arrows: true,
+            dots: false,
+            prevArrow: ".plans-arrows .arrow-left",
+            nextArrow: ".plans-arrows .arrow-right",
+            infinite: true,
+            responsive: [
+                {
+                    breakpoint: 992,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 1,
+                    },
+                },
+                {
+                    breakpoint: 576,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+            ],
+        });
+    });
+    if (typeof AOS !== "undefined") {
+        AOS.refresh();
+    }
 
 });
 const shopNavSwiper = new Swiper(".shop-nav-swiper", {

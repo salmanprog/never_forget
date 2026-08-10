@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Concerns\HandlesOutsourceCategories;
 use App\Models\BalloonsCategory;
 use Illuminate\Http\Request;
 
 class BalloonsCategoryController extends Controller
 {
+    use HandlesOutsourceCategories;
+
     public function __construct()
     {
         $this->middleware('permission:product-list|product-create|product-edit|product-delete', ['only' => ['index', 'store']]);
@@ -19,16 +22,13 @@ class BalloonsCategoryController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = BalloonsCategory::orderBy('sort_order')->orderBy('id');
+            $query = $this->outsourceCategoryQuery(BalloonsCategory::class);
 
             if ($request->filled('search')) {
                 $query->where('title', 'like', '%' . $request->search . '%');
             }
 
-            if ($request->status !== 'All') {
-                $status = $request->status == 2 ? 0 : $request->status;
-                $query->where('status', $status);
-            }
+            $query = $this->applyOutsourceCategoryStatusFilter($query, BalloonsCategory::class, $request);
 
             $models = $query->paginate(10);
 
@@ -36,10 +36,15 @@ class BalloonsCategoryController extends Controller
         }
 
         return view('admin.balloons_category.index', [
-            'models' => BalloonsCategory::orderBy('sort_order')->orderBy('id')->paginate(10),
+            'models' => $this->outsourceCategoryQuery(BalloonsCategory::class)->paginate(10),
             'page_title' => 'All Balloon Categories',
             'page_title_add' => 'Add Balloon Category',
         ]);
+    }
+
+    public function show($id)
+    {
+        return redirect()->route('balloons_category.edit', $id);
     }
 
     public function create()
@@ -59,8 +64,7 @@ class BalloonsCategoryController extends Controller
         $model = new BalloonsCategory();
         $model->title = $request->title;
         $model->description = $request->description;
-        $model->sort_order = $request->sort_order ?? 0;
-        $model->status = $request->status ?? '1';
+        $this->applyOutsourceCategoryOptionalFields($model, $request);
         $model->images = $this->uploadImage($request, 'assets/website/images/balloons');
         $model->save();
 
@@ -87,8 +91,7 @@ class BalloonsCategoryController extends Controller
         $update = BalloonsCategory::findOrFail($id);
         $update->title = $request->title;
         $update->description = $request->description;
-        $update->sort_order = $request->sort_order ?? 0;
-        $update->status = $request->status ?? '1';
+        $this->applyOutsourceCategoryOptionalFields($update, $request);
 
         if ($request->hasFile('image')) {
             $this->deleteImage($update->images);

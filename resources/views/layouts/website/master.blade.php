@@ -38,7 +38,7 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('public/assets/website/libs/libs.css') }}" rel="stylesheet">
     <link href="{{ asset('public/assets/website/css/utilities.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/assets/website/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/assets/website/css/style.css') }}?v=plans-slider-5" rel="stylesheet">
     <link href="{{ asset('public/assets/website/css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('public/assets/website/css/modal.css') }}" rel="stylesheet">
 
@@ -72,7 +72,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="{{ asset('public/assets/website/libs/libs.js') }}"></script>
-    <script src="{{ asset('public/assets/website/js/main.js') }}"></script>
+    <script src="{{ asset('public/assets/website/js/main.js') }}?v=plans-slider-5"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('public/assets/website/vendor/aos/aos.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>

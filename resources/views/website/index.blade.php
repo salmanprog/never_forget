@@ -480,6 +480,19 @@
                     </div>
                 </div>
                 <div class="card-wrapper">
+                    <div class="category-image mb-20" style="background: #f15c22;padding: 3px;">
+                        <img src="{{ asset('public/assets/website/images/tango/tango.png') }}"
+                            alt="Tango" class="img-fluid">
+                    </div>
+                    <div class="card-bottom text-center">
+                        <h5 class="heading light-black fs-24 fw-600 mb-20">
+                            Tango
+                        </h5>
+                        <a href="{{ route('shop', ['category' => 'tango']) }}"
+                            class="btn primary-btn border-0"><span>GET STARTED</span></a>
+                    </div>
+                </div>
+                <div class="card-wrapper">
                     <div class="category-image mb-20">
                         <img src="{{ asset('public/assets/website/images/quality_logo_category') }}/trade-show-desktop.webp"
                             alt="Quality Logo" class="img-fluid">
@@ -515,6 +528,19 @@
                             Greeting & Appreciation
                         </h5>
                         <a href="{{ route('shop', ['category' => 'greetings-appreciation']) }}"
+                            class="btn primary-btn border-0"><span>GET STARTED</span></a>
+                    </div>
+                </div>
+                <div class="card-wrapper">
+                    <div class="category-image mb-20">
+                        <img src="{{ asset('public/assets/website/images/gusto-image.png') }}"
+                            alt="Gusto" class="img-fluid">
+                    </div>
+                    <div class="card-bottom text-center">
+                        <h5 class="heading light-black fs-24 fw-600 mb-20">
+                            Gusto
+                        </h5>
+                        <a href="{{ route('shop', ['category' => 'gusto']) }}"
                             class="btn primary-btn border-0"><span>GET STARTED</span></a>
                     </div>
                 </div>
@@ -880,16 +906,16 @@
     @include('layouts.website.collaburate-modal')
     @include('website.include.plans')
     @include('website.include.gift-plan')
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
-
-    <script src="{{ asset('public/assets/website/vendor/aos/aos.js') }}"></script>
     <script>
-        AOS.init({
-            duration: 1000,
-            easing: "ease-in-out",
-            once: true,
-            mirror: false
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 1000,
+                    easing: 'ease-in-out',
+                    once: true,
+                    mirror: false
+                });
+            }
         });
     </script>
 @endsection
