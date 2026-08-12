@@ -10,6 +10,13 @@
         </td>
         <td>{{\Illuminate\Support\Str::limit($model->title,60)}}</td>
         <td>
+            @if(!empty($model->slug))
+                <a href="{{ route('collaborators.show', $model->slug) }}" target="_blank"><code>{{ $model->slug }}</code></a>
+            @else
+                —
+            @endif
+        </td>
+        <td>
             @if($model->status)
                 <span class="badge label-success">Active</span>
             @else
@@ -28,7 +35,7 @@
     </tr>
 @endforeach
 <tr>
-    <td colspan="6">
+    <td colspan="7">
         Displying {{$models->firstItem()}} to {{$models->lastItem()}} of {{$models->total()}} records
         <div class="d-flex justify-content-center">
             {!! $models->links('pagination::bootstrap-4') !!}

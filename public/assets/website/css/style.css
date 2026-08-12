@@ -1532,12 +1532,29 @@ ul.footer-links {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+.nav-dropdown-menu--scrollable {
+  max-height: 320px;
+  overflow-y: auto;
+  min-width: 240px;
+  overscroll-behavior: contain;
+}
+
 .nav-dropdown-menu-wrapper:hover .nav-dropdown-menu {
   visibility: visible;
 }
 
 .nav-dropdown-list {
-  padding: var(--text-10);
+  padding: 0;
+}
+
+.nav-dropdown-list > a,
+.nav-dropdown-link {
+  display: block;
+  width: 100%;
+  padding: var(--text-10) 14px;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
 }
 
 .nav-dropdown-list:hover {

@@ -82,6 +82,18 @@ class WebController extends Controller
         return view('website.corporate-solutions', compact('corporatesolutions', 'page_title'));
     }
 
+    public function collaboratorShow($slug)
+    {
+        $collaborator = Collaborator::with('activeFaqs')
+            ->where('status', 1)
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $page_title = $collaborator->title . ' || Never Forget';
+
+        return view('website.collaborators.show', compact('page_title', 'collaborator'));
+    }
+
     public function testimonials()
     {
         $page_title = 'Testimonials || Never Forget';
@@ -2326,18 +2338,23 @@ class WebController extends Controller
             'phone' => 'required|string|max:20',
             'message' => 'nullable|string|max:1000',
             'company_name' => 'required|string|max:100',
-            
+            'collaborator_name' => 'nullable|string|max:150',
+            'collaborator_id' => 'nullable|integer',
         ]);
 
+        $collaboratorNote = '';
+        if (!empty($data['collaborator_name'])) {
+            $collaboratorNote = 'Collaborator: ' . $data['collaborator_name'] . "\n\n";
+        }
+
         $model = new ContactUs();
-        $model->type = $request->type;
+        $model->type = $request->input('type', 'collaborate_quote');
         $model->first_name = $request->first_name;
         $model->last_name = $request->last_name;
         $model->email = $request->email;
         $model->phone = $request->phone;
-        $model->message = $request->message;
-        $model->company_name = $request->company_name;
-       
+        $model->company = $request->company_name;
+        $model->message = $collaboratorNote . ($request->message ?? '');
         $model->save();
 
         // Prepare email data
@@ -2348,13 +2365,16 @@ class WebController extends Controller
             'email' => $data['email'],
             'phone' => $data['phone'],
             'company_name' => $data['company_name'],
+            'collaborator_name' => $data['collaborator_name'] ?? '',
             'message' => $data['message'] ?? 'No additional message provided.',
         ];
 
         // Send email
         $details = [
             'from' => 'collaborate-quote',
-            'title' => 'New Corporate Gifting Quote Request',
+            'title' => !empty($data['collaborator_name'])
+                ? ('New Collaborator Inquiry: ' . $data['collaborator_name'])
+                : 'New Corporate Gifting Quote Request',
             'body' => $emailBody
         ];
 

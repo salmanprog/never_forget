@@ -12,10 +12,12 @@
                         <div class="swiper-wrapper">
                             @foreach($collaborators as $collaborator)
                             <div class="swiper-slide">
-                                @if($collaborator->image)
-                                <img src="{{ asset('public/admin/assets/images/collaborators/' . $collaborator->image) }}" alt="{{ $collaborator->title }}">
+                                @if(!empty($collaborator->slug))
+                                    <a href="{{ route('collaborators.show', $collaborator->slug) }}" title="{{ $collaborator->title }}">
+                                        <img src="{{ $collaborator->image_url }}" alt="{{ $collaborator->title }}">
+                                    </a>
                                 @else
-                                <img src="{{ asset('public/admin/assets/images/default.jpg') }}" alt="Default">
+                                    <img src="{{ $collaborator->image_url }}" alt="{{ $collaborator->title }}">
                                 @endif
                             </div>
                             @endforeach

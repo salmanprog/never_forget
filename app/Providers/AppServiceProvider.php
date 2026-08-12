@@ -28,6 +28,16 @@ class AppServiceProvider extends ServiceProvider
         
         $home_page_data = \globalData();
         View::share('home_page_data', $home_page_data);
+
+        View::composer('layouts.website.header', function ($view) {
+            $view->with(
+                'navCollaborators',
+                \App\Models\Collaborator::where('status', 1)
+                    ->orderBy('sort_order')
+                    ->orderBy('title')
+                    ->get(['id', 'title', 'slug', 'image'])
+            );
+        });
     }
 }
 

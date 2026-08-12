@@ -98,8 +98,24 @@
 
                                 </ul>
                             </li>
-                            <li><a class="btn primary-btn {{ Route::currentRouteName() == 'corporate-solutions' ? 'active' : '' }}"
-                                    href="{{ route('corporate-solutions') }}">Corporate Solutions </a></li>
+                            <li class="position-relative nav-dropdown-menu-wrapper">
+                                <a class="btn primary-btn {{ Route::currentRouteName() == 'corporate-solutions' || Route::currentRouteName() == 'collaborators.show' ? 'active' : '' }}"
+                                    href="{{ route('corporate-solutions') }}">Corporate Solutions</a>
+                                <span class="nav-dropdown-icon position-absolute"> <i
+                                        class="fa-solid fa-chevron-down"></i></span>
+                                @if(!empty($navCollaborators) && $navCollaborators->count())
+                                    <ul class="nav-dropdown-menu nav-dropdown-menu--scrollable">
+                                        @foreach($navCollaborators as $navCollaborator)
+                                            @if(!empty($navCollaborator->slug))
+                                                <li class="nav-dropdown-list">
+                                                    <a class="nav-dropdown-link"
+                                                        href="{{ route('collaborators.show', $navCollaborator->slug) }}">{{ $navCollaborator->title }}</a>
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </li>
                             <li><a class="btn primary-btn {{ Route::currentRouteName() == 'shop' ? 'active' : '' }}"
                                     href="{{ route('shop') }}">Shop</a></li>
                             <li><a class="btn primary-btn {{ Route::currentRouteName() == 'how-it-works' ? 'active' : '' }}"

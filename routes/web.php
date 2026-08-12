@@ -124,6 +124,7 @@ Route::get('about-us', [WebController::class, 'aboutUs'])->name('about-us');
 Route::get('shop', [WebController::class, 'shop'])->name('shop');
 Route::get('how-it-works', [WebController::class, 'howItWorks'])->name('how-it-works');
 Route::get('corporate-solutions', [WebController::class, 'corporateSolutions'])->name('corporate-solutions');
+Route::get('collaborators/{slug}', [WebController::class, 'collaboratorShow'])->name('collaborators.show');
 Route::get('testimonials', [WebController::class, 'testimonials'])->name('testimonials');
 Route::get('blogs', [WebController::class, 'blogs'])->name('blogs');
 Route::get('/load-more-blogs', [WebController::class, 'loadMoreBlogs'])->name('load.more.blogs');

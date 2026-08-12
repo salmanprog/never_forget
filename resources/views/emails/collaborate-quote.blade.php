@@ -91,6 +91,16 @@
                 <span class="label">Phone:</span>
                 <span class="value">{{ $details['body']['phone'] ?? '' }}</span>
             </div>
+            @if(!empty($details['body']['collaborator_name']))
+            <div class="info-row">
+                <span class="label">Collaborator:</span>
+                <span class="value">{{ $details['body']['collaborator_name'] }}</span>
+            </div>
+            @endif
+            <div class="info-row">
+                <span class="label">Company:</span>
+                <span class="value">{{ $details['body']['company_name'] ?? '' }}</span>
+            </div>
         </div>
 
         @if(isset($details['body']['message']) && $details['body']['message'] && $details['body']['message'] != 'No additional message provided.')
