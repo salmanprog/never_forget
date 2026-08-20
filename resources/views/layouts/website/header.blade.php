@@ -69,9 +69,11 @@
         <div class="row align-items-center justify-content-between">
             <div class="col-lg-2 col-6">
                 <div class="logo" data-aos="flip-left" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
-                    <a href="{{ route('index') }}" class=""><img
-                            src="{{ asset('public/admin/assets/images/page') }}/{{ $home_page_data['header_logo'] }}"
-                            alt="logo"></a>
+                    <a href="{{ route('index') }}" class="brand-logo-mark">
+                        <img src="{{ asset('public/admin/assets/images/page') }}/{{ $home_page_data['header_logo'] }}"
+                            alt="Never Forget">
+                        <sup class="brand-r-mark" aria-label="Registered trademark">&reg;</sup>
+                    </a>
                 </div>
             </div>
             <div class="col-lg-10 col-6">

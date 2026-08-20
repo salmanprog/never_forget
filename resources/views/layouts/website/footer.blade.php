@@ -2,8 +2,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-4 mb-lg-0">
-                    <img src="{{ asset('public/admin/assets/images/page') }}/{{ $home_page_data['footer_image'] }}"
-                        class="logo-light mb-20" alt="" style="max-width: 100%; height: auto;">
+                    <div class="brand-logo-mark mb-20">
+                        <img src="{{ asset('public/admin/assets/images/page') }}/{{ $home_page_data['footer_image'] }}"
+                            class="logo-light" alt="Never Forget" style="max-width: 100%; height: auto;">
+                        <sup class="brand-r-mark brand-r-mark--footer" aria-label="Registered trademark">&reg;</sup>
+                    </div>
                     <div class="text-white">
                         {!! $home_page_data['footer_description'] !!}
                     </div>

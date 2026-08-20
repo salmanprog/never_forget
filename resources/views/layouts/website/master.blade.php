@@ -42,6 +42,36 @@
     <link href="{{ asset('public/assets/website/css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('public/assets/website/css/modal.css') }}" rel="stylesheet">
 
+    <style>
+        .brand-logo-mark {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+        .brand-logo-mark img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        .brand-r-mark {
+            position: absolute;
+            top: 2px;
+            right: -2px;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            pointer-events: none;
+            text-decoration: none;
+        }
+        .brand-r-mark--footer {
+            color: #fff;
+            top: 0;
+            right: 0;
+            font-size: 12px;
+        }
+    </style>
 
 </head>
 
